@@ -14,14 +14,21 @@ import { FourtyTwoOAuthGuard } from './guards/42-auth.guard';
 import { FourtyTwoStrategy } from './strategies/42.strategy';
 import { User } from 'src/typeorm/User';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Achievement } from 'src/typeorm/Achievement';
+import { MatchHistory } from 'src/typeorm/MatchHistory';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env.dev',
+    }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Achievement, MatchHistory]),
   ],
   controllers: [AuthController],
   providers: [

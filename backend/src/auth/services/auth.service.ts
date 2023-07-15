@@ -35,8 +35,8 @@ export class AuthService {
       const newUser = this.userRepository.create(user);
       await this.userRepository.save(newUser);
       return this.generateJwt(newUser);
-    } catch {
-      throw new InternalServerErrorException();
+    } catch (error) {
+      throw new InternalServerErrorException("Couldn't register user");
     }
   }
 

@@ -50,7 +50,7 @@ export class AuthController {
     });
 
     res.status(HttpStatus.OK);
-    return { access_token: token, user: req.user };
+    res.json({ access_token: token, user: req.user });
   }
 
   /* 42 OAuth */
@@ -70,6 +70,6 @@ export class AuthController {
     });
 
     res.status(HttpStatus.OK);
-    return { access_token: token, user: req.user };
+    res.json({ access_token: token, user: req.user });
   }
 }

@@ -4,6 +4,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './typeorm/User';
+import { Achievement } from './typeorm/Achievement';
+import { MatchHistory } from './typeorm/MatchHistory';
 
 @Module({
   imports: [
@@ -11,7 +13,6 @@ import { User } from './typeorm/User';
       isGlobal: true,
       envFilePath: '.env.dev',
     }),
-    TypeOrmModule.forFeature([User]),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -19,9 +20,10 @@ import { User } from './typeorm/User';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Achievement, MatchHistory],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([User, Achievement, MatchHistory]),
     AuthModule,
     UsersModule,
   ],

@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { MatchHistory } from './MatchHistory';
+import { Achievement } from './Achievement';
 
 @Entity()
 export class User {
@@ -9,8 +18,24 @@ export class User {
   username: string;
 
   @Column()
+  fullname: string;
+
+  @Column()
   email: string;
 
   @Column()
+  tfa: string;
+
+  @Column()
+  status: string;
+
+  @Column()
   picture: string;
+
+  @OneToMany(() => MatchHistory, (matchHistory) => matchHistory.user_id)
+  matchHistory: MatchHistory[];
+
+  @ManyToMany(() => Achievement, (achievement) => achievement.users)
+  @JoinTable()
+  achievements: Achievement[];
 }
