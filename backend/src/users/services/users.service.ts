@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/User';
 import { Repository } from 'typeorm';
-import { IUsersService } from '../interfaces/IUsersService';
+import { IUsersService } from '../interfaces/IUsersService.interface';
 
 @Injectable()
 export class UsersService implements IUsersService {

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './typeorm/User';
 import { Achievement } from './typeorm/Achievement';
 import { MatchHistory } from './typeorm/MatchHistory';
+import { AchievementsModule } from './achievements/achievements.module';
 
 const configService = new ConfigService();
 
@@ -27,9 +28,9 @@ const configService = new ConfigService();
     }),
     AuthModule,
     UsersModule,
+    AchievementsModule,
   ],
   controllers: [],
   providers: [],
-  exports: [TypeOrmModule],
 })
 export class AppModule {}
