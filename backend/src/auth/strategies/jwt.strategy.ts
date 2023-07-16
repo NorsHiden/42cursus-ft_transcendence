@@ -5,11 +5,13 @@ import { JwtPayload } from '../../utils/types';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'src/typeorm/User';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly configService: ConfigService,
   ) {
     const JwtCookieExtractor = (req) => {
       let token = null;
@@ -20,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     };
 
     super({
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: configService.get<string>('JWT_SECRET'),
       jwtFromRequest: JwtCookieExtractor,
       ignoreExpiration: false,
     });

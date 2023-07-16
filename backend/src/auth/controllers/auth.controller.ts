@@ -10,8 +10,9 @@ import { GoogleOAuthGuard } from '../guards/google-auth.guard';
 import { AuthService } from '../services/auth.service';
 import { DiscordOAuthGuard } from '../guards/discord-auth.guard';
 import { FourtyTwoOAuthGuard } from '../guards/42-auth.guard';
+import { Routes } from 'src/utils/consts';
 
-@Controller('auth')
+@Controller(Routes.AUTH)
 export class AuthController {
   constructor(private authService: AuthService) {}
   /* Google OAuth*/

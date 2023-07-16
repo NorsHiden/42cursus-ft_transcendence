@@ -19,7 +19,7 @@ export class MatchHistory {
   opponent_score: number;
 
   @Column()
-  winner: boolean;
+  won: boolean;
 
   @Column()
   start_time: string;

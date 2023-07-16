@@ -7,6 +7,9 @@ import { Repository } from "typeorm";
 export class AchievementsService {
     constructor(@InjectRepository(Achievement) private achievementsRepository: Repository<Achievement>) {}
 
-    async onApplicationBootstrap() {}
+    async onModuleInit() {
+        // Initialization logic goes here
+        console.log('Module initialized');
+      }
 
 }

@@ -6,7 +6,6 @@ import { AuthService } from './services/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { APP_FILTER } from '@nestjs/core';
 import { TokenErrorFilter } from 'src/exceptions/TokenError';
 import { DiscordOAuthGuard } from './guards/discord-auth.guard';
 import { DiscordStrategy } from './strategies/discord.strategy';
@@ -14,21 +13,20 @@ import { FourtyTwoOAuthGuard } from './guards/42-auth.guard';
 import { FourtyTwoStrategy } from './strategies/42.strategy';
 import { User } from 'src/typeorm/User';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Achievement } from 'src/typeorm/Achievement';
-import { MatchHistory } from 'src/typeorm/MatchHistory';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Services } from 'src/utils/consts';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env.dev',
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        secret: config.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1d' },
+      }),
+      inject: [ConfigService],
     }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
-    }),
-    TypeOrmModule.forFeature([User, Achievement, MatchHistory]),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController],
   providers: [
@@ -42,9 +40,10 @@ import { ConfigModule } from '@nestjs/config';
     JwtStrategy,
     AuthService,
     {
-      provide: APP_FILTER,
+      provide: Services.Filter,
       useClass: TokenErrorFilter,
     },
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

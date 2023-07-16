@@ -3,10 +3,12 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import * as morgan from 'morgan';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const PORT = process.env.PORT;
+  const configService = app.get(ConfigService);
+  const PORT = configService.get<number>('PORT');
   
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());

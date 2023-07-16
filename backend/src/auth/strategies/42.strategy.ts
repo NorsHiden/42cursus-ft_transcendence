@@ -1,12 +1,15 @@
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile, verifyCallBack } from 'passport-42';
 
+@Injectable()
 export class FourtyTwoStrategy extends PassportStrategy(Strategy, '42') {
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     super({
-      clientID: process.env.FOURTYTWO_CLIENT_ID,
-      clientSecret: process.env.FOURTYTWO_CLIENT_SECRET,
-      callbackURL: process.env.FOURTYTWO_CALLBACK_URL,
+      clientID: configService.get<string>('FOURTYTWO_CLIENT_ID'),
+      clientSecret: configService.get<string>('FOURTYTWO_CLIENT_SECRET'),
+      callbackURL: configService.get<string>('FOURTYTWO_CALLBACK_URL'),
       scope: ['public'],
     });
   }
@@ -23,7 +26,7 @@ export class FourtyTwoStrategy extends PassportStrategy(Strategy, '42') {
       fullname: profile._json.displayname,
       picture: profile._json.image.link,
       tfa: false,
-      status: 'online',
+      status: 'null',
     };
     done(null, user);
   }
