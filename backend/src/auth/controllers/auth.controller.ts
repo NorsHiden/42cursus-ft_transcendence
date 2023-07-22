@@ -7,14 +7,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { GoogleOAuthGuard } from '../guards/google-auth.guard';
-import { AuthService } from '../services/auth.service';
 import { DiscordOAuthGuard } from '../guards/discord-auth.guard';
 import { FourtyTwoOAuthGuard } from '../guards/42-auth.guard';
 import { Routes } from 'src/utils/consts';
+import { IAuthService } from '../interfaces/IAuthService.interface';
 
 @Controller(Routes.AUTH)
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: IAuthService) {}
   /* Google OAuth*/
   @Get('google/login')
   @UseGuards(GoogleOAuthGuard)
@@ -72,5 +72,12 @@ export class AuthController {
 
     res.status(HttpStatus.OK);
     res.json({ access_token: token, user: req.user });
+  }
+
+  @Get('logout')
+  handleLogout(@Res() res) {
+    res.clearCookie('access_token');
+    res.status(HttpStatus.OK);
+    res.json({ message: 'Logged out' });
   }
 }

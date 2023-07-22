@@ -24,7 +24,7 @@ export class User {
   email: string;
 
   @Column()
-  tfa: string;
+  tfa: boolean;
 
   @Column()
   status: string;

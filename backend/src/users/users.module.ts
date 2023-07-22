@@ -6,10 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/User';
 import { Achievement } from 'src/typeorm/Achievement';
 import { MatchHistory } from 'src/typeorm/MatchHistory';
+import { PostController } from './controllers/users.controller.dev';
+import { AchievementsService } from 'src/achievements/services/achievements.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Achievement, MatchHistory])],
-  controllers: [UsersController],
-  providers: [UsersService, JwtStrategy],
+  controllers: [UsersController, PostController],
+  providers: [UsersService, JwtStrategy, AchievementsService],
 })
 export class UsersModule {}

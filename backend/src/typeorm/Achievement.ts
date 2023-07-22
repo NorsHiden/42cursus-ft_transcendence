@@ -10,11 +10,14 @@ export class Achievement {
   name: string;
 
   @Column()
+  altname: string;
+
+  @Column()
   description: string;
 
   @Column()
   image: string;
 
-  @ManyToMany(() => User, (user) => user.achievements)
+  @ManyToMany(() => User, (user) => user.achievements, { cascade: true })
   users: User[];
 }

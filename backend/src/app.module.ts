@@ -3,9 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './typeorm/User';
-import { Achievement } from './typeorm/Achievement';
-import { MatchHistory } from './typeorm/MatchHistory';
 import { AchievementsModule } from './achievements/achievements.module';
 
 const configService = new ConfigService();
@@ -23,7 +20,7 @@ const configService = new ConfigService();
       username: configService.get<string>('DB_USER'),
       password: configService.get<string>('DB_PASSWORD'),
       database: configService.get<string>('DB_NAME'),
-      entities: [User, Achievement, MatchHistory],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     AuthModule,

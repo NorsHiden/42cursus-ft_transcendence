@@ -12,7 +12,10 @@ export class UsersService implements IUsersService {
   ) {}
 
   async getUserById(id: string): Promise<User> {
-    return await this.userRepository.findOneBy({ id: id });
+    return await this.userRepository.findOne({
+      where: { id: id },
+      relations: ['achievements'],
+    });
   }
 
   async getAllUsers(): Promise<User[]> {
@@ -20,6 +23,13 @@ export class UsersService implements IUsersService {
   }
 
   async getUserByUsername(username: string): Promise<User> {
-    return await this.userRepository.findOneBy({ username: username });
+    return await this.userRepository.findOne({
+      where: { username: username },
+      relations: ['achievements'],
+    });
+  }
+
+  async updateUser(user: User): Promise<void> {
+    await this.userRepository.save(user);
   }
 }
