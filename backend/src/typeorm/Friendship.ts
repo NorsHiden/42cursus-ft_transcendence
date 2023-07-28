@@ -8,22 +8,19 @@ import {
 import { User } from './User';
 
 @Entity()
-export class Achievement {
+export class Friendship {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
-  name: string;
+  @ManyToOne(() => User, (User) => User.friendships)
+  sender: string;
 
   @Column()
-  image: string;
+  receiver: string;
 
   @Column()
-  description: string;
+  status: string;
 
   @Column()
-  progress: number;
-
-  @ManyToOne(() => User, (User) => User.achievements)
-  user: User;
+  created_at: Date;
 }

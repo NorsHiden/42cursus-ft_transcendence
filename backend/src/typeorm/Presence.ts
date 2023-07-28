@@ -2,28 +2,26 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './User';
 
 @Entity()
-export class Achievement {
+export class Presence {
   @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
-  name: string;
+  status: string;
 
   @Column()
-  image: string;
+  avatar: string;
 
   @Column()
-  description: string;
+  banner: string;
 
-  @Column()
-  progress: number;
-
-  @ManyToOne(() => User, (User) => User.achievements)
+  @OneToOne(() => User, (User) => User.presence)
+  @JoinColumn()
   user: User;
 }

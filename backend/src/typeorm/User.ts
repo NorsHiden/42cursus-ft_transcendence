@@ -4,10 +4,15 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { MatchHistory } from './MatchHistory';
+import { Presence } from './Presence';
+import { Profile } from './Profile';
 import { Achievement } from './Achievement';
+import { Friendship } from './Friendship';
+import { MatchHistory } from './MatchHistory';
+import { Channel } from 'diagnostics_channel';
 
 @Entity()
 export class User {
@@ -18,24 +23,24 @@ export class User {
   username: string;
 
   @Column()
-  fullname: string;
+  displayname: string;
 
-  @Column()
-  email: string;
+  @OneToOne(() => User, (User) => User.presence)
+  presence: Presence;
 
-  @Column()
-  tfa: boolean;
+  @OneToOne(() => User, (User) => User.profile)
+  profile: Profile;
 
-  @Column()
-  status: string;
-
-  @Column()
-  picture: string;
-
-  @OneToMany(() => MatchHistory, (matchHistory) => matchHistory.user_id)
-  matchHistory: MatchHistory[];
-
-  @ManyToMany(() => Achievement, (achievement) => achievement.users)
-  @JoinTable()
+  @OneToMany(() => Achievement, (Achievement) => Achievement.user)
   achievements: Achievement[];
+
+  @OneToMany(() => Friendship, (Friendship) => Friendship.sender)
+  friendships: Friendship[];
+
+  @OneToMany(() => Channel, (Channel) => Channel.owner)
+  channels: Channel[];
+
+  @ManyToMany(() => MatchHistory, (MatchHistory) => MatchHistory.players)
+  @JoinTable()
+  match_history: MatchHistory[];
 }
