@@ -1,4 +1,4 @@
-import { Channel } from 'diagnostics_channel';
+import { Channel } from './Channel';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
