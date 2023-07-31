@@ -1,0 +1,1 @@
+Adapters are the connectors of your application with the outside world. Any form of API call or websocket interaction which needs to happen, to share data with an external service or client, should happen within the adapter itself.
