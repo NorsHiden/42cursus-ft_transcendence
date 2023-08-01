@@ -37,7 +37,10 @@ import { Services } from 'src/utils/consts';
     FourtyTwoStrategy,
     JwtAuthGuard,
     JwtStrategy,
-    AuthService,
+    {
+      provide: Services.Auth,
+      useClass: AuthService,
+    },
   ],
 })
 export class AuthModule {}
