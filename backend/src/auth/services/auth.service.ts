@@ -16,7 +16,7 @@ export class AuthService implements IAuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  generateJwt(user: User) {
+  generateJwt(user: User): string {
     const payload = { sub: user.id, email: user.email };
     return this.jwtService.sign(payload);
   }

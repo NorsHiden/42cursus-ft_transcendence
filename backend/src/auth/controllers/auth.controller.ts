@@ -10,11 +10,11 @@ import { GoogleOAuthGuard } from '../guards/google-auth.guard';
 import { DiscordOAuthGuard } from '../guards/discord-auth.guard';
 import { FourtyTwoOAuthGuard } from '../guards/42-auth.guard';
 import { Routes } from 'src/utils/consts';
-import { IAuthService } from '../interfaces/IAuthService.interface';
+import { AuthService } from '../services/auth.service';
 
 @Controller(Routes.AUTH)
 export class AuthController {
-  constructor(private readonly authService: IAuthService) {}
+  constructor(private readonly authService: AuthService) {}
   /* Google OAuth*/
   @Get('google/login')
   @UseGuards(GoogleOAuthGuard)
@@ -53,6 +53,6 @@ export class AuthController {
   @Get('logout')
   handleLogout(@Res() res) {
     res.clearCookie('access_token');
-    return { message: 'Logged out', statusCode: HttpStatus.OK };
+    res.json({ message: 'Logged out', statusCode: HttpStatus.OK });
   }
 }
