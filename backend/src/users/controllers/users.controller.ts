@@ -52,6 +52,6 @@ export class UsersController {
   @Get(':userid/matches')
   async getMatchesFromUser(@Param('userid') userid: string) {
     const user = await this.usersService.getUserById(userid);
-    return user.matchHistory || [];
+    return user.match_history || [];
   }
 }

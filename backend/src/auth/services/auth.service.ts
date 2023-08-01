@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../typeorm/User';
 import { Repository } from 'typeorm';
 import { IAuthService } from '../interfaces/IAuthService.interface';
+import { JwtPayload } from 'src/utils/types';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -17,7 +18,7 @@ export class AuthService implements IAuthService {
   ) {}
 
   generateJwt(user: User) {
-    const payload = { sub: user.id, email: user.email };
+    const payload: JwtPayload = { sub: user.id, email: user.email };
     return this.jwtService.sign(payload);
   }
 

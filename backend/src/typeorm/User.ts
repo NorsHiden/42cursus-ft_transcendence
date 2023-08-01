@@ -12,7 +12,7 @@ import { Profile } from './Profile';
 import { Achievement } from './Achievement';
 import { Friendship } from './Friendship';
 import { MatchHistory } from './MatchHistory';
-import { Channel } from 'diagnostics_channel';
+import { Channel } from './Channel';
 
 @Entity()
 export class User {
@@ -24,6 +24,9 @@ export class User {
 
   @Column()
   displayname: string;
+
+  @Column()
+  email: string;
 
   @OneToOne(() => User, (User) => User.presence)
   presence: Presence;
