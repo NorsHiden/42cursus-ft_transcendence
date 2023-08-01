@@ -14,7 +14,7 @@ import { IAuthService } from '../interfaces/IAuthService.interface';
 
 @Controller(Routes.AUTH)
 export class AuthController {
-  constructor(private authService: IAuthService) {}
+  constructor(private readonly authService: IAuthService) {}
   /* Google OAuth*/
   @Get('google/login')
   @UseGuards(GoogleOAuthGuard)
@@ -22,17 +22,9 @@ export class AuthController {
 
   @Get('google/redirect')
   @UseGuards(GoogleOAuthGuard)
-  async googleRedirect(@Req() req, @Res() res) {
+  async googleRedirect(@Req() req) {
     const token = await this.authService.signIn(req.user);
-
-    res.cookie('access_token', token, {
-      MaxAge: 86400, // 1 day
-      sameSite: true,
-      secure: false,
-    });
-
-    res.status(HttpStatus.OK);
-    res.json({ access_token: token, user: req.user });
+    return { access_token: token, user: req.user };
   }
   /* Discord OAuth */
   @Get('discord/login')
@@ -41,17 +33,9 @@ export class AuthController {
 
   @Get('discord/redirect')
   @UseGuards(DiscordOAuthGuard)
-  async discordRedirect(@Req() req, @Res() res) {
+  async discordRedirect(@Req() req) {
     const token = await this.authService.signIn(req.user);
-
-    res.cookie('access_token', token, {
-      MaxAge: 86400, // 1 day
-      sameSite: true,
-      secure: false,
-    });
-
-    res.status(HttpStatus.OK);
-    res.json({ access_token: token, user: req.user });
+    return { access_token: token, user: req.user };
   }
 
   /* 42 OAuth */
@@ -61,23 +45,14 @@ export class AuthController {
 
   @Get('42/redirect')
   @UseGuards(FourtyTwoOAuthGuard)
-  async fourtyTwoRedirect(@Req() req, @Res() res) {
+  async fourtyTwoRedirect(@Req() req) {
     const token = await this.authService.signIn(req.user);
-
-    res.cookie('access_token', token, {
-      MaxAge: 86400, // 1 day
-      sameSite: true,
-      secure: false,
-    });
-
-    res.status(HttpStatus.OK);
-    res.json({ access_token: token, user: req.user });
+    return { access_token: token, user: req.user };
   }
 
   @Get('logout')
   handleLogout(@Res() res) {
     res.clearCookie('access_token');
-    res.status(HttpStatus.OK);
-    res.json({ message: 'Logged out' });
+    return { message: 'Logged out', statusCode: HttpStatus.OK };
   }
 }

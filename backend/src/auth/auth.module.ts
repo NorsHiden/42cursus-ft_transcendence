@@ -39,6 +39,5 @@ import { Services } from 'src/utils/consts';
     JwtStrategy,
     AuthService,
   ],
-  exports: [AuthService],
 })
 export class AuthModule {}
