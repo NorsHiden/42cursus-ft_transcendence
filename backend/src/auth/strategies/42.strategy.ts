@@ -27,8 +27,6 @@ export class FourtyTwoStrategy extends PassportStrategy(Strategy, '42') {
       picture: profile._json.image.link,
       tfa: false,
       status: 'null',
-      achievements: [],
-      matchHistory: [],
     };
     done(null, user);
   }

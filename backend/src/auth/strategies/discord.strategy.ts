@@ -32,8 +32,6 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
         '?size=1024',
       tfa: false,
       status: 'null',
-      achievements: [],
-      matchHistory: [],
     };
     done(null, user);
   }

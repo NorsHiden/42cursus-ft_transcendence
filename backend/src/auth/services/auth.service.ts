@@ -17,7 +17,7 @@ export class AuthService implements IAuthService {
   ) {}
 
   generateJwt(user: User): string {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, username: user.username };
     return this.jwtService.sign(payload);
   }
 

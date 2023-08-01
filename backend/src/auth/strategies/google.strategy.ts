@@ -27,8 +27,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       picture: profile._json.picture,
       tfa: false,
       status: 'null',
-      achievements: [],
-      matchHistory: [],
     };
     done(null, user);
   }
