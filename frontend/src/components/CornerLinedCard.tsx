@@ -13,11 +13,12 @@ interface ParentCompProps {
     width?:number; // this is the width of the shape it should be number you may passe it ass porp like this width={1} the unit is always px
     height?:number; // same as width
     strokesize?:number // this the size of stroke you can pass props same as widht it should be number as well
+    cornerredius?:string // to controll the ridius of edges
 }
 
 function CornerLinedCard(props:ParentCompProps){
-    const {childComp, stroke, fill, margine, polygonpoints} = props;
-    const width:string = "w-[" + props.width + "px]"
+    const {childComp, stroke, fill, margine, polygonpoints, cornerredius} = props;
+    const width:string = "w-[" + props.width + "px]" 
     const height:string = "before:[padding-top:"+props.height+"px;]"
     const strokesizewidth:string = "w-[" + (props.width - props.strokesize) + "px]"
     const strokesizeheight:string = "before:[padding-top:"+(props.height - props.strokesize)+"px;]" 
@@ -47,7 +48,8 @@ function CornerLinedCard(props:ParentCompProps){
 
                 <svg style={{ visibility: "hidden", position: "absolute" }} width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
                     <defs>
-                        <filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                        <filter id="round">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation={cornerredius} result="blur" />
                             <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
                             <feComposite in="SourceGraphic" in2="goo" operator="atop" />
                         </filter>
