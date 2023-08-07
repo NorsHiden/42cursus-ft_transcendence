@@ -5,4 +5,104 @@
   /* background-color: radial-gradient(100.00% 100.00% at 52.96% 100.00%, #285F7B 0%, #001D3A 96.42%); */
   /* background: radial-gradient(100.00% 100.00% at 52.96% 100.00%, #285F7B 0%, #001D3A 96.42%); */
 }
+/* .profilename{
+  color: #FFF;
+font-family: Poppins;
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+} */
+.playbutton {
+  display:inline-block;
+  width:200px;
+  color:#FE5821;
+  filter:url(#round)
 
+}
+
+
+.modestroke {
+  /* width: 113px; */
+  /* display:inline-block; */
+  filter: url(#round);
+}
+
+.modefill {
+  /* width: 111px; */
+  display:inline-block;
+  filter: url(#round);
+}
+
+/* .parent {
+  filter: url('#goo');
+  overflow:hidden;
+  position: fixed;
+  right:-50px;
+  z-index: 1;
+  margin-top: 10vw;
+} */
+
+.modestroke::before {
+  /* content:""; */
+  /* display:block; */
+  /* padding-top:88px; */
+  background: currentColor;
+  clip-path: polygon(var(--polygon-points));
+  /* clip-path: polygon(14.42% -0.15%, 100% 0%, 100.23% 80.16%, 87.12% 100.88%, 0% 100%, -0.5% 20.08%); */
+}
+
+.modefill::before {
+  content:"";
+  display:block;
+  /* padding-top:86px; */
+  background: currentColor;
+  clip-path: polygon(var(--polygon-points));
+  /* clip-path: polygon(14.42% -0.15%, 100% 0%, 100.23% 80.16%, 87.12% 100.88%, 0% 100%, -0.5% 20.08%); */
+}
+
+.playbutton::before {
+   content:"";
+   display:block;
+   padding-top:87px;
+   background:currentColor;
+   margin: 0%;
+   /* border-radius: 0px 0 0px 0px; */
+  /* clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); */
+  clip-path: polygon(10% -4.6%, 100% 0%, 102% 75.4%, 88.50% 105.29%, 0% 100%, -0.5% 22.3%)
+}
+
+
+
+
+
+.modes::before {
+   content:"";
+   display:block;
+   padding-top:112px;
+   background:currentColor;
+  clip-path: polygon(20.07% -17.99%, 100% 0%, 112.07% 65.85%, 89.44% 101.98%, 0% 100%, 0.22% 15.16%);
+}
+
+
+.play{
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.game-mode-font{
+  font-weight: bold;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+  font-size: 30px;
+}
