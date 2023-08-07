@@ -35,7 +35,7 @@ function GameModes() {
                 <ButtonAct margin="mt-[28px] ml-[1px]"/>
                 </section>
                 <section id="points-section"  className="mr-[30px]">
-                    hello im points section
+                    {/* hello im points section */}
                 </section>
         </div>
     )
