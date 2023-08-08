@@ -1,8 +1,17 @@
 import {twMerge} from "tailwind-merge";
 import React from 'react'
+import {unit,multiply, cos,sin, string, Unit} from 'mathjs'
+import { makeshape } from "./bl";
+
+import PointSection from "./home/PointsSection";
 
 /** this is a reusable component. sift message la biti t3rf kifach tst3mlo hehe (gha 9ra l interface a yban lik lblan)*/
+//the other angles of the right triangle that we have always 45degree
+// we have the hypothenus value and the angle is 45degre if we want to find adjacant we sould do  adj = cos(angle) * hypo
+// and if we want the opposite we should od  opp = sin(angle) * hyp0;
 
+// adj = cos(angle) * hypo, you're finding the length of the adjacent side.
+//opp = sin(angle) * hypo, you're finding the length of the opposite side.
 
 interface ParentCompProps {
     childComp?: React.ReactNode;// this the card content pass any component you want
@@ -12,20 +21,31 @@ interface ParentCompProps {
     polygonpoints?:string; // this is the points that make ur shape searche about polygone clip-path to understand more or visite this website to make ur own shapes (https://www.cssportal.com/css-clip-path-generator/) example of the string input "14.42% -0.15%, 100% 0%, 100.23% 80.16%, 87.12% 100.88%, 0% 100%, -0.5% 20.08%"
     width?:number; // this is the width of the shape it should be number you may passe it ass porp like this width={1} the unit is always px
     height?:number; // same as width
-    strokesize?:number // this the size of stroke you can pass props same as widht it should be number as well
+    strokesize:number // this the size of stroke you can pass props same as widht it should be number as well
     cornerredius?:string // to controll the ridius of edges
-}
+    cornershape?:number[]// [0 0 0 0] TopLeft TopRight DownLeft DownRight  respectivly
+}    
 
-function CornerLinedCard(props:ParentCompProps){
-    const {childComp, stroke, fill, margine, polygonpoints, cornerredius} = props;
+
+
+
+function CornerLinedCard(this: any, props:ParentCompProps){
+    const {childComp, stroke, fill, margine, polygonpoints, cornerredius, cornershape} = props;
+    
     const width:string = "w-[" + props.width + "px]" 
     const height:string = "before:[padding-top:"+props.height+"px;]"
-    const strokesizewidth:string = "w-[" + (props.width - props.strokesize) + "px]"
+    const strokesizewidth:string = "w-[" + (props.width - props.strokesize) + "px;]"
     const strokesizeheight:string = "before:[padding-top:"+(props.height - props.strokesize)+"px;]" 
     // const strokesizez:string = 
+    const angleDegrees = 45; // Angle in degrees
+    const angleRadians = unit(angleDegrees, 'deg'); //convert Degrees to radians
+    
+    const test = makeshape(cornershape, angleRadians, props.width , props.height);
+
+
     return (
         <div className="cursor-pointer">
-            <div style={{'--polygon-points':polygonpoints}} className={
+            <div style={{'--polygon-points':test}} className={
                 twMerge("modestroke inline-block [filter: url(#round)] ",
                 width,
                 stroke,
@@ -37,7 +57,7 @@ function CornerLinedCard(props:ParentCompProps){
 
                 
                 <div className={
-                    twMerge("modefill center flex items-center justify-center",
+                    twMerge("modefill center ",
                     strokesizewidth,
                     strokesizeheight,  
                     fill
