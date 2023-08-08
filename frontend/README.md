@@ -4,11 +4,12 @@ this project should be structured like this. Im adopting this structure https://
 
 
 src
-|---adapters 
-|---contexts
-|---components
-|---styles
-|---pages
+  |---adapters
+  |---contexts
+  |---components
+  |---styles
+  |---pages
+  
 
 checkout every directories README.md to understand what should and should not do in every single one
 
