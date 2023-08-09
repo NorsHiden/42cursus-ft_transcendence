@@ -31,11 +31,14 @@ function GameModes() {
                     <CornerLinedCard childComp={
                         <img className="center" src={Goldrush} alt="" />
                     } fill="[color:#241D0C]" cornerredius="3" stroke="[color:#413415]"  cornershape={[24,0,24,0]} strokesize={2} width={139} height={112} margine="mr-[20px]" />
-
+         
                 </div>
-                <ButtonAct margin="mt-[28px] ml-[1px]" />
+                <CornerLinedCard childComp={
+                        <h2 className="play font-Rowdies text-[38px] "> PLAY </h2>
+                    } fill="[color:#FE5821]" cornerredius="3" stroke="[color:#FE5821]"  cornershape={[24,0,24,0]} strokesize={0} width={200} height={87} margine="mt-[28px]" />
+         
             </section>
-            <section id="points-section" className="mr-[30px]">
+            <section style={{'border-color':"black"}} id="points-section" className="mr-[30px] flex flex-col  mt-[50px]">
                 <PointSection/>
             </section>
         </div>

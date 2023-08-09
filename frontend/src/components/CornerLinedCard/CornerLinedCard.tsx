@@ -2,7 +2,7 @@ import {twMerge} from "tailwind-merge";
 import React from 'react'
 import {unit,multiply, cos,sin, string, Unit} from 'mathjs'
 import { makeshape } from "./bl";
-
+import nextId from "react-id-generator";
 import PointSection from "./home/PointsSection";
 
 /** this is a reusable component. sift message la biti t3rf kifach tst3mlo hehe (gha 9ra l interface a yban lik lblan)*/
@@ -28,7 +28,7 @@ interface ParentCompProps {
 
 
 
-function CornerLinedCard(this: any, props:ParentCompProps){
+function CornerLinedCard(props:ParentCompProps){
     const {childComp, stroke, fill, margine,cornerredius, cornershape} = props;
     
     const width:string = "w-[" + props.width + "px]" 
@@ -41,11 +41,12 @@ function CornerLinedCard(this: any, props:ParentCompProps){
 
     const test = makeshape(cornershape, angleRadians, props.width , props.height);
 
-
+    const id = nextId();
+    const url = "url(#" + id + ")"    
     return (
         <div className="cursor-pointer">
-            <div style={{'--polygon-points':test}} className={
-                twMerge("modestroke inline-block [filter: url(#round)] ",
+            <div style={{'--polygon-points':test,'--url' : url}} className={
+                twMerge("modestroke",
                 width,
                 stroke,
                     "before:content-[''] before:block ",
@@ -55,7 +56,7 @@ function CornerLinedCard(this: any, props:ParentCompProps){
             } >
 
                 
-                <div className={
+                <div style={{'--url' : url}} className={
                     twMerge("modefill center ",
                     strokesizewidth,
                     strokesizeheight,  
@@ -67,7 +68,7 @@ function CornerLinedCard(this: any, props:ParentCompProps){
 
                 <svg style={{ visibility: "hidden", position: "absolute" }} width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
                     <defs>
-                        <filter id="round">
+                        <filter id={id}>
                             <feGaussianBlur in="SourceGraphic" stdDeviation={cornerredius} result="blur" />
                             <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
                             <feComposite in="SourceGraphic" in2="goo" operator="atop" />

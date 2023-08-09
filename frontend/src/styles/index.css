@@ -22,16 +22,22 @@ line-height: normal;
 }
 
 
+.apexcharts-tooltip {
+  border-radius: 0px !important;
+}
+
 .modestroke {
   /* width: 113px; */
   /* display:inline-block; */
-  filter: url(#round);
+  filter: var(--url);
 }
+
+
 
 .modefill {
   /* width: 111px; */
   display:inline-block;
-  filter: url(#round);
+  filter: var(--url)
 }
 
 /* .parent {

@@ -5,6 +5,7 @@ import FriendsBar from "../components/home/FriendsBar";
 import ButtonAct from "../components/home/ButtonAct";
 import GameModes from "../components/home/GamModes";
 
+import CornerLinedCard from "../components/CornerLinedCard/CornerLinedCard";
 function Home() {
 
     return (
@@ -12,10 +13,18 @@ function Home() {
             <NavBar/>
             {/* <SideBar/> */}
             <GameModes/>
+            {/* <CornerLinedCard  
+                childComp = {
+
+                    <div className="center w-[385px] h-[74px] bg-white">
+                        dasdasa
+                    </div>
+                }
+                fill="[color:#1E1F23]" cornerredius="5" stroke="[color:#2C2D33]" strokesize={3} cornershape={[45,0,45,0]} width={385} height={444} margine="mr-[20px]"  /> */}
+
             {/* <ButtonAct/> */}
             {/* <FriendsBar/> */}
         </div>
     )
 }
-
 export default Home
