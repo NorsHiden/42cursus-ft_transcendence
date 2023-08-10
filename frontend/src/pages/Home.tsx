@@ -6,6 +6,7 @@ import ButtonAct from "../components/home/ButtonAct";
 import GameModes from "../components/home/GamModes";
 
 import CornerLinedCard from "../components/CornerLinedCard/CornerLinedCard";
+import LiveMatchesAndGeneralChat from "../components/home/LiveMatchesAndGeneralChat";
 function Home() {
 
     return (
@@ -13,6 +14,7 @@ function Home() {
             <NavBar/>
             {/* <SideBar/> */}
             <GameModes/>
+            <LiveMatchesAndGeneralChat/>
             {/* <CornerLinedCard  
                 childComp = {
 

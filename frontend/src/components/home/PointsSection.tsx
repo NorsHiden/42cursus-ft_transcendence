@@ -8,7 +8,7 @@ function PointSection(){
  
     return (
         <>
-            <div className="flex ml-[15px]">
+            <div className="relative flex items-center ml-[15px]">
                 <div>
                     <p className="font-Rowdies text-[48px] font-extrabold">641<span className="font-Rowdies text-[36px]"> pts</span></p>
                     <CornerLinedCard childComp={
@@ -17,14 +17,14 @@ function PointSection(){
                             <p style={{color:"white"}} className="font-sans text-[8px]">New personal record</p>
                         </div>
                     } fill="[color:#6B26FF]" cornerredius="0.5" stroke="[color:#7C3FFF]" strokesize={2} cornershape={[4,0,4,0]} width={116} height={18} margine="mr-[20px]"  />
-
+                    
                     <p className="font-sans text-[12px] text-[#4A525E] mt-[13px]"> Your personal best <span className="font-sans text-[12px]  font-extrabold text-[#61686F]">622pts</span></p>
                 </div>
-                <div className="w-[247px] h-[74px] ">
+                <div className="w-[247px] ml-[43px]">
                     <PointsChart />
                 </div>
             </div>
-            <div className="border-b-[1px] border-[rgba(217,217,217,36%)] mt-[16px] mb-[16px]"> </div>
+            <div className="border-b-[1px] border-[rgba(217,217,217,36%)] mt-[-16px] mb-[16px]"> </div>
             <div className="flex ml-[15px]">
                 <CornerLinedCard childComp={
                     <div className="center w-[48px] h-[48px]">

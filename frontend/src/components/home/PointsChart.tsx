@@ -42,7 +42,7 @@ function PointsChart(){
                   },
             },
             xaxis: {
-                show: false,
+                show: true,
                 labels: {
                     show: false
                 },
@@ -87,7 +87,8 @@ function PointsChart(){
         },
         series: [{
             name: 'series-1',
-            data: [70, 40, 80, 50, 80, 40, 85]
+            data: [1, 80, 1, 90, 40, 70, 0]
+            // data: [0, 80, 100, 452, 300, 610, 30000]
         },
 
     ]
@@ -95,7 +96,7 @@ function PointsChart(){
 
     return(
         <>
-            <Chart options={state.options} series={state.series} width={247}/>
+            <Chart options={state.options} series={state.series} width={247} />
         </>
     )
 }
