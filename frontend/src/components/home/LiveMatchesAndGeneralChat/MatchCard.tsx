@@ -11,7 +11,7 @@ interface ParentCompProps {
 
 function MatchCard(props:ParentCompProps){
     return (
-        <CardTesting childComp={
+        <CornerLinedCard childComp={
             <div className={twMerge(
                 "center w-[100%] h-[100%]",
                 props.class
