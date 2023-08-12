@@ -1,9 +1,10 @@
 :root {
-
+  height: 100%; /* matters */
   color-scheme: dark;
   /* color: rgba(255, 255, 255, 0.87); */
-  background-color: radial-gradient(100.00% 100.00% at 52.96% 100.00%, #285F7B 0%, #001D3A 96.42%);
+  /* background-color: #1B191D;  */
   /* background: radial-gradient(100.00% 100.00% at 52.96% 100.00%, #285F7B 0%, #001D3A 96.42%); */
+  /* overflow: hidden; */
 }
 /* .profilename{
   color: #FFF;
@@ -20,6 +21,56 @@ line-height: normal;
   filter:url(#round)
 
 }
+
+.bannerimg {
+  background-image: url("../../../public/aamoussa.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+ }
+
+.row{
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+input[type=radio] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  -moz-appearance: none;
+       appearance: none;
+  /* For iOS < 15 */
+  background-color:#1B191D;
+  /* Not removed via appearance */
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.20em;
+  height: 1.20em;
+  border: 0.18em solid #717178;
+  border-radius: 50%;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+input[type=radio]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  /* Windows High Contrast Mode */
+  background-color:  #717178;
+}
+
+input[type=radio]:checked::before {
+  transform: scale(1.4);
+}
+
 
 
 .apexcharts-tooltip {
@@ -85,7 +136,7 @@ line-height: normal;
 .modes::before {
    content:"";
    display:block;
-   padding-top:112px;
+   padding-top:112px; 
    background:currentColor;
   clip-path: polygon(20.07% -17.99%, 100% 0%, 112.07% 65.85%, 89.44% 101.98%, 0% 100%, 0.22% 15.16%);
 }
@@ -102,6 +153,13 @@ line-height: normal;
 .center{
   position: absolute;
   top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center1{
+  position: absolute;
+  /* top: 50%; */
   left: 50%;
   transform: translate(-50%, -50%);
 }
