@@ -1,18 +1,20 @@
 // import { Outlet } from "react-router-dom";
-import SideBar from "../components/SideBar";
+import SideBar from "../components/home/SideBar";
 import NavBar from "../components/home/NavBar";
 import FriendsBar from "../components/home/FriendsBar";
-import ButtonAct from "../components/home/ButtonAct";
+// import ButtonAct from "../components/home/ButtonAct";
 import GameModes from "../components/home/GamModes";
 
 import CornerLinedCard from "../components/CornerLinedCard/CornerLinedCard";
-import LiveMatchesAndGeneralChat from "../components/home/LiveMatchesAndGeneralChat";
+
+import LiveMatchesAndGeneralChat from "../components/home/LiveMatchesAndGeneralChat/LiveMatchesAndGeneralChat";
 function Home() {
 
     return (
         <div className="home">
             <NavBar/>
-            {/* <SideBar/> */}
+            <SideBar/>
+            <FriendsBar/>          
             <GameModes/>
             <LiveMatchesAndGeneralChat/>
             {/* <CornerLinedCard  
