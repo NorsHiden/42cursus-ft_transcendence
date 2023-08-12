@@ -2,7 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import CURSED from "../../../../public/Cursedicon.svg"
 import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
 import {twMerge} from "tailwind-merge";
-import CardTesting from "../../CornerLinedCard/CardTesting"
+// import CardTesting from "../../CornerLinedCard/CardTesting"
 
 
 interface ParentCompProps {
