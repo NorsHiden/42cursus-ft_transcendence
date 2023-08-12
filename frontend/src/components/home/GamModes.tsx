@@ -1,4 +1,4 @@
-import ButtonAct from "./ButtonAct";
+// import ButtonAct from "./ButtonAct";
 import Regular from "../../../public/regular.svg";
 import Cursed from "../../../public/cursed.svg";
 import Vanish from "../../../public/vanish.svg";
@@ -10,7 +10,7 @@ import PointSection from "./PointsSection";
 
 function GameModes() {
     return (
-        <div id="games-and-points" className="flex justify-between mt-[35px] ml-[169px]">
+        <div id="games-and-points" className="flex justify-between mt-[35px] ml-[169px] mr-[169px] ">
 
             <section id="game-mode-section" className="">
                 <h1 className="game-mode-font mb-[46px] font-sans">Game Modes

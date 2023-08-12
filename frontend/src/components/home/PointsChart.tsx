@@ -6,6 +6,7 @@ import CornerLinedCard from '../CornerLinedCard/CornerLinedCard';
 function PointsChart(){
     const state = {
         options: {
+            
             markers: {
                 colors: "#FFFFFF",
                 strokeColors:"#1B191D",
@@ -42,6 +43,12 @@ function PointsChart(){
                   },
             },
             xaxis: {
+                crosshairs:{
+                    show:false
+                },    
+                tooltip:{
+                    enabled:false
+                },
                 show: true,
                 labels: {
                     show: false
@@ -77,20 +84,22 @@ function PointsChart(){
                           fill="[color:#FFFFFF]" cornerredius="0.5" stroke="[color:#D7D7D7]" cornershape={[3, 0, 3, 0]} strokesize={2} width={24} height={12} margine="" />
                       )
                   );
+                  
                 },
                 theme: false,
                 style: {
                     // fontSize: '12px',
                     fontFamily: undefined
                   },
-              }
+                  
+                },
         },
         series: [{
             name: 'series-1',
             data: [1, 80, 1, 90, 40, 70, 0]
             // data: [0, 80, 100, 452, 300, 610, 30000]
         },
-
+        
     ]
     }
 
@@ -100,5 +109,6 @@ function PointsChart(){
         </>
     )
 }
+
 
 export default PointsChart

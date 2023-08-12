@@ -3,7 +3,7 @@ import Logo from "../../../public/Logo.svg"
 function NavBar()
 {
     return (
-        <div className="navbar pt-[43px] pl-[53px]">
+        <div className="navbar pt-[43px] pl-[53px] mr-[150px]">
             
 <nav className="">
           <div className=" flex flex-wrap items-center justify-between mx-auto p-4">
