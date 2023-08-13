@@ -1,7 +1,7 @@
-import channel1 from "../../../public/channel1.png"
-import channel2 from "../../../public/channel2.png"
-import channel3 from "../../../public/channel3.png"
-import channel4 from "../../../public/channel4.png"
+import channel1 from "/channel1.png"
+import channel2 from "/channel2.png"
+import channel3 from "/channel3.png"
+import channel4 from "/channel4.png"
 
 function SideBar() {
 

@@ -1,5 +1,5 @@
 import Avatar from '@mui/material/Avatar';
-import CURSED from "../../../../public/Cursedicon.svg"
+import CURSED from "/cursedicon.svg"
 import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
 import {twMerge} from "tailwind-merge";
 // import CardTesting from "../../CornerLinedCard/CardTesting"

@@ -1,4 +1,4 @@
-import aamoussa from "../../../../public/aamoussa.jpeg"
+import aamoussa from "/aamoussa.jpeg"
 
 function MessageRecieverCard(){
     return(

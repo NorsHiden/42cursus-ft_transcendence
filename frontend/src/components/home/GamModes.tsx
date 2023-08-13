@@ -1,8 +1,8 @@
 // import ButtonAct from "./ButtonAct";
-import Regular from "../../../public/regular.svg";
-import Cursed from "../../../public/cursed.svg";
-import Vanish from "../../../public/vanish.svg";
-import Goldrush from "../../../public/goldrush.svg";
+import Regular from "/regular.svg";
+import Cursed from "/cursed.svg";
+import Vanish from "/vanish.svg";
+import Goldrush from "/goldrush.svg";
 import CornerLinedCard from "../CornerLinedCard/CornerLinedCard";
 import PointSection from "./PointsSection";
 

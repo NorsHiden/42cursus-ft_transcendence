@@ -1,7 +1,7 @@
 import CornerLinedCard from "../CornerLinedCard/CornerLinedCard"
-import Exclude from "../../../public/Exclude.svg"
-import Vector from "../../../public/Vector.svg"
-import Lock from "../../../public/lock.svg"
+import Exclude from "/exclude.svg"
+import Vector from "/vector.svg"
+import Lock from "/lock.svg"
 import PointsChart from "./PointsChart"
 
 function PointSection(){
