@@ -2,6 +2,8 @@ import Avatar from '@mui/material/Avatar';
 import CURSED from "/cursedicon.svg"
 import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
 import {twMerge} from "tailwind-merge";
+import CornerLinedCardTest from '../../CornerLinedCard/CornerLinedCardTest';
+import useMeasure from 'react-use-measure';
 // import CardTesting from "../../CornerLinedCard/CardTesting"
 
 
@@ -10,6 +12,10 @@ interface ParentCompProps {
 }
 
 function MatchCard(props:ParentCompProps){
+    
+    // const [card_ref, data] = useMeasure();
+
+    
     return (
         <CornerLinedCard childComp={
             <div className={twMerge(
@@ -17,7 +23,7 @@ function MatchCard(props:ParentCompProps){
                 props.class
             )}
             >
-                <div id="card-header" className="flex justify-between mt-[26px] ml-[37px] mr-[32px]">
+                <div id="card-header" className="relative flex justify-between mt-[26px] ml-[37px] mr-[32px]">
                     <div id="card-mode" className="flex">
                         <div  className="relative  mr-[12px] mt-[3px] mb-[37px] rounded-full bg-[#3DFFFB] w-[28px] h-[28px]">
                             <img  src={CURSED} className="center w-[16px] h-[18px]" />
@@ -37,7 +43,7 @@ function MatchCard(props:ParentCompProps){
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-center w-[100%]">
+                <div className="relative flex justify-center w-[100%]">
                     <div className="mr-[24px]">
                         <Avatar
                             alt="Remy Sharp"
@@ -68,7 +74,7 @@ function MatchCard(props:ParentCompProps){
                                     
 
 
-        } fill="[color:#1E1F23]" cornerredius="3" stroke="[color:#2C2D33]" strokesize={3} width={386} height={212} cornershape={[48, 0, 48, 0]} margine="" />
+        } fill="[color:#1E1F23]" cornerredius="3" stroke="[color:#2C2D33]" strokesize={3} width={386} height={212} cornershape={[48, 0, 48, 0]} margine="" ratio={55/100}/>
     )
 }
 

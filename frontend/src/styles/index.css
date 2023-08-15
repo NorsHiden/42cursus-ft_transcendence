@@ -164,9 +164,9 @@ input[type=radio]:checked::before {
   transform: translate(-50%, -50%);
 }
 
-.game-mode-font{
+/* .game-mode-font{
   font-weight: bold;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: white;
   font-size: 30px;
-}
+} */

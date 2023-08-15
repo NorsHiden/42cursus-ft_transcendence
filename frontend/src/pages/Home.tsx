@@ -3,8 +3,8 @@ import SideBar from "../components/home/SideBar";
 import NavBar from "../components/home/NavBar";
 import FriendsBar from "../components/home/FriendsBar";
 // import ButtonAct from "../components/home/ButtonAct";
-import GameModes from "../components/home/GamModes";
-
+import GameModes from "../components/home/GameModes";
+import GameModesTest from "../components/home/GameModesTest";
 import CornerLinedCard from "../components/CornerLinedCard/CornerLinedCard";
 
 import LiveMatchesAndGeneralChat from "../components/home/LiveMatchesAndGeneralChat/LiveMatchesAndGeneralChat";
@@ -15,7 +15,8 @@ function Home() {
             <NavBar/>
             <SideBar/>
             <FriendsBar/>          
-            <GameModes/>
+            {/* <GameModes/> */}
+            <GameModesTest/>
             <LiveMatchesAndGeneralChat/>
             {/* <CornerLinedCard  
                 childComp = {

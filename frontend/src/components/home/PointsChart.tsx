@@ -105,7 +105,7 @@ function PointsChart(){
 
     return(
         <>
-            <Chart options={state.options} series={state.series} width={247} />
+            <Chart options={state.options} series={state.series} />
         </>
     )
 }
