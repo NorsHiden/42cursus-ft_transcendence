@@ -6,7 +6,6 @@ interface props {
     name?:string
 }
 
-
 function MessageSenderCard(props:props)
 {
     return (

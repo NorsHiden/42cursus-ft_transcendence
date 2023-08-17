@@ -8,6 +8,8 @@ import GameModesTest from "../components/home/GameModesTest";
 import CornerLinedCard from "../components/CornerLinedCard/CornerLinedCard";
 
 import LiveMatchesAndGeneralChat from "../components/home/LiveMatchesAndGeneralChat/LiveMatchesAndGeneralChat";
+
+
 function Home() {
 
     return (
@@ -17,7 +19,7 @@ function Home() {
             <FriendsBar/>          
             {/* <GameModes/> */}
             <GameModesTest/>
-            <LiveMatchesAndGeneralChat/>
+            <LiveMatchesAndGeneralChat />
             {/* <CornerLinedCard  
                 childComp = {
 

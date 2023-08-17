@@ -8,45 +8,75 @@ import Subtract from "/subtract.svg"
 import aamoussa from "/aamoussa.jpeg"
 import MessageRecieverCard from "./MessageRecieverCard"
 import MessageSenderCard from "./MessageSenderCard"
+import useMeasure from "react-use-measure"
+import CornerLinedCardTest from "../../CornerLinedCard/CornerLinedCardTest"
+
+
+
+
+interface live_match_header {
+    title:number,
+    radio_buttone:{
+        size:string,
+        text:number,
+    },
+    select_button:{
+        w:number,
+    }
+
+}
 
 function LiveMatchesAndGeneralChat() {
+    const [header_ref, data] = useMeasure()
+
+    const header:live_match_header = {
+        title: data.width * (2.32 / 100),
+        radio_buttone:{
+            size: String((data.width * (1.68 / 100))) + "px",
+            text:(data.width * (1 / 100)),
+        },
+        select_button: {
+            w: data.width * (12.94 / 100),
+        }
+    }
+
     return (
         <div className="flex  mt-[35px] ml-[169px] gap-[10px] mr-[169px]">
             <section id="live-matches" className="flex flex-col w-3/4 gap-[46px]">
-                <div id="liveMatches-header" className="flex justify-between items-center">
-                    <h1 className="font-sans text-[28px] game-mode-font ">Recent Matches</h1>
+                <div ref={header_ref} id="liveMatches-header" className="flex justify-between items-center">
+                    <h1 className={`font-sans text-[${header.title}px] game-mode-font `}>Recent Matches</h1>
                     <div className="flex">
                         <div className="flex items-center ml-[30px]">
-                            <input id="default-radio-1" type="radio" value="" name="default-radio" className="" />
-                            <label htmlFor="default-radio-1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ALL</label>
+                            <input style={{"--data":header.radio_buttone.size}} id="default-radio-1" type="radio" value="" name="default-radio" className="" />
+                            <label htmlFor="default-radio-1" className={`ml-2 text-[${header.radio_buttone.text}px] font-medium text-gray-900 `}>ALL</label>
                         </div>
                         <div className="flex items-center ml-[30px]">
-                            <input checked id="default-radio-2" type="radio" value="" name="default-radio" className="w-4 h-4 " />
-                            <label htmlFor="default-radio-2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">live</label>
+                            <input checked style={{"--data":header.radio_buttone.size}} id="default-radio-2" type="radio" value="" name="default-radio" className="w-4 h-4 " />
+                            <label htmlFor="default-radio-2" className={`ml-2 text-[${header.radio_buttone.text}px] font-medium text-gray-900 `}>Live</label>
                         </div>
                         <div className="flex items-center ml-[30px]">
-                            <input checked id="default-radio-3" type="radio" value="" name="default-radio" className="w-4 h-4 " />
-                            <label htmlFor="default-radio-2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Done</label>
+                            <input checked style={{"--data":header.radio_buttone.size}} id="default-radio-3" type="radio" value="" name="default-radio" className="w-4 h-4 " />
+                            <label htmlFor="default-radio-3" className={`ml-2 text-[${header.radio_buttone.text}px] font-medium text-gray-900 `}>Done</label>
                         </div>
                         <CornerLinedCard childComp={
                           <div className="center w-[98%] h-[98%] flex justify-center">
                             <select name="language" id="language" className="flex pl-[6px] justify-center w-[100%] [background:none] [color:white]">
                                 
-                                    <option style={{display:"none"}} value="c++" disabled selected>Sorte by</option>
+                                    <option className="text-[2px]" style={{display:"none"}} value="c++" disabled selected >Sorte by</option>
                                     <option value="javascript" >cursed</option>
                                     <option value="python">Regular</option>
                                     <option value="java">Vanish</option>
                                     <option value="java">Goldrush</option> 
                         </select>                            
                         </div>
-                    } fill="[color:#2D313A]" cornerredius="1" stroke="[color:#4B5261]" strokesize={3} width={154} height={33} cornershape={[8,0,8,0]} margine="ml-[39px]"  />
+                    } fill="[color:#2D313A]" cornerredius="0" stroke="[color:#4B5261]" strokesize={1} width={header.select_button.w} height={header.select_button.w * (21 / 100)} cornershape={[8,0,8,0]} margine="ml-[38px]" />
 
                         
 
                     </div>
                 </div>
                 <div id="live-matches-cards" className=" grid grid-cols-3 gap-[20px] overflow-scroll  max-h-[60vh]">
-                    <MatchCard class="" />
+                    <MatchCard class=""/>
                     <MatchCard class="" />
                     <MatchCard class="" />
                     <MatchCard class="" />
