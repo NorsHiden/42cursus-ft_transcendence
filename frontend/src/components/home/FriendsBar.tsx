@@ -21,24 +21,24 @@ function FriendsBar(){
             <div className="relative w-full h-full pt-[100px]">
                 <ul className="relative w-full h-full space-y-[24PX]">
                     <li className="realatve w-full flex justify-center">
-                        <div  id="avatar" className="relative flex bannerimg justify-end w-[64px] h-[64px]  rounded-full ">
-                            <div id="online-icon" className=" w-[12px] h-[12px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
+                        <div  id="avatar" className="relative flex bannerimg justify-end lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]  rounded-full ">
+                            <div id="online-icon" className="  lg:h-[12px] lg:w-[12px] md:h-[6px] md:w-[6px] sm:h-[3px] lg:w-[3px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
                         </div>
                     </li>
                     <li className="flex justify-center">
                         
-                        <div  id="avatar" className="relative flex bannerimg justify-end w-[64px] h-[64px]  rounded-full ">
-                            <div id="online-icon" className=" w-[12px] h-[12px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
+                        <div  id="avatar" className="relative flex bannerimg justify-end lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]  rounded-full ">
+                            <div id="online-icon" className=" lg:h-[12px] lg:w-[12px] md:h-[6px] md:w-[6px] sm:h-[3px] lg:w-[3px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
                         </div>
                     </li>
                     <li className="flex justify-center">
-                    <div  id="avatar" className="relative flex bannerimg justify-end w-[64px] h-[64px]  rounded-full ">
-                            <div id="online-icon" className=" w-[12px] h-[12px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
+                    <div  id="avatar" className="relative flex bannerimg justify-end lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]  rounded-full ">
+                            <div id="online-icon" className=" lg:h-[12px] lg:w-[12px] md:h-[6px] md:w-[6px] sm:h-[3px] lg:w-[3px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
                             </div>
                     </li>
                     <li className="flex justify-center">
-                    <div  id="avatar" className="relative flex bannerimg justify-end w-[64px] h-[64px]  rounded-full ">
-                            <div id="online-icon" className=" w-[12px] h-[12px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
+                    <div  id="avatar" className="relative flex bannerimg justify-end lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]  rounded-full ">
+                            <div id="online-icon" className=" lg:h-[12px] lg:w-[12px] md:h-[6px] md:w-[6px] sm:h-[3px] lg:w-[3px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]"></div>
                         </div>
                     </li>
                 </ul>
