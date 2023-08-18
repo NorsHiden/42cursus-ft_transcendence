@@ -50,8 +50,7 @@ function CornerLinedCardTest(props:ParentCompProps){
     const test = makeshape(cornershape, angleRadians, props.width , props.height);
 
     const id = nextId();
-    const url = "url(#" + id + ")"
-    console.log(bounds);   
+    const url = "url(#" + id + ")"  
     return (
         <div className={`curser-poiter ${props.margine}`} ref={ref}>
             <div style={{'--polygon-points':test,'--url' : url}} className={
