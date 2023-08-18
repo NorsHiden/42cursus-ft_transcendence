@@ -11,7 +11,7 @@ import LiveMatchesAndGeneralChat from "../components/home/LiveMatchesAndGeneralC
 
 
 function Home() {
-
+    
     return (
         <div className="home">
             <NavBar/>
@@ -20,6 +20,8 @@ function Home() {
             {/* <GameModes/> */}
             <GameModesTest/>
             <LiveMatchesAndGeneralChat />
+            {/* <LiveMatches/>
+            <GeneralChat/> */}
             {/* <CornerLinedCard  
                 childComp = {
 
