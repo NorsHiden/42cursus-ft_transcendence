@@ -1,45 +1,43 @@
 import Logo from "/logo.svg"
+import parrametre from "/parrametre.svg"
+import notification from "/notification.svg"
+import chat from "/chat.svg"
 
 function NavBar()
 {
     return (
-        <div className="navbar pt-[43px] pl-[53px] mr-[150px]">
+        <div className="navbar  lg:pl-[53px] md:pl-[26.5px] sm:pl-[13.2px] lg:mr-[150px] md:mr-[75px] mr-[37.2px]">
             
 <nav className="">
-          <div className=" flex flex-wrap items-center justify-between mx-auto p-4">
-            <img className="" src={Logo} alt="" />
+          <div className=" flex flex-wrap items-center justify-between mx-auto lg:p-4 md:p-2 p-1">
+            <img className="lg:h-[150px] lg:w-[150px] md:h-[100px] md:w-[100px] h-[80px] w-[80px]" src={Logo} alt="" />
             <div className="flex items-center md:order-2">
 
               <div className="flex items-center ">
-                <div className="pr-[36px]">
+                <div className="lg:pr-[36px] md:pr-[18px] pr-[8px]">
                   <button>
-                    <svg width="25" height="25" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M9.74032 0.083374C8.27847 0.083374 7.09341 1.26844 7.09341 2.73029C7.09341 2.94215 6.94731 3.2248 6.59814 3.41443C6.49069 3.47279 6.38472 3.53348 6.2803 3.59642C5.93205 3.80636 5.60514 3.79289 5.41319 3.68306C4.13841 2.95367 2.51393 3.38892 1.77461 4.65798L1.04084 5.91751C0.30009 7.18901 0.737239 8.82053 2.01448 9.55133C2.19966 9.65728 2.37377 9.92677 2.36529 10.3278C2.36408 10.3851 2.36347 10.4425 2.36347 10.5C2.36347 10.5576 2.36408 10.615 2.36529 10.6723C2.37378 11.0733 2.19967 11.3428 2.0145 11.4488C0.737273 12.1796 0.300127 13.8111 1.04086 15.0825L1.77466 16.3421C2.51398 17.6112 4.13844 18.0464 5.41323 17.317C5.60516 17.2072 5.93207 17.1937 6.28031 17.4037C6.38472 17.4666 6.49069 17.5273 6.59814 17.5856C6.94731 17.7753 7.09341 18.0579 7.09341 18.2698C7.09341 19.7316 8.27847 20.9167 9.74032 20.9167H11.2598C12.7216 20.9167 13.9067 19.7316 13.9067 18.2698C13.9067 18.0579 14.0528 17.7753 14.402 17.5856C14.5094 17.5273 14.6154 17.4666 14.7198 17.4037C15.068 17.1937 15.3949 17.2072 15.5869 17.317C16.8616 18.0464 18.4861 17.6112 19.2254 16.3421L19.9592 15.0826C20.7 13.8111 20.2628 12.1796 18.9856 11.4488C18.8004 11.3428 18.6263 11.0734 18.6348 10.6724C18.636 10.615 18.6366 10.5576 18.6366 10.5C18.6366 10.4425 18.636 10.3851 18.6348 10.3278C18.6263 9.92676 18.8004 9.65727 18.9856 9.55132C20.2629 8.82052 20.7 7.189 19.9593 5.9175L19.2255 4.65798C18.4862 3.38892 16.8617 2.95366 15.5869 3.68305C15.3949 3.79288 15.068 3.80635 14.7198 3.59642C14.6154 3.53347 14.5094 3.47279 14.4019 3.41443C14.0528 3.2248 13.9067 2.94215 13.9067 2.73029C13.9067 1.26844 12.7216 0.083374 11.2598 0.083374H9.74032ZM10.5 7.37504C8.77408 7.37504 7.37497 8.77415 7.37497 10.5C7.37497 12.2259 8.77408 13.625 10.5 13.625C12.2259 13.625 13.625 12.2259 13.625 10.5C13.625 8.77415 12.2259 7.37504 10.5 7.37504Z" fill="#5E6069" />
-                    </svg>
+                    {/* parrametre */}
+                    <img  src={parrametre} alt="img" className=" lg:h-[32px] lg:w-[32px] md:h-[15px] md:w-[15px] h-[6px] w-[6px]"/>
                   </button>
                 </div>
-                <div className="pr-[36px]">
+                <div className="lg:pr-[36px] md:pr-[18px] pr-[8px]">
                   <button>
-                    <svg width="25" height="25" viewBox="0 0 27 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 2.08337C6.74701 2.08337 2.08331 6.74707 2.08331 12.5C2.08331 14.391 2.58801 16.1663 3.47005 17.6962C3.64969 18.0078 3.6805 18.3871 3.52891 18.7133L2.63962 20.6267C2.09359 21.6597 2.84098 22.9167 4.02247 22.9167H12.5C18.2529 22.9167 22.9166 18.253 22.9166 12.5C22.9166 6.74707 18.2529 2.08337 12.5 2.08337Z" fill="#5E6069" />
-                      <circle cx="21.5" cy="5.5" r="4.5" fill="#FE5821" stroke="#1B191D" stroke-width="2" />
-                    </svg>
+                    {/* chat */}
+                    <img  src={chat} alt="img" className=" lg:h-[32px] lg:w-[32px] md:h-[15px] md:w-[15px] h-[6px] w-[6px]"/>
                   </button>
                 </div>
-                <button className="pr-[36px]">
-                  <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 2.08337C10.3849 2.08337 8.69691 2.83939 7.55023 4.1467C6.4208 5.43433 5.90278 7.15688 5.90278 8.95837V10.7639C5.90278 11.0181 5.78871 11.3239 5.49131 11.7185C5.20623 12.0968 4.83614 12.4515 4.42731 12.8434L4.35804 12.9098C3.6458 13.5932 3.125 14.583 3.125 15.7639C3.125 17.3646 4.37316 18.75 6.01852 18.75H18.9815C20.6268 18.75 21.875 17.3646 21.875 15.7639C21.875 14.583 21.3542 13.5932 20.642 12.9098L20.5727 12.8434C20.1639 12.4515 19.7938 12.0968 19.5087 11.7185C19.2113 11.3239 19.0972 11.0181 19.0972 10.7639V8.95837C19.0972 7.15688 18.5792 5.43433 17.4498 4.1467C16.3031 2.83939 14.6151 2.08337 12.5 2.08337Z" fill="#5E6069" />
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.83648 19.9681C10.3143 19.6477 10.9614 19.7753 11.2818 20.2531C11.3853 20.4075 11.5461 20.5531 11.7624 20.6609C11.9789 20.7687 12.2338 20.8296 12.5 20.8296C12.7662 20.8296 13.0211 20.7687 13.2376 20.6609C13.4538 20.5531 13.6147 20.4075 13.7182 20.2531C14.0386 19.7753 14.6857 19.6477 15.1635 19.9681C15.6413 20.2886 15.7689 20.9357 15.4485 21.4135C15.1285 21.8905 14.6816 22.269 14.1666 22.5256C13.6519 22.782 13.0777 22.9129 12.5 22.9129C11.9223 22.9129 11.3481 22.782 10.8334 22.5256C10.3184 22.269 9.87143 21.8905 9.55151 21.4135C9.23109 20.9357 9.35867 20.2886 9.83648 19.9681Z" fill="#5E6069" />
-                  </svg>
+                <button className="lg:pr-[36px] md:pr-[18px] pr-[8px]">
+                  {/* Notification */}
+                  <img  src={notification} alt="img" className=" lg:h-[32px] lg:w-[32px] md:h-[15px] md:w-[15px] h-[6px] w-[6px]"/>
                 </button>
               </div>
-              <button type="button" className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+              <button type="button" className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 " id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                 <span className="sr-only">Open user menu</span>
-                <img className="w-[59px] h-[59px] rounded-full" src="/public/aamoussa.jpeg" alt="user photo" />
+                <img className="lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px] rounded-full" src="/public/aamoussa.jpeg" alt="user photo" />
               </button>
               <div >
-                <p className="profilename font-sans text-xl font-extrabold ml-[14px]">HxX</p>
-                <p className="font-sans text-sm font-extrabold ml-[14px] text-[#5E6069]">@hunter</p>
+                <p className="profilename font-sans lg:text-lg md:text-sm text-xs font-extrabold lg:ml-[14px] md:ml-[7px] ml-[2px]">HxX</p>
+                <p className="font-sans lg:text-lg md:text-sm text-xs font-extrabold ml-[14px] text-[#5E6069] lg:ml-[14px] md:ml-[7px] ml-[2px]">@hunter</p>
               </div>
             </div>
           </div>
