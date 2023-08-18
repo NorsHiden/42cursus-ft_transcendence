@@ -16,8 +16,7 @@ function PointSection(){
     const width = bounds.width;
 
     const achievement_size = bound.width * (15 / 100)
-    console.log("achie",achievement_size);
-    console.log("re", bound.width)
+
     return (
         <>
             <div className="relative  grid grid-cols-2 ml-[15px]">

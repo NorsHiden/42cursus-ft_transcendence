@@ -22,7 +22,7 @@ function SideBar() {
         h:5,
     }
 
-    console.log("sideBar",data.height)
+
 
     function signOut() {
         localStorage.removeItem('token');
@@ -30,28 +30,28 @@ function SideBar() {
     }
 
     return (
-        <aside ref={ref_sidebar} id="default-sidebar" className={`fixed top-0 left-0 z-40 w-[161px] h-[60vh] transition-transform -translate-x-full sm:translate-x-0`} aria-label="Sidebar">
+        <aside ref={ref_sidebar} id="default-sidebar" className={`fixed top-0 left-0 z-40 w-[161px] h-[60vh] transition-transform`} aria-label="Sidebar">
             
-            <div className="h-full h-full pt-[180px]">
-                <ul className="space-y-[24PX]">
+            <div className="h-full h-full lg:pt-[180px] md:pt-[100px] sm:pt-[80px] ">
+                <ul className="lg:space-y-[24PX] md:space-y-[12PX] space-y-[8PX]">
                     <li>
                         <a id="home" href="#" className="flex justify-center p-2">
-                        <img  src={home} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>                            
+                        <img  src={home} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>                            
                         </a>
                     </li>
                     <li>
                         <a id="search" href="#" className="flex justify-center p-2">
-                        <img  src={search} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>                            
+                        <img  src={search} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>                            
                         </a>
                     </li>
                     <li>
                         <a  id="leader" href="#" className="flex justify-center p-2 ">
-                        <img  src={leader} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>
+                        <img  src={leader} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>
                         </a>
                     </li>
                     <li>
                         <a id="shope" href="#" className="flex justify-center p-2">
-                        <img  src={bag} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>
+                        <img  src={bag} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>
                         </a>
                     </li>
 

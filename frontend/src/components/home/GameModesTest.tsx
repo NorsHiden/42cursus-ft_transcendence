@@ -15,17 +15,16 @@ function GameModesTest() {
     const [first_section, bounds] = useMeasure();
 
     const width = bound.width;
-    console.log("width ", width)
     const play_size = width * (32 / 100)
     const font_size = play_size * (18 / 100);
     const section_gap_xl = bounds.width * (32 / 100);
     const section_gap = bounds.width * (10 / 100);
 
     return (
-        <div id="games-and-points" ref={first_section} className={`grid grid-cols-2  mt-[35px] ml-[169px] mr-[169px] gap-[${section_gap}px] xl:gap-[${section_gap_xl}px]`}>
+        <div id="games-and-points" ref={first_section} className={`grid grid-cols-2   lg:ml-[169px] md:ml-[150px] ml-[60px] lg:mr-[169px] md:mr-[150px] mr-[60px] gap-[${section_gap}px] xl:gap-[${section_gap_xl}px]`}>
 
             <section ref={ref} id="game-mode-section" className="">
-                <h1 className={`font-extrabold text-[${width * (4 / 100)}px] mb-[46px] font-sans`}> Game Modes </h1>
+                <h1 className={`font-extrabold text-[${width * (4 / 100)}px] lg:mb-[46px] md:mb-[22px] mb-[12px] font-sans`}> Game Modes </h1>
                 <div id="modes" className="grid grid-cols-4 gap-[10px]">
                     
                     <CornerLinedCardTest childComp={

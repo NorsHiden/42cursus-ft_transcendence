@@ -33,7 +33,6 @@ function GeneralChat()
 
     }
 
-    console.log("chat", data.width)
     return (
         <>
         <section ref={header_ref} id="general-chat" className="flex flex-col gap-[46px] w-[100%]">
