@@ -7,57 +7,63 @@ import home from "/home.svg"
 import search from "/search.svg"
 import leader from "/leader.svg"
 import bag from "/bag.svg"
+import addchannel from "/addchannel.svg"
+import explore from "/explore.svg"
 
 interface side_bar {
     w:number,
     h:number,
+    buttomMargine:number,
 }
 
 function SideBar() {
 
     const [ref_sidebar, data] = useMeasure()
 
+
     const scalSideBar:side_bar = {
         w: data.height * (15 / 100),
-        h:5,
+        h: (data.height / 11) - (data.height * (5 / 100)),
+        buttomMargine:data.height * (2.6 / 100),
     }
 
-
-
+    
     function signOut() {
         localStorage.removeItem('token');
         window.location.href = "/login";
     }
 
+    console.log("NAVBAR HEIGHT: ", data.height)
+
     return (
-        <aside ref={ref_sidebar} id="default-sidebar" className={`fixed top-0 left-0 z-40 w-[161px] h-[60vh] transition-transform`} aria-label="Sidebar">
+        <aside ref={ref_sidebar} id="default-sidebar" className={`fixed top-0 left-0 z-40 w-[10vw] h-[90vh] transition-transform overflow-hidden`} aria-label="Sidebar">
             
             <div className="h-full h-full lg:pt-[180px] md:pt-[100px] sm:pt-[80px] ">
-                <ul className="lg:space-y-[24PX] md:space-y-[12PX] space-y-[8PX]">
+                <ul className={`space-y-[${scalSideBar.buttomMargine}px]`}>
                     <li>
-                        <a id="home" href="#" className="flex justify-center p-2">
-                        <img  src={home} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>                            
+                        <a id="home" href="#" className={`flex justify-center`}>
+                        <img  src={home} alt="img" className={`h-[${scalSideBar.h }px]`}/>                            
                         </a>
                     </li>
                     <li>
-                        <a id="search" href="#" className="flex justify-center p-2">
-                        <img  src={search} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>                            
+                        <a id="search" href="#" className="flex justify-center ">
+                        <img  src={search} alt="img" className={`h-[${scalSideBar.h}px]`}/>                            
                         </a>
                     </li>
                     <li>
-                        <a  id="leader" href="#" className="flex justify-center p-2 ">
-                        <img  src={leader} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>
+                        <a  id="leader" href="#" className="flex justify-center ">
+                        <img  src={leader} alt="img" className={`h-[${scalSideBar.h}px]`}/>
                         </a>
                     </li>
                     <li>
-                        <a id="shope" href="#" className="flex justify-center p-2">
-                        <img  src={bag} alt="img" className=" lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] h-[15px] w-[15px]"/>
+                        <a id="shope" href="#" className="flex justify-center ">
+                        <img  src={bag} alt="img" className={`h-[${scalSideBar.h}px]`}/>
                         </a>
                     </li>
 
 
-                    <li className="flex justify-center py-[39px]">
-                        <div style={{ background: "rgba(217, 217, 217, 0.36)" }} className="w-[80px] h-[1px] ">
+                    <li className="flex justify-center p-2">
+                        <div style={{ background: "rgba(217, 217, 217, 0.36)" }} className="w-[50%] h-[1px] ">
                         </div>
                     </li>
 
@@ -67,21 +73,22 @@ function SideBar() {
                     </li> */}
 
                     <li className="flex justify-center">
-                            <img src={channel1} alt="img" className="rounded-[20px] lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>   
+                            <img src={channel1} alt="img" className={`rounded-[20px] w-[${scalSideBar.h}px]`}/>   
                     </li>
                     <li className="flex justify-center">
-                            <img src={channel2} alt="img" className="rounded-[20px] lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>   
+                            <img src={channel2} alt="img" className={`rounded-[20px] w-[${scalSideBar.h}px]`}/>   
                     </li>
                     <li className="flex justify-center">
-                            <img src={channel3} alt="img" className="rounded-[20px] lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>   
+                            <img src={channel3} alt="img" className={`rounded-[20px] w-[${scalSideBar.h}px]`}/>   
                     </li>
                     <li className="flex justify-center">
-                            <img src={channel4} alt="img" className="rounded-[20px] lg:h-[52px] lg:w-[52px] md:h-[32px] md:w-[32px] sm:h-[15px] lg:w-[15px]"/>   
+                            <img src={channel4} alt="img" className={`rounded-[20px] w-[${scalSideBar.h}px]`}/>   
                     </li>
                     <li className="flex justify-center">
-                        <button onClick={signOut} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                            Log Out
-                        </button>
+                            <img src={addchannel} alt="img" className={`rounded-[20px] w-[${scalSideBar.h - 6}px]`}/>   
+                    </li>
+                    <li className="flex justify-center">
+                            <img src={explore} alt="img" className={`rounded-[20px] w-[${scalSideBar.h - 6}px]`}/>   
                     </li>
                 </ul>
 
