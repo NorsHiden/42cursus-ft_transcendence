@@ -38,7 +38,7 @@ function SideBar() {
     return (
         <aside ref={ref_sidebar} id="default-sidebar" className={`fixed top-0 left-0 z-40 w-[10vw] h-[90vh] transition-transform overflow-hidden`} aria-label="Sidebar">
             
-            <div className="h-full h-full lg:pt-[180px] md:pt-[100px] sm:pt-[80px] ">
+            <div className="h-full w-full pt-[18vh]">
                 <ul className={`space-y-[${scalSideBar.buttomMargine}px]`}>
                     <li>
                         <a id="home" href="#" className={`flex justify-center`}>
