@@ -23,7 +23,7 @@ function GameModesTest() {
     const mb = bound.height * (13.06 / 100);
     const play_button_margin3 = bound.height * (7.95 / 100)
     return (
-        <div id="games-and-points" ref={first_section} className={`grid grid-cols-2 ml-[9vw]  mr-[9vw] gap-[${section_gap}px] xl:gap-[${section_gap_xl}px]`}>
+        <div id="games-and-points" ref={first_section} className={`grid grid-cols-2 ml-[9vw]  mr-[9vw] gap-[${section_gap}px] xl:gap-[${section_gap_xl}px] mt-[5.64vh]`}>
 
             <section ref={ref} id="game-mode-section" className="">
                 <h1 className={`font-extrabold text-[${width * (4 / 100)}px] mb-[${mb}px] font-sans`}> Game Modes </h1>
