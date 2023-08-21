@@ -18,19 +18,19 @@ function GameModes() {
                 <div id="modes" className="flex">
                     <CornerLinedCard childComp={
                         <img className="center" src={Regular} alt="" />
-                    } fill="[color:#301D13]" cornerredius="3" stroke="[color:#4E301F]" strokesize={2} cornershape={[24,0,24,0]} width={139} height={112} margine="mr-[20px]"  />
+                    } fill="[color:#301D13]" cornerredius="3" stroke="[color:#4E301F]" strokesize={0} cornershape={[24,0,24,0]} width={139} height={112} margine="mr-[20px]"  />
 
                     <CornerLinedCard childComp={
                         <img className="center" src={Cursed} alt="" />
-                    } fill="[color:#041F1E]" cornerredius="3" stroke="[color:#073736]" strokesize={2} width={139} height={112} cornershape={[24,0,24,0]} margine="mr-[20px]"  />
+                    } fill="[color:#041F1E]" cornerredius="3" stroke="[color:#073736]" strokesize={0} width={139} height={112} cornershape={[24,0,24,0]} margine="mr-[20px]"  />
 
                     <CornerLinedCard childComp={
                         <img className="center" src={Vanish} alt="" />
-                    } fill="[color:#1D1333]" cornerredius="3" stroke="[color:#332158]" cornershape={[24,0,24,0]} strokesize={2} width={139} height={112} margine="mr-[20px]"  />
+                    } fill="[color:#1D1333]" cornerredius="3" stroke="[color:#332158]" cornershape={[24,0,24,0]} strokesize={0} width={139} height={112} margine="mr-[20px]"  />
 
                     <CornerLinedCard childComp={
                         <img className="center" src={Goldrush} alt="" />
-                    } fill="[color:#241D0C]" cornerredius="3" stroke="[color:#413415]"  cornershape={[24,0,24,0]} strokesize={2} width={139} height={112} margine="mr-[20px]" />
+                    } fill="[color:#241D0C]" cornerredius="3" stroke="[color:#413415]"  cornershape={[24,0,24,0]} strokesize={0} width={139} height={112} margine="mr-[20px]" />
          
          
                 </div>

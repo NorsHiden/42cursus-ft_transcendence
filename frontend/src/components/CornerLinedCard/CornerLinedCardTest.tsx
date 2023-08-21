@@ -42,7 +42,7 @@ function CornerLinedCardTest(props:ParentCompProps){
     const width:string = "w-[" + props.width + "px]" 
     const height:string = "before:[padding-top:"+pad+"px;]"
     const strokesizewidth:string = "w-[" + (props.width - props.strokesize) + "px;]"
-    const strokesizeheight:string = "before:[padding-top:"+(pad - props.strokesize)+"px;]" 
+    const strokesizeheight:string = "before:[padding-top:"+(pad)+"px;]" 
     // const strokesizez:string = 
     const angleDegrees = 45; // Angle in degrees
     const angleRadians = unit(angleDegrees, 'deg'); //convert Degrees to radians
@@ -65,7 +65,7 @@ function CornerLinedCardTest(props:ParentCompProps){
                 
                 <div style={{'--url' : url}} className={
                     twMerge("modefill center ",
-                    "w-[99%]",
+                    "w-[100%]",
                     strokesizeheight,  
                     fill
                     )
