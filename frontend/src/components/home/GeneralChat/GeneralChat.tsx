@@ -70,7 +70,7 @@ function GeneralChat()
                   {/* and this one is resonsible for chat body  */}
                   
                   <div className="relative grid grid-cols-1 bg-[#1E1F23] w-[100%] items-end h-[60%] z-40 border-l-2 border-r-2  overflow-hidden overflow-y-scroll  ">
-                    <MessageSenderCard
+                    {/* <MessageSenderCard
                       name="Anas"
                       avatar="../../../../public/aamoussa.jpeg"
                       content="hallo"
@@ -80,7 +80,7 @@ function GeneralChat()
                     <MessageRecieverCard />
                     <MessageRecieverCard />
                     <MessageRecieverCard />
-                    <MessageRecieverCard />
+                    <MessageRecieverCard /> */}
                   </div>
                     
                   <div
