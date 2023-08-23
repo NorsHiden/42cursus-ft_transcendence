@@ -10,6 +10,11 @@ interface side_bar {
     h:number,
     buttomMargine:number,
     online:number,
+    card:{
+        w:number,
+        h:number,
+        cornershape:number,
+    }
 }
 
 
@@ -21,17 +26,22 @@ function FriendsBar(){
         w: data.height * (15 / 100),
         h: (data.height / 6) - data.height * (5 / 100) - 6,
         buttomMargine:data.height * (5 / 100),
-        online: ((data.height / 6) - data.height * (5 / 100)) * (18 / 100)
+        online: ((data.height / 6) - data.height * (5 / 100)) * (18 / 100),
+        card:{
+            w: data.width * (44.89 / 100),
+            h: (data.width * (44.89 / 100)) * (27.27 / 100),
+            cornershape: ((data.width * (44.89 / 100)) * (27.27 / 100)) * (30 / 100),
+        }
     }   
     return (
         
         <aside id="default-sidebar" ref={ref_sidebar} className="fixed top-0 right-0 z-40 w-[10vw] h-[60vh] transition-transform -translate-x-full sm:translate-x-0 " aria-label="Sidebar">
             <div id="friends-header-side-bar" className="pt-[4vh]">
                 <div className="flex flex-col w-full justify-center items-center">
-                    <h2 className="font-sans extra-bold lg:text-[18px] md:text-[8px] text-[4px]">FRIENDS</h2>
+                    <h2 className="font-sans extra-bold  text-[1.4vw]">FRIENDS</h2>
                     <CornerLinedCard childComp={
-                            <h2 style={{ color: "black" }} className="center font-sans text-[12px] font-extrabold "> online </h2>
-                        } fill="[color:#D5FF5C]" cornerredius="1" stroke="[color:#E0FF85]"  cornershape={[5,0,5,0]} strokesize={0} width={66} height={18} margine="" />
+                            <h2 style={{ color: "black" }} className="center font-sans text-[1vw] font-extrabold "> online </h2>
+                        } fill="[color:#D5FF5C]" cornerredius="0" stroke="[color:#E0FF85]"  cornershape={[scalSideBar.card.cornershape,0,scalSideBar.card.cornershape,0]} strokesize={0} width={scalSideBar.card.w} height={scalSideBar.card.h} margine="" />
             
             </div>
             </div>
