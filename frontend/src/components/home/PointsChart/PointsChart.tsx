@@ -1,7 +1,7 @@
 import Chart from 'react-apexcharts'
 import { renderToString } from 'react-dom/server';
 
-import CornerLinedCard from '../CornerLinedCard/CornerLinedCard';
+import CornerLinedCard from '../../CornerLinedCard/CornerLinedCard';
 
 function PointsChart(){
     const state = {

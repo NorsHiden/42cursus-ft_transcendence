@@ -3,8 +3,8 @@ import Regular from "/regular.svg";
 import Cursed from "/cursed.svg";
 import Vanish from "/vanish.svg";
 import Goldrush from "/goldrush.svg";
-import CornerLinedCard from "../CornerLinedCard/CornerLinedCard";
-import PointSection from "./PointsSection";
+import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard";
+import PointSection from "../PoinstSection/PointsSection";
 
 
 

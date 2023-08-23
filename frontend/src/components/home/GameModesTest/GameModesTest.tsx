@@ -3,10 +3,10 @@ import Regular from "/regular.svg";
 import Cursed from "/cursed.svg";
 import Vanish from "/vanish.svg";
 import Goldrush from "/goldrush.svg";
-import CornerLinedCardTest from "../CornerLinedCard/CornerLinedCardTest";
-import PointSection from "./PointsSection";
+import CornerLinedCardTest from "../../CornerLinedCard/CornerLinedCardTest";
+import PointSection from "../PoinstSection/PointsSection";
 import useMeasure from "react-use-measure";
-import CornerLinedCard from "../CornerLinedCard/CornerLinedCard"
+import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
 
 
 

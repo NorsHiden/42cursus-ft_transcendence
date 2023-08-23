@@ -27,16 +27,16 @@ function GeneralChat()
         channel_name:  data.width * (4.15 / 100),
         channel_online: data.width * (2.15 / 100),
         chat_header : {
-            title: data.width * (5.19 / 100),
-            description: data.width * (3.11 / 100)
+            title: data.width * (2 / 100),
+            description: data.width * (2 / 100)
         }
 
     }
 
     return (
         <>
-        <section ref={header_ref} id="general-chat" className="flex flex-col gap-[46px] w-[100%]">
-          <div className="flex flex-col justify-center ml-[43px]">
+        <section ref={header_ref} id="general-chat" className="flex flex-col gap-[3.5vh] w-[100%]">
+          <div className="flex flex-col justify-center ml-[1.19vw]">
             <h1 className={`font-sans text-[${chat.chat_header.title}px] font-extrabold`}>
               Public chat
             </h1>

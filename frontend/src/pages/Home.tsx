@@ -1,10 +1,10 @@
 // import { Outlet } from "react-router-dom";
-import SideBar from "../components/home/SideBar";
-import NavBar from "../components/home/NavBar";
-import FriendsBar from "../components/home/FriendsBar";
+import SideBar from "../components/home/Sidebar/SideBar";
+import NavBar from "../components/home/NavBar/NavBar";
+import FriendsBar from "../components/home/FriendsBar/FriendsBar";
 // import ButtonAct from "../components/home/ButtonAct";
-import GameModes from "../components/home/GameModes";
-import GameModesTest from "../components/home/GameModesTest";
+import GameModes from "../components/home/GameModes/GameModes";
+import GameModesTest from "../components/home/GameModesTest/GameModesTest";
 import CornerLinedCard from "../components/CornerLinedCard/CornerLinedCard";
 
 import LiveMatchesAndGeneralChat from "../components/home/LiveMatchesAndGeneralChat/LiveMatchesAndGeneralChat";

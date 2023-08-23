@@ -3,7 +3,7 @@ import channel1 from "/channel1.png"
 import channel2 from "/channel2.png"
 import channel3 from "/channel3.png"
 import channel4 from "/channel4.png"
-import CornerLinedCard from "../CornerLinedCard/CornerLinedCard"
+import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
 import useMeasure from "react-use-measure"
 interface side_bar {
     w:number,

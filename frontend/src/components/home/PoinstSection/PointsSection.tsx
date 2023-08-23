@@ -1,11 +1,11 @@
-import CornerLinedCardTest from "../CornerLinedCard/CornerLinedCardTest"
-import CornerLinedCard from "../CornerLinedCard/CornerLinedCard"
+import CornerLinedCardTest from "../../CornerLinedCard/CornerLinedCardTest"
+import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
 import Exclude from "/exclude.svg"
 import Vector from "/vector.svg"
 import Lock from "/lock.svg"
-import PointsChart from "./PointsChart"
+import PointsChart from "../PointsChart/PointsChart"
 import useMeasure from "react-use-measure"
-import NewScoreCard from "./NewScoreCard"
+import NewScoreCard from "../NewScoreCard/NewScoreCard"
 // import NewScoreCard from "NewScoreCard.tsx"
 
 function PointSection(){

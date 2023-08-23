@@ -56,8 +56,8 @@ function LiveMatchesAndGeneralChat() {
     // }
 
     return (
-      <div className="grid grid-cols-3 mt-[35px] ml-[8.38vw]  mr-[8.38vw] gap-4">
-        <section id="live-matches" className="col-span-2 flex flex-col  gap-[46px]">
+      <div className="grid grid-cols-3 mt-[35px] ml-[8.38vw]  mr-[8.38vw] gap-[1vw]">
+        <section id="live-matches" className="col-span-2 flex flex-col  gap-[4.62vh]">
           <div
             ref={header_ref}
             id="liveMatches-header"
