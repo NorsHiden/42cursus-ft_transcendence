@@ -7,19 +7,16 @@ import PointsChart from "../PointsChart/PointsChart"
 import useMeasure from "react-use-measure"
 import NewScoreCard from "../NewScoreCard/NewScoreCard"
 // import NewScoreCard from "NewScoreCard.tsx"
+import PoinstSectionViewController from "./PointsSectionViewController"
 
 function PointSection(){
 
-    const [ref, bounds] = useMeasure()
-    const [refd,bound] = useMeasure();
-
-    const width = bounds.width;
-
-    const achievement_size = bound.width * (15 / 100)
+  const { ref, refd, width, achievement_size } = PoinstSectionViewController();
 
     return (
         <>
-            <div className="relative  grid grid-cols-2 ml-[15px]">
+            {/* ml-[15px] */}
+            <div className="relative  grid grid-cols-2 "> 
                 <div ref={ref} className="flex flex-col items-start justify-end mb-[20px]">
                         <p className={`font-Rowdies flex justify-center items-center text-[${width * (24 / 100)}px] font-extrabold`}>641<span className={`font-Rowdies text-[${20}px]`}> pts</span></p>
                     <CornerLinedCard 

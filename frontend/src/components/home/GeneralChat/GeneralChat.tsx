@@ -2,40 +2,17 @@ import Subtract from "/subtract.svg"
 import aamoussa from "/aamoussa.jpeg"
 import MessageRecieverCard from "./MessageRecieverCard"
 import MessageSenderCard from "./MessageSenderCard"
-import useMeasure from "react-use-measure"
 import CornerLinedCardTest from "../../CornerLinedCard/CornerLinedCardTest"
+import GeneralChatViewCOntroller from "./GeneralChatViewController"
 
-
-interface GeneralChat {
-    chatsize:number,
-    header_size:number,
-    channel_name:number,
-    channel_online:number,
-    chat_header: {
-        title:number,
-        description:number,
-    }
-}
 
 function GeneralChat()
 {
-    const [header_ref, data] = useMeasure()
-    // const data = 400;
-    const chat:GeneralChat = {
-        chatsize : data.width * (32 / 100),
-        header_size:data.width * (16 / 100),
-        channel_name:  data.width * (4.15 / 100),
-        channel_online: data.width * (2.15 / 100),
-        chat_header : {
-            title: data.width * (2 / 100),
-            description: data.width * (2 / 100)
-        }
-
-    }
+  const {header_ref, chat} = GeneralChatViewCOntroller()
 
     return (
         <>
-        <section ref={header_ref} id="general-chat" className="flex flex-col gap-[3.5vh] w-[100%]">
+        <section ref={header_ref} id="general-chat" className="flex flex-col gap-[3.5vh] w-[100%] ">
           <div className="flex flex-col justify-center ml-[1.19vw]">
             <h1 className={`font-sans text-[${chat.chat_header.title}px] font-extrabold`}>
               Public chat
@@ -111,7 +88,7 @@ function GeneralChat()
               height={444}
               width={385}
               margine="mr-[20px]"
-              ratio={115.32 / 100}
+              ratio={140.32 / 100}
             />
           </div>
         </section>

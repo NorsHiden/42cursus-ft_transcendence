@@ -1,63 +1,23 @@
 
 // import { blue } from "@mui/material/colors";
-import { colors } from "@mui/material"
 import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
 import MatchCard from "./MatchCard"
-import { grey } from "@mui/material/colors"
-import Subtract from "/subtract.svg"
-import aamoussa from "/aamoussa.jpeg"
-
-import useMeasure from "react-use-measure"
-import CornerLinedCardTest from "../../CornerLinedCard/CornerLinedCardTest"
 import GeneralChat from "../GeneralChat/GeneralChat"
+import LiveMatchesViewControler from "./LiveMatchesViewController"
 
 
 
-
-interface live_match_header {
-    title:number,
-    radio_buttone:{
-        size:string,
-        text:number,
-    },
-    select_button:{
-        w:number,
-    }
-
+interface prop {
+  reminder:number
 }
 
-interface GeneralChat {
-    chatsize:number,
-    header_size:number,
-    channel_name:number,
-    channel_online:number,
-  }
-
-
-
-function LiveMatchesAndGeneralChat() {
-    const [header_ref, data] = useMeasure()
-
-    const header:live_match_header = {
-        title: data.width * (2.32 / 100),
-        radio_buttone:{
-            size: String((data.width * (1.68 / 100))) + "px",
-            text:(data.width * (1 / 100)),
-        },
-        select_button: {
-            w: data.width * (12.94 / 100),
-        }
-    }
-    // const chat:GeneralChat = {
-    //     chatsize : data.width * (32 / 100),
-    //     header_size:data.width * (16 / 100),
-    //     channel_name:  (data.width * (16 / 100)) * (8 / 100),
-    //     channel_online: (data.width * (16 / 100)) * (4 / 100),
-    // }
+function LiveMatchesAndGeneralChat(data:prop) {
+  const { header_ref, header, taken} = LiveMatchesViewControler(data);
+  
 
     return (
-      <div className="grid grid-cols-3 mt-[35px] ml-[8.38vw]  mr-[8.38vw] gap-[1vw]">
-        <section id="live-matches" className="col-span-2 flex flex-col  gap-[4.62vh]">
+      <div className="grid grid-cols-5 mt-[4.62vh] ml-[8.38vw]  mr-[8.38vw] gap-[1vw]">
+        <section id="live-matches" className={`col-span-4 flex flex-col  gap-[4.62vh] h-[${95 - taken}vh]`}>
           <div
             ref={header_ref}
             id="liveMatches-header"
@@ -156,7 +116,7 @@ function LiveMatchesAndGeneralChat() {
           </div>
           <div
             id="live-matches-cards"
-            className=" grid grid-cols-3 gap-[20px] overflow-scroll  max-h-[60vh]"
+            className=" grid grid-cols-3 gap-[1.04vw] overflow-scroll  max-h-[50vh]"
           >
             <MatchCard class="" />
             <MatchCard class="" />
@@ -181,3 +141,4 @@ function LiveMatchesAndGeneralChat() {
 }
 
 export default LiveMatchesAndGeneralChat
+

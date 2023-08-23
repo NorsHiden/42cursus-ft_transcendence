@@ -1,38 +1,12 @@
 // import ButtonAct from "./ButtonAct"
-import channel1 from "/channel1.png"
-import channel2 from "/channel2.png"
-import channel3 from "/channel3.png"
-import channel4 from "/channel4.png"
+import FriendsBarViewController from "./FriendsBarViewConroller"
 import CornerLinedCard from "../../CornerLinedCard/CornerLinedCard"
-import useMeasure from "react-use-measure"
-interface side_bar {
-    w:number,
-    h:number,
-    buttomMargine:number,
-    online:number,
-    card:{
-        w:number,
-        h:number,
-        cornershape:number,
-    }
-}
-
 
 function FriendsBar(){
-    const [ref_sidebar, data] = useMeasure()
 
+const { ref_sidebar, scalSideBar } = FriendsBarViewController();
 
-    const scalSideBar:side_bar = {
-        w: data.height * (15 / 100),
-        h: (data.height / 6) - data.height * (5 / 100) - 6,
-        buttomMargine:data.height * (5 / 100),
-        online: ((data.height / 6) - data.height * (5 / 100)) * (18 / 100),
-        card:{
-            w: data.width * (44.89 / 100),
-            h: (data.width * (44.89 / 100)) * (27.27 / 100),
-            cornershape: ((data.width * (44.89 / 100)) * (27.27 / 100)) * (30 / 100),
-        }
-    }   
+    
     return (
         
         <aside id="default-sidebar" ref={ref_sidebar} className="fixed top-0 right-0 z-40 w-[10vw] h-[60vh] transition-transform -translate-x-full sm:translate-x-0 " aria-label="Sidebar">
