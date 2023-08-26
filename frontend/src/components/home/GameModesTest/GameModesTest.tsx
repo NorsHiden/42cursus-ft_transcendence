@@ -13,7 +13,7 @@ function GameModesTest() {
   return (
     <div
       id="games-and-points"
-      className={`grid grid-cols-2 ml-[9vw]  mr-[9vw] gap-[20.91vw] mt-[5.64vh]`}
+      className={`grid grid-cols-2 ml-[9vw]  mr-[9vw] sm:gap-[20.91vw]  mt-[5.64vh]`}
     >
       <section ref={ref} id="game-mode-section" className="">
         <h1
