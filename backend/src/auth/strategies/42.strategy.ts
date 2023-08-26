@@ -23,10 +23,8 @@ export class FourtyTwoStrategy extends PassportStrategy(Strategy, '42') {
     const user = {
       email: profile._json.email,
       username: profile._json.login,
-      fullname: profile._json.displayname,
-      picture: profile._json.image.link,
-      tfa: false,
-      status: 'null',
+      display_name: profile._json.displayname,
+      verified: false,
     };
     done(null, user);
   }

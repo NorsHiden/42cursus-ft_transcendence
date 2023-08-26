@@ -23,10 +23,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     const user = {
       email: profile._json.email,
       username: profile._json.name,
-      fullname: profile._json.given_name,
-      picture: profile._json.picture,
-      tfa: false,
-      status: 'null',
+      display_name: profile._json.given_name,
+      verified: false,
     };
     done(null, user);
   }

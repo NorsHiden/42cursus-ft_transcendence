@@ -22,16 +22,9 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   ) {
     const user = {
       username: profile.username,
-      fullname: profile.global_name,
+      display_name: profile.global_name,
       email: profile.email,
-      picture:
-        'https://cdn.discordapp.com/avatars/' +
-        profile.id +
-        '/' +
-        profile.avatar +
-        '?size=1024',
-      tfa: false,
-      status: 'null',
+      verified: false,
     };
     done(null, user);
   }

@@ -9,17 +9,11 @@ export class User {
   username: string;
 
   @Column()
-  fullname: string;
+  display_name: string;
 
   @Column()
   email: string;
 
   @Column()
-  tfa: boolean;
-
-  @Column()
-  status: string;
-
-  @Column()
-  picture: string;
+  verified: boolean;
 }
