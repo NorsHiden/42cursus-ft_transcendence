@@ -9,7 +9,7 @@ function FriendsBar() {
     <aside
       id="default-sidebar"
       ref={ref_sidebar}
-      className="fixed top-0 right-0 z-40 w-[10vw] h-[60vh] transition-transform -translate-x-full sm:translate-x-0 "
+      className="fixed top-0 right-0 z-40 w-[10vw] sm:h-[40vh]  h-[20vh] transition-transform  sm:translate-x-0 "
       aria-label="Sidebar"
     >
       <div id="friends-header-side-bar" className="pt-[4vh]">
