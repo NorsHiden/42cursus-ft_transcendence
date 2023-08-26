@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
 const configService = new ConfigService();
 
 @Module({
@@ -17,6 +18,7 @@ const configService = new ConfigService();
       synchronize: true,
     }),
     AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
