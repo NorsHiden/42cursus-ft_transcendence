@@ -36,7 +36,7 @@ function SideBar() {
     <aside
       ref={ref_sidebar}
       id="default-sidebar"
-      className={`fixed top-0 left-0 z-40 w-[10vw] h-[90vh] transition-transform overflow-hidden`}
+      className={`fixed top-0 left-0 z-40 w-[10vw] sm:h-[100vh] transition-transform overflow-hidden`}
       aria-label="Sidebar"
     >
       <div className="h-full w-full pt-[18vh]">
