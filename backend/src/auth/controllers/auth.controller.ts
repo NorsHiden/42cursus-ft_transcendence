@@ -3,6 +3,8 @@ import {
   Get,
   HttpStatus,
   Inject,
+  Query,
+  Redirect,
   Req,
   Res,
   UseGuards,
@@ -18,6 +20,17 @@ export class AuthController {
   constructor(
     @Inject(Services.Auth) private readonly authService: IAuthService,
   ) {}
+
+  async signIn(req, res, state: string) {
+    const token = await this.authService.signIn(req.user);
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+    return { url: state, access_token: token, user: req.user };
+  }
+
   /* Google OAuth*/
   @Get('google/login')
   @UseGuards(GoogleOAuthGuard)
@@ -25,9 +38,9 @@ export class AuthController {
 
   @Get('google/redirect')
   @UseGuards(GoogleOAuthGuard)
-  async googleRedirect(@Req() req) {
-    const token = await this.authService.signIn(req.user);
-    return { access_token: token, user: req.user };
+  @Redirect('/', 302)
+  async googleRedirect(@Req() req, @Res() res, @Query('state') state: string) {
+    return this.signIn(req, res, state);
   }
   /* Discord OAuth */
   @Get('discord/login')
@@ -36,9 +49,9 @@ export class AuthController {
 
   @Get('discord/redirect')
   @UseGuards(DiscordOAuthGuard)
-  async discordRedirect(@Req() req) {
-    const token = await this.authService.signIn(req.user);
-    return { access_token: token, user: req.user };
+  @Redirect('/', 302)
+  async discordRedirect(@Req() req, @Res() res, @Query('state') state: string) {
+    return this.signIn(req, res, state);
   }
 
   /* 42 OAuth */
@@ -48,14 +61,17 @@ export class AuthController {
 
   @Get('42/redirect')
   @UseGuards(FourtyTwoOAuthGuard)
-  async fourtyTwoRedirect(@Req() req) {
-    const token = await this.authService.signIn(req.user);
-    return { access_token: token, user: req.user };
+  @Redirect('/', 302)
+  async fourtyTwoRedirect(
+    @Req() req,
+    @Res() res,
+    @Query('state') state: string,
+  ) {
+    return this.signIn(req, res, state);
   }
-
   @Get('logout')
+  @Redirect('/', 302)
   handleLogout(@Res() res) {
     res.clearCookie('access_token');
-    res.json({ message: 'Logged out', statusCode: HttpStatus.OK });
   }
 }

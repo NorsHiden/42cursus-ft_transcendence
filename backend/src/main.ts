@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import * as morgan from 'morgan';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,13 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
+  app.use(
+    session({
+      secret: configService.get<string>('SESSION_SECRET'),
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
   app.use(cookieParser());
   app.use(morgan('dev'));
   try {
