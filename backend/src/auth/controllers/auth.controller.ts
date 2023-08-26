@@ -28,7 +28,8 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
     });
-    return { url: state, access_token: token, user: req.user };
+    if (req.user.verified === false) return { url: '/postlogin' };
+    return { url: state };
   }
 
   /* Google OAuth*/
