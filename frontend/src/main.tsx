@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Home from './pages/Home.tsx';
 // import App from './App.tsx'
+import Login from './pages/Login.tsx';
 import PostLogin from './pages/PostLogin.tsx';
 import './styles/index.css';
+
 import {
   createBrowserRouter,
   RouterProvider,
@@ -17,9 +19,13 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
+    path: '/login',
+    element: <Login />,
+  },
+  {
     path: '/Postlogin',
     element: <PostLogin />,
-  },
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
