@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { Routes } from 'src/utils/consts';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UsersService } from '../services/users.service';
@@ -11,5 +11,10 @@ export class UsersController {
   @Get('is-loggedin')
   isLogged() {
     return true;
+  }
+
+  @Get('is-verified')
+  isVerified(@Req() req) {
+    return this.usersService.isVerified(req.user.id);
   }
 }
