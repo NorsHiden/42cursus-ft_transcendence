@@ -28,8 +28,9 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
     });
-    if (req.user.verified === false) return { url: '/postlogin' };
-    return { url: state };
+    if (req.user.verified === false)
+      return { url: 'http://localhost:5173/postlogin' };
+    return { url: `http://localhost:5173/${state}` };
   }
 
   /* Google OAuth*/
