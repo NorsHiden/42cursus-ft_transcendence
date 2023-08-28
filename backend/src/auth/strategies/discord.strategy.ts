@@ -24,6 +24,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       username: profile.username,
       display_name: profile.global_name,
       email: profile.email,
+      avatar_url: profile.avatar,
       verified: false,
     };
     done(null, user);

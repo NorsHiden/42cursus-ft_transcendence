@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  HttpStatus,
   Inject,
   Query,
   Redirect,
@@ -28,8 +27,7 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
     });
-    if (req.user.verified === false)
-      return { url: 'http://localhost:5173/postlogin' };
+    if (!this.authService.isVerified(req.user.id)) return { url: 'http://localhost:5173/postlogin' };
     return { url: `http://localhost:5173/${state}` };
   }
 
@@ -75,5 +73,6 @@ export class AuthController {
   @Redirect('/', 302)
   handleLogout(@Res() res) {
     res.clearCookie('access_token');
+    return { url: 'http://localhost:5173/login' };
   }
 }

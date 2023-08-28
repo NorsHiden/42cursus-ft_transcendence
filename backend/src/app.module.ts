@@ -17,6 +17,7 @@ const configService = new ConfigService();
       autoLoadEntities: true,
       synchronize: true,
     }),
+
     AuthModule,
     UsersModule,
   ],

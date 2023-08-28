@@ -5,14 +5,17 @@ export class User {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()
   display_name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
+
+  @Column()
+  avatar_url: string;
 
   @Column()
   verified: boolean;
