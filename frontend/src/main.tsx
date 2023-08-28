@@ -5,10 +5,11 @@ import Home from './pages/Home.tsx';
 import Login from './pages/Login.tsx';
 import PostLogin from './pages/PostLogin.tsx';
 import './styles/index.css';
-
+import Guard from './components/Guards/Guard.tsx';
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate,
   // Route,
   // Link
 } from 'react-router-dom';
@@ -16,11 +17,11 @@ import {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <Guard target={<Home/>} redirect='/'/>,
   },
   {
     path: '/login',
-    element: <Login />,
+    element: <Login/>,
   },
   {
     path: '/Postlogin',

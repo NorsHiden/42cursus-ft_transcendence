@@ -18,13 +18,13 @@ const LoginView = () => {
                 <h1 className="font-sans font-extrabold text-[2.29vw] ">Are you ready to play!</h1>
                 <h2 className="text-[1.66vw] font-sans font-extrabold text-[#5E6069] mt-[1.57vh]" >login</h2>
                 <div id="providers" className="flex mt-[3.51vh]">
-                    <a href="/">
+                    <a href="">
                         <img src={google} alt="google" className="w-[5vw] w-[5vw] mr-[2.18vw]" />
                     </a>
                     <a href="/">
                         <img src={discord} alt="discord" className="w-[5vw] w-[5vw] mr-[2.18vw]" />
                     </a>
-                    <a href="/">
+                    <a href="/api/auth/42/login">
                         <img src={ft} alt="fortytwo" className="w-[5vw] w-[5vw]"/>
                     </a>
                 </div>
