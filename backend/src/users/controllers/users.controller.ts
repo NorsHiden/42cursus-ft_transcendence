@@ -25,7 +25,7 @@ export class UsersController {
 
   @Get('is-loggedin')
   isLogged() {
-    return true;
+    return { statusCode: 200, is_logged_in: true };
   }
 
   @Get('is-verified')

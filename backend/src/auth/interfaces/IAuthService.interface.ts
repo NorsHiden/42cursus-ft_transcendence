@@ -5,5 +5,5 @@ export interface IAuthService {
   generateJwt(user: User): string;
   registerUser(user: User): Promise<string>;
   findUser(id: string): Promise<User>;
-  isVerified(id: string): Promise<boolean>;
+  isVerified(id: string): Promise<{ statusCode: number; is_verified: boolean }>;
 }

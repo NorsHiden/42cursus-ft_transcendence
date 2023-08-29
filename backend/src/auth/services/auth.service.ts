@@ -45,9 +45,11 @@ export class AuthService implements IAuthService {
     return this.userRepository.findOneBy({ id: id });
   }
 
-  async isVerified(id: string): Promise<boolean> {
+  async isVerified(
+    id: string,
+  ): Promise<{ statusCode: number; is_verified: boolean }> {
     const user = await this.userRepository.findOneBy({ id: id });
-    if (!user) return false;
-    return user.verified;
+    if (!user) return { statusCode: 200, is_verified: false };
+    return { statusCode: 200, is_verified: user.verified };
   }
 }
