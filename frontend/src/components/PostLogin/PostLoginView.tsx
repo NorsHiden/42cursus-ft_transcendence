@@ -3,39 +3,18 @@ import logo from '/logo.svg';
 import aamoussa from '/aamoussa.jpeg';
 import update from '/update.svg';
 import CornerLinedCardTest from '../CornerLinedCard/CornerLinedCardTest';
+import PostLoginViewController from './PostLoginViewController';
 
 const PostLoginView = () => {
-  const [FormData, setFormData] = useState({
-    name: 'aamoussa',
-    displayname: 'Anas',
-    value: '',
-  });
 
-  function handleInput(event: any) {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-  }
-
-  function handlesubmit(event: any) {
-    event.preventDefault();
-    alert(`Name:  ${FormData.name}\ndisplayname:  ${FormData.displayname}`);
-  }
-
-  function trigerupload(event: any) {
-    const target = event.target.id;
-    const upload = document.getElementsByName(target);
-    upload[0]?.click();
-  }
-
-  function trigersubmit() {
-    const submit = document.getElementsByName('submit');
-    submit[0]?.click();
-  }
-
-  function handleUpload(event: any) {
-    const path = URL.createObjectURL(event.target.files[0]);
-    setFormData((prevFormData) => ({ ...prevFormData, value: path }));
-  }
+  const {
+    handleInput,
+    handlesubmit,
+    trigerupload,
+    trigersubmit,
+    handleUpload,
+    FormData,
+  } = PostLoginViewController();
 
   return (
     <div className="grid grid-cols-2 h-[100vh] w-[100wh]">
@@ -53,7 +32,7 @@ const PostLoginView = () => {
             onClick={trigerupload}
           >
             <img
-              src={FormData.value ? FormData.value : aamoussa}
+              src={FormData.avatar ? FormData.avatar : aamoussa}
               alt="img"
               id="file1"
               className="absolute rounded-full h-[14.16vh] w-[14.16vh] "
