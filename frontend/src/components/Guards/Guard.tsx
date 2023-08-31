@@ -1,23 +1,18 @@
-import React from "react"
+import React, { useState } from "react"
 import {Navigate} from "react-router-dom"
 interface props {
     target: React.ReactNode
     redirect: string
 }
+import GuardViewModel from "./GuardViewModel"
 
 function Guard(parent:props){
     
     const {target, redirect } = parent
+    const {loged, verified} = GuardViewModel()
+
     
-    const logged_in = () =>{
-        return (false)
-    }
-
-    const is_verified = () => {
-        return (true)
-    }
-
-    if (logged_in() && is_verified())
+    if (loged && verified)
     {
         return (
             <>
@@ -25,11 +20,11 @@ function Guard(parent:props){
             </>
         )
     }
-    else if (!logged_in())
+    else if (!loged)
     {
         return (
             <>
-                <Navigate to={`/login/?redirect=${redirect}`}/>
+                <Navigate to={`/login?redirect=${redirect}`}/>
             </>
         )
     }

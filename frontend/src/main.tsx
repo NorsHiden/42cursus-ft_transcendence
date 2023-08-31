@@ -9,7 +9,6 @@ import Guard from './components/Guards/Guard.tsx';
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate,
   // Route,
   // Link
 } from 'react-router-dom';
