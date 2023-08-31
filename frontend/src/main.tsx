@@ -9,6 +9,7 @@ import Guard from './components/Guards/Guard.tsx';
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate
   // Route,
   // Link
 } from 'react-router-dom';
@@ -16,7 +17,11 @@ import {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Guard target={<Home/>} redirect='/'/>,
+    element: <Navigate to="home"/>,
+  },
+  {
+    path: '/home',
+    element: <Guard target={<Home/>} redirect='home'/>,
   },
   {
     path: '/login',
