@@ -2,8 +2,10 @@ import Logo from '/logo.svg';
 import parrametre from '/parrametre.svg';
 import notification from '/notification.svg';
 import chat from '/chat.svg';
+import axios from 'axios';
 
 function NavBar() {
+  // const test = '<script>function hello(){console.log("hello")}</script>'
   return (
     <div className="fix mr-[14vw] pt-[4vh] pl-[3vw]">
       <nav className="">
@@ -54,8 +56,8 @@ function NavBar() {
               />
             </button>
             <div>
-              <p className=" font-sans text-[1vw] ml-[0.72vw] font-extrabold ">
-                HxX
+              <p className={` font-sans text-[1vw] ml-[0.72vw] font-extrabold`} >
+              hello
               </p>
               <p className="font-sans text-[0.5vw] font-extrabold ml-[0.72vw]  text-[#5E6069] ">
                 @hunter
