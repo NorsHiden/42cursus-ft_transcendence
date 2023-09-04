@@ -20,7 +20,7 @@ async function bootstrap() {
     .addTag('Authentication', 'Endpoints related to user authentication')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('api/docs', app, document);
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
