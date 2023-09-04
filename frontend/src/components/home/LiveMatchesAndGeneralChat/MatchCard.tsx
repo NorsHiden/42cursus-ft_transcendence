@@ -215,7 +215,7 @@ function MatchCard(props: ParentCompProps) {
           </div>
         </div>
       }
-      fill="[color:#1E1F23]"
+      fill="[color:#202127]"
       cornerredius="3"
       stroke="[color:#2C2D33]"
       strokesize={0}

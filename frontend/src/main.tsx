@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children } from 'react';
 import ReactDOM from 'react-dom/client';
 import Home from './pages/Home.tsx';
 // import App from './App.tsx'
@@ -9,19 +9,43 @@ import Guard from './components/Guards/Guard.tsx';
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate
+  Navigate,
+  redirect
   // Route,
   // Link
 } from 'react-router-dom';
+import Route from './pages/Route.tsx';
+import SearchView from './components/home/Search/SearchView.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="home"/>,
-  },
-  {
-    path: '/home',
-    element: <Guard target={<Home/>} redirect='home'/>,
+    element: <Route/>,
+    children:[
+      {
+        path: '/home',
+        element: <Guard target={<Home/>} redirect='home'/>,
+        loader:async ({})=>{
+    
+          const res = await fetch("http://localhost:5173/api/users/is-loggedin")
+          if (res.status == 200)
+          {
+            return (1)
+          }
+          else {
+            throw redirect("/login?redirect=home");
+          }
+        },
+        children:[
+          {
+            path:'/home/search',
+            element:<SearchView/>
+            
+          }
+        ]
+      
+      },
+    ]
   },
   {
     path: '/login',
