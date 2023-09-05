@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/typeorm/User';
-import { Repository } from 'typeorm';
+import { User } from 'src/typeorm/user.entity';
+import { Not, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -10,27 +10,58 @@ export class UsersService {
   ) {}
 
   async getMe(id: string): Promise<User> {
-    return await this.userRepository.findOneBy({ id: id });
+    return await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        profile: true,
+      },
+    });
   }
 
-  async isVerified(id: string): Promise<boolean> {
+  async isVerified(
+    id: string,
+  ): Promise<{ statusCode: number; is_verified: boolean }> {
     const user = await this.userRepository.findOneBy({ id: id });
-    if (!user) return false;
-    return user.verified;
+    if (!user)
+      return {
+        statusCode: 200,
+        is_verified: false,
+      };
+    return {
+      statusCode: 200,
+      is_verified: user.verified,
+    };
   }
 
-  async saveUserData(
+  async completeLogin(
     id: string,
     username: string,
     display_name: string,
     avatar_url: string,
   ): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id: id });
+    const user = await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        profile: true,
+      },
+    });
     if (!user) return null;
     user.username = username;
     user.display_name = display_name;
-    user.avatar_url = avatar_url;
+    user.profile.avatar = avatar_url;
     user.verified = true;
+    return await this.userRepository.save(user);
+  }
+
+  async updateAbout(id: string, about: string): Promise<User> {
+    const user = await this.getMe(id);
+    if (!user) return null;
+    if (!user.verified) throw new ForbiddenException("user isn't verified");
+    user.profile.about = about;
     return await this.userRepository.save(user);
   }
 }

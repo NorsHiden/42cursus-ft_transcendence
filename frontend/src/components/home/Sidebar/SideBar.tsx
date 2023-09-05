@@ -44,7 +44,7 @@ function SideBar() {
     <aside
       ref={ref_sidebar}
       id="default-sidebar"
-      className={`fixed top-0 left-0 z-40 w-[10vw] sm:h-[100vh] transition-transform overflow-hidden`}
+      className={`fixed top-0 left-0 z-40 w-[10vw] sm:h-[72vh] transition-transform overflow-hidden`}
       aria-label="Sidebar"
     >
       <div className="h-full w-full pt-[18vh]">
@@ -119,28 +119,28 @@ function SideBar() {
             <img
               src={channel1}
               alt="img"
-              className={`rounded-[20px] w-[${scalSideBar.h}px]`}
+              className={`rounded-[20px] w-[${scalSideBar.h + 20}px]`}
             />
           </li>
           <li className="flex justify-center">
             <img
               src={channel2}
               alt="img"
-              className={`rounded-[20px] w-[${scalSideBar.h}px]`}
+              className={`rounded-[20px] w-[${scalSideBar.h + 20}px]`}
             />
           </li>
           <li className="flex justify-center">
             <img
               src={channel3}
               alt="img"
-              className={`rounded-[20px] w-[${scalSideBar.h}px]`}
+              className={`rounded-[20px] w-[${scalSideBar.h + 20}px]`}
             />
           </li>
           <li className="flex justify-center">
             <img
               src={channel4}
               alt="img"
-              className={`rounded-[20px] w-[${scalSideBar.h}px]`}
+              className={`rounded-[20px] w-[${scalSideBar.h + 20}px]`}
             />
           </li>
           <li className="flex justify-center">

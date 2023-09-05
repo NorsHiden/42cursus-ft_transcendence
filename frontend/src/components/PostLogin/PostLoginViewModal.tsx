@@ -5,15 +5,15 @@ import PostLoginModal from "./PostLoginModal"
 
 const PostLoginViewModal = ()=>{
     // const [uploaddone, setuploaddone] = useState(0)
-    const {postdata,} = PostLoginModal()
+    const {postdata} = PostLoginModal()
     
 
     const senddata = async (dataa:any)=>{
         const formdata = new FormData()
+        formdata.append('avatar', dataa.avatarpath);
         formdata.append('username', dataa.name);
         formdata.append('display_name', dataa.displayname);
-        formdata.append('avatar', dataa.avatarpath);
-        
+        console.log(formdata),
         postdata(formdata).then((response)=>{
             if (response.status == 201)
             {
