@@ -63,8 +63,8 @@ export class AuthService implements IAuthService {
       newProfile.avatar = '';
       newProfile.banner = '';
       const newUser = this.userRepository.create({
-        username: user.username,
-        display_name: user.display_name,
+        username: null,
+        display_name: null,
         email: user.email,
         verified: false,
         profile: newProfile,
@@ -105,9 +105,9 @@ export class AuthService implements IAuthService {
    * @throws {InternalServerErrorException}
    */
   async isVerified(
-    id: string,
+    email: string,
   ): Promise<{ statusCode: number; is_verified: boolean }> {
-    const user = await this.userRepository.findOneBy({ id: id });
+    const user = await this.findUser(email);
     if (!user) return { statusCode: 200, is_verified: false };
     return { statusCode: 200, is_verified: user.verified };
   }

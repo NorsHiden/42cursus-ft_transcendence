@@ -26,18 +26,18 @@ export class User {
 
   /**
    * The chosen username of the user, which must be unique.
-   * @type {string}
+   * @type {string || null}
    * @memberof User
    */
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   username: string;
 
   /**
    * The display name that the user has chosen for public presentation.
-   * @type {string}
+   * @type {string || null}
    * @memberof User
    */
-  @Column()
+  @Column({ nullable: true })
   display_name: string;
 
   /**

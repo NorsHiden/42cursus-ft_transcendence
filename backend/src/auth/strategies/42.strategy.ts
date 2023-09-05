@@ -40,6 +40,7 @@ export class FourtyTwoStrategy extends PassportStrategy(Strategy, '42') {
       email: profile._json.email,
       username: profile._json.login,
       display_name: profile._json.displayname,
+      avatar_url: profile._json.image.link,
     };
     done(null, user);
   }

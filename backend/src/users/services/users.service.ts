@@ -52,7 +52,7 @@ export class UsersService {
     if (!user) return null;
     user.username = username;
     user.display_name = display_name;
-    user.profile.avatar = avatar_url;
+    if (avatar_url) user.profile.avatar = avatar_url;
     user.verified = true;
     return await this.userRepository.save(user);
   }

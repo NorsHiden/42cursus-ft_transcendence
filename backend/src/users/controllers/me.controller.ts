@@ -90,7 +90,11 @@ export class MeController {
     @Body('username') username: string,
     @Body('display_name') display_name: string,
   ) {
-    const profileImageUrl = `/avatars/${req.user.id}/${avatar.filename}`;
+    let profileImageUrl = null;
+    if (avatar)
+      profileImageUrl = `${this.configService.get('CLIENT_URL')}/avatars/${
+        req.user.id
+      }/${avatar.filename}`;
     const user = await this.usersService.completeLogin(
       req.user.id,
       username,

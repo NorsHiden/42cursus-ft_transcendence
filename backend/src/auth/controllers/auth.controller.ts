@@ -14,12 +14,7 @@ import { FourtyTwoOAuthGuard } from '../guards/42-auth.guard';
 import { Routes, Services } from 'src/utils/consts';
 import { IAuthService } from '../interfaces/IAuthService.interface';
 import { ConfigService } from '@nestjs/config';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 /**
  * The `AuthController` handles authentication-related endpoints and redirects
@@ -48,8 +43,13 @@ export class AuthController {
       secure: true,
       sameSite: 'none',
     });
-    if (!this.authService.isVerified(req.user.id))
-      return { url: `${this.configService.get('CLIENT_URL')}/postlogin` };
+    console.log(req.user);
+    if (!(await this.authService.isVerified(req.user.email)).is_verified)
+      return {
+        url: `${this.configService.get('CLIENT_URL')}/postlogin?username=${
+          req.user.username
+        }&display_name=${req.user.display_name}&avatar=${req.user.avatar_url}`,
+      };
     return { url: `${this.configService.get('CLIENT_URL')}/${state}` };
   }
 

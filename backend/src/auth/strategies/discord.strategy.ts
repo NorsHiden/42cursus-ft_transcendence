@@ -40,6 +40,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       username: profile.username,
       display_name: profile.global_name,
       email: profile.email,
+      avatar_url: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}`,
     };
     done(null, user);
   }
