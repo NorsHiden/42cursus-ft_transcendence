@@ -10,7 +10,7 @@ const PostLoginModal = ()=>{
 
     
     const postdata = async (formdata:any)=>{
-        return (await axios.post("http://localhost:5173/api/users/profile", formdata))
+        return (await axios.post("http://localhost:5173/api/users/@me/complete-login", formdata))
     }
     
     const getUserData =async () => {

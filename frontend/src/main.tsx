@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         element: <Guard target={<Home/>} redirect='home'/>,
         loader:async ({})=>{
     
-          const res = await fetch("http://localhost:5173/api/users/is-loggedin")
+          const res = await fetch("http://localhost:5173/api/users/@me/is-loggedin")
           if (res.status == 200)
           {
             return (1)

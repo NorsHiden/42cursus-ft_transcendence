@@ -4,7 +4,7 @@ const GuardModel = async ()=> {
     let response,verified
     try {
 
-         response = await axios.get('http://localhost:5173/api/users/is-loggedin');
+         response = await axios.get('http://localhost:5173/api/users/@me/is-loggedin');
          
         //  console.log("model", response)
     }
@@ -14,7 +14,7 @@ const GuardModel = async ()=> {
     }
     
     try {
-        verified = await axios.get('http://localhost:5173/api/users/is-verified');
+        verified = await axios.get('http://localhost:5173/api/users/@me/is-verified');
     }
     catch(error){
 

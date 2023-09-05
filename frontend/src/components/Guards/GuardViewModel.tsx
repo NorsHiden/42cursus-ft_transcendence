@@ -17,12 +17,12 @@ const GuardViewModel = ()=>{
                 }
             if(data.verified?.status == 200)
             {
-                if (data.verified?.data == true)
+                if (data.verified?.data.is_verified == true)
                 {
                     setverified(1)
                     console.log("user is verified")
                 }
-                else if (data.verified?.data == false)
+                else if (data.verified?.data.is_verified == false)
                 {
                     setverified(0)
                     console.log("user is not verified")
