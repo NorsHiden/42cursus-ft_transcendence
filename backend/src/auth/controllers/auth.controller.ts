@@ -14,7 +14,7 @@ import { FourtyTwoOAuthGuard } from '../guards/42-auth.guard';
 import { Routes, Services } from 'src/utils/consts';
 import { IAuthService } from '../interfaces/IAuthService.interface';
 import { ConfigService } from '@nestjs/config';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 /**
  * The `AuthController` handles authentication-related endpoints and redirects
@@ -58,6 +58,11 @@ export class AuthController {
    * Redirects the user to the Google OAuth authorization URL.
    */
   @ApiOperation({ summary: 'Handle Google OAuth sign-in' }) // Add operation summary
+  @ApiQuery({
+    name: 'redirect',
+    description: 'The URL to redirect to after sign-in',
+    required: false,
+  })
   @ApiResponse({
     status: 302,
     description: 'Redirect to Google OAuth authorization URL',
@@ -90,7 +95,12 @@ export class AuthController {
    * Handles initiating Discord OAuth sign-in.
    * Redirects the user to the Discord OAuth authorization URL.
    */
-  @ApiOperation({ summary: 'Handle Discord OAuth sign-in' }) // Add operation summary
+  @ApiOperation({ summary: 'Handle Discord OAuth sign-in' })
+  @ApiQuery({
+    name: 'redirect',
+    description: 'The URL to redirect to after sign-in',
+    required: false,
+  })
   @ApiResponse({
     status: 302,
     description: 'Redirect to Discord OAuth authorization URL',
@@ -107,7 +117,7 @@ export class AuthController {
    * @param state - The state parameter passed during OAuth sign-in.
    * @returns Redirects the user to the appropriate URL after sign-in.
    */
-  @ApiOperation({ summary: 'Handle Discord OAuth redirect' }) // Add operation summary
+  @ApiOperation({ summary: 'Handle Discord OAuth redirect' })
   @ApiResponse({
     status: 302,
     description: 'Redirect to the appropriate URL after Discord OAuth sign-in',
@@ -123,7 +133,12 @@ export class AuthController {
    * Handles initiating 42 OAuth sign-in.
    * Redirects the user to the 42 OAuth authorization URL.
    */
-  @ApiOperation({ summary: 'Handle 42 OAuth sign-in' }) // Add operation summary
+  @ApiOperation({ summary: 'Handle 42 OAuth sign-in' })
+  @ApiQuery({
+    name: 'redirect',
+    description: 'The URL to redirect to after sign-in',
+    required: false,
+  })
   @ApiResponse({
     status: 302,
     description: 'Redirect to 42 OAuth authorization URL',
@@ -140,7 +155,7 @@ export class AuthController {
    * @param state - The state parameter passed during OAuth sign-in.
    * @returns Redirects the user to the appropriate URL after sign-in.
    */
-  @ApiOperation({ summary: 'Handle 42 OAuth redirect' }) // Add operation summary
+  @ApiOperation({ summary: 'Handle 42 OAuth redirect' })
   @ApiResponse({
     status: 302,
     description: 'Redirect to the appropriate URL after 42 OAuth sign-in',
