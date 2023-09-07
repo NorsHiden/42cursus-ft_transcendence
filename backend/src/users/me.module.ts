@@ -7,6 +7,7 @@ import { UsersService } from './services/users.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as fs from 'fs';
+import * as path from 'path';
 /**
  * The `MeModule` encapsulates functionality related to the current user's profile and actions.
  * It includes controllers, services, and database models for managing the user's data.
@@ -19,8 +20,27 @@ import * as fs from 'fs';
     MulterModule.register({
       storage: diskStorage({
         destination: (req, file, cb) => {
+          // Checks if the user already has an avatar and deletes it if it exists.
+          function isDirEmpty(dirname) {
+            return fs.promises.readdir(dirname).then((files) => {
+              return files.length === 0;
+            });
+          }
           // Creates a directory for storing user avatars if it doesn't exist.
           const dir = `../avatars/${req.user.id}`;
+
+          // Deletes the user's avatar if it exists.
+          if (fs.existsSync(dir)) {
+            fs.readdir(dir, (err, files) => {
+              if (err) throw err;
+              for (const file of files) {
+                fs.unlink(path.join(dir, file), (err) => {
+                  if (err) throw err;
+                });
+              }
+            });
+          }
+
           if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
           }

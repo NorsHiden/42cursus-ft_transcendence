@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/user.entity';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -41,6 +41,23 @@ export class UsersService {
     display_name: string,
     avatar_url: string,
   ): Promise<User> {
+    if (await this.userRepository.findOneBy({ username: username })) {
+      // If the username already exists, throw an error.
+      // This is to prevent users from taking usernames that already exist.
+      const user = await this.userRepository.findOne({
+        where: {
+          id: id,
+        },
+        relations: {
+          profile: true,
+        },
+      });
+      if (!user) return null;
+      user.display_name = display_name;
+      if (avatar_url) user.profile.avatar = avatar_url;
+      await this.userRepository.save(user);
+      throw new ForbiddenException('username already exists');
+    }
     const user = await this.userRepository.findOne({
       where: {
         id: id,

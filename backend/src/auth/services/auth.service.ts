@@ -60,7 +60,7 @@ export class AuthService implements IAuthService {
     try {
       const newProfile = new Profile();
       newProfile.about = 'I am a new user';
-      newProfile.avatar = '';
+      newProfile.avatar = user.avatar_url;
       newProfile.banner = '';
       const newUser = this.userRepository.create({
         username: null,
