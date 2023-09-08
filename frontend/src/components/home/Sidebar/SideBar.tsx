@@ -56,7 +56,7 @@ function SideBar() {
           </li>
           <li className="">
             {/* <a id="search" href="/home/search" className="flex justify-center "> */}
-              <NavLink to="/home/search" className="flex justify-center ">
+              <NavLink to="#" className="flex justify-center ">
               <svg
                 // className={`h-[${scalSideBar.h}px]`}
                 height={scalSideBar.h}
