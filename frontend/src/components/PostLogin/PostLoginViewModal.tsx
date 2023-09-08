@@ -5,38 +5,34 @@ import PostLoginModal from "./PostLoginModal"
 
 const PostLoginViewModal = ()=>{
     // const [uploaddone, setuploaddone] = useState(0)
-    const {postdata} = PostLoginModal()
-    
+    const {postdata,user,avatar} = PostLoginModal()
+    const [UserExist, setUserExist] = useState(false)
 
     const senddata = async (dataa:any)=>{
         const formdata = new FormData()
-        formdata.append('avatar', dataa.avatarpath);
+        dataa.avatarpath?formdata.append('avatar', dataa.avatarpath):true
         formdata.append('username', dataa.name);
         formdata.append('display_name', dataa.displayname);
         console.log(formdata),
         postdata(formdata).then((response)=>{
+            console.log("data in post data",formdata)
             if (response.status == 201)
             {
+                // console.log("data has ben sent")
                 window.location.href = "http://localhost:5173/"
             }
             else {
-                alert("(rah ba9i ma ka njibch l first data man 3ndek bla ma tjrab dir save m3a d9a try to change inputs and image)")
+                setUserExist(true)
             }
         })
-        // await PostLoginModal(formdata).then((data)=>{
-        //     console.log("response from post view modal",data.response)
-        //     if (data.response.status == 201)
-        //     {
-        //         window.location.href = "http://localhost:5173/"
-        //     }
-        //     else{
-        //         alert("(rah ba9i ma ka njibch l first data man 3ndek bla ma tjrab dir save m3a d9a try to change inputs and image)")
-        //     }
-        // })
     }
 
     return{
-        senddata
+        senddata,
+        user,
+        avatar,
+        UserExist,
+        setUserExist
     }
 }
 
