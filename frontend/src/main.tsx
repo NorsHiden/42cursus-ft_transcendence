@@ -37,11 +37,10 @@ const router = createBrowserRouter([
           }
         },
         children:[
-          {
-            path:'/home/search',
-            element:<SearchView/>
-            
-          }
+          // {
+          //   path:'/home/search',
+          //   element:<SearchView/>
+          // }
         ]
       
       },
@@ -54,6 +53,13 @@ const router = createBrowserRouter([
   {
     path: '/Postlogin',
     element: <PostLogin />,
+    loader:async({})=>{
+      const res = await fetch("http://localhost:5173/api/users/@me")
+      if(res.status == 200)
+      {
+        return(res.json())
+      }
+    }
   }
 ]);
 
