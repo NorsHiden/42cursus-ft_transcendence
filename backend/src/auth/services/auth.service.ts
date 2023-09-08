@@ -5,10 +5,17 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../typeorm/User';
+import { User } from '../../typeorm/user.entity';
 import { Repository } from 'typeorm';
 import { IAuthService } from '../interfaces/IAuthService.interface';
+import { Profile } from 'src/typeorm/profile.entity';
 
+/**
+ * @description Service for Auth
+ * @export
+ * @class AuthService
+ * @implements {IAuthService}
+ */
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
@@ -16,32 +23,92 @@ export class AuthService implements IAuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
+  /**
+   * @description Generate JWT
+   * @param {User} user
+   * @returns {string} JWT
+   */
   generateJwt(user: User): string {
     const payload = { sub: user.id, username: user.username };
     return this.jwtService.sign(payload);
   }
 
+  /**
+   * @description Sign in user
+   * @param {User} user
+   * @returns {Promise<string>} JWT
+   * @throws {BadRequestException}
+   * @throws {InternalServerErrorException}
+   */
   async signIn(user: User): Promise<string> {
     if (!user) throw new BadRequestException('Unauthenticated');
 
-    const userExists = await this.findUser(user.id);
+    const userExists = await this.findUser(user.email);
 
     if (!userExists) return this.registerUser(user);
 
     return this.generateJwt(userExists);
   }
 
-  async registerUser(user: User): Promise<string> {
+  /**
+   * @description Register user
+   * @param {User} user
+   * @returns {Promise<string>} JWT
+   * @throws {InternalServerErrorException}
+   */
+  async registerUser(user): Promise<string> {
     try {
-      const newUser = this.userRepository.create(user);
+      const newProfile = new Profile();
+      newProfile.about = 'I am a new user';
+      newProfile.avatar = user.avatar_url;
+      newProfile.banner = '';
+      const newUser = this.userRepository.create({
+        username: null,
+        display_name: null,
+        email: user.email,
+        verified: false,
+        profile: newProfile,
+      });
       await this.userRepository.save(newUser);
       return this.generateJwt(newUser);
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException("Couldn't register user");
     }
   }
 
-  async findUser(id: string): Promise<User> {
-    return this.userRepository.findOneBy({ id: id });
+  /**
+   * @description Find user
+   * @param {string} email
+   * @returns {Promise<User>} User
+   * @throws {InternalServerErrorException}
+   * @throws {BadRequestException}
+   * @throws {ForbiddenException}
+   * @throws {NotFoundException}
+   * @throws {UnauthorizedException}
+   */
+  async findUser(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+      relations: {
+        profile: true,
+      },
+    });
+  }
+
+  /**
+   * @description Check if user is verified
+   * @param {string} id
+   * @returns {Promise<{ statusCode: number; is_verified: boolean }>} { statusCode: number; is_verified: boolean }
+   * @throws {InternalServerErrorException}
+   */
+  async isVerified(
+    email: string,
+  ): Promise<{ statusCode: number; is_verified: boolean }> {
+    const user = await this.findUser(email);
+    if (!user) return { statusCode: 200, is_verified: false };
+    return { statusCode: 200, is_verified: user.verified };
   }
 }

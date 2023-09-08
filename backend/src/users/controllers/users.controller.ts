@@ -1,15 +1,18 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { Routes } from 'src/utils/consts';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UsersService } from '../services/users.service';
+import { ConfigService } from '@nestjs/config';
 
-@Controller(Routes.USERS)
+@Controller()
 @UseGuards(JwtAuthGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  @Get('is-loggedin')
-  isLogged() {
-    return true;
+  @Get('test')
+  test() {
+    return { statusCode: 200, message: 'test' };
   }
 }

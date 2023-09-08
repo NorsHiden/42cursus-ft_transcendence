@@ -3,6 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile, VerifyCallback } from 'passport-discord';
 
+/**
+ * Discord Strategy
+ * @extends PassportStrategy
+ * @example @UseGuards(DiscordStrategy)
+ * @example @Get('discord/login')
+ * @example @Get('discord/redirect')
+ * @see https://docs.nestjs.com/security/authentication#implementing-passport-strategies
+ */
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   constructor(private readonly configService: ConfigService) {
@@ -14,6 +22,14 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     });
   }
 
+  /**
+   * @description Validate Discord OAuth
+   * @param {string} accessToken
+   * @param {string} refreshToken
+   * @param {Profile} profile
+   * @param {verifyCallBack} done
+   * @returns {object} User
+   */
   validate(
     accessToken: string,
     refreshToken: string,
@@ -24,7 +40,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       username: profile.username,
       display_name: profile.global_name,
       email: profile.email,
-      verified: false,
+      avatar_url: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}`,
     };
     done(null, user);
   }
