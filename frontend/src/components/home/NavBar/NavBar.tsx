@@ -3,9 +3,10 @@ import parrametre from '/parrametre.svg';
 import notification from '/notification.svg';
 import chat from '/chat.svg';
 import axios from 'axios';
-
+import NavBarViewModel from './NavBarViewModel';
 function NavBar() {
   // const test = '<script>function hello(){console.log("hello")}</script>'
+  const {user} = NavBarViewModel()
   return (
     <div className="fix mr-[14vw] pt-[4vh] pl-[3vw]">
       <nav className="">
@@ -51,16 +52,16 @@ function NavBar() {
               {/* <span className="sr-only">Open user menu</span> */}
               <img
                 className="h-[5.64vh] w-[5.64vh] rounded-full"
-                src="/public/aamoussa.jpeg"
+                src={user.avatar}
                 alt="user photo"
               />
             </button>
             <div>
               <p className={` font-sans text-[1vw] ml-[0.72vw] font-extrabold`} >
-              hello
+              {user.display_name}
               </p>
               <p className="font-sans text-[0.5vw] font-extrabold ml-[0.72vw]  text-[#5E6069] ">
-                @hunter
+                @{user.username}
               </p>
             </div>
           </div>
