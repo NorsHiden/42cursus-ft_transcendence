@@ -8,6 +8,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Services } from 'src/utils/consts';
 /**
  * The `MeModule` encapsulates functionality related to the current user's profile and actions.
  * It includes controllers, services, and database models for managing the user's data.
@@ -62,6 +63,11 @@ import * as path from 'path';
     }),
   ],
   controllers: [MeController], // Contains the controller for user-specific actions.
-  providers: [UsersService], // Provides services for managing user-related data.
+  providers: [
+    {
+      provide: Services.Users,
+      useClass: UsersService,
+    },
+  ], // Provides services for managing user-related data.
 })
 export class MeModule {}

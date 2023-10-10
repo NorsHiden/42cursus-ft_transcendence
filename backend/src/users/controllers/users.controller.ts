@@ -1,13 +1,14 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { UsersService } from '../services/users.service';
 import { ConfigService } from '@nestjs/config';
+import { IUsersService } from '../interfaces/IUsersService.interface';
+import { Services } from 'src/utils/consts';
 
 @Controller()
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService,
+    @Inject(Services.Users) private readonly usersService: IUsersService,
     private readonly configService: ConfigService,
   ) {}
 

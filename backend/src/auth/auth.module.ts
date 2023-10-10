@@ -15,6 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Services } from 'src/utils/consts';
 import { Profile } from 'src/typeorm/profile.entity';
+import { UsersService } from 'src/users/services/users.service';
 
 /**
  * The `AuthModule` encapsulates the authentication-related functionality of the application.
@@ -58,6 +59,11 @@ import { Profile } from 'src/typeorm/profile.entity';
     {
       provide: Services.Auth,
       useClass: AuthService,
+    },
+    // The user service responsible for user management.
+    {
+      provide: Services.Users,
+      useClass: UsersService,
     },
   ],
 })

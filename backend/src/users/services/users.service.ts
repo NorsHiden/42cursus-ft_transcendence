@@ -1,10 +1,13 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Profile } from 'src/typeorm/profile.entity';
 import { User } from 'src/typeorm/user.entity';
 import { Repository } from 'typeorm';
+import { UserDto } from '../dto/userDto';
+import { IUsersService } from '../interfaces/IUsersService.interface';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements IUsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
@@ -18,6 +21,42 @@ export class UsersService {
         profile: true,
       },
     });
+  }
+
+  /**
+   * @description Find user
+   * @param {string} email
+   * @returns {Promise<User>} User
+   * @throws {InternalServerErrorException}
+   * @throws {BadRequestException}
+   * @throws {ForbiddenException}
+   * @throws {NotFoundException}
+   * @throws {UnauthorizedException}
+   */
+  async findUserByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+      relations: {
+        profile: true,
+      },
+    });
+  }
+
+  async createUser(user: UserDto): Promise<User> {
+    const newProfile = new Profile();
+    newProfile.about = 'I am a new user';
+    newProfile.avatar = user.profile.avatar;
+    newProfile.banner = '';
+    const newUser = this.userRepository.create({
+      username: null,
+      display_name: null,
+      email: user.email,
+      verified: false,
+      profile: newProfile,
+    });
+    return await this.userRepository.save(newUser);
   }
 
   async isVerified(

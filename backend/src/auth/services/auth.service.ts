@@ -1,14 +1,11 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../typeorm/user.entity';
-import { Repository } from 'typeorm';
 import { IAuthService } from '../interfaces/IAuthService.interface';
-import { Profile } from 'src/typeorm/profile.entity';
+import { UserDto } from 'src/users/dto/userDto';
+import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
+import { Services } from 'src/utils/consts';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * @description Service for Auth
@@ -19,8 +16,9 @@ import { Profile } from 'src/typeorm/profile.entity';
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
-    private jwtService: JwtService,
-    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+    @Inject(Services.Users) private readonly usersService: IUsersService,
+    private readonly configService: ConfigService,
   ) {}
 
   /**
@@ -35,67 +33,32 @@ export class AuthService implements IAuthService {
 
   /**
    * @description Sign in user
-   * @param {User} user
+   * @param req Request
+   * @param res Response
+   * @param state URL state
    * @returns {Promise<string>} JWT
    * @throws {BadRequestException}
    * @throws {InternalServerErrorException}
    */
-  async signIn(user: User): Promise<string> {
-    if (!user) throw new BadRequestException('Unauthenticated');
+  async signIn(req, res, state: string) {
+    if (!req.user) throw new BadRequestException('Unauthenticated');
 
-    const userExists = await this.findUser(user.email);
+    const userExists = await this.usersService.findUserByEmail(req.user.email);
 
-    if (!userExists) return this.registerUser(user);
-
-    return this.generateJwt(userExists);
-  }
-
-  /**
-   * @description Register user
-   * @param {User} user
-   * @returns {Promise<string>} JWT
-   * @throws {InternalServerErrorException}
-   */
-  async registerUser(user): Promise<string> {
-    try {
-      const newProfile = new Profile();
-      newProfile.about = 'I am a new user';
-      newProfile.avatar = user.avatar_url;
-      newProfile.banner = '';
-      const newUser = this.userRepository.create({
-        username: null,
-        display_name: null,
-        email: user.email,
-        verified: false,
-        profile: newProfile,
-      });
-      await this.userRepository.save(newUser);
-      return this.generateJwt(newUser);
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException("Couldn't register user");
-    }
-  }
-
-  /**
-   * @description Find user
-   * @param {string} email
-   * @returns {Promise<User>} User
-   * @throws {InternalServerErrorException}
-   * @throws {BadRequestException}
-   * @throws {ForbiddenException}
-   * @throws {NotFoundException}
-   * @throws {UnauthorizedException}
-   */
-  async findUser(email: string): Promise<User> {
-    return this.userRepository.findOne({
-      where: {
-        email: email,
-      },
-      relations: {
-        profile: true,
-      },
+    if (!userExists) await this.usersService.createUser(req.user as UserDto);
+    const token = this.generateJwt(userExists);
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     });
+    if (!(await this.isVerified(req.user.email)).is_verified)
+      return {
+        url: `${this.configService.get('CLIENT_URL')}/postlogin?username=${
+          req.user.username
+        }&display_name=${req.user.display_name}&avatar=${req.user.avatar_url}`,
+      };
+    return { url: `${this.configService.get('CLIENT_URL')}/${state}` };
   }
 
   /**
@@ -107,7 +70,7 @@ export class AuthService implements IAuthService {
   async isVerified(
     email: string,
   ): Promise<{ statusCode: number; is_verified: boolean }> {
-    const user = await this.findUser(email);
+    const user = await this.usersService.findUserByEmail(email);
     if (!user) return { statusCode: 200, is_verified: false };
     return { statusCode: 200, is_verified: user.verified };
   }

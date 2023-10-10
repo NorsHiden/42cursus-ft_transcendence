@@ -6,6 +6,7 @@ import { UsersService } from './services/users.service';
 
 import { Profile } from 'src/typeorm/profile.entity';
 import { MeModule } from './me.module';
+import { Services } from 'src/utils/consts';
 
 /**
  * The `UsersModule` encapsulates user-related functionality within the application.
@@ -20,6 +21,11 @@ import { MeModule } from './me.module';
     MeModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [
+    {
+      provide: Services.Users,
+      useClass: UsersService,
+    },
+  ],
 })
 export class UsersModule {}
