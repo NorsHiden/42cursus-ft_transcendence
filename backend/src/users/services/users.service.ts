@@ -5,6 +5,7 @@ import { User } from 'src/typeorm/user.entity';
 import { Repository } from 'typeorm';
 import { UserDto } from '../dto/userDto';
 import { IUsersService } from '../interfaces/IUsersService.interface';
+import { match } from 'fuzzy-tools';
 
 @Injectable()
 export class UsersService implements IUsersService {
@@ -21,6 +22,30 @@ export class UsersService implements IUsersService {
         profile: true,
       },
     });
+  }
+
+  async getUser(id: string) {
+    return await this.userRepository.findOne({
+      where: {
+        id: id,
+        verified: true,
+      },
+      select: ['id', 'display_name', 'username', 'profile'],
+      relations: ['profile'],
+    });
+  }
+
+  async search(search_query: string) {
+    const allUsers = await this.userRepository.find({
+      where: {
+        verified: true,
+      },
+      select: ['id', 'display_name', 'username', 'profile'],
+      relations: ['profile'],
+    });
+    return allUsers.filter((user) =>
+      match(search_query, [user.username, user.display_name]),
+    );
   }
 
   /**

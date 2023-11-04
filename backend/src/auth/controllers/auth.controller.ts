@@ -8,6 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { GoogleOAuthGuard } from '../guards/google-auth.guard';
 import { DiscordOAuthGuard } from '../guards/discord-auth.guard';
 import { FourtyTwoOAuthGuard } from '../guards/42-auth.guard';
@@ -29,7 +30,11 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleOAuthGuard)
   @Redirect('/', 302)
-  async googleRedirect(@Req() req, @Res() res, @Query('state') state: string) {
+  async googleRedirect(
+    @Req() req,
+    @Res({ passthrough: true }) res: Response,
+    @Query('state') state: string,
+  ) {
     return this.authService.signIn(req, res, state);
   }
 

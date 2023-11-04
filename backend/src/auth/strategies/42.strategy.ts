@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile, verifyCallBack } from 'passport-42';
+import { UserDto } from 'src/users/dto/userDto';
 
 /**
  * 42 Strategy
@@ -36,11 +37,13 @@ export class FourtyTwoStrategy extends PassportStrategy(Strategy, '42') {
     profile: Profile,
     done: verifyCallBack,
   ) {
-    const user = {
+    const user: UserDto = {
       email: profile._json.email,
       username: profile._json.login,
       display_name: profile._json.displayname,
-      avatar_url: profile._json.image.link,
+      profile: {
+        avatar: profile._json.image.link,
+      },
     };
     done(null, user);
   }

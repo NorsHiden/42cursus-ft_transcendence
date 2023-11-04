@@ -1,4 +1,5 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../typeorm/user.entity';
 import { IAuthService } from '../interfaces/IAuthService.interface';
@@ -40,23 +41,27 @@ export class AuthService implements IAuthService {
    * @throws {BadRequestException}
    * @throws {InternalServerErrorException}
    */
-  async signIn(req, res, state: string) {
+  async signIn(
+    req: any,
+    @Res({ passthrough: true }) res: Response,
+    state: string,
+  ) {
     if (!req.user) throw new BadRequestException('Unauthenticated');
 
-    const userExists = await this.usersService.findUserByEmail(req.user.email);
+    let user = await this.usersService.findUserByEmail(req.user.email);
 
-    if (!userExists) await this.usersService.createUser(req.user as UserDto);
-    const token = this.generateJwt(userExists);
+    if (!user) user = await this.usersService.createUser(req.user as UserDto);
+    const token = this.generateJwt(user);
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      // secure: true,
+      sameSite: 'strict',
     });
     if (!(await this.isVerified(req.user.email)).is_verified)
       return {
         url: `${this.configService.get('CLIENT_URL')}/postlogin?username=${
           req.user.username
-        }&display_name=${req.user.display_name}&avatar=${req.user.avatar_url}`,
+        }&display_name=${req.user.display_name}&avatar=${user.profile.avatar}`,
       };
     return { url: `${this.configService.get('CLIENT_URL')}/${state}` };
   }

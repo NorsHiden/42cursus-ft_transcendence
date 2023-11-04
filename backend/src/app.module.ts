@@ -5,8 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { RouterModule } from '@nestjs/core';
-import { MeModule } from './users/me.module';
 import { Routes } from './utils/consts';
+
 const configService = new ConfigService();
 
 /**
@@ -45,15 +45,6 @@ const configService = new ConfigService();
 
     // Imports the `UsersModule` for user-related functionality.
     UsersModule,
-
-    // Configures routing for user-related endpoints and the `MeModule`.
-    RouterModule.register([
-      {
-        path: Routes.USERS,
-        module: UsersModule,
-        children: [{ path: '@me', module: MeModule }],
-      },
-    ]),
   ],
   controllers: [], // No controllers defined in this module.
   providers: [], // No providers defined in this module.
