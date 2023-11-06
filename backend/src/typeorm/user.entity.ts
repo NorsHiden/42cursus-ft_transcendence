@@ -2,11 +2,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Profile } from './profile.entity';
-import { type } from 'os';
+import { Friendlist } from './friendlist.entity';
 
 /**
  * Represents a user entity within the application.
@@ -60,6 +62,11 @@ export class User {
   @JoinColumn()
   profile: Profile;
 
+  @OneToOne((type) => Friendlist, (friendlist) => friendlist.owner, {
+    cascade: true,
+  })
+  friendlist: Friendlist;
+
   /**
    * Indicates whether the user's account has been verified.
    * By default, this is set to `false` until the user completes a verification process.
@@ -69,4 +76,13 @@ export class User {
    */
   @Column()
   verified: boolean;
+
+  @ManyToMany((type) => Friendlist, (friendlist) => friendlist.friends)
+  friends: Friendlist;
+
+  @ManyToMany((type) => Friendlist, (friendlist) => friendlist.pending)
+  pending: Friendlist;
+
+  @ManyToMany((type) => Friendlist, (friendlist) => friendlist.blocked)
+  blocked: Friendlist;
 }

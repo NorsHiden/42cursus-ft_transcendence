@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Profile } from 'src/typeorm/profile.entity';
 import { User } from 'src/typeorm/user.entity';
@@ -6,6 +10,7 @@ import { Repository } from 'typeorm';
 import { UserDto } from '../dto/userDto';
 import { IUsersService } from '../interfaces/IUsersService.interface';
 import { match } from 'fuzzy-tools';
+import { Friendlist } from 'src/typeorm/friendlist.entity';
 
 @Injectable()
 export class UsersService implements IUsersService {
@@ -20,6 +25,7 @@ export class UsersService implements IUsersService {
       },
       relations: {
         profile: true,
+        friendlist: true,
       },
     });
   }
@@ -33,6 +39,26 @@ export class UsersService implements IUsersService {
       select: ['id', 'display_name', 'username', 'profile'],
       relations: ['profile'],
     });
+  }
+
+  async getFriendList(id: string): Promise<User> {
+    const userFriendlist = await this.userRepository.findOne({
+      where: {
+        id: id,
+        verified: true,
+      },
+      select: ['id', 'friendlist'],
+      relations: [
+        'friendlist.friends',
+        'friendlist.pending',
+        'friendlist.blocked',
+        'friendlist.friends.profile',
+        'friendlist.pending.profile',
+        'friendlist.blocked.profile',
+      ],
+    });
+    if (!userFriendlist) throw new NotFoundException('user not found');
+    return userFriendlist;
   }
 
   async search(search_query: string) {
@@ -80,8 +106,13 @@ export class UsersService implements IUsersService {
       email: user.email,
       verified: false,
       profile: newProfile,
+      friendlist: new Friendlist(),
     });
     return await this.userRepository.save(newUser);
+  }
+
+  async saveUser(user: User): Promise<User> {
+    return await this.userRepository.save(user);
   }
 
   async isVerified(

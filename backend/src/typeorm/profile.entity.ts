@@ -50,6 +50,9 @@ export class Profile {
    * @type {User}
    * @memberof Profile
    */
-  @OneToOne((type) => User, (user) => user.profile)
+  @OneToOne((type) => User, (user) => user.profile, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   owner: User;
 }

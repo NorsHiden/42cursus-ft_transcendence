@@ -10,9 +10,11 @@ import { UserDto } from '../dto/userDto';
 export interface IUsersService {
   getMe(id: string): Promise<User>;
   getUser(id: string);
+  getFriendList(user_id: string);
   search(search_query: string);
   findUserByEmail(email: string): Promise<User>;
   createUser(user: UserDto): Promise<User>;
+  saveUser(user: User): Promise<User>;
   isVerified(
     email: string,
   ): Promise<{ statusCode: number; is_verified: boolean }>;

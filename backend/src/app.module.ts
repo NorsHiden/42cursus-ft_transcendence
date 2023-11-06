@@ -4,8 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { RouterModule } from '@nestjs/core';
-import { Routes } from './utils/consts';
+import { FriendlistModule } from './friendlist/friendlist.module';
 
 const configService = new ConfigService();
 
@@ -45,6 +44,8 @@ const configService = new ConfigService();
 
     // Imports the `UsersModule` for user-related functionality.
     UsersModule,
+
+    FriendlistModule,
   ],
   controllers: [], // No controllers defined in this module.
   providers: [], // No providers defined in this module.

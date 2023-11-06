@@ -7,6 +7,7 @@ import {
   Post,
   Query,
   Req,
+  Sse,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -16,8 +17,10 @@ import { ConfigService } from '@nestjs/config';
 import { IUsersService } from '../interfaces/IUsersService.interface';
 import { Routes, Services } from 'src/utils/consts';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { interval, map, switchMap } from 'rxjs';
+import { User } from 'src/typeorm/user.entity';
 
-@Controller()
+@Controller(Routes.USERS)
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(
@@ -69,9 +72,16 @@ export class UsersController {
     return user;
   }
 
-  @Get('test')
-  test() {
-    return { statusCode: 200, message: 'test' };
+  @Sse(Routes.ME + '/notifications')
+  notifications(@Req() req) {
+    return interval(1000).pipe(
+      switchMap(() => this.usersService.getFriendList(req.user.id)),
+      map((user: User) => {
+        data: {
+          friend_request: user.friendlist.pending;
+        }
+      }),
+    );
   }
 
   @Get('search')

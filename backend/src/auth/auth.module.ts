@@ -16,6 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Services } from 'src/utils/consts';
 import { Profile } from 'src/typeorm/profile.entity';
 import { UsersService } from 'src/users/services/users.service';
+import { Friendlist } from 'src/typeorm/friendlist.entity';
 
 /**
  * The `AuthModule` encapsulates the authentication-related functionality of the application.
@@ -35,7 +36,7 @@ import { UsersService } from 'src/users/services/users.service';
     }),
 
     // Configures TypeORM to work with the `User` and `Profile` entities.
-    TypeOrmModule.forFeature([User, Profile]),
+    TypeOrmModule.forFeature([User, Friendlist, Profile]),
   ],
   controllers: [AuthController],
   providers: [
