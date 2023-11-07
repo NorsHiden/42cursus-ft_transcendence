@@ -1,7 +1,9 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Profile } from 'src/typeorm/profile.entity';
@@ -11,12 +13,131 @@ import { UserDto } from '../dto/userDto';
 import { IUsersService } from '../interfaces/IUsersService.interface';
 import { match } from 'fuzzy-tools';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
+import { EventService } from 'src/notification/services/events.service';
 
 @Injectable()
 export class UsersService implements IUsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly eventService: EventService,
   ) {}
+
+  // async onApplicationBootstrap() {
+  //   const usersTestData = [
+  //     {
+  //       username: 'john_doe',
+  //       display_name: 'John Doe',
+  //       email: 'john.doe@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Software Engineer at ABC Tech',
+  //         avatar: 'https://i.pravatar.cc/300?u=1',
+  //         banner: 'https://example.com/john_doe-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'jane_smith',
+  //       display_name: 'Jane Smith',
+  //       email: 'jane.smith@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Product Manager at XYZ Corp',
+  //         avatar: 'https://i.pravatar.cc/300?u=2',
+  //         banner: 'https://example.com/jane_smith-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'mike_jackson',
+  //       display_name: 'Mike Jackson',
+  //       email: 'mike.jackson@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Digital Marketing Specialist',
+  //         avatar: 'https://i.pravatar.cc/300?u=3',
+  //         banner: 'https://example.com/mike_jackson-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'sarah_adams',
+  //       display_name: 'Sarah Adams',
+  //       email: 'sarah.adams@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Travel Enthusiast and Blogger',
+  //         avatar: 'https://i.pravatar.cc/300?u=4',
+  //         banner: 'https://example.com/sarah_adams-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'david_clark',
+  //       display_name: 'David Clark',
+  //       email: 'david.clark@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Web Developer and Designer',
+  //         avatar: 'https://i.pravatar.cc/300?u=5',
+  //         banner: 'https://example.com/david_clark-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'emily_martin',
+  //       display_name: 'Emily Martin',
+  //       email: 'emily.martin@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Graphic Designer and Illustrator',
+  //         avatar: 'https://i.pravatar.cc/300?u=6',
+  //         banner: 'https://example.com/emily_martin-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'robert_brown',
+  //       display_name: 'Robert Brown',
+  //       email: 'robert.brown@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Entrepreneur and Investor',
+  //         avatar: 'https://i.pravatar.cc/300?u=7',
+  //         banner: 'https://example.com/robert_brown-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'olivia_wilson',
+  //       display_name: 'Olivia Wilson',
+  //       email: 'olivia.wilson@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Fashion Blogger and Stylist',
+  //         avatar: 'https://i.pravatar.cc/300?u=8',
+  //         banner: 'https://example.com/olivia_wilson-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'william_harris',
+  //       display_name: 'William Harris',
+  //       email: 'william.harris@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Photographer and Nature Lover',
+  //         avatar: 'https://i.pravatar.cc/300?u=9',
+  //         banner: 'https://example.com/william_harris-banner.jpg',
+  //       },
+  //     },
+  //     {
+  //       username: 'lisa_smith',
+  //       display_name: 'Lisa Smith',
+  //       email: 'lisa.smith@example.com',
+  //       verified: true,
+  //       profile: {
+  //         about: 'Foodie and Recipe Enthusiast',
+  //         avatar: 'https://i.pravatar.cc/300?u=10',
+  //         banner: 'https://example.com/lisa_smith-banner.jpg',
+  //       },
+  //     },
+  //   ];
+
+  //   usersTestData.forEach(async (user) => await this.userRepository.save(user));
+  // }
 
   async getMe(id: string): Promise<User> {
     return await this.userRepository.findOne({
@@ -41,7 +162,10 @@ export class UsersService implements IUsersService {
     });
   }
 
-  async getFriendList(id: string): Promise<User> {
+  async getFriendList(
+    id: string,
+    notification: boolean = false,
+  ): Promise<User> {
     const userFriendlist = await this.userRepository.findOne({
       where: {
         id: id,
@@ -55,6 +179,7 @@ export class UsersService implements IUsersService {
         'friendlist.friends.profile',
         'friendlist.pending.profile',
         'friendlist.blocked.profile',
+        notification ? 'notifications' : undefined,
       ],
     });
     if (!userFriendlist) throw new NotFoundException('user not found');
@@ -97,14 +222,9 @@ export class UsersService implements IUsersService {
 
   async createUser(user: UserDto): Promise<User> {
     const newProfile = new Profile();
-    newProfile.about = 'I am a new user';
     newProfile.avatar = user.profile.avatar;
-    newProfile.banner = '';
     const newUser = this.userRepository.create({
-      username: null,
-      display_name: null,
       email: user.email,
-      verified: false,
       profile: newProfile,
       friendlist: new Friendlist(),
     });

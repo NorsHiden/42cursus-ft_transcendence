@@ -17,6 +17,7 @@ import { Services } from 'src/utils/consts';
 import { Profile } from 'src/typeorm/profile.entity';
 import { UsersService } from 'src/users/services/users.service';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
+import { NotificationModule } from 'src/notification/notification.module';
 
 /**
  * The `AuthModule` encapsulates the authentication-related functionality of the application.
@@ -25,6 +26,7 @@ import { Friendlist } from 'src/typeorm/friendlist.entity';
  */
 @Module({
   imports: [
+    NotificationModule,
     // Configures the JWT module for token-based authentication.
     JwtModule.registerAsync({
       imports: [ConfigModule],

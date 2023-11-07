@@ -72,18 +72,6 @@ export class UsersController {
     return user;
   }
 
-  @Sse(Routes.ME + '/notifications')
-  notifications(@Req() req) {
-    return interval(1000).pipe(
-      switchMap(() => this.usersService.getFriendList(req.user.id)),
-      map((user: User) => {
-        data: {
-          friend_request: user.friendlist.pending;
-        }
-      }),
-    );
-  }
-
   @Get('search')
   async search(@Query('s') search_query: string) {
     return await this.usersService.search(search_query);

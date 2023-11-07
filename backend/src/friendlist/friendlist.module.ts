@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/user.entity';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
 import { UsersService } from 'src/users/services/users.service';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Friendlist])],
+  imports: [NotificationModule, TypeOrmModule.forFeature([User, Friendlist])],
   controllers: [FriendlistController],
   providers: [
     {

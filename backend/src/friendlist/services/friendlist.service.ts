@@ -6,17 +6,21 @@ import {
 } from '@nestjs/common';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { Services } from 'src/utils/consts';
+import { IFriendlistService } from '../interfaces/friendlist.interface';
+import { EventService } from 'src/notification/services/events.service';
+import { Notification } from 'src/typeorm/notification.entity';
 
 @Injectable()
-export class FriendlistService {
+export class FriendlistService implements IFriendlistService {
   constructor(
     @Inject(Services.Users) private readonly usersService: IUsersService,
+    private readonly eventService: EventService,
   ) {}
 
   async sendRequest(user_id: string, target_id: string) {
     if (user_id === target_id) throw new ForbiddenException('same ID as user');
-    const user = await this.usersService.getFriendList(user_id);
-    const target = await this.usersService.getFriendList(target_id);
+    const user = await this.usersService.getFriendList(user_id, true);
+    const target = await this.usersService.getFriendList(target_id, true);
     if (
       user.friendlist.friend.find((friendUser) => friendUser.id === target.id)
     )
@@ -28,6 +32,13 @@ export class FriendlistService {
     )
       throw new ForbiddenException('cannot send request on both sides.');
     target.friendlist.pending.push(user);
+    const newNotif = {
+      action: 'FRIEND',
+      recipient: target,
+      sender: user,
+    } as Notification;
+    target.notifications.push(newNotif);
+    this.eventService.emit(target.id, newNotif);
     await this.usersService.saveUser(target);
   }
 

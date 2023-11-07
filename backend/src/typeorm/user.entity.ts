@@ -3,86 +3,70 @@ import {
   Entity,
   JoinColumn,
   ManyToMany,
-  ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Profile } from './profile.entity';
 import { Friendlist } from './friendlist.entity';
+import { Notification } from './notification.entity';
 
-/**
- * Represents a user entity within the application.
- * Users are identified by a unique ID and can have various personal information,
- * including a username, display name, email, and profile details.
- * Additionally, user verification status can be tracked.
- */
 @Entity()
 export class User {
-  /**
-   * Unique identifier for the user.
-   * @type {string}
-   * @memberof User
-   */
   @PrimaryGeneratedColumn()
   id: string;
 
-  /**
-   * The chosen username of the user, which must be unique.
-   * @type {string || null}
-   * @memberof User
-   */
+  // The chosen username of the user, which must be unique.
   @Column({ unique: true, nullable: true })
   username: string;
 
-  /**
-   * The display name that the user has chosen for public presentation.
-   * @type {string || null}
-   * @memberof User
-   */
+  // The display name that the user has chosen for public presentation.
   @Column({ nullable: true })
   display_name: string;
 
-  /**
-   * The email address associated with the user, which must be unique.
-   * @type {string}
-   * @memberof User
-   */
-  @Column({ unique: true })
+  // The email address associated with the user, which must be unique.
+  @Column({ unique: true, nullable: false })
   email: string;
 
-  /**
-   * Stores the user's profile information, including avatar, banner, and other details.
-   * The profile is linked to this user entity.
-   * @type {Profile}
-   * @memberof User
-   */
-  @OneToOne((type) => Profile, (profile) => profile.owner, {
-    cascade: true,
-  })
+  // Additional user statistics
+  @Column({ default: 0 })
+  wins: number;
+
+  @Column({ default: 0 })
+  loses: number;
+
+  @Column({ default: 0 })
+  points: number;
+
+  // Stores the user's profile information, including avatar, banner, and other details.
+  @OneToOne((type) => Profile, (profile) => profile.owner, { cascade: true })
   @JoinColumn()
   profile: Profile;
 
+  // One-to-one relationship with the user's friendlist
   @OneToOne((type) => Friendlist, (friendlist) => friendlist.owner, {
     cascade: true,
   })
+  @JoinColumn()
   friendlist: Friendlist;
 
-  /**
-   * Indicates whether the user's account has been verified.
-   * By default, this is set to `false` until the user completes a verification process.
-   * @type {boolean}
-   * @memberof User
-   * @default false
-   */
-  @Column()
+  // One-to-many relationship with notifications
+  @OneToMany((type) => Notification, (notification) => notification.recipient, {
+    cascade: true,
+  })
+  notifications: Notification[];
+
+  // Indicates whether the user's account has been verified.
+  @Column({ default: false })
   verified: boolean;
 
+  // Many-to-many relationships with friendlists
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.friends)
-  friends: Friendlist;
+  friends: Friendlist[];
 
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.pending)
-  pending: Friendlist;
+  pending: Friendlist[];
 
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.blocked)
-  blocked: Friendlist;
+  blocked: Friendlist[];
 }

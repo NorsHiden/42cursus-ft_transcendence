@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { FriendlistModule } from './friendlist/friendlist.module';
+import { NotificationModule } from './notification/notification.module';
 
 const configService = new ConfigService();
 
@@ -46,8 +47,8 @@ const configService = new ConfigService();
     UsersModule,
 
     FriendlistModule,
+
+    NotificationModule,
   ],
-  controllers: [], // No controllers defined in this module.
-  providers: [], // No providers defined in this module.
 })
 export class AppModule {}

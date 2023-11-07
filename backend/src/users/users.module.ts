@@ -1,4 +1,4 @@
-import { ForbiddenException, Module } from '@nestjs/common';
+import { ForbiddenException, Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/user.entity';
 import { UsersController } from './controllers/users.controller';
@@ -10,6 +10,8 @@ import { diskStorage } from 'multer';
 import * as path from 'path';
 import * as fs from 'fs';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
+import { Notification } from 'src/typeorm/notification.entity';
+import { NotificationModule } from 'src/notification/notification.module';
 
 /**
  * The `UsersModule` encapsulates user-related functionality within the application.
@@ -17,8 +19,10 @@ import { Friendlist } from 'src/typeorm/friendlist.entity';
  */
 @Module({
   imports: [
+    NotificationModule,
+
     // Configures TypeORM to work with the `User` and `Profile` entities.
-    TypeOrmModule.forFeature([User, Friendlist, Profile]),
+    TypeOrmModule.forFeature([User, Friendlist, Profile, Notification]),
 
     // Configures Multer for handling file uploads and storing avatars.
     MulterModule.register({
@@ -61,6 +65,12 @@ import { Friendlist } from 'src/typeorm/friendlist.entity';
   ],
   controllers: [UsersController],
   providers: [
+    {
+      provide: Services.Users,
+      useClass: UsersService,
+    },
+  ],
+  exports: [
     {
       provide: Services.Users,
       useClass: UsersService,
