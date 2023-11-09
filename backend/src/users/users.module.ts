@@ -29,7 +29,7 @@ import { NotificationModule } from 'src/notification/notification.module';
       storage: diskStorage({
         destination: (req, file, cb) => {
           // Creates a directory for storing user avatars if it doesn't exist.
-          const dir = `../avatars/${req.user.id}`;
+          const dir = `../imgs/avatars/${req.user.id}`;
           if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
           }

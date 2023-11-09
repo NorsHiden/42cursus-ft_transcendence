@@ -5,6 +5,7 @@ import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from 'src/typeorm/notification.entity';
 import { Repository } from 'typeorm';
+import { EventService } from './events.service';
 
 @Injectable()
 export class NotificationService implements INotificationService {
@@ -12,6 +13,7 @@ export class NotificationService implements INotificationService {
     @Inject(Services.Users) private readonly usersService: IUsersService,
     @InjectRepository(Notification)
     private readonly notificationRepository: Repository<Notification>,
+    private readonly eventService: EventService,
   ) {}
 
   async getNotifications(
@@ -34,8 +36,13 @@ export class NotificationService implements INotificationService {
   }
 
   async addNotification(
-    sender_id: string,
     target_id: string,
-    actions: string,
-  ) {}
+    notification: Notification,
+  ): Promise<void> {
+    const user = await this.usersService.getNotifications(target_id);
+    if (!user) throw new NotFoundException('user not found.');
+    user.notifications.push(notification);
+    await this.usersService.saveUser(user);
+    this.eventService.emit(target_id, notification);
+  }
 }

@@ -1,9 +1,7 @@
 import {
   ForbiddenException,
-  Inject,
   Injectable,
   NotFoundException,
-  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Profile } from 'src/typeorm/profile.entity';
@@ -13,13 +11,11 @@ import { UserDto } from '../dto/userDto';
 import { IUsersService } from '../interfaces/IUsersService.interface';
 import { match } from 'fuzzy-tools';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
-import { EventService } from 'src/notification/services/events.service';
 
 @Injectable()
 export class UsersService implements IUsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private readonly eventService: EventService,
   ) {}
 
   // async onApplicationBootstrap() {
@@ -162,10 +158,20 @@ export class UsersService implements IUsersService {
     });
   }
 
-  async getFriendList(
-    id: string,
-    notification: boolean = false,
-  ): Promise<User> {
+  async getNotifications(id: string): Promise<User> {
+    const userNotifications = await this.userRepository.findOne({
+      where: {
+        id: id,
+        verified: true,
+      },
+      select: ['id', 'notifications'],
+      relations: ['notifications'],
+    });
+    if (!userNotifications) throw new NotFoundException('user not found');
+    return userNotifications;
+  }
+
+  async getFriendList(id: string): Promise<User> {
     const userFriendlist = await this.userRepository.findOne({
       where: {
         id: id,
@@ -179,7 +185,6 @@ export class UsersService implements IUsersService {
         'friendlist.friends.profile',
         'friendlist.pending.profile',
         'friendlist.blocked.profile',
-        notification ? 'notifications' : undefined,
       ],
     });
     if (!userFriendlist) throw new NotFoundException('user not found');

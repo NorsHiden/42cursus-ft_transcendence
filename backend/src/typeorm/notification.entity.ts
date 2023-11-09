@@ -25,6 +25,6 @@ export class Notification {
   is_read: boolean;
 
   // The timestamp when the notification was created.
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', default: new Date() })
   created_at: Date;
 }

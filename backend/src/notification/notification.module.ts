@@ -22,6 +22,11 @@ import { EventService } from './services/events.service';
       useClass: NotificationService,
     },
   ],
-  exports: [EventService],
+  exports: [
+    {
+      provide: Services.Notification,
+      useClass: NotificationService,
+    },
+  ],
 })
 export class NotificationModule {}
