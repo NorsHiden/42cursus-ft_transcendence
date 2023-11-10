@@ -12,6 +12,7 @@ import * as fs from 'fs';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
 import { Notification } from 'src/typeorm/notification.entity';
 import { NotificationModule } from 'src/notification/notification.module';
+import { Achievement } from 'src/typeorm/achievement.entity';
 
 /**
  * The `UsersModule` encapsulates user-related functionality within the application.
@@ -22,7 +23,13 @@ import { NotificationModule } from 'src/notification/notification.module';
     NotificationModule,
 
     // Configures TypeORM to work with the `User` and `Profile` entities.
-    TypeOrmModule.forFeature([User, Friendlist, Profile, Notification]),
+    TypeOrmModule.forFeature([
+      User,
+      Friendlist,
+      Profile,
+      Notification,
+      Achievement,
+    ]),
 
     // Configures Multer for handling file uploads and storing avatars.
     MulterModule.register({

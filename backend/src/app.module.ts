@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { FriendlistModule } from './friendlist/friendlist.module';
 import { NotificationModule } from './notification/notification.module';
+import { AchievementModule } from './achievement/achievement.module';
 
 const configService = new ConfigService();
 
@@ -49,6 +50,8 @@ const configService = new ConfigService();
     FriendlistModule,
 
     NotificationModule,
+
+    AchievementModule,
   ],
 })
 export class AppModule {}

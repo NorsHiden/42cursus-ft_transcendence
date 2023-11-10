@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class Achievement {
@@ -9,11 +16,17 @@ export class Achievement {
   name: string;
 
   @Column()
+  alt_name: string;
+
+  @Column()
   icon: string;
 
   @Column()
   description: string;
 
-  @Column()
-  progress: number;
+  @ManyToMany((type) => User, (user) => user.achievements, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  claimers: User[];
 }

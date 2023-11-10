@@ -10,6 +10,7 @@ import {
 import { Profile } from './profile.entity';
 import { Friendlist } from './friendlist.entity';
 import { Notification } from './notification.entity';
+import { Achievement } from './achievement.entity';
 
 @Entity()
 export class User {
@@ -55,6 +56,9 @@ export class User {
     cascade: true,
   })
   notifications: Notification[];
+
+  @ManyToMany((type) => Achievement, (achievement) => achievement.claimers)
+  achievements: Achievement[];
 
   // Indicates whether the user's account has been verified.
   @Column({ default: false })
