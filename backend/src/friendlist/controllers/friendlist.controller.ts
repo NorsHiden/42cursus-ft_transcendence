@@ -24,7 +24,29 @@ export class FriendlistController {
 
   @Get()
   async getFriendList(@Req() req) {
-    return await this.usersService.getFriendList(req.user.id);
+    return await this.usersService.getFriendList(req.user.id, [
+      'friendlist.friends',
+      'friendlist.pending',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.pending.profile',
+      'friendlist.blocked.profile',
+    ]);
+  }
+
+  @Get('/friends')
+  async getFriends(@Req() req) {
+    return await this.friendlistService.getFriends(req.user.id);
+  }
+
+  @Get('/pending')
+  async getPending(@Req() req) {
+    return await this.friendlistService.getPending(req.user.id);
+  }
+
+  @Get('/blocked')
+  async getBlocked(@Req() req) {
+    return await this.friendlistService.getBlocked(req.user.id);
   }
 
   @Post(':id/accept')

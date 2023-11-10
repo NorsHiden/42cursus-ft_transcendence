@@ -11,7 +11,7 @@ export interface IUsersService {
   getMe(id: string): Promise<User>;
   getUser(id: string);
   getNotifications(id: string): Promise<User>;
-  getFriendList(user_id: string): Promise<User>;
+  getFriendList(user_id: string, relations: string[]): Promise<User>;
   search(search_query: string);
   findUserByEmail(email: string): Promise<User>;
   createUser(user: UserDto): Promise<User>;

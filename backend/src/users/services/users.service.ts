@@ -171,21 +171,14 @@ export class UsersService implements IUsersService {
     return userNotifications;
   }
 
-  async getFriendList(id: string): Promise<User> {
+  async getFriendList(id: string, relations: string[]): Promise<User> {
     const userFriendlist = await this.userRepository.findOne({
       where: {
         id: id,
         verified: true,
       },
       select: ['id', 'friendlist'],
-      relations: [
-        'friendlist.friends',
-        'friendlist.pending',
-        'friendlist.blocked',
-        'friendlist.friends.profile',
-        'friendlist.pending.profile',
-        'friendlist.blocked.profile',
-      ],
+      relations: relations,
     });
     if (!userFriendlist) throw new NotFoundException('user not found');
     return userFriendlist;

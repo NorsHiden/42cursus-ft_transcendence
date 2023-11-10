@@ -7,9 +7,9 @@ import {
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { Services } from 'src/utils/consts';
 import { IFriendlistService } from '../interfaces/friendlist.interface';
-import { EventService } from 'src/notification/services/events.service';
 import { Notification } from 'src/typeorm/notification.entity';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
+import { User } from 'src/typeorm/user.entity';
 
 @Injectable()
 export class FriendlistService implements IFriendlistService {
@@ -21,8 +21,22 @@ export class FriendlistService implements IFriendlistService {
 
   async sendRequest(user_id: string, target_id: string) {
     if (user_id === target_id) throw new ForbiddenException('same ID as user');
-    const user = await this.usersService.getFriendList(user_id);
-    const target = await this.usersService.getFriendList(target_id);
+    const user = await this.usersService.getFriendList(user_id, [
+      'friendlist.friends',
+      'friendlist.pending',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.pending.profile',
+      'friendlist.blocked.profile',
+    ]);
+    const target = await this.usersService.getFriendList(target_id, [
+      'friendlist.friends',
+      'friendlist.pending',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.pending.profile',
+      'friendlist.blocked.profile',
+    ]);
     if (
       user.friendlist.friends.find((friendUser) => friendUser.id === target.id)
     )
@@ -44,8 +58,22 @@ export class FriendlistService implements IFriendlistService {
 
   async removeRequest(user_id: string, target_id: string) {
     if (user_id === target_id) throw new ForbiddenException('same ID as user');
-    const user = await this.usersService.getFriendList(user_id);
-    const target = await this.usersService.getFriendList(target_id);
+    const user = await this.usersService.getFriendList(user_id, [
+      'friendlist.friends',
+      'friendlist.pending',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.pending.profile',
+      'friendlist.blocked.profile',
+    ]);
+    const target = await this.usersService.getFriendList(target_id, [
+      'friendlist.friends',
+      'friendlist.pending',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.pending.profile',
+      'friendlist.blocked.profile',
+    ]);
     user.friendlist.pending = user.friendlist.pending.filter(
       (friend) => friend.id !== target.id,
     );
@@ -55,10 +83,39 @@ export class FriendlistService implements IFriendlistService {
     await this.usersService.saveUser(user);
   }
 
+  async getFriends(user_id: string): Promise<User> {
+    return await this.usersService.getFriendList(user_id, [
+      'friendlist.friends',
+      'friendlist.friends.profile',
+    ]);
+  }
+  async getPending(user_id: string): Promise<User> {
+    return await this.usersService.getFriendList(user_id, [
+      'friendlist.pending',
+      'friendlist.pending.profile',
+    ]);
+  }
+  async getBlocked(user_id: string): Promise<User> {
+    return await this.usersService.getFriendList(user_id, [
+      'friendlist.blocked',
+      'friendlist.blocked.profile',
+    ]);
+  }
+
   async acceptRequest(user_id: string, target_id: string) {
     if (user_id === target_id) throw new ForbiddenException('same ID as user');
-    const user = await this.usersService.getFriendList(user_id);
-    const target = await this.usersService.getFriendList(target_id);
+    const user = await this.usersService.getFriendList(user_id, [
+      'friendlist.friends',
+      'friendlist.pending',
+      'friendlist.friends.profile',
+      'friendlist.pending.profile',
+    ]);
+    const target = await this.usersService.getFriendList(target_id, [
+      'friendlist.friends',
+      'friendlist.pending',
+      'friendlist.friends.profile',
+      'friendlist.pending.profile',
+    ]);
     if (
       !user.friendlist.pending.find(
         (pendingUser) => pendingUser.id === target.id,
@@ -76,8 +133,18 @@ export class FriendlistService implements IFriendlistService {
 
   async blockFriend(user_id: string, target_id: string) {
     if (user_id === target_id) throw new ForbiddenException('same ID as user');
-    const user = await this.usersService.getFriendList(user_id);
-    const target = await this.usersService.getFriendList(target_id);
+    const user = await this.usersService.getFriendList(user_id, [
+      'friendlist.friends',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.blocked.profile',
+    ]);
+    const target = await this.usersService.getFriendList(target_id, [
+      'friendlist.friends',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.blocked.profile',
+    ]);
     if (
       !user.friendlist.friends.find((friendUser) => friendUser.id === target.id)
     )
@@ -91,8 +158,18 @@ export class FriendlistService implements IFriendlistService {
 
   async unblockFriend(user_id: string, target_id: string) {
     if (user_id === target_id) throw new ForbiddenException('same ID as user');
-    const user = await this.usersService.getFriendList(user_id);
-    const target = await this.usersService.getFriendList(target_id);
+    const user = await this.usersService.getFriendList(user_id, [
+      'friendlist.friends',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.blocked.profile',
+    ]);
+    const target = await this.usersService.getFriendList(target_id, [
+      'friendlist.friends',
+      'friendlist.blocked',
+      'friendlist.friends.profile',
+      'friendlist.blocked.profile',
+    ]);
     if (
       !user.friendlist.blocked.find((friendUser) => friendUser.id === target.id)
     )
