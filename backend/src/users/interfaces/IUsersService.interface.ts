@@ -8,22 +8,30 @@ import { UserDto } from '../dto/userDto';
  * @example import { User } from 'src/typeorm/user.entity';
  */
 export interface IUsersService {
-  getMe(id: string): Promise<User>;
-  getUser(id: string);
-  getNotifications(id: string): Promise<User>;
-  getFriendList(user_id: string, relations: string[]): Promise<User>;
-  search(search_query: string);
-  findUserByEmail(email: string): Promise<User>;
+  // get user without relations
+  getUser(user_id: string): Promise<User>;
+  setUser(user: User): Promise<User>;
   createUser(user: UserDto): Promise<User>;
-  saveUser(user: User): Promise<User>;
-  isVerified(
-    email: string,
-  ): Promise<{ statusCode: number; is_verified: boolean }>;
-  completeLogin(
-    id: string,
-    username: string,
-    display_name: string,
-    profileImageUrl: string,
+  findUserByEmail(email: string): Promise<User>;
+  updateUser(
+    user_id: string,
+    userDto: UserDto,
+    images: {
+      avatar?: Express.Multer.File[];
+      banner?: Express.Multer.File[];
+    },
   ): Promise<User>;
-  updateAbout(id: string, about: string): Promise<User>;
+
+  // get user with relations
+  getNotifications(user_id: string): Promise<User>;
+  getProfile(user_id: string): Promise<User>;
+  getFriendList(user_id: string): Promise<User>;
+  getFriends(user_id: string): Promise<User>;
+  getPending(user_id: string): Promise<User>;
+  getBlocked(user_id: string): Promise<User>;
+  getAchievements(user_id: string): Promise<User>;
+  getUsers(query: string): Promise<User[]>;
+
+  // boolean
+  isVerified(user_id: string): Promise<boolean>;
 }

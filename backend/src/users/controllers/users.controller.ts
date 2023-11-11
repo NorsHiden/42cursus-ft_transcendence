@@ -4,81 +4,69 @@ import {
   Get,
   Inject,
   Param,
-  Post,
+  Put,
   Query,
   Req,
-  Sse,
-  UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { ConfigService } from '@nestjs/config';
 import { IUsersService } from '../interfaces/IUsersService.interface';
 import { Routes, Services } from 'src/utils/consts';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { interval, map, switchMap } from 'rxjs';
-import { User } from 'src/typeorm/user.entity';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { UserDto } from '../dto/userDto';
 
 @Controller(Routes.USERS)
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(
     @Inject(Services.Users) private readonly usersService: IUsersService,
-    private readonly configService: ConfigService,
   ) {}
 
   @Get(Routes.ME)
   async getMe(@Req() req) {
-    return await this.usersService.getMe(req.user.id);
+    return await this.usersService.getUser(req.user.id);
   }
 
-  @Get(Routes.ME + '/is-loggedin')
-  isLogged() {
-    return { statusCode: 200, is_logged_in: true };
-  }
-
-  @Get(Routes.ME + '/is-verified')
-  isVerified(@Req() req) {
-    return this.usersService.isVerified(req.user.id);
-  }
-
-  @Post(Routes.ME + '/complete-login')
-  @UseInterceptors(FileInterceptor('avatar'))
-  async uploadProfileImage(
+  @Put(Routes.ME)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'banner', maxCount: 1 },
+    ]),
+  )
+  async updateUser(
     @Req() req,
-    @UploadedFile() avatar,
-    @Body('username') username: string,
-    @Body('display_name') display_name: string,
+    @Body() userDto: UserDto,
+    @UploadedFiles()
+    images: {
+      avatar?: Express.Multer.File[];
+      banner?: Express.Multer.File[];
+    },
   ) {
-    let profileImageUrl = null;
-    if (avatar)
-      profileImageUrl = `${this.configService.get('CLIENT_URL')}/avatars/${
-        req.user.id
-      }/${avatar.filename}`;
-    const user = await this.usersService.completeLogin(
-      req.user.id,
-      username,
-      display_name,
-      profileImageUrl,
-    );
-
-    return user;
-  }
-
-  @Post(Routes.ME + '/about')
-  async updateAbout(@Req() req, @Body('about') about: string) {
-    const user = await this.usersService.updateAbout(req.user.id, about);
-    return user;
-  }
-
-  @Get('search')
-  async search(@Query('s') search_query: string) {
-    return await this.usersService.search(search_query);
+    return this.usersService.updateUser(req.user.id, userDto, images);
   }
 
   @Get(':id')
   async getUser(@Param('id') id: string) {
     return await this.usersService.getUser(id);
+  }
+
+  @Get(Routes.ME + '/is-loggedin')
+  isLogged() {
+    return { is_logged_in: true };
+  }
+
+  @Get(Routes.ME + '/is-verified')
+  async isVerified(@Req() req) {
+    return {
+      verified: await this.usersService.isVerified(req.user.id),
+    };
+  }
+
+  @Get('search')
+  async search(@Query('s') search_query: string) {
+    return await this.usersService.getUsers(search_query);
   }
 }

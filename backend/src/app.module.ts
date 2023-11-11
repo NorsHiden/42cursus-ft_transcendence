@@ -32,9 +32,20 @@ const configService = new ConfigService();
 
     // Configures serving static files, including avatars.
     ServeStaticModule.forRoot({
-      rootPath: `${__dirname}/../../avatars`,
+      rootPath: `${__dirname}/../../imgs/avatars`,
       renderPath: '/avatars',
       serveRoot: '/avatars',
+      serveStaticOptions: {
+        index: false,
+        redirect: false,
+      },
+    }),
+
+    // Configures serving static files, including avatars.
+    ServeStaticModule.forRoot({
+      rootPath: `${__dirname}/../../imgs/banners`,
+      renderPath: '/banners',
+      serveRoot: '/banners',
       serveStaticOptions: {
         index: false,
         redirect: false,

@@ -20,7 +20,7 @@ export class NotificationService implements INotificationService {
     user_id: string,
     page: number = 0,
   ): Promise<Notification[]> {
-    const user = await this.usersService.getMe(user_id);
+    const user = await this.usersService.getUser(user_id);
     if (!user) throw new NotFoundException('user not found.');
     const notifications = await this.notificationRepository.find({
       where: {
@@ -42,7 +42,7 @@ export class NotificationService implements INotificationService {
     const user = await this.usersService.getNotifications(target_id);
     if (!user) throw new NotFoundException('user not found.');
     user.notifications.push(notification);
-    await this.usersService.saveUser(user);
+    await this.usersService.setUser(user);
     this.eventService.emit(target_id, notification);
   }
 }

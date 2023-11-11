@@ -18,7 +18,12 @@ export class Notification {
 
   // The type of action associated with the notification (e.g., FRIEND or GAME).
   @Column()
-  action: 'FRIEND' | 'GAME' | 'ACHIEVEMENT';
+  action:
+    | 'FRIEND_REQUEST'
+    | 'GAME_REQUEST'
+    | 'ACHIEVEMENT_UNLOCKED'
+    | 'DIRECT_MESSAGE'
+    | 'GROUP_MESSAGE';
 
   // Indicates whether the notification has been read.
   @Column({ default: false })

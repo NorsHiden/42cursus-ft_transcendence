@@ -7,11 +7,9 @@ import { Profile } from 'src/typeorm/profile.entity';
 import { Services } from 'src/utils/consts';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import * as path from 'path';
 import * as fs from 'fs';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
 import { Notification } from 'src/typeorm/notification.entity';
-import { NotificationModule } from 'src/notification/notification.module';
 import { Achievement } from 'src/typeorm/achievement.entity';
 
 /**
@@ -20,8 +18,6 @@ import { Achievement } from 'src/typeorm/achievement.entity';
  */
 @Module({
   imports: [
-    NotificationModule,
-
     // Configures TypeORM to work with the `User` and `Profile` entities.
     TypeOrmModule.forFeature([
       User,
@@ -34,25 +30,12 @@ import { Achievement } from 'src/typeorm/achievement.entity';
     // Configures Multer for handling file uploads and storing avatars.
     MulterModule.register({
       storage: diskStorage({
-        destination: (req, file, cb) => {
+        destination: (req: any, file, cb) => {
           // Creates a directory for storing user avatars if it doesn't exist.
-          const dir = `../imgs/avatars/${req.user.id}`;
+          const dir = `../imgs/${file.fieldname}s/${req.user.id}`;
           if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
           }
-
-          // Deletes the user's avatar if it exists.
-          if (fs.existsSync(dir)) {
-            fs.readdir(dir, (err, files) => {
-              if (err) throw err;
-              for (const file of files) {
-                fs.unlink(path.join(dir, file), (err) => {
-                  if (err) throw err;
-                });
-              }
-            });
-          }
-
           cb(null, dir);
         },
         filename: (req, file, cb) => {
@@ -60,7 +43,7 @@ import { Achievement } from 'src/typeorm/achievement.entity';
           if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/))
             return cb(
               new ForbiddenException('Only image files are allowed!'),
-              false,
+              null,
             );
           const filename = `${Date.now()}.${file.originalname
             .split('.')

@@ -24,14 +24,7 @@ export class FriendlistController {
 
   @Get()
   async getFriendList(@Req() req) {
-    return await this.usersService.getFriendList(req.user.id, [
-      'friendlist.friends',
-      'friendlist.pending',
-      'friendlist.blocked',
-      'friendlist.friends.profile',
-      'friendlist.pending.profile',
-      'friendlist.blocked.profile',
-    ]);
+    return await this.usersService.getFriendList(req.user.id);
   }
 
   @Get('/friends')

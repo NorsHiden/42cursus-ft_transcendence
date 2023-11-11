@@ -43,7 +43,7 @@ export class AchievementService {
     const user = await this.usersService.getUser(target_id);
     achievement.claimers.push(user);
     this.notificationService.addNotification(target_id, {
-      action: 'ACHIEVEMENT',
+      action: 'ACHIEVEMENT_UNLOCKED',
       recipient: user,
       sender: null,
     } as Notification);
