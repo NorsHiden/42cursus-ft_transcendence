@@ -23,6 +23,7 @@ export class UsersService implements IUsersService {
       where: {
         id: user_id,
       },
+      relations: ['profile'],
     });
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
