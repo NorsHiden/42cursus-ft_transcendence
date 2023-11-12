@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 import React from 'react';
 import { unit, multiply, cos, sin, string, Unit } from 'mathjs';
 import { makeshape } from './bl';
-import nextId from 'react-id-generator';
+// import nextId from 'react-id-generator';
 import PointSection from './home/PointsSection';
 import { useRef } from 'react';
 import useMeasure from 'react-use-measure';
@@ -45,7 +45,7 @@ function CornerLinedCardTest(props: ParentCompProps) {
 
   const test = makeshape(cornershape, angleRadians, props.width, props.height);
 
-  const id = nextId();
+  // const id = nextId();
   const url = 'url(#' + id + ')';
   return (
     <div className={`curser-poiter ${props.margine}`} ref={ref}>

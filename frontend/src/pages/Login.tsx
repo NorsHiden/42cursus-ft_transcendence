@@ -1,12 +1,11 @@
-import LoginView from "../components/login/LoginView.tsx"
+import LoginView from '../components/login/LoginView.tsx';
 
-
-function Login(){
-    return (
-        <>
-            <LoginView/>
-        </>
-    )
+function Login() {
+  return (
+    <>
+      <LoginView />
+    </>
+  );
 }
 
-export default Login
+export default Login;

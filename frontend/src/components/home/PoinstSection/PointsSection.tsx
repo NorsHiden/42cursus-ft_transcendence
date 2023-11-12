@@ -1,12 +1,8 @@
-import CornerLinedCardTest from '../../CornerLinedCard/CornerLinedCardTest';
 import CornerLinedCard from '../../CornerLinedCard/CornerLinedCard';
-import Exclude from '/exclude.svg';
 import Vector from '/vector.svg';
 import Lock from '/lock.svg';
 import PointsChart from '../PointsChart/PointsChart';
-import useMeasure from 'react-use-measure';
 import NewScoreCard from '../NewScoreCard/NewScoreCard';
-// import NewScoreCard from "NewScoreCard.tsx"
 import PoinstSectionViewController from './PointsSectionViewController';
 
 function PointSection() {
@@ -14,7 +10,6 @@ function PointSection() {
 
   return (
     <>
-      {/* ml-[15px] */}
       <div className="relative  grid grid-cols-2 ">
         <div
           ref={ref}

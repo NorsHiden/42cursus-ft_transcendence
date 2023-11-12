@@ -1,70 +1,48 @@
-import React, { Children } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Home from './pages/Home.tsx';
-// import App from './App.tsx'
-import Login from './pages/Login.tsx';
-import PostLogin from './pages/PostLogin.tsx';
-import './styles/index.css';
-import Guard from './components/Guards/Guard.tsx';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-  redirect
-  // Route,
-  // Link
-} from 'react-router-dom';
-import Route from './pages/Route.tsx';
-import SearchView from './components/home/Search/SearchView.tsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import './main.css';
+
+import Home, { HomeLoader } from './pages/Home';
+import Login from './pages/Login';
+import PostLogin from './pages/PostLogin';
+import Layout from './pages/Layout';
+import Polygon from './components/Polygon';
+
+const TestComponent = () => {
+  return (
+    <>
+      <Polygon background="#301D13" cutSize={10} />
+      <Polygon background="#301D13" />
+    </>
+  );
+};
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Route/>,
-    children:[
+    element: <TestComponent />,
+    children: [
       {
         path: '/home',
-        element: <Guard target={<Home/>} redirect='home'/>,
-        loader:async ({})=>{
-    
-          const res = await fetch("http://localhost:5173/api/users/@me/is-loggedin")
-          if (res.status == 200)
-          {
-            return (1)
-          }
-          else {
-            throw redirect("/login?redirect=home");
-          }
-        },
-        children:[
-          // {
-          //   path:'/home/search',
-          //   element:<SearchView/>
-          // }
-        ]
-      
+        element: <Home />,
+        loader: HomeLoader,
       },
-    ]
+    ],
   },
   {
     path: '/login',
-    element: <Login/>,
+    element: <Login />,
   },
   {
-    path: '/Postlogin',
+    path: '/signup',
     element: <PostLogin />,
-    loader:async({})=>{
-      const res = await fetch("http://localhost:5173/api/users/@me")
-      if(res.status == 200)
-      {
-        return(res.json())
-      }
-    }
-  }
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
-  <RouterProvider router={router} />,
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>,
 );
