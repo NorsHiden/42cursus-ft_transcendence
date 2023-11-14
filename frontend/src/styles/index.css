@@ -2,7 +2,7 @@
   height: 100%; /* matters */
   color-scheme: dark;
   /* color: rgba(255, 255, 255, 0.87); */
-  background: #1B191D;
+  background: #1b191d;
   /* background: radial-gradient(100.00% 100.00% at 52.96% 100.00%, #285F7B 0%, #001D3A 96.42%); */
   /* overflow: hidden; */
 }
@@ -15,33 +15,32 @@ font-weight: 700;
 line-height: normal;
 } */
 .playbutton {
-  display:inline-block;
-  width:200px;
-  color:#FE5821;
-  filter:url(#round)
-
+  display: inline-block;
+  width: 200px;
+  color: #fe5821;
+  filter: url(#round);
 }
 
 .bannerimg {
-  background-image: url("../../../public/aamoussa.jpeg");
+  background-image: url('../../../public/aamoussa.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
- }
+}
 
-.row{
+.row {
   overflow-y: scroll;
   scroll-behavior: smooth;
 }
 
-input[type=radio] {
+input[type='radio'] {
   /* Add if not using autoprefixer */
   -webkit-appearance: none;
   /* Remove most all native input styles */
   -moz-appearance: none;
-       appearance: none;
+  appearance: none;
   /* For iOS < 15 */
-  background-color:#1B191D;
+  background-color: #1b191d;
   /* Not removed via appearance */
   margin: 0;
   font: inherit;
@@ -55,8 +54,8 @@ input[type=radio] {
   place-content: center;
 }
 
-input[type=radio]::before {
-  content: "";
+input[type='radio']::before {
+  content: '';
   width: var(--data);
   height: var(--data);
   border-radius: 50%;
@@ -64,14 +63,12 @@ input[type=radio]::before {
   transition: 120ms transform ease-in-out;
   box-shadow: inset 1em 1em var(--form-control-color);
   /* Windows High Contrast Mode */
-  background-color:  #717178;
+  background-color: #717178;
 }
 
-input[type=radio]:checked::before {
+input[type='radio']:checked::before {
   transform: scale(1.4);
 }
-
-
 
 .apexcharts-tooltip {
   border-radius: 0px !important;
@@ -83,12 +80,10 @@ input[type=radio]:checked::before {
   filter: var(--url);
 }
 
-
-
 .modefill {
   /* width: 111px; */
-  display:inline-block;
-  filter: var(--url)
+  display: inline-block;
+  filter: var(--url);
 }
 
 /* .parent {
@@ -110,8 +105,8 @@ input[type=radio]:checked::before {
 }
 
 .modefill::before {
-  content:"";
-  display:block;
+  content: '';
+  display: block;
   /* padding-top:86px; */
   background: currentColor;
   clip-path: polygon(var(--polygon-points));
@@ -119,45 +114,54 @@ input[type=radio]:checked::before {
 }
 
 .playbutton::before {
-   content:"";
-   display:block;
-   padding-top:87px;
-   background:currentColor;
-   margin: 0%;
-   /* border-radius: 0px 0 0px 0px; */
+  content: '';
+  display: block;
+  padding-top: 87px;
+  background: currentColor;
+  margin: 0%;
+  /* border-radius: 0px 0 0px 0px; */
   /* clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); */
-  clip-path: polygon(10% -4.6%, 100% 0%, 102% 75.4%, 88.50% 105.29%, 0% 100%, -0.5% 22.3%)
+  clip-path: polygon(
+    10% -4.6%,
+    100% 0%,
+    102% 75.4%,
+    88.5% 105.29%,
+    0% 100%,
+    -0.5% 22.3%
+  );
 }
-
-
-
-
 
 .modes::before {
-   content:"";
-   display:block;
-   padding-top:112px; 
-   background:currentColor;
-  clip-path: polygon(20.07% -17.99%, 100% 0%, 112.07% 65.85%, 89.44% 101.98%, 0% 100%, 0.22% 15.16%);
+  content: '';
+  display: block;
+  padding-top: 112px;
+  background: currentColor;
+  clip-path: polygon(
+    20.07% -17.99%,
+    100% 0%,
+    112.07% 65.85%,
+    89.44% 101.98%,
+    0% 100%,
+    0.22% 15.16%
+  );
 }
 
-
-.play{
-    color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.center{
+.play {
+  color: white;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.center1{
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center1 {
   position: absolute;
   /* top: 50%; */
   left: 50%;

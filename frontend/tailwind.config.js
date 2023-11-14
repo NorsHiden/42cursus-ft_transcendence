@@ -8,9 +8,9 @@ export default {
       },
     },
     fontFamily: {
-      sans: ['Poppins'],
-      serif: ['Rowdies', 'Georgia'],
-      mono: ['ui-monospace', 'SFMono-Regular'],
+      sans: ['Poppins', 'sans-serif'],
+      serif: ['Rowdies', 'serif'],
+      mono: ['ui-monospace', 'monospace'],
     },
     fontSize: {
       sm: '0.8rem',
