@@ -4,9 +4,10 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { RouterModule } from '@nestjs/core';
-import { MeModule } from './users/me.module';
-import { Routes } from './utils/consts';
+import { FriendlistModule } from './friendlist/friendlist.module';
+import { NotificationModule } from './notification/notification.module';
+import { AchievementModule } from './achievement/achievement.module';
+
 const configService = new ConfigService();
 
 /**
@@ -31,9 +32,20 @@ const configService = new ConfigService();
 
     // Configures serving static files, including avatars.
     ServeStaticModule.forRoot({
-      rootPath: `${__dirname}/../../avatars`,
+      rootPath: `${__dirname}/../../imgs/avatars`,
       renderPath: '/avatars',
       serveRoot: '/avatars',
+      serveStaticOptions: {
+        index: false,
+        redirect: false,
+      },
+    }),
+
+    // Configures serving static files, including avatars.
+    ServeStaticModule.forRoot({
+      rootPath: `${__dirname}/../../imgs/banners`,
+      renderPath: '/banners',
+      serveRoot: '/banners',
       serveStaticOptions: {
         index: false,
         redirect: false,
@@ -46,16 +58,11 @@ const configService = new ConfigService();
     // Imports the `UsersModule` for user-related functionality.
     UsersModule,
 
-    // Configures routing for user-related endpoints and the `MeModule`.
-    RouterModule.register([
-      {
-        path: Routes.USERS,
-        module: UsersModule,
-        children: [{ path: '@me', module: MeModule }],
-      },
-    ]),
+    FriendlistModule,
+
+    NotificationModule,
+
+    AchievementModule,
   ],
-  controllers: [], // No controllers defined in this module.
-  providers: [], // No providers defined in this module.
 })
 export class AppModule {}

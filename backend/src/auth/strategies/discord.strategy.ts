@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile, VerifyCallback } from 'passport-discord';
+import { UserDto } from 'src/users/dto/userDto';
 
 /**
  * Discord Strategy
@@ -36,7 +37,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     profile: Profile,
     done: VerifyCallback,
   ) {
-    const user = {
+    const user: UserDto = {
       username: profile.username,
       display_name: profile.global_name,
       email: profile.email,
