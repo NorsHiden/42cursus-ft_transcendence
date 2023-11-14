@@ -8,6 +8,7 @@ type PolygonProps = {
   borderColor?: string;
   borderRadius?: number;
   cut?: number;
+  className?: string;
 };
 
 const Polygon: React.FC<PolygonProps> = ({
@@ -16,14 +17,16 @@ const Polygon: React.FC<PolygonProps> = ({
   fill = '#000',
   borderWidth = 0,
   borderColor = '#000',
-  borderRadius = 0,
-  cut = 10,
+  borderRadius = 10,
+  cut = 15,
+  className,
 }) => {
   cut = width * (Math.min(cut, 40) / 100);
   borderRadius = Math.min(borderRadius, cut / 2);
 
   return (
     <svg
+      className={className}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
