@@ -1,74 +1,42 @@
+import React from 'react';
+
 import Logo from '/logo.svg';
-import parrametre from '/parrametre.svg';
-import notification from '/notification.svg';
+import settings from '/settings.svg';
 import chat from '/chat.svg';
-import axios from 'axios';
-import NavBarViewModel from './NavBarViewModel';
-function NavBar() {
-  // const test = '<script>function hello(){console.log("hello")}</script>'
-  const {user} = NavBarViewModel()
+import notification from '/notification.svg';
+
+const NavBar: React.FC = () => {
   return (
-    <div className="fix mr-[14vw] pt-[4vh] pl-[3vw]">
-      <nav className="">
-        <div className=" flex flex-wrap items-center justify-between ">
-          <img className="h-[5vh] " src={Logo} alt="" />
-          <div className="flex items-center md:order-2">
-            <div className="flex items-center ">
-              <div className="pr-[1.87vw]">
-                <button>
-                  {/* parrametre */}
-                  <img
-                    src={parrametre}
-                    alt="img"
-                    className="h-[2.31vh] w-[2.31vh]"
-                  />
-                </button>
-              </div>
-              <div className="pr-[1.87vw]">
-                <button>
-                  {/* chat */}
-                  <img src={chat} alt="img" className="h-[2.31vh] w-[2.31vh]" />
-                </button>
-              </div>
-              <div className="pr-[1.87vw]">
-                <button>
-                  {/* chat */}
-                  <img
-                    src={notification}
-                    alt="img"
-                    className="h-[2.31vh] w-[2.31vh]"
-                  />
-                </button>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 "
-              id="user-menu-button"
-              aria-expanded="false"
-              data-dropdown-toggle="user-dropdown"
-              data-dropdown-placement="bottom"
-            >
-              {/* <span className="sr-only">Open user menu</span> */}
-              <img
-                className="h-[5.64vh] w-[5.64vh] rounded-full"
-                src={user.avatar}
-                alt="user photo"
-              />
-            </button>
-            <div>
-              <p className={` font-sans text-[1vw] ml-[0.72vw] font-extrabold`} >
-              {user.display_name}
-              </p>
-              <p className="font-sans text-[0.5vw] font-extrabold ml-[0.72vw]  text-[#5E6069] ">
-                @{user.username}
-              </p>
-            </div>
-          </div>
+    <nav className="fix w-full h-full pl-14 flex items-center justify-between">
+      <img className="h-10" src={Logo} alt="Pong Logo" />
+      <div className="flex items-center gap-x-10">
+        <div className="flex items-center gap-x-8">
+          <button>
+            <img src={settings} alt="img" className="h-5 w-5" />
+          </button>
+          <button>
+            <img src={chat} alt="img" className="h-5 w-5" />
+          </button>
+          <button>
+            <img src={notification} alt="img" className="h-5 w-5" />
+          </button>
         </div>
-      </nav>
-    </div>
+        <button className="flex items-center gap-x-2">
+          <img
+            className="w-10 h-10 rounded-full empty"
+            src="https://picsum.photos/40"
+            alt="user photo"
+          />
+          <div className="text-left">
+            <p className="font-sans font-medium text-white">display_name</p>
+            <p className="font-sans font-medium text-[10px] text-[#5E6069]">
+              @username
+            </p>
+          </div>
+        </button>
+      </div>
+    </nav>
   );
-}
+};
 
 export default NavBar;

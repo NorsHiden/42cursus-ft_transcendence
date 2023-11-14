@@ -1,4 +1,3 @@
-// import { blue } from "@mui/material/colors";
 import CornerLinedCard from '../../CornerLinedCard/CornerLinedCard';
 import MatchCard from './MatchCard';
 import GeneralChat from '../GeneralChat/GeneralChat';
@@ -8,7 +7,7 @@ interface prop {
   reminder: number;
 }
 
-function LiveMatchesAndGeneralChat(data: prop) {
+// function LiveMatchesAndGeneralChat(data: prop) {
   const { header_ref, header, taken } = LiveMatchesViewControler(data);
 
   return (

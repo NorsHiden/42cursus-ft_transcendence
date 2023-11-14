@@ -1,120 +1,23 @@
-// import ButtonAct from "./ButtonAct"
-import FriendsBarViewController from './FriendsBarViewConroller';
-import CornerLinedCard from '../../CornerLinedCard/CornerLinedCard';
+import React from 'react';
 
-function FriendsBar() {
-  const { ref_sidebar, scalSideBar } = FriendsBarViewController();
-
+const FriendsBar: React.FC = () => {
   return (
-    <aside
-      id="default-sidebar"
-      ref={ref_sidebar}
-      className="fixed top-0 right-0 z-40 w-[10vw] sm:h-[40vh]  h-[20vh] transition-transform  sm:translate-x-0 "
-      aria-label="Sidebar"
-    >
-      <div id="friends-header-side-bar" className="pt-[4vh]">
-        <div className="flex flex-col w-full justify-center items-center">
-          <h2 className="font-sans extra-bold  text-[1.4vw]">FRIENDS</h2>
-          <CornerLinedCard
-            childComp={
-              <h2
-                style={{ color: 'black' }}
-                className="center font-sans text-[1vw] font-extrabold "
-              >
-                {' '}
-                online{' '}
-              </h2>
-            }
-            fill="[color:#D5FF5C]"
-            cornerredius="0"
-            stroke="[color:#E0FF85]"
-            cornershape={[
-              scalSideBar.card.cornershape,
-              0,
-              scalSideBar.card.cornershape,
-              0,
-            ]}
-            strokesize={0}
-            width={scalSideBar.card.w}
-            height={scalSideBar.card.h}
-            margine=""
-          />
-        </div>
+    <aside className="w-full h-full flex flex-col items-center py-6">
+      <div>
+        <h1 className="font-bold text-white text-center">Friends</h1>
+        <h2 className="font-bold text-[#1B191D] text-center text-[10px] bg-[#D5FF5C] rounded">
+          Online
+        </h2>
       </div>
-      <div className="relative w-full h-full pt-[10vh]">
-        <ul
-          className={`relative w-full h-full space-y-[${scalSideBar.buttomMargine}px]`}
-        >
-          <li className="realatve w-full flex justify-center">
-            <div
-              id="avatar"
-              className={`relative flex bannerimg justify-end h-[${scalSideBar.h}px] w-[${scalSideBar.h}px]  rounded-full `}
-            >
-              <div
-                id="online-icon"
-                className={`h-[${scalSideBar.online}px] w-[${scalSideBar.online}px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]`}
-              ></div>
-            </div>
-          </li>
-          <li className="flex justify-center">
-            <div
-              id="avatar"
-              className={`relative flex bannerimg justify-end h-[${scalSideBar.h}px] w-[${scalSideBar.h}px]  rounded-full `}
-            >
-              <div
-                id="online-icon"
-                className={`h-[${scalSideBar.online}px] w-[${scalSideBar.online}px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]`}
-              ></div>
-            </div>
-          </li>
-          <li className="flex justify-center">
-            <div
-              id="avatar"
-              className={`relative flex bannerimg justify-end h-[${scalSideBar.h}px] w-[${scalSideBar.h}px]  rounded-full `}
-            >
-              <div
-                id="online-icon"
-                className={`h-[${scalSideBar.online}px] w-[${scalSideBar.online}px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]`}
-              ></div>
-            </div>
-          </li>
-          <li className="flex justify-center">
-            <div
-              id="avatar"
-              className={`relative flex bannerimg justify-end h-[${scalSideBar.h}px] w-[${scalSideBar.h}px]  rounded-full `}
-            >
-              <div
-                id="online-icon"
-                className={`h-[${scalSideBar.online}px] w-[${scalSideBar.online}px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]`}
-              ></div>
-            </div>
-          </li>
-          <li className="flex justify-center">
-            <div
-              id="avatar"
-              className={`relative flex bannerimg justify-end h-[${scalSideBar.h}px] w-[${scalSideBar.h}px]  rounded-full `}
-            >
-              <div
-                id="online-icon"
-                className={`h-[${scalSideBar.online}px] w-[${scalSideBar.online}px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]`}
-              ></div>
-            </div>
-          </li>
-          <li className="flex justify-center">
-            <div
-              id="avatar"
-              className={`relative flex bannerimg justify-end h-[${scalSideBar.h}px] w-[${scalSideBar.h}px]  rounded-full `}
-            >
-              <div
-                id="online-icon"
-                className={`h-[${scalSideBar.online}px] w-[${scalSideBar.online}px] bg-[#D5FF5C] border-[2px] border-[#1B191D] rounded-full mr-[4px]`}
-              ></div>
-            </div>
-          </li>
-        </ul>
+      <div className="flex-grow flex flex-col items-center justify-center gap-y-5">
+        <div className="empty w-10 h-10 rounded-full relative after:block after:absolute after:top-0 after:right-0 after:translate-x-1/4 after:-translate-y-1/4 after:rounded-full after:w-4 after:h-4 after:bg-[#D5FF5C] after:border-4 after:border-[#1B191D]"></div>
+        <div className="empty w-10 h-10 rounded-full"></div>
+        <div className="empty w-10 h-10 rounded-full"></div>
+        <div className="empty w-10 h-10 rounded-full"></div>
+        <div className="empty w-10 h-10 rounded-full"></div>
       </div>
     </aside>
   );
-}
+};
 
 export default FriendsBar;

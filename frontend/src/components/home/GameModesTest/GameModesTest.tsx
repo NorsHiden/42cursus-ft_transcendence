@@ -1,15 +1,8 @@
-// import ButtonAct from "./ButtonAct";
-import Regular from '/regular.svg';
-import Cursed from '/cursed.svg';
-import Vanish from '/vanish.svg';
-import Goldrush from '/goldrush.svg';
+import React from 'react';
 import CornerLinedCardTest from '../../CornerLinedCard/CornerLinedCardTest';
 import PointSection from '../PoinstSection/PointsSection';
-import GameModesTestViewCOntroller from './GameModestestViewController';
 
-function GameModesTest() {
-  const { ref, scale } = GameModesTestViewCOntroller();
-
+const GameModesTest: React.FC = () => {
   return (
     <div
       id="games-and-points"
@@ -19,8 +12,7 @@ function GameModesTest() {
         <h1
           className={`font-extrabold text-[${scale.width}px] mb-[${scale.mb}px] font-sans`}
         >
-          {' '}
-          Game Modes{' '}
+          Game Modes 
         </h1>
         <div id="modes" className="grid grid-cols-4 gap-[10px]">
           <CornerLinedCardTest
@@ -104,6 +96,6 @@ function GameModesTest() {
       </section>
     </div>
   );
-}
+};
 
 export default GameModesTest;

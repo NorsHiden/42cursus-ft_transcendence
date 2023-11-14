@@ -1,15 +1,9 @@
-import axios from "axios"
+import axios from 'axios';
 
-const NavBarModel = ()=>{
+const NavBarModel = () => {
+  return {
+    getUser: async () => await axios.get('http://localhost:5173/api/users/@me'),
+  };
+};
 
-    
-    const getuser = async()=>{
-        return (await axios.get("http://localhost:5173/api/users/@me"))
-    }
-    
-    return {
-        getuser
-    }
-}
-
-export default NavBarModel
+export default NavBarModel;
