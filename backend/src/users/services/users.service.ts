@@ -18,6 +18,7 @@ export class UsersService implements IUsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
+  // Method to retrieve user information by user ID.
   async getUser(user_id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
@@ -28,10 +29,13 @@ export class UsersService implements IUsersService {
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
   }
+
+  // Method to set user information in the database.
   async setUser(user: User): Promise<User> {
     return await this.userRepository.save(user);
   }
 
+  // Method to retrieve user notifications by user ID.
   async getNotifications(user_id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
@@ -44,6 +48,7 @@ export class UsersService implements IUsersService {
     return user;
   }
 
+  // Method to retrieve user profile by user ID.
   async getProfile(user_id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
@@ -55,6 +60,7 @@ export class UsersService implements IUsersService {
     return user;
   }
 
+  // Method to retrieve user friend list by user ID.
   async getFriendList(user_id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
@@ -74,13 +80,14 @@ export class UsersService implements IUsersService {
     return user;
   }
 
+  // Methods to retrieve specific lists from the user's friend list.
   async getFriends(user_id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
         id: user_id,
       },
       select: ['friendlist'],
-      relations: ['friendlist.friends'],
+      relations: ['friendlist.friends', 'friendlist.friends.profile'],
     });
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
@@ -92,7 +99,7 @@ export class UsersService implements IUsersService {
         id: user_id,
       },
       select: ['friendlist'],
-      relations: ['friendlist.pending'],
+      relations: ['friendlist.pending', 'friendlist.pending.profile'],
     });
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
@@ -104,12 +111,13 @@ export class UsersService implements IUsersService {
         id: user_id,
       },
       select: ['friendlist'],
-      relations: ['friendlist.blocked'],
+      relations: ['friendlist.blocked', 'friendlist.blocked.profile'],
     });
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
   }
 
+  // Method to retrieve user achievements by user ID.
   async getAchievements(user_id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
@@ -122,6 +130,7 @@ export class UsersService implements IUsersService {
     return user;
   }
 
+  // Method to search for users based on a query string.
   async getUsers(query: string): Promise<User[]> {
     const allUsers = await this.userRepository.find({
       where: {
@@ -135,6 +144,7 @@ export class UsersService implements IUsersService {
     );
   }
 
+  // Method to find a user by their email.
   async findUserByEmail(email: string): Promise<User> {
     return this.userRepository.findOne({
       where: {
@@ -146,6 +156,7 @@ export class UsersService implements IUsersService {
     });
   }
 
+  // Method to create a new user in the database.
   async createUser(user: UserDto): Promise<User> {
     const newProfile = new Profile();
     newProfile.avatar = user.avatar_url;
@@ -157,6 +168,7 @@ export class UsersService implements IUsersService {
     return await this.userRepository.save(newUser);
   }
 
+  // Method to update user information in the database.
   async updateUser(
     user_id: string,
     userDto: UserDto,
