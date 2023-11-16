@@ -14,4 +14,10 @@ export enum Services {
   Friendlist = 'FRIENDLIST_SERVICE',
   Notification = 'NOTIFICATION_SERVICE',
   Achievement = 'ACHIEVEMENT_SERVICE',
+  Gateways = 'GATEWAYS_SERVICE',
+  Chat = 'CHAT_SERVICE',
+}
+
+export enum Namespaces {
+  Chat = '/chat',
 }
