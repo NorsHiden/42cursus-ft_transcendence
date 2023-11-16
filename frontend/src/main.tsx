@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
+import Card from './components/Card';
 import './main.css';
 
 import Home, { HomeLoader } from './pages/Home';
@@ -34,6 +34,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     {/* <RouterProvider router={router} /> */}
-    <Card className="w-30 h-30" />
+    
+    <Card className="w-64 h-64 " borderRadius={15}>
+      {/* put ur card content here */}
+    </Card>
+
   </React.StrictMode>,
 );
