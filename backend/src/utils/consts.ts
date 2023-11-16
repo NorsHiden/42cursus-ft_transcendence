@@ -6,6 +6,7 @@ export enum Routes {
   FRIENDLIST = 'friendlist',
   NOTIFICATION = 'notification',
   ACHIEVEMENT = 'Achievement',
+  CHANNELS = 'channels',
 }
 
 export enum Services {
@@ -14,4 +15,5 @@ export enum Services {
   Friendlist = 'FRIENDLIST_SERVICE',
   Notification = 'NOTIFICATION_SERVICE',
   Achievement = 'ACHIEVEMENT_SERVICE',
+  Channels = 'CHANNELS_SERVICE',
 }

@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { FriendlistModule } from './friendlist/friendlist.module';
 import { NotificationModule } from './notification/notification.module';
 import { AchievementModule } from './achievement/achievement.module';
+import { ChannelsModule } from './channels/channels.module';
 
 const configService = new ConfigService();
 
@@ -63,6 +64,8 @@ const configService = new ConfigService();
     NotificationModule,
 
     AchievementModule,
+
+    ChannelsModule,
   ],
 })
 export class AppModule {}
