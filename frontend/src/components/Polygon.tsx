@@ -1,6 +1,7 @@
 import React from 'react';
 
-type PolygonProps = {
+//export PolygonProps type to use it in card
+export type PolygonProps = {
   width: number;
   height: number;
   fill?: string;
@@ -24,6 +25,7 @@ const Polygon: React.FC<PolygonProps> = ({
 
   return (
     <svg
+      className='absolute inset-0 z-0'
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
