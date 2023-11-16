@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Socket, Server } from 'socket.io';
 import { User } from 'src/typeorm/user.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
@@ -43,3 +44,6 @@ export interface IGameService {
   spectateGame(client: Socket, server: Server, game_id: string): object;
 }
 >>>>>>> eeab70f (joining rooms)
+=======
+export interface IGameService {}
+>>>>>>> 475422b (game init)

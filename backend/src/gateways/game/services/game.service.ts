@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
 import { Services, WebSocketEvents } from 'src/utils/consts';
 import { Socket, Server } from 'socket.io';
@@ -657,10 +658,13 @@ export class GameService {
     return;
   }
 =======
+=======
+>>>>>>> 475422b (game init)
 
 @Injectable()
 export class GameService {
   constructor() {}
+<<<<<<< HEAD
 >>>>>>> ccf63eb (game init)
 =======
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
@@ -815,4 +819,6 @@ export class GameService {
     };
   }
 >>>>>>> 8ebad9c (implementing game_mode matchmaking)
+=======
+>>>>>>> 475422b (game init)
 }

@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> eeab70f (joining rooms)
 import {
@@ -20,16 +21,23 @@ import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 =======
 } from '@nestjs/websockets';
 >>>>>>> eeab70f (joining rooms)
+=======
+import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+>>>>>>> 475422b (game init)
 import { Inject, UseGuards } from '@nestjs/common';
 import { Namespaces, Services } from 'src/utils/consts';
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
+<<<<<<< HEAD
 <<<<<<< HEAD
 import { Server } from 'socket.io';
 >>>>>>> ccf63eb (game init)
 =======
 import { Server, Socket } from 'socket.io';
 >>>>>>> eeab70f (joining rooms)
+=======
+import { Server } from 'socket.io';
+>>>>>>> 475422b (game init)
 import { WebSocketServer } from '@nestjs/websockets';
 
 @WebSocketGateway({
@@ -37,9 +45,12 @@ import { WebSocketServer } from '@nestjs/websockets';
   cors: {
     origin: '*',
 <<<<<<< HEAD
+<<<<<<< HEAD
     credentials: true,
 =======
 >>>>>>> ccf63eb (game init)
+=======
+>>>>>>> 475422b (game init)
   },
 })
 @UseGuards(WsGuard)
@@ -51,6 +62,7 @@ export class GameGateway {
     @Inject(Services.Game) private readonly gameService: IGameService,
   ) {}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   // Event handler for when a client connects to the WebSocket server
@@ -162,5 +174,10 @@ export class GameGateway {
     // Call the game service to handle the spectate request
     return this.gameService.spectateGame(client, this.server, game_id);
 >>>>>>> 8ebad9c (implementing game_mode matchmaking)
+=======
+  @SubscribeMessage('test')
+  test() {
+    console.log('test');
+>>>>>>> 475422b (game init)
   }
 }
