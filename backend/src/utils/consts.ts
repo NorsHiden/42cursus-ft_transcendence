@@ -18,10 +18,12 @@ export enum Services {
   Gateways = 'GATEWAYS_SERVICE',
   Chat = 'CHAT_SERVICE',
   Channels = 'CHANNELS_SERVICE',
+  Game = 'GAME_SERVICE',
 }
 
 export enum Namespaces {
   Chat = '/chat',
+  Game = '/game',
 }
 
 export const imagesFileFields = [
