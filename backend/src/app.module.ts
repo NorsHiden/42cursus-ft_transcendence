@@ -10,6 +10,7 @@ import { AchievementModule } from './achievement/achievement.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from './multer.service';
+import { ChannelsModule } from './channels/channels.module';
 
 const configService = new ConfigService();
 
@@ -68,6 +69,8 @@ const configService = new ConfigService();
     AchievementModule,
 
     GatewaysModule,
+
+    ChannelsModule,
   ],
 })
 export class AppModule {}
