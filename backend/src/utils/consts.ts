@@ -16,8 +16,10 @@ export enum Services {
   Achievement = 'ACHIEVEMENT_SERVICE',
   Gateways = 'GATEWAYS_SERVICE',
   Chat = 'CHAT_SERVICE',
+  Game = 'GAME_SERVICE',
 }
 
 export enum Namespaces {
   Chat = '/chat',
+  Game = '/game',
 }
