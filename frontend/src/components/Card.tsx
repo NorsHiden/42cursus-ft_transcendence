@@ -14,6 +14,7 @@ const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps}) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Set dimensions based on the current offset width and height of the cardRef.
   useEffect(() => {
     if (cardRef.current) {
       setDimensions({
@@ -21,7 +22,7 @@ const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps}) => {
         height: cardRef.current.offsetHeight,
       });
     }
-  }, []);
+  }, [cardRef]);
 
   return (
     <div ref={cardRef} className={`relative ${className}`}>
