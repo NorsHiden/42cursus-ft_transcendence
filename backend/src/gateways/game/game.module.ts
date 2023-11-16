@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { Services } from 'src/utils/consts';
+<<<<<<< HEAD
 import { JwtService } from '@nestjs/jwt';
 import { GameService } from './services/game.service';
 import { GameGateway } from './gateway/game.gateway';
@@ -16,16 +17,26 @@ import { AchievementModule } from 'src/achievement/achievement.module';
     MatchHistoryModule,
     AchievementModule,
   ],
+=======
+import { GameService } from './services/game.service';
+import { GameGateway } from './gateway/game.gateway';
+
+@Module({
+  imports: [],
+>>>>>>> ccf63eb (game init)
   providers: [
     {
       provide: Services.Game,
       useClass: GameService,
     },
+<<<<<<< HEAD
     {
       provide: Services.Gateways,
       useClass: GatewaysService,
     },
     JwtService,
+=======
+>>>>>>> ccf63eb (game init)
     GameGateway,
   ],
   exports: [

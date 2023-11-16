@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Socket, Server } from 'socket.io';
 import { User } from 'src/typeorm/user.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
@@ -25,3 +26,6 @@ export interface IGameService {
   manageInGame(client: Socket, server: Server, action: string, game_id: string);
   getSpectators(client: Socket, game_id: string): void;
 }
+=======
+export interface IGameService {}
+>>>>>>> ccf63eb (game init)

@@ -18,14 +18,19 @@ export enum Services {
   Achievement = 'ACHIEVEMENT_SERVICE',
   Gateways = 'GATEWAYS_SERVICE',
   Chat = 'CHAT_SERVICE',
+<<<<<<< HEAD
   Channels = 'CHANNELS_SERVICE',
   Game = 'GAME_SERVICE',
   MatchHistory = 'MATCH_HISTORY',
+=======
+  Game = 'GAME_SERVICE',
+>>>>>>> ccf63eb (game init)
 }
 
 export enum Namespaces {
   Chat = '/chat',
   Game = '/game',
+<<<<<<< HEAD
 }
 
 export const imagesFileFields = [
@@ -36,4 +41,6 @@ export enum WebSocketEvents {
   Lobby = 'lobby',
   InGame = 'ingame',
   Spectators = 'spectators',
+=======
+>>>>>>> ccf63eb (game init)
 }

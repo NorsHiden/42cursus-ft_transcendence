@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   ConnectedSocket,
   MessageBody,
@@ -10,13 +11,24 @@ import { Namespaces, Services, WebSocketEvents } from 'src/utils/consts';
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';
+=======
+import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { Inject, UseGuards } from '@nestjs/common';
+import { Namespaces, Services } from 'src/utils/consts';
+import { IGameService } from '../interfaces/game.interface';
+import { WsGuard } from 'src/gateways/guards/ws.guard';
+import { Server } from 'socket.io';
+>>>>>>> ccf63eb (game init)
 import { WebSocketServer } from '@nestjs/websockets';
 
 @WebSocketGateway({
   namespace: Namespaces.Game,
   cors: {
     origin: '*',
+<<<<<<< HEAD
     credentials: true,
+=======
+>>>>>>> ccf63eb (game init)
   },
 })
 @UseGuards(WsGuard)
@@ -28,6 +40,7 @@ export class GameGateway {
     @Inject(Services.Game) private readonly gameService: IGameService,
   ) {}
 
+<<<<<<< HEAD
   // Event handler for when a client connects to the WebSocket server
   async handleConnection(client: Socket) {
     await this.gameService.handleConnection(client);
@@ -76,5 +89,10 @@ export class GameGateway {
     @MessageBody('game_id') game_id: string,
   ) {
     return this.gameService.getSpectators(client, game_id);
+=======
+  @SubscribeMessage('test')
+  test() {
+    console.log('test');
+>>>>>>> ccf63eb (game init)
   }
 }
