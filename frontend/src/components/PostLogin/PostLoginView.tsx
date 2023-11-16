@@ -2,7 +2,7 @@ import { useState } from 'react';
 import logo from '/logo.svg';
 import aamoussa from '/aamoussa.jpeg';
 import update from '/update.svg';
-import CornerLinedCardTest from '../CornerLinedCard/CornerLinedCardTest';
+// import CornerLinedCardTest from '../CornerLinedCard/CornerLinedCardTest';
 import PostLoginViewController from './PostLoginViewController';
 
 const PostLoginView = () => {
@@ -86,7 +86,7 @@ const PostLoginView = () => {
                     className="w-[8.12vw] h-[6.29vh] cursor-pointer"
                     onClick={trigersubmit}
                   >
-                    <CornerLinedCardTest
+                    {/* <CornerLinedCardTest
                       childComp={
                         <h2 className={`play font-Rowdies text-[2.59vh]`}>
                           {' '}
@@ -102,7 +102,7 @@ const PostLoginView = () => {
                       height={87}
                       margine=""
                       ratio={43 / 100}
-                    />
+                    /> */}
                   </div>
                   <input
                     type="submit"
