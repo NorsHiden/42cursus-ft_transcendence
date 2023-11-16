@@ -31,10 +31,10 @@ export class NotificationController {
     return this.eventService.subscribe(req.user.id);
   }
 
-  @Get('emit')
-  emitTest(@Req() req) {
-    return this.eventService.emit(req.user.id, {
-      data: 'hello',
-    });
-  }
+  // @Get('emit')
+  // emitTest(@Req() req) {
+  //   return this.eventService.emit(req.user.id, {
+  //     data: 'hello',
+  //   });
+  // }
 }
