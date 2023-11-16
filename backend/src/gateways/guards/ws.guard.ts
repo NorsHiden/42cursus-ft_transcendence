@@ -15,7 +15,10 @@ export class WsGuard implements CanActivate {
 
     if (!cookies) throw new WsException('Please log in to continue');
 
-    const token = cookies['access_token'];
+    const token = cookies
+      .split(';')
+      .find((cookie: string) => cookie.startsWith('access_token'))
+      .split('=')[1];
 
     if (!token) throw new WsException('Please log in to continue');
 
