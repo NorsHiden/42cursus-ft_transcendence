@@ -1,6 +1,6 @@
 import React from 'react';
 
-type PolygonProps = {
+export type PolygonProps = {
   width: number;
   height: number;
   fill?: string;
@@ -8,26 +8,29 @@ type PolygonProps = {
   borderColor?: string;
   borderRadius?: number;
   cut?: number;
+  className?: string;
 };
 
 const Polygon: React.FC<PolygonProps> = ({
   width = 100,
   height = 100,
-  fill = '#000',
+  fill,
   borderWidth = 0,
   borderColor = '#000',
-  borderRadius = 0,
+  borderRadius = 10,
   cut = 10,
+  className,
 }) => {
   cut = width * (Math.min(cut, 40) / 100);
   borderRadius = Math.min(borderRadius, cut / 2);
 
   return (
     <svg
+      className={className}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      fill={fill}
+      fill={fill || 'currentColor'}
       stroke={borderColor}
       strokeWidth={borderWidth}
       strokeLinecap="round"

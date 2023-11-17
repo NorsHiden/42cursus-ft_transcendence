@@ -1,20 +1,29 @@
-import React, { useRef } from 'react';
-import Polygon from './Polygon';
+import React from 'react';
+import clsx from 'clsx';
 
-type CardProps = {
+import Polygon, { PolygonProps } from './Polygon';
+import useDimensions from '../hooks/useDimensions';
+
+type CardProps = Omit<PolygonProps, 'width' | 'height'> & {
   className?: string;
   children?: React.ReactNode;
 };
 
-const Card: React.FC<CardProps> = ({ className, children }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
+const Card: React.FC<CardProps> = ({
+  className,
+  children,
+  ...PolygonProps
+}) => {
+  const { ref, dimensions } = useDimensions<HTMLDivElement>();
 
   return (
-    <div ref={cardRef} className={className}>
+    <div ref={ref} className={clsx('relative', className)}>
       {children}
       <Polygon
-        width={cardRef.current?.offsetWidth}
-        height={cardRef.current?.offsetHeight}
+        className="absolute inset-0 -z-10"
+        width={dimensions.width}
+        height={dimensions.height}
+        {...PolygonProps}
       />
     </div>
   );

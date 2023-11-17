@@ -1,15 +1,12 @@
 import React from 'react';
-
-// import GameModesTest from '../components/home/GameModesTest/GameModesTest';
-// import LiveMatchesAndGeneralChat from '../components/home/LiveMatchesAndGeneralChat/LiveMatchesAndGeneralChat';
-
-import RegularIcon from '/regular.svg';
-import CursedIcon from '/cursed.svg';
-import VanishIcon from '/vanish.svg';
-import GoldrushIcon from '/goldrush.svg';
-import excludeIcon from '/exclude.svg';
-// import PointsChart from '../components/home/PointsChart/PointsChart';
 import { LineChart, Line } from 'recharts';
+
+import excludeIcon from '/exclude.svg';
+import Card from '../components/Card';
+import CursedIcon from '../assets/CursedIcon';
+import RegularIcon from '../assets/RegularIcon';
+import VanishIcon from '../assets/VanishIcon';
+import GoldRushIcon from '../assets/GoldRushIcon';
 
 export const HomeLoader = async () => {
   return true;
@@ -17,25 +14,50 @@ export const HomeLoader = async () => {
 
 const GameModeSection: React.FC = () => {
   return (
-    <section className="col-span-2 flex flex-col items-start gap-y-5">
+    <section className="col-span-2 flex flex-col items-start gap-y-6">
       <h1 className="font-serif text-xl text-white">Game Modes</h1>
       <div className="flex gap-x-3">
-        <div className="bg-[#301D13] border border-[#4E301F] py-4 px-10 rounded-lg flex center">
-          <img src={RegularIcon} className="w-10" alt="" />
-        </div>
-        <div className="bg-[#041F1E] border border-[#073736] py-4 px-10 rounded-lg flex center">
-          <img src={CursedIcon} className="w-10" alt="" />
-        </div>
-        <div className="bg-[#1D1333] border border-[#332158] py-4 px-10 rounded-lg flex center">
-          <img src={VanishIcon} className="w-10" alt="" />
-        </div>
-        <div className="bg-[#241D0C] border border-[#413415] py-4 px-10 rounded-lg flex center">
-          <img src={GoldrushIcon} className="w-10" alt="" />
-        </div>
+        <Card
+          className="flex items-center justify-center center py-5 px-8 text-[#301D13] hover:text-[#462818]"
+          cut={18}
+          borderWidth={1}
+          borderColor="#4E301F"
+        >
+          <RegularIcon className="w-12 h-12 text-[#C2784F]" />
+        </Card>
+        <Card
+          className="flex items-center justify-center center py-5 px-8"
+          cut={18}
+          fill="#041F1E"
+          borderWidth={1}
+          borderColor="#073736"
+        >
+          <CursedIcon className="w-12 h-12 text-[#3DFFFB]" />
+        </Card>
+        <Card
+          className="flex items-center justify-center center py-5 px-8"
+          cut={18}
+          fill="#1D1333"
+          borderWidth={1}
+          borderColor="#332158"
+        >
+          <VanishIcon className="w-12 h-12 text-[#8655F4]" />
+        </Card>
+        <Card
+          className="flex items-center justify-center center py-5 px-8"
+          cut={18}
+          fill="#241D0C"
+          borderWidth={1}
+          borderColor="#413415"
+        >
+          <GoldRushIcon className="w-12 h-12 text-[#FFCF53]" />
+        </Card>
       </div>
-      <button className="bg-[#FE5821] text-white text-xl font-serif py-3 px-16 rounded">
-        PLAY
-      </button>
+      <Card className="flex" cut={8} fill="#FE5821">
+        <button className="text-white text-xl font-serif py-4 px-10 rounded z-10">
+          PLAY
+        </button>
+      </Card>
     </section>
   );
 };

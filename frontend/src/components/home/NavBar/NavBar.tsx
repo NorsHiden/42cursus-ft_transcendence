@@ -22,11 +22,7 @@ const NavBar: React.FC = () => {
           </button>
         </div>
         <button className="flex items-center gap-x-2">
-          <img
-            className="w-10 h-10 rounded-full empty"
-            src="https://picsum.photos/40"
-            alt="user photo"
-          />
+          <div className="w-10 h-10 rounded-full empty"></div>
           <div className="text-left">
             <p className="font-sans font-medium text-white">display_name</p>
             <p className="font-sans font-medium text-[10px] text-[#5E6069]">
