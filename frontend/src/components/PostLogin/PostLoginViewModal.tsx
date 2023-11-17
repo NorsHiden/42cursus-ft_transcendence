@@ -1,39 +1,41 @@
-import axios from "axios"
+// import {AxiosError} from "axios"
 import { useState } from "react"
 import PostLoginModal from "./PostLoginModal"
-
+// import { User } from "./types"
+import { ExtendedUser } from "./PostLoginViewController"
 
 const PostLoginViewModal = ()=>{
-    // const [uploaddone, setuploaddone] = useState(0)
-    const {postdata,user,avatar} = PostLoginModal()
-    const [UserExist, setUserExist] = useState(false)
+      const {postdata,user} = PostLoginModal()
+      const [errors, seterrors] = useState<string>("")
+  
+      const senddata = async (user:ExtendedUser)=>{
+          const formdata = new FormData()
+          console.log("avatar to upload",user.fileToupload)
+          user.fileToupload ?formdata.append('avatar', user.fileToupload):true
+          formdata.append('username', user.username);
+          formdata.append('display_name', user.display_name);
+          
 
-    const senddata = async (dataa:any)=>{
-        const formdata = new FormData()
-        dataa.avatarpath?formdata.append('avatar', dataa.avatarpath):true
-        formdata.append('username', dataa.name);
-        formdata.append('display_name', dataa.displayname);
-        console.log(formdata),
-        postdata(formdata).then((response)=>{
-            console.log("data in post data",formdata)
-            if (response.status == 201)
-            {
-                // console.log("data has ben sent")
-                window.location.href = "http://localhost:5173/"
-            }
-            else {
-                setUserExist(true)
-            }
-        })
-    }
+          try {
+              const response = await postdata(formdata);
+              if (response.status === 200) {
+                window.location.href = "/";
+              }
+              else{
+                    seterrors(response.data.message[0]);
+              }
+          } catch (error:any) {
+                seterrors(error.response.data.message[0]);
+          }
+      }
 
-    return{
-        senddata,
-        user,
-        avatar,
-        UserExist,
-        setUserExist
-    }
+      return{
+          senddata,
+          user,
+          errors,
+          seterrors,
+          haserrors : errors.length > 0,
+      }
 }
 
 export default PostLoginViewModal
