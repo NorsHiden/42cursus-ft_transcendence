@@ -8,4 +8,7 @@
     border: 1px solid #2c2d33;
     /* border-radius: 4px; */
   }
+  .input-placeholder::placeholder {
+    color: #71717A; /* Replace with your desired color */
+  }
 }
