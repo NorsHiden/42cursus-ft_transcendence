@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
 import './index.css';
+import { Toaster } from 'sonner';
+import './main.css';
 
 import Home, { HomeLoader } from './pages/Home';
 import Login from './pages/Login';
@@ -26,13 +27,27 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/signup',
+    path: '/postlogin',
+    loader:async({})=>{
+      const res = await fetch("/api/users/@me")
+      console.log("response: "+res);
+      if(res.status == 200)
+      {
+        return(res.json())
+      }
+    },
     element: <PostLogin />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  <>
+    <Toaster />
     <RouterProvider router={router} />
-  </React.StrictMode>,
+    
+    {/* <Card className="w-64 h-64 " borderRadius={15}> */}
+      {/* put ur card content here */}
+    {/* </Card> */}
+
+  </>,
 );
