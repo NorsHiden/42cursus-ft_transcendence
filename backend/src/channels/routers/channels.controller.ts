@@ -35,6 +35,8 @@ export class ChannelsController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   findAll(@Paginate() query: PaginateQuery) {
     return this.channelsService.findAll(query);
   }
