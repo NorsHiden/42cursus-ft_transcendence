@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { GameService } from './services/game.service';
 import { GameGateway } from './gateway/game.gateway';
 import { GatewaysService } from '../services/gateways.service';
+<<<<<<< HEAD
 import { UsersModule } from 'src/users/users.module';
 import { NotificationModule } from 'src/notification/notification.module';
 import { MatchHistoryModule } from 'src/match_history/match_history.module';
@@ -24,6 +25,8 @@ import { JwtService } from '@nestjs/jwt';
 >>>>>>> 26804f8 (jwtService added)
 import { GameService } from './services/game.service';
 import { GameGateway } from './gateway/game.gateway';
+=======
+>>>>>>> eeab70f (joining rooms)
 
 @Module({
   imports: [],
@@ -35,6 +38,9 @@ import { GameGateway } from './gateway/game.gateway';
     },
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> eeab70f (joining rooms)
     {
       provide: Services.Gateways,
       useClass: GatewaysService,

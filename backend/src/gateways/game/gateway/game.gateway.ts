@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> eeab70f (joining rooms)
 import {
   ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
+<<<<<<< HEAD
   WsException,
 } from '@nestjs/websockets';
 import { Inject, UseGuards } from '@nestjs/common';
@@ -13,12 +17,19 @@ import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';
 =======
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+=======
+} from '@nestjs/websockets';
+>>>>>>> eeab70f (joining rooms)
 import { Inject, UseGuards } from '@nestjs/common';
 import { Namespaces, Services } from 'src/utils/consts';
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
+<<<<<<< HEAD
 import { Server } from 'socket.io';
 >>>>>>> ccf63eb (game init)
+=======
+import { Server, Socket } from 'socket.io';
+>>>>>>> eeab70f (joining rooms)
 import { WebSocketServer } from '@nestjs/websockets';
 
 @WebSocketGateway({
@@ -91,8 +102,20 @@ export class GameGateway {
     return this.gameService.getSpectators(client, game_id);
 =======
   @SubscribeMessage('test')
+<<<<<<< HEAD
   test() {
     console.log('test');
 >>>>>>> ccf63eb (game init)
+=======
+  async test(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('name') name: string,
+  ) {
+    await this.gameService.handleConnection(client, client.id);
+    console.log(this.gameService.getId(client.id));
+    client.join('some_room');
+    this.server.to('some_room').emit('test2', 'test2');
+    return name;
+>>>>>>> eeab70f (joining rooms)
   }
 }
