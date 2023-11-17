@@ -1,57 +1,29 @@
-import React, { useRef, useState, useEffect } from 'react';
-
-import Polygon from './Polygon';
+import React from 'react';
 import clsx from 'clsx';
 
-type CardProps = {
+import Polygon, { PolygonProps } from './Polygon';
+import useDimensions from '../hooks/useDimensions';
+
+type CardProps = Omit<PolygonProps, 'width' | 'height'> & {
   className?: string;
-  background?: string;
-  borderColor?: string;
-  borderWidth?: number;
   children?: React.ReactNode;
-};
-
-const useContainerSize = (): {
-  ref: React.MutableRefObject<HTMLDivElement | null>;
-  size: { width: number; height: number };
-} => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [size, setSize] = useState<{ width: number; height: number }>({
-    width: 0,
-    height: 0,
-  });
-
-  useEffect(() => {
-    if (ref.current) {
-      setSize({
-        width: ref.current.offsetWidth,
-        height: ref.current.offsetHeight,
-      });
-    }
-  }, [ref]);
-
-  return { ref, size };
 };
 
 const Card: React.FC<CardProps> = ({
   className,
   children,
-  background,
-  borderWidth,
-  borderColor,
+  ...PolygonProps
 }) => {
-  const { ref, size } = useContainerSize();
+  const { ref, dimensions } = useDimensions<HTMLDivElement>();
 
   return (
     <div ref={ref} className={clsx('relative', className)}>
       {children}
       <Polygon
-        fill={background}
-        borderWidth={borderWidth}
-        borderColor={borderColor}
-        className="absolute top-0 left-0 -z-10"
-        width={size.width}
-        height={size.height}
+        className="absolute inset-0 z-0"
+        width={dimensions.width}
+        height={dimensions.height}
+        {...PolygonProps}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-type PolygonProps = {
+export type PolygonProps = {
   width: number;
   height: number;
   fill?: string;
@@ -18,7 +18,7 @@ const Polygon: React.FC<PolygonProps> = ({
   borderWidth = 0,
   borderColor = '#000',
   borderRadius = 10,
-  cut = 15,
+  cut = 10,
   className,
 }) => {
   cut = width * (Math.min(cut, 40) / 100);
