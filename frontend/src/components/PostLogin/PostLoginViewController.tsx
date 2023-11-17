@@ -1,76 +1,57 @@
-import { useState } from "react";
+import { useState,useRef, useEffect } from "react";
 import PostLoginViewModal from "./PostLoginViewModal";
-import { string } from "mathjs";
+import { toast } from "sonner";
+import { User } from "@types/types"
+
+export type ExtendedUser = User & {
+  fileToupload: File;
+};
 
 const PostLoginViewController = ()=>{
-  const {senddata,user,avatar,UserExist,setUserExist} = PostLoginViewModal()
-    const [FormData, setFormData] = useState({
-        name: user.username,
-        displayname: user.display_name,
-        avatar: user.avatar?user.avatar:avatar,
-        avatarpath:null
-      });
-    const [errors, seterrors] = useState({
-      name:false,
-      displayname:false
-    })
+  const submitRef = useRef<HTMLInputElement>(null);
+  const uploadRef = useRef<HTMLInputElement>(null);
+  const {senddata,user,haserrors,errors,seterrors} = PostLoginViewModal()
+  const [NewUser, setNewUser] = useState<ExtendedUser | null>(null);
 
+  useEffect(() => {
+    setNewUser(user as ExtendedUser);
+  }, []);
 
-      function handleInput(event: any) {
-        let { name, value } = event.target;
-        if(name == "name")
-        {
-          seterrors({name:false,displayname:errors.displayname})
-          setUserExist(false)
-        }
-        if(name == "displayname")
-        {
-          seterrors({name:errors.name,displayname:false})
-        }
-        if (value == "")
-        {
-          value = null
-        }
-        setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-      }
-    
-      function handlesubmit(event: any) {
-        event.preventDefault();
-        if (FormData.name == null && FormData.displayname == null)
-        {
-          seterrors({name:true,displayname:true})
-        }
-        else if (FormData.name == null){
-          seterrors({name:true,displayname:errors.displayname})
-        }
-        else if (FormData.displayname == null){
-          seterrors({name:errors.name, displayname:true})
-        }
-        else {
-          senddata(FormData)
-        }
-      }
-    
-      function trigerupload(event: any) {
-        const target = event.target.id;
-        const upload = document.getElementsByName(target);
-        upload[0]?.click();
-      }
-    
-      function trigersubmit() {
-        const submit = document.getElementsByName('submit');
-        submit[0]?.click();
-      }
-    
-      function handleUpload(event: any) {
-        const path = URL.createObjectURL(event.target.files[0]);
-        console.log(path)
-        setFormData((prevFormData) => ({ ...prevFormData, avatar: path, avatarpath: event.target.files[0]}));
-      }
-    
-    return{
-        handleInput,handlesubmit,trigerupload,trigersubmit,handleUpload,FormData,errors,UserExist
+  function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
+    let { name, value } = event.target;
+    seterrors("");
+    setNewUser((prevUser) => prevUser ? { ...prevUser, [name]: value } : null);
+  }
+
+  function handlesubmit(event: any) {
+    event.preventDefault();
+    const user: ExtendedUser = NewUser as ExtendedUser;
+    senddata(user!)
+  }
+
+  function trigerupload() {
+    uploadRef.current?.click();
+  }
+
+  function trigersubmit() {
+    if (errors.length > 0) {
+      toast.error(errors);
+      return;
     }
+    submitRef.current?.click();
+  }
+
+  function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const path = URL.createObjectURL(file);
+      setNewUser((prevUser) => ({ ...prevUser!, profile: { ...prevUser?.profile!, avatar: path },fileToupload: file, }));
+    }
+  }
+
+  return {
+    handleInput, handlesubmit, trigerupload, trigersubmit, handleUpload, NewUser, errors, uploadRef, submitRef, haserrors, seterrors
+  }
 }
 
 export default PostLoginViewController
