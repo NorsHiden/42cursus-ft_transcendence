@@ -1,12 +1,15 @@
 import React from 'react';
-import { LineChart, Line } from 'recharts';
+import { LineChart, Line, Tooltip } from 'recharts';
 
-import excludeIcon from '/exclude.svg';
-import Card from '../components/Card';
-import CursedIcon from '../assets/CursedIcon';
-import RegularIcon from '../assets/RegularIcon';
-import VanishIcon from '../assets/VanishIcon';
-import GoldRushIcon from '../assets/GoldRushIcon';
+import Card from '@components/Card';
+
+import {
+  RegularIcon,
+  CursedIcon,
+  VanishIcon,
+  GoldRushIcon,
+} from '@assets/icons';
+import { AlertCircleSolid } from '@assets/novaIcons/';
 
 export const HomeLoader = async () => {
   return true;
@@ -23,7 +26,7 @@ const GameModeSection: React.FC = () => {
           borderWidth={1}
           borderColor="#4E301F"
         >
-          <RegularIcon className="w-12 h-12 text-[#C2784F]" />
+          <RegularIcon size={50} className="text-[#C2784F] hover:text-black" />
         </Card>
         <Card
           className="flex items-center justify-center center py-5 px-8"
@@ -32,7 +35,7 @@ const GameModeSection: React.FC = () => {
           borderWidth={1}
           borderColor="#073736"
         >
-          <CursedIcon className="w-12 h-12 text-[#3DFFFB]" />
+          <CursedIcon size={50} className="text-[#3DFFFB]" />
         </Card>
         <Card
           className="flex items-center justify-center center py-5 px-8"
@@ -41,7 +44,7 @@ const GameModeSection: React.FC = () => {
           borderWidth={1}
           borderColor="#332158"
         >
-          <VanishIcon className="w-12 h-12 text-[#8655F4]" />
+          <VanishIcon size={50} className="text-[#8655F4]" />
         </Card>
         <Card
           className="flex items-center justify-center center py-5 px-8"
@@ -50,7 +53,7 @@ const GameModeSection: React.FC = () => {
           borderWidth={1}
           borderColor="#413415"
         >
-          <GoldRushIcon className="w-12 h-12 text-[#FFCF53]" />
+          <GoldRushIcon size={50} className="text-[#FFCF53]" />
         </Card>
       </div>
       <Card className="flex" cut={8} fill="#FE5821">
@@ -65,43 +68,51 @@ const GameModeSection: React.FC = () => {
 const StatsSection: React.FC = () => {
   const data = [
     { name: 'Page A', value: 10 },
-    { name: 'Page B', value: 100 },
-    { name: 'Page C', value: 70 },
-    { name: 'Page C', value: 50 },
-    { name: 'Page C', value: 3 },
+    { name: 'Page B', value: 0 },
+    { name: 'Page C', value: 90 },
+    { name: 'Page C', value: 55 },
+    { name: 'Page C', value: 61 },
+    { name: 'Page A', value: 10 },
   ];
 
   return (
     <section className="col-span-2 flex flex-col items-center gap-y-5">
       <div className="flex items-center gap-x-10">
-        <div className="flex flex-col flex-shrink-0 items-baseline gap-y-2">
-          <h1 className="font-serif text-white text-[3.5rem]">641 pts</h1>
+        <div className="flex flex-col flex-shrink-0 items-baseline gap-y-3">
+          <h1 className="font-serif text-white text-4xl">641 pts</h1>
           <div className="flex items-center gap-x-[0.3rem] px-3 py-1 rounded bg-[#6B26FF]">
-            <img src={excludeIcon} className="w-5" alt="" />
-            <span className="text-sm text-white">New personal record</span>
+            <AlertCircleSolid size={16} className="text-white" />
+            <span className="text-[10px] text-white">New personal record</span>
           </div>
-          <p className="text-[#4A525E] text-sm font-medium">
+          <p className="text-[#4A525E] text-[10px] font-medium">
             Your previous best{' '}
             <span className="text-[#61686F] font-semibold">622pts</span>
           </p>
         </div>
-        <LineChart className="flex-grow" width={300} height={160} data={data}>
+        <LineChart className="flex-grow" width={300} height={100} data={data}>
+          <Tooltip
+            cursor={false}
+            isAnimationActive={false}
+            offset={0}
+            content={<h1 className="bg-white">sdf</h1>}
+          />
           <Line
+            dot={false}
             type="monotone"
             dataKey="value"
-            strokeWidth={3}
-            stroke="#6B26FF"
+            stroke="#FE5821"
+            strokeWidth={4}
           />
         </LineChart>
       </div>
-      <hr className="w-10/12 border border-[#29272C]" />
+      <hr className="w-8/12 border border-[#29272C]" />
       <div className="flex items-center gap-x-4">
-        <div className="empty w-14 h-14 rounded-lg"></div>
-        <div className="empty w-14 h-14 rounded-lg"></div>
-        <div className="empty w-14 h-14 rounded-lg"></div>
-        <div className="empty w-14 h-14 rounded-lg"></div>
-        <div className="empty w-14 h-14 rounded-lg"></div>
-        <div className="text-white">+3 more</div>
+        <div className="empty w-10 h-10 rounded-lg"></div>
+        <div className="empty w-10 h-10 rounded-lg"></div>
+        <div className="empty w-10 h-10 rounded-lg"></div>
+        <div className="empty w-10 h-10 rounded-lg"></div>
+        <div className="empty w-10 h-10 rounded-lg"></div>
+        <div className="text-[10px] text-white">+3 more</div>
       </div>
     </section>
   );

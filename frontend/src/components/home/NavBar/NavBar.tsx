@@ -1,9 +1,8 @@
 import React from 'react';
 
 import Logo from '/logo.svg';
-import settings from '/settings.svg';
-import chat from '/chat.svg';
 import notification from '/notification.svg';
+import searchIcon from '/search.svg';
 
 const NavBar: React.FC = () => {
   return (
@@ -12,10 +11,7 @@ const NavBar: React.FC = () => {
       <div className="flex items-center gap-x-10">
         <div className="flex items-center gap-x-8">
           <button>
-            <img src={settings} alt="img" className="h-5 w-5" />
-          </button>
-          <button>
-            <img src={chat} alt="img" className="h-5 w-5" />
+            <img src={searchIcon} alt="img" className="h-5 w-5" />
           </button>
           <button>
             <img src={notification} alt="img" className="h-5 w-5" />

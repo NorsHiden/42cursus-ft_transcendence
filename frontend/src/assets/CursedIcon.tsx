@@ -1,18 +1,20 @@
 import React from 'react';
-import { twMerge } from 'tailwind-merge';
 
 type IconProps = {
+  size?: number;
   className?: string;
 };
 
-const CursedIcon: React.FC<IconProps> = ({ className }) => {
+const CursedIcon: React.FC<IconProps> = ({ size, className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
       aria-hidden="true"
-      className={twMerge('w-6 h-6', className)}
+      width={size}
+      height={size}
+      className={className}
     >
       <path
         fillRule="evenodd"

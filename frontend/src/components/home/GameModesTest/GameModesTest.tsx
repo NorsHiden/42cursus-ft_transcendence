@@ -2,6 +2,8 @@ import React from 'react';
 import CornerLinedCardTest from '../../CornerLinedCard/CornerLinedCardTest';
 import PointSection from '../PoinstSection/PointsSection';
 
+import ert from "@hooks/useDimensions"
+
 const GameModesTest: React.FC = () => {
   return (
     <div

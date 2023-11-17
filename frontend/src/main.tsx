@@ -4,10 +4,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import './index.css';
 
-import Home, { HomeLoader } from './pages/Home';
-import Login from './pages/Login';
-import PostLogin from './pages/PostLogin';
-import Layout from './pages/Layout';
+import Home, { HomeLoader } from '@pages/Home';
+import Login from '@pages/Login';
+import PostLogin from '@pages/PostLogin';
+import Layout from '@pages/Layout';
 
 const router = createBrowserRouter([
   {

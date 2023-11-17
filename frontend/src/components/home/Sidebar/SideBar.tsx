@@ -2,27 +2,27 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import homeIcon from '/home.svg';
-import searchIcon from '/search.svg';
 import barChartIcon from '/Bar-chart.svg';
-import bagIcon from '/bag.svg';
 import addChannelIcon from '/addchannel.svg';
 import exploreIcon from '/explore.svg';
+import settings from '/settings.svg';
+import chat from '/chat.svg';
 
 const SideBar: React.FC = () => {
   return (
     <aside className="w-full h-full flex flex-col items-center justify-center gap-y-6">
-      <nav className="flex flex-col gap-y-4">
+      <nav className="flex flex-col gap-y-5">
         <NavLink to="#">
           <img src={homeIcon} className="w-6" alt="" />
         </NavLink>
         <NavLink to="#">
-          <img src={searchIcon} className="w-6" alt="" />
+          <img src={chat} className="w-6" alt="" />
         </NavLink>
         <NavLink to="#">
           <img src={barChartIcon} className="w-6" alt="" />
         </NavLink>
         <NavLink to="#">
-          <img src={bagIcon} className="w-6" alt="" />
+          <img src={settings} className="w-6" alt="" />
         </NavLink>
       </nav>
       <hr className="w-8 border border-[#2c2d33]" />
