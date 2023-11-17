@@ -18,7 +18,7 @@ export class UserChannel {
   timeout: number;
 
   @ManyToOne(() => User, (user) => user.channels)
-  member: User;
+  user: User;
 
   @ManyToOne(() => Channel, (channel) => channel.members)
   channel: Channel;

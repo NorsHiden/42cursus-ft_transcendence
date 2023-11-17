@@ -18,6 +18,7 @@ import { UpdateChannelDto } from '../dto/update-channel.dto';
 import { Routes, Services } from 'src/utils/consts';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 
 @Controller(Routes.CHANNELS)
 export class ChannelsController {
@@ -34,8 +35,8 @@ export class ChannelsController {
   }
 
   @Get()
-  findAll() {
-    return this.channelsService.findAll();
+  findAll(@Paginate() query: PaginateQuery) {
+    return this.channelsService.findAll(query);
   }
 
   @Get(':id')
