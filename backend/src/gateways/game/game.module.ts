@@ -3,6 +3,7 @@ import { Services } from 'src/utils/consts';
 import { JwtService } from '@nestjs/jwt';
 import { GameService } from './services/game.service';
 import { GameGateway } from './gateway/game.gateway';
+import { GatewaysService } from '../services/gateways.service';
 
 @Module({
   imports: [],
@@ -10,6 +11,10 @@ import { GameGateway } from './gateway/game.gateway';
     {
       provide: Services.Game,
       useClass: GameService,
+    },
+    {
+      provide: Services.Gateways,
+      useClass: GatewaysService,
     },
     JwtService,
     GameGateway,
