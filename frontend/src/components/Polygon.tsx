@@ -14,7 +14,7 @@ export type PolygonProps = {
 const Polygon: React.FC<PolygonProps> = ({
   width = 100,
   height = 100,
-  fill = '#000',
+  fill,
   borderWidth = 0,
   borderColor = '#000',
   borderRadius = 10,
@@ -30,7 +30,7 @@ const Polygon: React.FC<PolygonProps> = ({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      fill={fill}
+      fill={fill || 'currentColor'}
       stroke={borderColor}
       strokeWidth={borderWidth}
       strokeLinecap="round"

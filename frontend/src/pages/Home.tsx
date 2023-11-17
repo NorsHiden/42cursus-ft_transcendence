@@ -1,12 +1,12 @@
 import React from 'react';
 import { LineChart, Line } from 'recharts';
 
-// import RegularIcon from '/regular.svg';
-// import CursedIcon from '/cursed.svg';
-// import VanishIcon from '/vanish.svg';
-// import GoldrushIcon from '/goldrush.svg';
 import excludeIcon from '/exclude.svg';
 import Card from '../components/Card';
+import CursedIcon from '../assets/CursedIcon';
+import RegularIcon from '../assets/RegularIcon';
+import VanishIcon from '../assets/VanishIcon';
+import GoldRushIcon from '../assets/GoldRushIcon';
 
 export const HomeLoader = async () => {
   return true;
@@ -14,44 +14,47 @@ export const HomeLoader = async () => {
 
 const GameModeSection: React.FC = () => {
   return (
-    <section className="col-span-2 flex flex-col items-start gap-y-5">
+    <section className="col-span-2 flex flex-col items-start gap-y-6">
       <h1 className="font-serif text-xl text-white">Game Modes</h1>
       <div className="flex gap-x-3">
         <Card
-          className="flex items-center justify-center center py-4 px-10"
-          fill="#301D13"
+          className="flex items-center justify-center center py-5 px-8 text-[#301D13] hover:text-[#462818]"
+          cut={18}
           borderWidth={1}
           borderColor="#4E301F"
         >
-          <div className="w-10 h-10 bg-white z-10"></div>
+          <RegularIcon className="w-12 h-12 text-[#C2784F]" />
         </Card>
         <Card
-          className="flex items-center justify-center center py-4 px-10"
+          className="flex items-center justify-center center py-5 px-8"
+          cut={18}
           fill="#041F1E"
           borderWidth={1}
           borderColor="#073736"
         >
-          <div className="w-10 h-10 bg-white z-10"></div>
+          <CursedIcon className="w-12 h-12 text-[#3DFFFB]" />
         </Card>
         <Card
-          className="flex items-center justify-center center py-4 px-10"
+          className="flex items-center justify-center center py-5 px-8"
+          cut={18}
           fill="#1D1333"
           borderWidth={1}
           borderColor="#332158"
         >
-          <div className="w-10 h-10 bg-white z-10"></div>
+          <VanishIcon className="w-12 h-12 text-[#8655F4]" />
         </Card>
         <Card
-          className="flex items-center justify-center center py-4 px-10"
+          className="flex items-center justify-center center py-5 px-8"
+          cut={18}
           fill="#241D0C"
           borderWidth={1}
           borderColor="#413415"
         >
-          <div className="w-10 h-10 bg-white z-10"></div>
+          <GoldRushIcon className="w-12 h-12 text-[#FFCF53]" />
         </Card>
       </div>
       <Card className="flex" cut={8} fill="#FE5821">
-        <button className="text-white text-xl font-serif py-4 px-16 rounded z-10">
+        <button className="text-white text-xl font-serif py-4 px-10 rounded z-10">
           PLAY
         </button>
       </Card>

@@ -14,7 +14,7 @@ const Layout: React.FC = () => {
       <div className="w-full col-start-1 col-end-2 row-span-2">
         <SideBar />
       </div>
-      <div className="w-full col-start-2 col-end-6 row-span-2">
+      <div className="w-full col-start-2 col-end-6 row-span-2 z-10">
         <Outlet />
       </div>
       <div className="w-full col-start-6 col-end-7 row-start-1 row-end-4">

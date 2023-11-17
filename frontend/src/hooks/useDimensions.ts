@@ -10,15 +10,7 @@ const useDimensions = <T extends HTMLElement>() => {
   };
 
   useLayoutEffect(() => {
-    if (ref.current) {
-      setDimensions(getDimensions(ref.current));
-      console.log(
-        'width: ',
-        dimensions.width,
-        ' | height: ',
-        dimensions.height,
-      );
-    }
+    if (ref.current) setDimensions(getDimensions(ref.current));
   }, []);
 
   useEffect(() => {

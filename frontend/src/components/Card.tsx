@@ -20,7 +20,7 @@ const Card: React.FC<CardProps> = ({
     <div ref={ref} className={clsx('relative', className)}>
       {children}
       <Polygon
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 -z-10"
         width={dimensions.width}
         height={dimensions.height}
         {...PolygonProps}
