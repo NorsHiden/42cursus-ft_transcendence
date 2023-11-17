@@ -3,6 +3,7 @@ import {
   Paginated,
   paginate,
   PaginateConfig,
+  FilterOperator,
 } from 'nestjs-paginate';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
@@ -58,9 +59,14 @@ export class ChannelsService {
     // return channels;
 
     const config: PaginateConfig<Channel> = {
-      sortableColumns: ['id', 'name', 'type', 'protected'],
+      sortableColumns: ['id', 'name', 'createdAt'],
       searchableColumns: ['name'],
-      defaultSortBy: [['id', 'DESC']],
+      defaultSortBy: [['id', 'ASC']],
+	  filterableColumns: {
+		'type': [FilterOperator.EQ],
+		'protected': [FilterOperator.EQ],
+	  },
+	  relations: ['members']
     };
 
     return paginate(query, this.channelRepository, config);
