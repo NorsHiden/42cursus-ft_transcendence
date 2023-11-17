@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { Services } from 'src/utils/consts';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { JwtService } from '@nestjs/jwt';
 import { GameService } from './services/game.service';
 import { GameGateway } from './gateway/game.gateway';
@@ -18,6 +19,9 @@ import { AchievementModule } from 'src/achievement/achievement.module';
     AchievementModule,
   ],
 =======
+=======
+import { JwtService } from '@nestjs/jwt';
+>>>>>>> 26804f8 (jwtService added)
 import { GameService } from './services/game.service';
 import { GameGateway } from './gateway/game.gateway';
 
@@ -30,6 +34,7 @@ import { GameGateway } from './gateway/game.gateway';
       useClass: GameService,
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     {
       provide: Services.Gateways,
       useClass: GatewaysService,
@@ -37,6 +42,9 @@ import { GameGateway } from './gateway/game.gateway';
     JwtService,
 =======
 >>>>>>> ccf63eb (game init)
+=======
+    JwtService,
+>>>>>>> 26804f8 (jwtService added)
     GameGateway,
   ],
   exports: [
