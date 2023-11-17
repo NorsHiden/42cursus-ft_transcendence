@@ -75,6 +75,6 @@ export class User {
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.blocked)
   blocked: Friendlist[];
 
-  @OneToMany(() => UserChannel, (userChannel) => userChannel.member)
+  @OneToMany(() => UserChannel, (userChannel) => userChannel.user)
   channels: UserChannel[];
 }

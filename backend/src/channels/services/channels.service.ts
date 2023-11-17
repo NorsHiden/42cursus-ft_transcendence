@@ -1,5 +1,11 @@
+import {
+  PaginateQuery,
+  Paginated,
+  paginate,
+  PaginateConfig,
+} from 'nestjs-paginate';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateChannelDto } from '../dto/update-channel.dto';
 import { CreateChannelArgs } from 'src/utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -37,7 +43,7 @@ export class ChannelsService {
 
     const userChannel = this.userChannelRepository.create({
       role: 'owner',
-      member: owner,
+      user: owner,
       channel: channel,
     });
     this.userChannelRepository.save(userChannel);
@@ -45,12 +51,30 @@ export class ChannelsService {
     return channel;
   }
 
-  public findAll() {
-    return `This action returns all channels`;
+  public async findAll(query: PaginateQuery): Promise<Paginated<Channel>> {
+    // const channels: Channel[] = await this.channelRepository.find({
+    //   relations: { members: { user: { profile: true } } },
+    // });
+    // return channels;
+
+    const config: PaginateConfig<Channel> = {
+      sortableColumns: ['id', 'name', 'type', 'protected'],
+      searchableColumns: ['name'],
+      defaultSortBy: [['id', 'DESC']],
+    };
+
+    return paginate(query, this.channelRepository, config);
   }
 
-  public findOne(id: number) {
-    return `This action returns a #${id} channel`;
+  public async findOne(id: number): Promise<Channel> {
+    const channel: Channel = await this.channelRepository.findOne({
+      where: { id: id },
+      relations: { members: true },
+    });
+
+    if (!channel) throw new NotFoundException('Channel Not Found.');
+
+    return channel;
   }
 
   public update(id: number, updateChannelDto: UpdateChannelDto) {
