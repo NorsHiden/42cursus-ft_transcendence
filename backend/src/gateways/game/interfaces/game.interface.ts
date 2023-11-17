@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Socket, Server } from 'socket.io';
 import { User } from 'src/typeorm/user.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
@@ -47,3 +48,9 @@ export interface IGameService {
 =======
 export interface IGameService {}
 >>>>>>> 475422b (game init)
+=======
+export interface IGameService {
+  handleConnection(client: any, ...args: any[]): Promise<void>;
+  getId(id: string): number;
+}
+>>>>>>> 9c25fe2 (joining rooms)
