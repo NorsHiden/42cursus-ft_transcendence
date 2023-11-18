@@ -53,20 +53,15 @@ export class ChannelsService {
   }
 
   public async findAll(query: PaginateQuery): Promise<Paginated<Channel>> {
-    // const channels: Channel[] = await this.channelRepository.find({
-    //   relations: { members: { user: { profile: true } } },
-    // });
-    // return channels;
-
     const config: PaginateConfig<Channel> = {
       sortableColumns: ['id', 'name', 'createdAt'],
       searchableColumns: ['name'],
       defaultSortBy: [['id', 'ASC']],
-	  filterableColumns: {
-		'type': [FilterOperator.EQ],
-		'protected': [FilterOperator.EQ],
-	  },
-	  relations: ['members']
+      filterableColumns: {
+        type: [FilterOperator.EQ],
+        protected: [FilterOperator.EQ],
+      },
+      relations: ['members'],
     };
 
     return paginate(query, this.channelRepository, config);
@@ -83,8 +78,29 @@ export class ChannelsService {
     return channel;
   }
 
-  public update(id: number, updateChannelDto: UpdateChannelDto) {
-    return `This action updates a #${id} channel`;
+  public async update(
+    id: number,
+    updateChannelDto: UpdateChannelDto,
+  ): Promise<Channel> {
+    const hashedPassword = updateChannelDto.password
+      ? await this.hashPassword(updateChannelDto.password)
+      : undefined;
+
+    const newChannel = this.channelRepository.create({
+      name: updateChannelDto.name,
+      type: updateChannelDto.type,
+      protected: updateChannelDto.password ? true : undefined,
+      password: hashedPassword,
+    });
+
+    const updatedChannel = await this.channelRepository
+      .createQueryBuilder('channel')
+      .update(newChannel)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    return updatedChannel.raw[0];
   }
 
   public remove(id: number) {
