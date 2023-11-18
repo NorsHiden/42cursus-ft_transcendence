@@ -76,6 +76,7 @@ export class GameGateway {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   // Event handler for when a client connects to the WebSocket server
   async handleConnection(client: Socket) {
 =======
@@ -83,11 +84,17 @@ export class GameGateway {
   async handleConnection(client: Socket) {
     // Call the game service to handle the connection
 >>>>>>> 8ebad9c (implementing game_mode matchmaking)
+=======
+  // Event handler for when a client connects to the WebSocket server
+  async handleConnection(client: Socket) {
+    // Call the game service to handle the connection
+>>>>>>> 46b0e30 (implementing game_mode matchmaking)
     await this.gameService.handleConnection(client);
   }
 
   // Event handler for when a client disconnects from the WebSocket server
   async handleDisconnect(client: Socket) {
+<<<<<<< HEAD
 <<<<<<< HEAD
     await this.gameService.closeConnection(client);
   }
@@ -158,6 +165,18 @@ export class GameGateway {
     @ConnectedSocket() client: Socket, // Decorator to inject the connected socket
     @MessageBody('game_mode') game_mode: string, // Decorator to extract the 'game_mode' from the message body
   ) {
+=======
+    // Call the game service to close the connection
+    await this.gameService.closeConnection(client);
+  }
+
+  // Event handler for the 'lobby' message, used for joining game lobbies
+  @SubscribeMessage('lobby')
+  async lobby(
+    @ConnectedSocket() client: Socket, // Decorator to inject the connected socket
+    @MessageBody('game_mode') game_mode: string, // Decorator to extract the 'game_mode' from the message body
+  ) {
+>>>>>>> 46b0e30 (implementing game_mode matchmaking)
     // Check if the provided game mode is valid
     if (
       game_mode !== 'REGULAR' &&
@@ -184,6 +203,7 @@ export class GameGateway {
   ) {
     // Call the game service to handle the spectate request
     return this.gameService.spectateGame(client, this.server, game_id);
+<<<<<<< HEAD
 >>>>>>> 8ebad9c (implementing game_mode matchmaking)
 =======
   @SubscribeMessage('test')
@@ -202,5 +222,7 @@ export class GameGateway {
     this.server.to('some_room').emit('test2', 'test2');
     return name;
 >>>>>>> 9c25fe2 (joining rooms)
+=======
+>>>>>>> 46b0e30 (implementing game_mode matchmaking)
   }
 }

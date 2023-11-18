@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Socket, Server } from 'socket.io';
 import { User } from 'src/typeorm/user.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
@@ -49,8 +50,14 @@ export interface IGameService {
 export interface IGameService {}
 >>>>>>> 475422b (game init)
 =======
+=======
+import { Socket, Server } from 'socket.io';
+>>>>>>> 46b0e30 (implementing game_mode matchmaking)
 export interface IGameService {
-  handleConnection(client: any, ...args: any[]): Promise<void>;
+  handleConnection(client: Socket): Promise<void>;
+  closeConnection(client: Socket): Promise<void>;
   getId(id: string): number;
+  findLobby(client: Socket, server: Server, game_mode: string): object;
+  spectateGame(client: Socket, server: Server, game_id: string): object;
 }
 >>>>>>> 9c25fe2 (joining rooms)
