@@ -1,14 +1,14 @@
 import CornerLinedCard from '../../CornerLinedCard/CornerLinedCard';
 import MatchCard from './MatchCard';
 import GeneralChat from '../GeneralChat/GeneralChat';
-import LiveMatchesViewControler from './LiveMatchesViewController';
+import useLiveMatchesViewControler from './LiveMatchesViewController';
 
 interface prop {
   reminder: number;
 }
 
 // function LiveMatchesAndGeneralChat(data: prop) {
-  const { header_ref, header, taken } = LiveMatchesViewControler(data);
+  const { header_ref, header, taken } = useLiveMatchesViewControler(data);
 
   return (
     <div className="grid grid-cols-5 mt-[4.62vh] ml-[8.38vw]  mr-[8.38vw] gap-[1vw]">

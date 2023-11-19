@@ -3,13 +3,8 @@ import { LineChart, Line, Tooltip } from 'recharts';
 
 import Card from '@components/Card';
 
-import {
-  RegularIcon,
-  CursedIcon,
-  VanishIcon,
-  GoldRushIcon,
-} from '@assets/icons';
-import { AlertCircleSolid } from '@assets/novaIcons/';
+import { RegularIcon, CursedIcon, VanishIcon, GoldRushIcon } from '@assets/gameIcons';
+import { AlertCircleSolid } from '@assets/novaIcons';
 
 export const HomeLoader = async () => {
   return true;
@@ -57,9 +52,7 @@ const GameModeSection: React.FC = () => {
         </Card>
       </div>
       <Card className="flex" cut={8} fill="#FE5821">
-        <button className="text-white text-xl font-serif py-4 px-10 rounded z-10">
-          PLAY
-        </button>
+        <button className="text-white text-xl font-serif py-4 px-10 rounded z-10">PLAY</button>
       </Card>
     </section>
   );
@@ -85,8 +78,7 @@ const StatsSection: React.FC = () => {
             <span className="text-[10px] text-white">New personal record</span>
           </div>
           <p className="text-[#4A525E] text-[10px] font-medium">
-            Your previous best{' '}
-            <span className="text-[#61686F] font-semibold">622pts</span>
+            Your previous best <span className="text-[#61686F] font-semibold">622pts</span>
           </p>
         </div>
         <LineChart className="flex-grow" width={300} height={100} data={data}>
@@ -96,13 +88,7 @@ const StatsSection: React.FC = () => {
             offset={0}
             content={<h1 className="bg-white">sdf</h1>}
           />
-          <Line
-            dot={false}
-            type="monotone"
-            dataKey="value"
-            stroke="#FE5821"
-            strokeWidth={4}
-          />
+          <Line dot={false} type="monotone" dataKey="value" stroke="#FE5821" strokeWidth={4} />
         </LineChart>
       </div>
       <hr className="w-8/12 border border-[#29272C]" />

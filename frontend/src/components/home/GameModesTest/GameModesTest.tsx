@@ -2,8 +2,6 @@ import React from 'react';
 import CornerLinedCardTest from '../../CornerLinedCard/CornerLinedCardTest';
 import PointSection from '../PoinstSection/PointsSection';
 
-import ert from "@hooks/useDimensions"
-
 const GameModesTest: React.FC = () => {
   return (
     <div
@@ -14,7 +12,7 @@ const GameModesTest: React.FC = () => {
         <h1
           className={`font-extrabold text-[${scale.width}px] mb-[${scale.mb}px] font-sans`}
         >
-          Game Modes 
+          Game Modes
         </h1>
         <div id="modes" className="grid grid-cols-4 gap-[10px]">
           <CornerLinedCardTest

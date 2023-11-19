@@ -21,9 +21,7 @@ const NavBar: React.FC = () => {
           <div className="w-10 h-10 rounded-full empty"></div>
           <div className="text-left">
             <p className="font-sans font-medium text-white">display_name</p>
-            <p className="font-sans font-medium text-[10px] text-[#5E6069]">
-              @username
-            </p>
+            <p className="font-sans font-medium text-[#5E6069] text-[10px]">@username</p>
           </div>
         </button>
       </div>

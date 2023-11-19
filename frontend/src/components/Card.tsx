@@ -9,11 +9,7 @@ type CardProps = Omit<PolygonProps, 'width' | 'height'> & {
   children?: React.ReactNode;
 };
 
-const Card: React.FC<CardProps> = ({
-  className,
-  children,
-  ...PolygonProps
-}) => {
+const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps }) => {
   const { ref, dimensions } = useDimensions<HTMLDivElement>();
 
   return (
