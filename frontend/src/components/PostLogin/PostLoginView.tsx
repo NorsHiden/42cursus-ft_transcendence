@@ -33,8 +33,8 @@ const PostLoginView = () => {
 
   return (
     <div className='relative overflow-hidden'>
-    <div className='absolute bottom-0 right-0  hidden lg:block w-[60%] h-full  z-10'>
-      <img src={illustation} alt="Illustration" className="relative  object-none w-full h-full transform  object-left-top " />
+    <div className='absolute bottom-0 right-0  hidden lg:block w-[50%] h-full  z-10'>
+      <img src={illustation} alt="Illustration" className="relative  object-none w-full h-full transform  object-right-top " />
     </div>
     <div className="grid relative lg:grid-cols-2 h-[100vh] w-[100vw] grid-cols-1  overflow-hidden">
       <div id="login_section" className="w-full h-full  bg-background">

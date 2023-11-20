@@ -9,6 +9,13 @@ export default {
       'xl': '1280px',
       '2xl': '1536px',
     },
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',
@@ -34,10 +41,12 @@ export default {
       serif: ['Rowdies', 'serif'],
       mono: ['ui-monospace', 'monospace'],
       'inter': ['Inter', 'sans-serif'],
+      'inter': ['Inter', 'sans-serif'],
     },
     fontSize: {
       sm: '0.8rem',
       base: '1rem',
+      lg: '1.25rem',
       lg: '1.25rem',
       xl: '1.30rem',
       '2xl': '1.563rem',
