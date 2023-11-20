@@ -13,4 +13,11 @@ export type CreateChannelArgs = {
   name: string;
   type: ChannelType;
   password?: string;
+  avatar?: Express.Multer.File;
+  banner?: Express.Multer.File;
 };
+
+export type ImagesFiles = Partial<{
+  avatar: Express.Multer.File[];
+  banner: Express.Multer.File[];
+}>;

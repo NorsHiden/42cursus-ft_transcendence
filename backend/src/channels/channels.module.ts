@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+import { ForbiddenException, Module } from '@nestjs/common';
 import { ChannelsService } from './services/channels.service';
-import { ChannelsController } from './routers/channels.controller';
+import { ChannelsController } from './controllers/channels.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/user.entity';
 import { Channel } from 'src/typeorm/channel.entity';

@@ -20,6 +20,6 @@ export class UserChannel {
   @ManyToOne(() => User, (user) => user.channels)
   user: User;
 
-  @ManyToOne(() => Channel, (channel) => channel.members)
+  @ManyToOne(() => Channel, (channel) => channel.members, { onDelete: 'CASCADE' })
   channel: Channel;
 }
