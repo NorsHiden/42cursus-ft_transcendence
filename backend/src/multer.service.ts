@@ -13,7 +13,10 @@ export class MulterConfigService implements MulterOptionsFactory {
       storage: diskStorage({
         destination: (req: any, file, cb) => {
           // Creates a directory for storing user avatars if it doesn't exist.
-          const dir = `../imgs/users/${file.fieldname}s/${req.user.id}`;
+          let dir = '../imgs';
+          if (file.fieldname == 'avatar' || file.fieldname == 'avatar')
+            dir += `/users/${file.fieldname}s/${req.user.id}`;
+          else dir += `/channels/${file.fieldname}`;
           if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
           }
