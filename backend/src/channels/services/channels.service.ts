@@ -6,7 +6,12 @@ import {
   FilterOperator,
 } from 'nestjs-paginate';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UpdateChannelDto } from '../dto/update-channel.dto';
 import { CreateChannelArgs } from 'src/utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,6 +21,7 @@ import { Channel } from 'src/typeorm/channel.entity';
 import { Services } from 'src/utils/consts';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/typeorm/user.entity';
 
 @Injectable()
 export class ChannelsService {
@@ -39,6 +45,8 @@ export class ChannelsService {
       type: args.type,
       protected: args.password ? true : false,
       password: hashedPassword,
+      avatar: args.avatar?.path.slice(7),
+      banner: args.banner?.path.slice(7),
     });
     const channel = await this.channelRepository.save(newChannel);
 
@@ -69,8 +77,8 @@ export class ChannelsService {
 
   public async findOne(id: number): Promise<Channel> {
     const channel: Channel = await this.channelRepository.findOne({
-      where: { id: id },
-      relations: { members: true },
+      where: { id },
+      relations: ['members', 'members.user'],
     });
 
     if (!channel) throw new NotFoundException('Channel Not Found.');
@@ -81,7 +89,14 @@ export class ChannelsService {
   public async update(
     id: number,
     updateChannelDto: UpdateChannelDto,
+    user: User,
   ): Promise<Channel> {
+    const channel = await this.findOne(id);
+
+    if (this.isRole(channel, user, 'owner') === false) {
+      throw new UnauthorizedException('You cannot delete this channel.');
+    }
+
     const hashedPassword = updateChannelDto.password
       ? await this.hashPassword(updateChannelDto.password)
       : undefined;
@@ -103,12 +118,25 @@ export class ChannelsService {
     return updatedChannel.raw[0];
   }
 
-  public remove(id: number) {
-    return `This action removes a #${id} channel`;
+  public async remove(id: number, user: User): Promise<Channel> {
+    const channel = await this.findOne(id);
+
+    if (this.isRole(channel, user, 'owner') === false) {
+      throw new UnauthorizedException('You cannot delete this channel.');
+    }
+
+    const deletedChannel = await this.channelRepository.remove(channel);
+    return deletedChannel;
   }
 
   private async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt();
     return await bcrypt.hash(password, salt);
+  }
+
+  private isRole(channel: Channel, user: User, role: string): boolean {
+    return channel.members.some(
+      (member) => member.user.id === user.id && member.role === role,
+    );
   }
 }

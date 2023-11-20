@@ -17,3 +17,8 @@ export enum Services {
   Achievement = 'ACHIEVEMENT_SERVICE',
   Channels = 'CHANNELS_SERVICE',
 }
+
+export const imagesFileFields = [
+  { name: 'avatar', maxCount: 1 },
+  { name: 'banner', maxCount: 1 },
+];

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ChannelsController } from '../routers/channels.controller';
+import { ChannelsController } from '../controllers/channels.controller';
 import { ChannelsService } from '../services/channels.service';
 
 describe('ChannelsController', () => {

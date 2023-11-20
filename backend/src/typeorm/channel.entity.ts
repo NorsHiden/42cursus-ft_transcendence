@@ -40,6 +40,6 @@ export class Channel {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: number;
 
-  @OneToMany(() => UserChannel, (userChannel) => userChannel.channel)
+  @OneToMany(() => UserChannel, (userChannel) => userChannel.channel, {cascade: true, onDelete: 'CASCADE'})
   members: UserChannel[];
 }
