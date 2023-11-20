@@ -877,6 +877,7 @@ export class GameService {
     console.log(`client ${client.id} has disconnected.`);
   }
 
+<<<<<<< HEAD
   // Get the user ID associated with a given client ID
   getId(id: string): number {
     return this.users.get(id);
@@ -885,6 +886,8 @@ export class GameService {
 >>>>>>> 9c25fe2 (joining rooms)
 =======
 
+=======
+>>>>>>> 41fa70f (gamemode)
   // Find a lobby for a client based on game mode
   findLobby(client: Socket, server: Server, game_mode: string) {
     // Check if the client is already in a game
@@ -928,7 +931,7 @@ export class GameService {
       home_player: opponent,
       away_player: clientLobby,
       spectators: [],
-      game_mode: 'N/A',
+      game_mode: game_mode,
       created_at: new Date(),
       end_at: undefined,
     };
