@@ -183,7 +183,7 @@ export class GameService {
       home_player: opponent,
       away_player: clientLobby,
       spectators: [],
-      game_mode: 'N/A',
+      game_mode: game_mode,
       created_at: new Date(),
       end_at: undefined,
     };
