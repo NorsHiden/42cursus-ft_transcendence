@@ -1,4 +1,4 @@
-import { ForbiddenException, Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/user.entity';
 import { UsersController } from './controllers/users.controller';
@@ -6,11 +6,10 @@ import { UsersService } from './services/users.service';
 import { Profile } from 'src/typeorm/profile.entity';
 import { Services } from 'src/utils/consts';
 import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import * as fs from 'fs';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
 import { Notification } from 'src/typeorm/notification.entity';
 import { Achievement } from 'src/typeorm/achievement.entity';
+import { MulterConfigService } from 'src/multer.service';
 
 /**
  * The `UsersModule` encapsulates user-related functionality within the application.
@@ -28,29 +27,8 @@ import { Achievement } from 'src/typeorm/achievement.entity';
     ]),
 
     // Configures Multer for handling file uploads and storing avatars.
-    MulterModule.register({
-      storage: diskStorage({
-        destination: (req: any, file, cb) => {
-          // Creates a directory for storing user avatars if it doesn't exist.
-          const dir = `../imgs/${file.fieldname}s/${req.user.id}`;
-          if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-          }
-          cb(null, dir);
-        },
-        filename: (req, file, cb) => {
-          // Generates a unique filename for uploaded avatars and checks file types.
-          if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/))
-            return cb(
-              new ForbiddenException('Only image files are allowed!'),
-              null,
-            );
-          const filename = `${Date.now()}.${file.originalname
-            .split('.')
-            .pop()}`;
-          cb(null, filename);
-        },
-      }),
+    MulterModule.registerAsync({
+      useClass: MulterConfigService,
     }),
   ],
   controllers: [UsersController],

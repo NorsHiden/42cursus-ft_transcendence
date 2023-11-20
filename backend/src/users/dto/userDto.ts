@@ -8,7 +8,9 @@ export class UserDto {
 
   @IsString()
   @IsOptional()
-  @Length(3, 20, { message: 'Username must be between 3 and 20 characters' })
+  @Length(3, 20, {
+    message: 'Display Name must be between 3 and 20 characters',
+  })
   readonly display_name?: string;
 
   @IsEmail()

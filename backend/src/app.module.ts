@@ -8,6 +8,8 @@ import { FriendlistModule } from './friendlist/friendlist.module';
 import { NotificationModule } from './notification/notification.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { GatewaysModule } from './gateways/gateways.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { MulterConfigService } from './multer.service';
 
 const configService = new ConfigService();
 

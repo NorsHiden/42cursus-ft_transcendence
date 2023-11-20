@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -184,14 +185,18 @@ export class UsersService implements IUsersService {
         },
       });
       if (otherUser && otherUser.id != user_id)
-        throw new ForbiddenException('Username Already exists');
+        throw new BadRequestException('Username Already exists');
     }
     const user = await this.getProfile(user_id);
     const updatedVersion: User = { ...user, ...userDto, email: user.email };
-    if (images.avatar)
-      updatedVersion.profile.avatar = images.avatar[0].path.slice(7);
-    if (images.banner)
-      updatedVersion.profile.banner = images.banner[0].path.slice(7);
+    if (images.avatar) {
+      const startIndex = images.avatar[0].path.indexOf('/avatars');
+      updatedVersion.profile.avatar = images.avatar[0].path.slice(startIndex);
+    }
+    if (images.banner) {
+      const startIndex = images.banner[0].path.indexOf('/banners');
+      updatedVersion.profile.banner = images.banner[0].path.slice(startIndex);
+    }
     if (userDto.about) updatedVersion.profile.about = userDto.about;
     if (userDto.username && userDto.display_name)
       updatedVersion.verified = true;
