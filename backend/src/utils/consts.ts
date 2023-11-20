@@ -20,11 +20,11 @@ export enum Services {
   Channels = 'CHANNELS_SERVICE',
 }
 
+export enum Namespaces {
+  Chat = '/chat',
+}
+
 export const imagesFileFields = [
   { name: 'avatar', maxCount: 1 },
   { name: 'banner', maxCount: 1 },
 ];
-
-export enum Namespaces {
-  Chat = '/chat',
-}
