@@ -54,7 +54,7 @@ const PostLoginView = () => {
               src={NewUser?.profile.avatar || ""}
               alt="img"
               id="file1"
-              className="absolute rounded-full h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36"
+              className="absolute rounded-full object-cover h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36"
             />
             
             <div className="flex justify-end h-full w-full " >
