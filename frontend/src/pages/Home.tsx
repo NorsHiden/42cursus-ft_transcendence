@@ -4,7 +4,7 @@ import { LineChart, Line, Tooltip } from 'recharts';
 import Card from '@components/Card';
 
 import { RegularIcon, CursedIcon, VanishIcon, GoldRushIcon } from '@assets/gameIcons';
-import { AlertCircleSolid } from '@assets/novaIcons';
+// import { AlertCircleSolid } from '@assets/novaIcons';
 import userAvatar from '@assets/images/user.jpeg';
 
 export const HomeLoader = async () => {
