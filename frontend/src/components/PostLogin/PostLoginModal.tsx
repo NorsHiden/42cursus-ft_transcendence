@@ -18,7 +18,7 @@ const PostLoginModal = ()=>{
     }
 
     const postdata = (formdata: FormData) => {
-        return axios.put("/api/users/@me", formdata)
+        return axios.patch("/api/users/@me", formdata)
           .then(response => {
             console.log("user response:", response);
             return response;
