@@ -6,8 +6,10 @@ import {
   Inject,
   Param,
   Patch,
+  Post,
   Query,
   Req,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -17,6 +19,7 @@ import { IUsersService } from '../interfaces/IUsersService.interface';
 import { Routes, Services } from 'src/utils/consts';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UserDto } from '../dto/userDto';
+import { toDataURL } from 'qrcode';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller(Routes.USERS)
