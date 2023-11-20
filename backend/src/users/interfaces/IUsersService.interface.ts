@@ -21,6 +21,11 @@ export interface IUsersService {
       banner?: Express.Multer.File[];
     },
   ): Promise<User>;
+  generateTwoFactorAuthenticationSecret(user_id: string): Promise<string>;
+  turnOnTwoFactorAuthentication(
+    user_id: string,
+    auth_code: string,
+  ): Promise<void>;
 
   // get user with relations
   getNotifications(user_id: string): Promise<User>;

@@ -1,12 +1,15 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Inject,
   Param,
   Patch,
+  Post,
   Query,
   Req,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -16,7 +19,9 @@ import { IUsersService } from '../interfaces/IUsersService.interface';
 import { Routes, Services } from 'src/utils/consts';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UserDto } from '../dto/userDto';
+import { toDataURL } from 'qrcode';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller(Routes.USERS)
 @UseGuards(JwtAuthGuard)
 export class UsersController {
@@ -60,14 +65,28 @@ export class UsersController {
     return this.usersService.updateUser(req.user.id, userDto, images);
   }
 
-  /**
-   * Retrieve the information of a user by their ID.
-   * @param id The ID of the user to retrieve.
-   * @returns The user's information.
-   */
-  @Get(':id')
-  async getUser(@Param('id') id: string) {
-    return await this.usersService.getUser(id);
+  @Post(Routes.ME + '/generate-2fa')
+  async generateTwoFactorAuthenticationSecret(@Req() req, @Res() res) {
+    const otpauth =
+      await this.usersService.generateTwoFactorAuthenticationSecret(
+        req.user.id,
+      );
+    toDataURL(otpauth, (err, dataUrl) =>
+      res.send({
+        qrcode: dataUrl,
+      }),
+    );
+  }
+
+  @Post(Routes.ME + '/turn-on-2fa')
+  async turnOnTwoFactorAuthentication(
+    @Req() req,
+    @Body('auth_code') auth_code: string,
+  ) {
+    return await this.usersService.turnOnTwoFactorAuthentication(
+      req.user.id,
+      auth_code,
+    );
   }
 
   /**
@@ -99,5 +118,15 @@ export class UsersController {
   @Get('search')
   async search(@Query('s') search_query: string) {
     return await this.usersService.getUsers(search_query);
+  }
+
+  /**
+   * Retrieve the information of a user by their ID.
+   * @param id The ID of the user to retrieve.
+   * @returns The user's information.
+   */
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    return await this.usersService.getUser(id);
   }
 }
