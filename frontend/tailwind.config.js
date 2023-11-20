@@ -21,7 +21,12 @@ export default {
         'input-text-color':'#71717A'
       },
       spacing: {
+        '14': '3.5rem',
+        '15': '3.75rem',
         '17': '4.25rem',
+        '32': '8rem',
+        '34': '8.5rem',
+        '39': '9.75rem',
       }
     },
     fontFamily: {

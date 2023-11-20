@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import { Toaster } from 'sonner';
-import './main.css';
+// import './main.css';
 
 import Home, { HomeLoader } from './pages/Home';
 import Login from './pages/Login';
