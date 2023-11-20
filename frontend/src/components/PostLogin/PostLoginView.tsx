@@ -6,6 +6,8 @@ import logo from '/logo.svg';
 import PostLoginViewController from './PostLoginViewController';
 import Update from '../Icons/Update';
 import { toast } from 'sonner';
+import Card from '../Card';
+import illustation from '../../assets/illustration.svg';
 
 const PostLoginView = () => {
 
@@ -30,8 +32,12 @@ const PostLoginView = () => {
   }, [haserrors]);
 
   return (
-    <div className="grid sm:grid-cols-2 h-screen w-full grid-cols-1">
-      <div id="login_section" className="w-full h-full overflow-hidden bg-background">
+    <div className='relative overflow-hidden'>
+    <div className='absolute bottom-0 right-0  hidden lg:block w-[60%] h-full  z-10'>
+      <img src={illustation} alt="Illustration" className="relative  object-none w-full h-full transform  object-left-top " />
+    </div>
+    <div className="grid relative lg:grid-cols-2 h-[100vh] w-[100vw] grid-cols-1  overflow-hidden">
+      <div id="login_section" className="w-full h-full  bg-background">
         <div id="logo" className="flex justify-center mt-5 sm:mt-7 md:mt-10 lg:mt-14 xl:mt-17">
           <img src={logo} alt="logo" className="w-32 sm:w-36 md:w-40 lg:w-44 xl:w-48" />
         </div>
@@ -90,13 +96,12 @@ const PostLoginView = () => {
                     onChange={handleInput}
                     autoComplete="off"
                   />
-                <div className="w-full flex justify-center mt-[3.24vh]">
-                  <button
-                    className="w-40 h-16 bg-vibrantOrange text-white text-center font-bold text-xl cursor-pointer"
-                    onClick={trigersubmit}
-                  >
-                    SAVE
-                  </button>
+                <div className="w-full flex justify-center mt-[3.24vh]" onClick={trigersubmit}>
+                  <Card className="flex w-32 sm:w-34 md:w-36 justify-center h-14 sm:h-15 md:h-16 z-10 text-[#FE5821] hover:filter hover:brightness-75" cut={8} >
+                    <button className="text-white sm:text-base md:text-lg font-serif py-4 px-10 rounded ">
+                      SAVE
+                    </button>
+                  </Card>
                   <input
                     ref={submitRef}
                     type="submit"
@@ -111,7 +116,10 @@ const PostLoginView = () => {
           </div>
         </div>
       </div>
-      <div id="loginIlustration" className="hidden sm:block w-full h-full bg-vibrantOrange"></div>
+      <div id="loginIlustration" className="bottom-0 right-0  hidden lg:block w-full h-full bg-[#70311E] ">
+        {/* <img src={illustation} alt="Illustration" className="  object-cover  transform translate-x-[0%] w-full h-[110%]   object-bottom object-right scale-60" />  */}
+      </div>
+    </div>
     </div>
   );
 };
