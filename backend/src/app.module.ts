@@ -8,8 +8,7 @@ import { FriendlistModule } from './friendlist/friendlist.module';
 import { NotificationModule } from './notification/notification.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { GatewaysModule } from './gateways/gateways.module';
-import { MulterModule } from '@nestjs/platform-express';
-import { MulterConfigService } from './multer.service';
+import { ChannelsModule } from './channels/channels.module';
 
 const configService = new ConfigService();
 
@@ -35,20 +34,9 @@ const configService = new ConfigService();
 
     // Configures serving static files, including avatars.
     ServeStaticModule.forRoot({
-      rootPath: `${__dirname}/../../imgs/avatars`,
-      renderPath: '/avatars',
-      serveRoot: '/avatars',
-      serveStaticOptions: {
-        index: false,
-        redirect: false,
-      },
-    }),
-
-    // Configures serving static files, including avatars.
-    ServeStaticModule.forRoot({
-      rootPath: `${__dirname}/../../imgs/banners`,
-      renderPath: '/banners',
-      serveRoot: '/banners',
+      rootPath: `${__dirname}/../../imgs`,
+      renderPath: '/imgs',
+      serveRoot: '/imgs',
       serveStaticOptions: {
         index: false,
         redirect: false,

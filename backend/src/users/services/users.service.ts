@@ -190,11 +190,11 @@ export class UsersService implements IUsersService {
     const user = await this.getProfile(user_id);
     const updatedVersion: User = { ...user, ...userDto, email: user.email };
     if (images.avatar) {
-      const startIndex = images.avatar[0].path.indexOf('/avatars');
+      const startIndex = images.avatar[0].path.indexOf('/imgs');
       updatedVersion.profile.avatar = images.avatar[0].path.slice(startIndex);
     }
     if (images.banner) {
-      const startIndex = images.banner[0].path.indexOf('/banners');
+      const startIndex = images.banner[0].path.indexOf('/imgs');
       updatedVersion.profile.banner = images.banner[0].path.slice(startIndex);
     }
     if (userDto.about) updatedVersion.profile.about = userDto.about;
