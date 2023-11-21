@@ -13,6 +13,6 @@ export class AchievementController {
 
   @Get()
   async getAchievements(@Req() req) {
-    return await this.achievementService.getAchievements(req.user.id);
+    return await this.achievementService.getAchievements(req.user.sub);
   }
 }

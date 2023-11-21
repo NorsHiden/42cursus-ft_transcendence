@@ -1,7 +1,9 @@
 import {
+  Body,
   Controller,
   Get,
   Inject,
+  Post,
   Query,
   Redirect,
   Req,
@@ -15,6 +17,9 @@ import { FourtyTwoOAuthGuard } from '../guards/42-auth.guard';
 import { Routes, Services } from 'src/utils/consts';
 import { IAuthService } from '../interfaces/IAuthService.interface';
 import { ConfigService } from '@nestjs/config';
+import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
+import { toDataURL } from 'qrcode';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @Controller(Routes.AUTH)
 export class AuthController {
@@ -22,6 +27,7 @@ export class AuthController {
     @Inject(Services.Auth)
     private readonly authService: IAuthService,
     private readonly configService: ConfigService,
+    @Inject(Services.Users) private readonly usersService: IUsersService,
   ) {}
 
   /**
@@ -93,6 +99,73 @@ export class AuthController {
     @Query('state') state: string,
   ) {
     return this.authService.signIn(req, res, state);
+  }
+
+  /**
+   * @description Generate a secret key for two-factor authentication (2FA) and return a QR code URL.
+   * @param {any} req - Request object containing the authenticated user information.
+   * @param {any} res - Response object for sending the QR code data.
+   * @returns {Promise<void>} - Promise with no result.
+   * @throws {UnauthorizedException} - If the user is not authenticated.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('2fa/generate')
+  async generateTwoFactorAuthenticationSecret(
+    @Req() req,
+    @Res() res,
+  ): Promise<void> {
+    // Generate 2FA secret and get OTP authentication URL
+    const otpauth =
+      await this.authService.generateTwoFactorAuthenticationSecret(
+        req.user.sub,
+      );
+
+    // Convert OTP authentication URL to a QR code data URL
+    toDataURL(otpauth, (err, dataUrl) =>
+      res.send({
+        qrcode: dataUrl,
+      }),
+    );
+  }
+
+  /**
+   * @description Turn on two-factor authentication (2FA) for a user after verifying the provided authentication code.
+   * @param {any} req - Request object containing the authenticated user information.
+   * @param {string} auth_code - Authentication code entered by the user.
+   * @param {any} res - Response object for sending the result of the 2FA activation.
+   * @returns {Promise<void>} - Promise with no result.
+   * @throws {UnauthorizedException} - If the user is not authenticated or the provided authentication code is invalid.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('2fa/verify')
+  async turnOnTwoFactorAuthentication(
+    @Req() req,
+    @Body('auth_code') auth_code: string,
+    @Res() res,
+  ): Promise<void> {
+    // Activate 2FA for the user and verify the provided authentication code
+    return await this.authService.turnOnTwoFactorAuthentication(
+      req.user,
+      auth_code,
+      res,
+    );
+  }
+
+  /**
+   * @description Turn off two-factor authentication (2FA) for a user.
+   * @param {any} req - Request object containing the authenticated user information.
+   * @param {any} res - Response object for sending the result of the 2FA deactivation.
+   * @returns {Promise<void>} - Promise with no result.
+   * @throws {UnauthorizedException} - If the user is not authenticated.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post('2fa/turn-off')
+  async turnOffTwoFactorAuthentication(@Req() req, @Res() res): Promise<void> {
+    // Deactivate 2FA for the user
+    return await this.authService.turnOffTwoFactorAuthentication(
+      req.user.sub,
+      res,
+    );
   }
 
   /**

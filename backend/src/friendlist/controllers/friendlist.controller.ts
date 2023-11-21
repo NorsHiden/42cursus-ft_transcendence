@@ -30,7 +30,7 @@ export class FriendlistController {
    */
   @Get()
   async getFriendList(@Req() req) {
-    return await this.usersService.getFriendList(req.user.id);
+    return await this.usersService.getFriendList(req.user.sub);
   }
 
   /**
@@ -40,7 +40,7 @@ export class FriendlistController {
    */
   @Get('/friends')
   async getFriends(@Req() req) {
-    return await this.friendlistService.getFriends(req.user.id);
+    return await this.friendlistService.getFriends(req.user.sub);
   }
 
   /**
@@ -50,7 +50,7 @@ export class FriendlistController {
    */
   @Get('/pending')
   async getPending(@Req() req) {
-    return await this.friendlistService.getPending(req.user.id);
+    return await this.friendlistService.getPending(req.user.sub);
   }
 
   /**
@@ -60,7 +60,7 @@ export class FriendlistController {
    */
   @Get('/blocked')
   async getBlocked(@Req() req) {
-    return await this.friendlistService.getBlocked(req.user.id);
+    return await this.friendlistService.getBlocked(req.user.sub);
   }
 
   /**
@@ -70,7 +70,7 @@ export class FriendlistController {
    */
   @Post(':id/accept')
   async acceptFriendRequest(@Req() req, @Param('id') target_id: string) {
-    await this.friendlistService.acceptRequest(req.user.id, target_id);
+    await this.friendlistService.acceptRequest(req.user.sub, target_id);
   }
 
   /**
@@ -80,7 +80,7 @@ export class FriendlistController {
    */
   @Post(':id/send')
   async sendFriendRequest(@Req() req, @Param('id') target_id: string) {
-    await this.friendlistService.sendRequest(req.user.id, target_id);
+    await this.friendlistService.sendRequest(req.user.sub, target_id);
   }
 
   /**
@@ -90,7 +90,7 @@ export class FriendlistController {
    */
   @Post(':id/block')
   async blockFriend(@Req() req, @Param('id') target_id: string) {
-    await this.friendlistService.blockFriend(req.user.id, target_id);
+    await this.friendlistService.blockFriend(req.user.sub, target_id);
   }
 
   /**
@@ -100,7 +100,7 @@ export class FriendlistController {
    */
   @Post(':id/unblock')
   async unblockFriend(@Req() req, @Param('id') target_id: string) {
-    await this.friendlistService.unblockFriend(req.user.id, target_id);
+    await this.friendlistService.unblockFriend(req.user.sub, target_id);
   }
 
   /**
@@ -110,6 +110,6 @@ export class FriendlistController {
    */
   @Delete(':id')
   async removeFriendRequest(@Req() req, @Param('id') target_id: string) {
-    await this.friendlistService.removeRequest(req.user.id, target_id);
+    await this.friendlistService.removeRequest(req.user.sub, target_id);
   }
 }
