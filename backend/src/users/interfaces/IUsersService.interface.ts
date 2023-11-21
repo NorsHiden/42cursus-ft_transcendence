@@ -1,5 +1,7 @@
 import { User } from 'src/typeorm/user.entity';
 import { UserDto } from '../dto/userDto';
+import { Response } from 'express';
+import { JwtPayload } from 'src/utils/types';
 
 /**
  * @description Service for User
@@ -21,11 +23,6 @@ export interface IUsersService {
       banner?: Express.Multer.File[];
     },
   ): Promise<User>;
-  generateTwoFactorAuthenticationSecret(user_id: string): Promise<string>;
-  turnOnTwoFactorAuthentication(
-    user_id: string,
-    auth_code: string,
-  ): Promise<void>;
 
   // get user with relations
   getNotifications(user_id: string): Promise<User>;

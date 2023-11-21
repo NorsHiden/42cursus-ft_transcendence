@@ -6,10 +6,8 @@ import {
   Inject,
   Param,
   Patch,
-  Post,
   Query,
   Req,
-  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -19,7 +17,6 @@ import { IUsersService } from '../interfaces/IUsersService.interface';
 import { Routes, Services } from 'src/utils/consts';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UserDto } from '../dto/userDto';
-import { toDataURL } from 'qrcode';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller(Routes.USERS)
@@ -36,7 +33,7 @@ export class UsersController {
    */
   @Get(Routes.ME)
   async getMe(@Req() req) {
-    return await this.usersService.getUser(req.user.id);
+    return await this.usersService.getUser(req.user.sub);
   }
 
   /**
@@ -62,31 +59,7 @@ export class UsersController {
       banner?: Express.Multer.File[];
     },
   ) {
-    return this.usersService.updateUser(req.user.id, userDto, images);
-  }
-
-  @Post(Routes.ME + '/generate-2fa')
-  async generateTwoFactorAuthenticationSecret(@Req() req, @Res() res) {
-    const otpauth =
-      await this.usersService.generateTwoFactorAuthenticationSecret(
-        req.user.id,
-      );
-    toDataURL(otpauth, (err, dataUrl) =>
-      res.send({
-        qrcode: dataUrl,
-      }),
-    );
-  }
-
-  @Post(Routes.ME + '/turn-on-2fa')
-  async turnOnTwoFactorAuthentication(
-    @Req() req,
-    @Body('auth_code') auth_code: string,
-  ) {
-    return await this.usersService.turnOnTwoFactorAuthentication(
-      req.user.id,
-      auth_code,
-    );
+    return this.usersService.updateUser(req.user.sub, userDto, images);
   }
 
   /**
@@ -106,7 +79,7 @@ export class UsersController {
   @Get(Routes.ME + '/is-verified')
   async isVerified(@Req() req) {
     return {
-      verified: await this.usersService.isVerified(req.user.id),
+      verified: await this.usersService.isVerified(req.user.sub),
     };
   }
 
