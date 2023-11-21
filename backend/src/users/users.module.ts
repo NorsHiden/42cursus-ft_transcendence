@@ -9,6 +9,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
 import { Notification } from 'src/typeorm/notification.entity';
 import { Achievement } from 'src/typeorm/achievement.entity';
+import { AuthModule } from 'src/auth/auth.module';
 import { MulterConfigService } from 'src/multer/multer.service';
 
 /**
@@ -30,6 +31,8 @@ import { MulterConfigService } from 'src/multer/multer.service';
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
+
+    AuthModule,
   ],
   controllers: [UsersController],
   providers: [

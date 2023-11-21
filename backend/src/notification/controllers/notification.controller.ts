@@ -23,17 +23,17 @@ export class NotificationController {
 
   @Get()
   async getNotifications(@Req() req, @Query('page') page: number) {
-    return this.notificationService.getNotifications(req.user.id, page);
+    return this.notificationService.getNotifications(req.user.sub, page);
   }
 
   @Sse('sse-notifications')
   notifications(@Req() req) {
-    return this.eventService.subscribe(req.user.id);
+    return this.eventService.subscribe(req.user.sub);
   }
 
   // @Get('emit')
   // emitTest(@Req() req) {
-  //   return this.eventService.emit(req.user.id, {
+  //   return this.eventService.emit(req.user.sub, {
   //     data: 'hello',
   //   });
   // }

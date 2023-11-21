@@ -11,6 +11,7 @@ import { Profile } from './profile.entity';
 import { Friendlist } from './friendlist.entity';
 import { Notification } from './notification.entity';
 import { Achievement } from './achievement.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -63,6 +64,13 @@ export class User {
   // Indicates whether the user's account has been verified.
   @Column({ default: false })
   verified: boolean;
+
+  @Column({ default: false })
+  is_2fa_enabled: boolean;
+
+  @Exclude()
+  @Column({ default: '' })
+  _2fa_secret: string;
 
   // Many-to-many relationships with friendlists
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.friends)

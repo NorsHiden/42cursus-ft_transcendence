@@ -69,5 +69,11 @@ import { NotificationModule } from 'src/notification/notification.module';
       useClass: UsersService,
     },
   ],
+  exports: [
+    {
+      provide: Services.Auth,
+      useClass: AuthService,
+    },
+  ],
 })
 export class AuthModule {}

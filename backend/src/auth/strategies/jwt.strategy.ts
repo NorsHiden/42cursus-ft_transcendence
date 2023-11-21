@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtPayload } from '../../utils/types';
@@ -6,6 +10,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'src/typeorm/user.entity';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 
 /**
  * @description JWT Strategy
@@ -38,6 +43,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       secretOrKey: configService.get<string>('JWT_SECRET'),
       jwtFromRequest: JwtCookieExtractor,
       ignoreExpiration: false,
+      passReqToCallback: true,
     });
   }
 
@@ -47,14 +53,18 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
    * @returns {Promise<object>} User
    * @throws {UnauthorizedException}
    */
-  async validate(payload: JwtPayload) {
+  async validate(req: Request, payload: JwtPayload) {
     const user = await this.userRepository.findOneBy({ id: payload.sub });
 
     if (!user) throw new UnauthorizedException('Please log in to continue');
 
-    return {
-      id: payload.sub,
-      username: payload.username,
-    };
+    if (
+      payload.is_2fa_enabled &&
+      !req.path.includes('2fa/verify') &&
+      !payload.is_2fa_verified
+    )
+      throw new ForbiddenException('2fa not verified');
+
+    return payload;
   }
 }

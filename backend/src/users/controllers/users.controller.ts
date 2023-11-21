@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Inject,
@@ -17,6 +18,7 @@ import { Routes, Services } from 'src/utils/consts';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UserDto } from '../dto/userDto';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller(Routes.USERS)
 @UseGuards(JwtAuthGuard)
 export class UsersController {
@@ -31,7 +33,7 @@ export class UsersController {
    */
   @Get(Routes.ME)
   async getMe(@Req() req) {
-    return await this.usersService.getUser(req.user.id);
+    return await this.usersService.getUser(req.user.sub);
   }
 
   /**
@@ -57,17 +59,7 @@ export class UsersController {
       banner?: Express.Multer.File[];
     },
   ) {
-    return this.usersService.updateUser(req.user.id, userDto, images);
-  }
-
-  /**
-   * Retrieve the information of a user by their ID.
-   * @param id The ID of the user to retrieve.
-   * @returns The user's information.
-   */
-  @Get(':id')
-  async getUser(@Param('id') id: string) {
-    return await this.usersService.getUser(id);
+    return this.usersService.updateUser(req.user.sub, userDto, images);
   }
 
   /**
@@ -87,7 +79,7 @@ export class UsersController {
   @Get(Routes.ME + '/is-verified')
   async isVerified(@Req() req) {
     return {
-      verified: await this.usersService.isVerified(req.user.id),
+      verified: await this.usersService.isVerified(req.user.sub),
     };
   }
 
@@ -99,5 +91,15 @@ export class UsersController {
   @Get('search')
   async search(@Query('s') search_query: string) {
     return await this.usersService.getUsers(search_query);
+  }
+
+  /**
+   * Retrieve the information of a user by their ID.
+   * @param id The ID of the user to retrieve.
+   * @returns The user's information.
+   */
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    return await this.usersService.getUser(id);
   }
 }
