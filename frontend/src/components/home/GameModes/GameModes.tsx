@@ -64,7 +64,7 @@ function GameModes() {
           />
         </div>
         <CornerLinedCard
-          childComp={<h2 className="play font-Rowdies text-[38px] "> PLAY </h2>}
+          childComp={<h2 className="play font-Rowdies text-2xl">PLAY</h2>}
           fill="[color:#FE5821]"
           cornerredius="3"
           stroke="[color:#FE5821]"

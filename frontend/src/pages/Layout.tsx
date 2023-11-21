@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-import NavBar from '@components/home/NavBar/NavBar';
-import SideBar from '@components/home/Sidebar/SideBar';
-import FriendsBar from '@components/home/FriendsBar/FriendsBar';
+import NavBar from '@components/NavBar';
+import SideBar from '@components/Sidebar';
+import FriendsBar from '@components/FriendsBar';
 
 const Layout: React.FC = () => {
   return (

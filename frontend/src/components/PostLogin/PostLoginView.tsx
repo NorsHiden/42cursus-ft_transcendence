@@ -42,7 +42,13 @@ const PostLoginView = () => {
               <img id="file1" src={update} alt="" className="absolute h-[3.33vh] w-[3.33vh] z-15" />
             </div>
           </div>
-          <input type="file" id="file1" name="file1" className="hidden" onChange={handleUpload} />
+          <input
+            typePostLoginView="file"
+            id="file1"
+            name="file1"
+            className="hidden"
+            onChange={handleUpload}
+          />
           <div id="inputs" className="flex mt-[3.42vh]">
             <form onSubmit={handlesubmit}>
               <div className="flex flex-col">

@@ -4,55 +4,35 @@ import { LineChart, Line, Tooltip } from 'recharts';
 import Card from '@components/Card';
 
 import { RegularIcon, CursedIcon, VanishIcon, GoldRushIcon } from '@assets/gameIcons';
-// import { AlertCircleSolid } from '@assets/novaIcons';
+import { AlertCircleSolid } from '@assets/novaIcons';
 import userAvatar from '@assets/images/user.jpeg';
-
-export const HomeLoader = async () => {
-  return true;
-};
+import { getColorValue } from '../utils/getColorValue';
 
 const GameModeSection: React.FC = () => {
+  const modes = [
+    { name: 'regular', icon: RegularIcon },
+    { name: 'cursed', icon: CursedIcon },
+    { name: 'vanish', icon: VanishIcon },
+    { name: 'goldRush', icon: GoldRushIcon },
+  ];
+
   return (
     <section className="col-span-2 flex flex-col items-start gap-y-6">
       <h1 className="font-serif text-xl text-white">Game Modes</h1>
       <div className="flex gap-x-3">
-        <Card
-          className="center py-5 px-8 text-[#301D13] hover:text-[#462818]"
-          cut={18}
-          borderWidth={1}
-          borderColor="#4E301F"
-        >
-          <RegularIcon size={50} className="text-[#C2784F] hover:text-black" />
-        </Card>
-        <Card
-          className="center py-5 px-8"
-          cut={18}
-          fill="#041F1E"
-          borderWidth={1}
-          borderColor="#073736"
-        >
-          <CursedIcon size={50} className="text-[#3DFFFB]" />
-        </Card>
-        <Card
-          className="center py-5 px-8"
-          cut={18}
-          fill="#1D1333"
-          borderWidth={1}
-          borderColor="#332158"
-        >
-          <VanishIcon size={50} className="text-[#8655F4]" />
-        </Card>
-        <Card
-          className="center py-5 px-8"
-          cut={18}
-          fill="#241D0C"
-          borderWidth={1}
-          borderColor="#413415"
-        >
-          <GoldRushIcon size={50} className="text-[#FFCF53]" />
-        </Card>
+        {modes.map((mode) => (
+          <Card
+            className={`center py-5 px-8 text-${mode.name}-dark`}
+            cut={18}
+            borderWidth={1}
+            borderColor={getColorValue(mode.name, 'lightDark')}
+            key={mode.name}
+          >
+            <mode.icon size={50} className={`text-${mode.name}-color`} />
+          </Card>
+        ))}
       </div>
-      <Card className="flex" cut={8} fill="#FE5821">
+      <Card className="flex text-[#FE5821]">
         <button className="text-white text-xl font-serif py-4 px-10 rounded z-10">PLAY</button>
       </Card>
     </section>
@@ -132,8 +112,8 @@ const PreviousGamesSection: React.FC = () => {
           <label htmlFor="doneRadio">
             <input type="radio" name="filter" value="done" id="doneRadio" /> Done
           </label>
-          <select name="" id="" className="w-32">
-            <option selected disabled hidden>
+          <select defaultValue="_" name="" id="" className="w-32">
+            <option value="_" disabled hidden>
               Sort By
             </option>
             <option value="qwe">qwe</option>
