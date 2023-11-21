@@ -10,7 +10,7 @@ export type ExtendedUser = User & {
 const PostLoginViewController = ()=>{
   const submitRef = useRef<HTMLInputElement>(null);
   const uploadRef = useRef<HTMLInputElement>(null);
-  const {senddata,user,haserrors,errors,seterrors} = PostLoginViewModal()
+  const {senddata,user,haserrors,errors,seterrors, loading} = PostLoginViewModal()
   const [NewUser, setNewUser] = useState<ExtendedUser | null>(null);
 
   useEffect(() => {
@@ -34,6 +34,7 @@ const PostLoginViewController = ()=>{
   }
 
   function trigersubmit() {
+    if (loading) return;
     if (errors.length > 0) {
       toast.error(errors);
       return;
@@ -50,7 +51,7 @@ const PostLoginViewController = ()=>{
   }
 
   return {
-    handleInput, handlesubmit, trigerupload, trigersubmit, handleUpload, NewUser, errors, uploadRef, submitRef, haserrors, seterrors
+    handleInput, handlesubmit, trigerupload, trigersubmit, handleUpload, NewUser, errors, uploadRef, submitRef, haserrors, seterrors,loading
   }
 }
 

@@ -8,6 +8,7 @@ import Update from '../Icons/Update';
 import { toast } from 'sonner';
 import Card from '../Card';
 import illustation from '../../assets/illustration.svg';
+import { to } from 'mathjs';
 
 const PostLoginView = () => {
 
@@ -22,15 +23,23 @@ const PostLoginView = () => {
     submitRef,
     errors,
     haserrors,
+    loading
   } = PostLoginViewController();
 
   useEffect(() => {
     console.log(haserrors && errors.length > 0)
+    toast.dismiss();
     if (haserrors && errors.length > 0) {
       toast.error(errors);
     }
   }, [haserrors]);
 
+  useEffect(() => {
+    if (loading && !haserrors) {
+      toast.loading("Updating your profile");
+    }
+  }, [loading]);
+  
   return (
     <div className='relative overflow-hidden'>
     <div className='absolute bottom-0 right-0  hidden lg:block w-[50%] h-full  z-10'>
@@ -97,8 +106,8 @@ const PostLoginView = () => {
                     autoComplete="off"
                   />
                 <div className="w-full flex justify-center mt-[3.24vh]" onClick={trigersubmit}>
-                  <Card className="flex w-32 sm:w-34 md:w-36 justify-center h-14 sm:h-15 md:h-16 z-10 text-[#FE5821] hover:filter hover:brightness-75" cut={8} >
-                    <button className="text-white sm:text-base md:text-lg font-serif py-4 px-10 rounded ">
+                  <Card className={`flex w-32 sm:w-34 md:w-36 justify-center h-14 sm:h-15 md:h-16 z-10 text-[#FE5821] ${loading?"filter brightness-75":""} hover:filter hover:brightness-75`} cut={8} >
+                    <button className="text-white sm:text-base md:text-lg font-serif py-4 px-10 rounded " disabled={loading}>
                       SAVE
                     </button>
                   </Card>
