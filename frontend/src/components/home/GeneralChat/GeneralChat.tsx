@@ -10,15 +10,9 @@ function GeneralChat() {
 
   return (
     <>
-      <section
-        ref={header_ref}
-        id="general-chat"
-        className="flex flex-col gap-[3.5vh] w-[100%] "
-      >
+      <section ref={header_ref} id="general-chat" className="flex flex-col gap-[3.5vh] w-[100%] ">
         <div className="flex flex-col justify-center ml-[1.19vw]">
-          <h1
-            className={`font-sans text-[${chat.chat_header.title}px] font-extrabold`}
-          >
+          <h1 className={`font-sans text-[${chat.chat_header.title}px] font-extrabold`}>
             Public chat
           </h1>
           <p className={`font-sans text-[${chat.chat_header.description}px] `}>
@@ -77,17 +71,13 @@ function GeneralChat() {
                   className="flex relative  justify-center items-center w-full h-[85px]  "
                 >
                   <input
-                    className="bg-[#1E1F23]  focus:outline-none outline-0 rounded-[5px] [color:white]  rounded-br-[0px]  rounded-tr-[0px] w-[82%] h-[50%] placeholder:text-[8px]  placeholder:ml-[10px] text-white "
+                    className="bg-[#1E1F23]  focus:outline-none outline-0 rounded-[5px] [color:white]  rounded-br-[0px]  rounded-tr-[0px] w-[82%] h-[50%] placeholder:text-xs  placeholder:ml-[10px] text-white "
                     placeholder="Type Your Message"
                     type="text"
                     name="search"
                   />
                   <div className="bg-[#1E1F23]  flex rounded-tr-[5px] rounded-br-[11px] h-[50%] justify-center items-center">
-                    <img
-                      src={Subtract}
-                      alt="send icon"
-                      className="h-[15px] w-[15px] mr-[10px]"
-                    />
+                    <img src={Subtract} alt="send icon" className="h-[15px] w-[15px] mr-[10px]" />
                   </div>
                 </div>
               </div>
