@@ -14,9 +14,13 @@ export class MulterConfigService implements MulterOptionsFactory {
         destination: (req: any, file, cb) => {
           // Creates a directory for storing user avatars if it doesn't exist.
           let dir = '../imgs';
-          if (file.fieldname == 'avatar' || file.fieldname == 'avatar')
-            dir += `/users/${file.fieldname}s/${req.user.sub}`;
-          else dir += `/channels/${file.fieldname}`;
+
+          if (req.path.includes('users')) {
+            dir += `/users/${file.fieldname}s/${req.user.id}`;
+          } else if (req.path.includes('channels')) {
+            dir += `/channels/${file.fieldname}s/${req.user.id}`;
+          }
+
           if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
           }
