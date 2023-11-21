@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res } from '@nestjs/common';
 import { EventEmitter } from 'events';
 import { fromEvent } from 'rxjs';
 
@@ -13,11 +13,19 @@ export class EventService {
   }
 
   /**
+   * Get the events property.
+   * @returns The events property, which likely contains information or functionality related to events.
+   */
+  getEvent() {
+    return this.events;
+  }
+
+  /**
    * Subscribe to events on a specific channel.
    * @param channel_id The ID of the channel to subscribe to.
    * @returns An Observable that emits events on the specified channel.
    */
-  subscribe(channel_id: string) {
+  subscribe(channel_id: string, @Res() res) {
     // Use the 'fromEvent' function to create an Observable from EventEmitter events.
     return fromEvent(this.events, channel_id);
   }

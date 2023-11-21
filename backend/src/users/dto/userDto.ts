@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import {
+  IsDateString,
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Length,
+} from 'class-validator';
 
 export class UserDto {
   @IsString()
@@ -20,6 +27,14 @@ export class UserDto {
   @IsString()
   @IsOptional()
   readonly about?: string;
+
+  @IsString()
+  @IsOptional()
+  readonly location?: string;
+
+  @IsDateString()
+  @IsOptional()
+  readonly birthdate?: string;
 
   @IsUrl()
   @IsOptional()
