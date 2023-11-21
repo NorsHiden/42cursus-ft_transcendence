@@ -43,12 +43,12 @@ export class ChannelsController {
     @UploadedFiles() files: ImagesFiles,
     @AuthUser() user: User,
   ) {
-    console.log(files);
     const args: CreateChannelArgs = {
       ...createChannelDto,
       avatar: files?.avatar?.[0],
       banner: files?.banner?.[0],
     };
+
     return this.channelsService.create(args, user.id);
   }
 

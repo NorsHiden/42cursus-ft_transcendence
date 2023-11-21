@@ -7,9 +7,16 @@ import { Channel } from 'src/typeorm/channel.entity';
 import { UserChannel } from 'src/typeorm/userchannel.entity';
 import { Services } from 'src/utils/consts';
 import { UsersService } from 'src/users/services/users.service';
+import { MulterModule } from '@nestjs/platform-express';
+import { MulterConfigService } from 'src/multer/multer.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Channel, UserChannel, User])],
+  imports: [
+    TypeOrmModule.forFeature([Channel, UserChannel, User]),
+    MulterModule.registerAsync({
+      useClass: MulterConfigService,
+    }),
+  ],
   controllers: [ChannelsController],
   providers: [
     {

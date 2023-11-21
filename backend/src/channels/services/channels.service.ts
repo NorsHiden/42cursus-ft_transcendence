@@ -37,17 +37,20 @@ export class ChannelsService {
     userId: string,
   ): Promise<Channel> {
     const owner = await this.usersService.getUser(userId);
+
     const hashedPassword = args.password
       ? await this.hashPassword(args.password)
       : null;
+
     const newChannel = this.channelRepository.create({
       name: args.name,
       type: args.type,
       protected: args.password ? true : false,
       password: hashedPassword,
-      avatar: args.avatar?.path.slice(7),
-      banner: args.banner?.path.slice(7),
+      avatar: args.avatar?.path?.slice(2),
+      banner: args.banner?.path?.slice(2),
     });
+
     const channel = await this.channelRepository.save(newChannel);
 
     const userChannel = this.userChannelRepository.create({
