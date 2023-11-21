@@ -200,10 +200,27 @@ export class UsersService implements IUsersService {
       const startIndex = images.banner[0].path.indexOf('/imgs');
       updatedVersion.profile.banner = images.banner[0].path.slice(startIndex);
     }
-    if (userDto.about) updatedVersion.profile.about = userDto.about;
+    updatedVersion.profile = {
+      ...updatedVersion.profile,
+      ...userDto,
+    } as Profile;
     if (userDto.username && userDto.display_name)
       updatedVersion.verified = true;
-    return await this.setUser(updatedVersion);
+    try {
+      return await this.setUser(updatedVersion);
+    } catch {
+      updatedVersion.profile.birthdate = user.profile.birthdate;
+      return await this.setUser(updatedVersion);
+    }
+  }
+
+  async setPresence(
+    user_id: string,
+    presence: 'online' | 'offline' | 'in-game',
+  ): Promise<User> {
+    const user = await this.getUser(user_id);
+    user.presence = presence;
+    return await this.setUser(user);
   }
 
   async isVerified(user_id: string): Promise<boolean> {

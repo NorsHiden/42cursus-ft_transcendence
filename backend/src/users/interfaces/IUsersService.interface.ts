@@ -33,6 +33,10 @@ export interface IUsersService {
   getBlocked(user_id: string): Promise<User>;
   getAchievements(user_id: string): Promise<User>;
   getUsers(query: string): Promise<User[]>;
+  setPresence(
+    user_id: string,
+    presence: 'online' | 'offline' | 'in-game',
+  ): Promise<User>;
 
   // boolean
   isVerified(user_id: string): Promise<boolean>;
