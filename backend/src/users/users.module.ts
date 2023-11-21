@@ -10,6 +10,7 @@ import { Friendlist } from 'src/typeorm/friendlist.entity';
 import { Notification } from 'src/typeorm/notification.entity';
 import { Achievement } from 'src/typeorm/achievement.entity';
 import { MulterConfigService } from 'src/multer.service';
+import { AuthModule } from 'src/auth/auth.module';
 
 /**
  * The `UsersModule` encapsulates user-related functionality within the application.
@@ -30,6 +31,8 @@ import { MulterConfigService } from 'src/multer.service';
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
+
+    AuthModule,
   ],
   controllers: [UsersController],
   providers: [
