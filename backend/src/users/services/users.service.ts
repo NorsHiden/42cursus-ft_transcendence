@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/user.entity';
@@ -12,7 +11,6 @@ import { match } from 'fuzzy-tools';
 import { UserDto } from '../dto/userDto';
 import { Profile } from 'src/typeorm/profile.entity';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
-import { authenticator } from 'otplib';
 
 @Injectable()
 export class UsersService implements IUsersService {
@@ -206,32 +204,6 @@ export class UsersService implements IUsersService {
     if (userDto.username && userDto.display_name)
       updatedVersion.verified = true;
     return await this.setUser(updatedVersion);
-  }
-
-  async generateTwoFactorAuthenticationSecret(
-    user_id: string,
-  ): Promise<string> {
-    const user = await this.getUser(user_id);
-    const secret = authenticator.generateSecret();
-    const otpauthUrl = authenticator.keyuri(user.email, 'AUTH_PONG', secret);
-    user._2fa_secret = secret;
-    await this.setUser(user);
-    return otpauthUrl;
-  }
-
-  async turnOnTwoFactorAuthentication(
-    user_id: string,
-    auth_code: string,
-  ): Promise<void> {
-    const user = await this.getUser(user_id);
-    const isCodeValid = authenticator.verify({
-      token: auth_code,
-      secret: user._2fa_secret,
-    });
-    if (!isCodeValid)
-      throw new UnauthorizedException('Wrong authentication code');
-    user.is_2fa_enabled = true;
-    await this.setUser(user);
   }
 
   async isVerified(user_id: string): Promise<boolean> {
