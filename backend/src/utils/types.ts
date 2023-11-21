@@ -1,4 +1,6 @@
 export type JwtPayload = {
   sub: string;
-  username: string;
+  email: string;
+  is_2fa_enabled: boolean;
+  is_2fa_verified: boolean;
 };
