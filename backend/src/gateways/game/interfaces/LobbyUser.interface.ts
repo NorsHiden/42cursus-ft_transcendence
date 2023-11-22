@@ -5,4 +5,5 @@ export interface LobbyUser {
   socket: Socket;
   game_mode: string;
   score_points: number;
+  invited?: boolean;
 }
