@@ -7,4 +7,11 @@
     background-color: #1e1f23;
     border: 1px solid #2c2d33;
   }
+  .input-placeholder::placeholder {
+    color: #71717A; 
+  }
+  html, body {
+    overflow: auto;
+    background-color: #1B191D; /* Replace with your desired color */
+  }
 }
