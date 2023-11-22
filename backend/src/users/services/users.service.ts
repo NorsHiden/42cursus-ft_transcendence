@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -11,6 +12,8 @@ import { match } from 'fuzzy-tools';
 import { UserDto } from '../dto/userDto';
 import { Profile } from 'src/typeorm/profile.entity';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
+import { Services } from 'src/utils/consts';
+import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 
 @Injectable()
 export class UsersService implements IUsersService {

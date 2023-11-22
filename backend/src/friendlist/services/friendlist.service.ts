@@ -10,6 +10,7 @@ import { IFriendlistService } from '../interfaces/friendlist.interface';
 import { Notification } from 'src/typeorm/notification.entity';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
 import { User } from 'src/typeorm/user.entity';
+import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 
 @Injectable()
 export class FriendlistService implements IFriendlistService {
@@ -17,6 +18,8 @@ export class FriendlistService implements IFriendlistService {
     @Inject(Services.Users) private readonly usersService: IUsersService,
     @Inject(Services.Notification)
     private readonly notificationService: INotificationService,
+    @Inject(Services.Achievement)
+    private readonly achievementService: IAchievementService,
   ) {}
 
   /**
@@ -46,7 +49,7 @@ export class FriendlistService implements IFriendlistService {
 
     // Add the request to the target's pending list and notify the target.
     target.friendlist.pending.push(user);
-    this.notificationService.addNotification(target.id, {
+    await this.notificationService.addNotification(target.id, {
       action: 'FRIEND_REQUEST',
       recipient: target,
       sender: user,
@@ -141,6 +144,15 @@ export class FriendlistService implements IFriendlistService {
     // Save the updated user and target information.
     await this.usersService.setUser(user);
     await this.usersService.setUser(target);
+    await this.achievementService.setAchievement(user.id, 'social_pioneer');
+    await this.achievementService.setAchievement(target.id, 'social_pioneer');
+    if (user.friendlist.friends.length > 4)
+      await this.achievementService.setAchievement(user.id, 'circle_of_allies');
+    if (target.friendlist.friends.length > 4)
+      await this.achievementService.setAchievement(
+        target.id,
+        'circle_of_allies',
+      );
   }
 
   /**

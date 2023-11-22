@@ -18,12 +18,6 @@ export const achievementData = [
     icon: '👥✨',
     description: 'Gathering a diverse group of five friends.',
   },
-  {
-    name: 'Master of Self-Presentation',
-    alt_name: 'master_of_self_presentation',
-    icon: '✨✏️',
-    description: 'Knack for crafting a standout profile.',
-  },
   // [Chat]
   {
     name: 'DM Initiator',
