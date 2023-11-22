@@ -1,7 +1,7 @@
 import axios, {AxiosError} from "axios"
 // import axios from "axios"
 import { useSearchParams,useLoaderData } from "react-router-dom"
-import { User } from '@/types/user'
+import { User } from '@globalTypes/types';
 
 const PostLoginModal = ()=>{
     const [searchParams] = useSearchParams();

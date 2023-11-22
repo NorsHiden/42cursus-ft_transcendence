@@ -1,7 +1,7 @@
 import { useState,useRef, useEffect } from "react";
 import PostLoginViewModal from "./PostLoginViewModal";
 import { toast } from "sonner";
-import { User } from "@types/types"
+import { User } from "@globalTypes/types"
 
 export type ExtendedUser = User & {
   fileToupload: File;
@@ -33,14 +33,7 @@ const PostLoginViewController = ()=>{
     uploadRef.current?.click();
   }
 
-  function trigersubmit() {
-    if (loading) return;
-    if (errors.length > 0) {
-      toast.error(errors);
-      return;
-    }
-    submitRef.current?.click();
-  }
+  
 
   function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files.length > 0) {
@@ -51,7 +44,7 @@ const PostLoginViewController = ()=>{
   }
 
   return {
-    handleInput, handlesubmit, trigerupload, trigersubmit, handleUpload, NewUser, errors, uploadRef, submitRef, haserrors, seterrors,loading
+    handleInput, handlesubmit, trigerupload, handleUpload, NewUser, errors, uploadRef, submitRef, haserrors, seterrors,loading
   }
 }
 
