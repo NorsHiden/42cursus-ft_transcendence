@@ -38,11 +38,38 @@ export class GameGateway {
     await this.gameService.closeConnection(client);
   }
 
+  @SubscribeMessage('invite')
+  async inviteFriend(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('target_id') target_id: string,
+    @MessageBody('game_mode') game_mode: string,
+  ) {
+    // Check if the provided game mode is valid
+    if (
+      game_mode !== 'REGULAR' &&
+      game_mode !== 'CURSED' &&
+      game_mode !== 'VANISH' &&
+      game_mode !== 'GOLD_RUSH'
+    ) {
+      // If not valid, return an error response
+      return {
+        action: 'NOT_FOUND',
+        message: 'Game Mode Not Found',
+      };
+    }
+    return await this.gameService.inviteFriend(client, target_id, game_mode);
+  }
+
+  @SubscribeMessage('cancel')
+  cancelLobby(@ConnectedSocket() client: Socket) {
+    return this.gameService.cancelLobby(client.id);
+  }
+
   // Event handler for the 'lobby' message, used for joining game lobbies
   @SubscribeMessage('lobby')
   async lobby(
-    @ConnectedSocket() client: Socket, // Decorator to inject the connected socket
-    @MessageBody('game_mode') game_mode: string, // Decorator to extract the 'game_mode' from the message body
+    @ConnectedSocket() client: Socket,
+    @MessageBody('game_mode') game_mode: string,
   ) {
     // Check if the provided game mode is valid
     if (
