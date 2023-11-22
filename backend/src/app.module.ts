@@ -52,8 +52,6 @@ const configService = new ConfigService();
 
     NotificationModule,
 
-    AchievementModule,
-
     GatewaysModule,
   ],
 })

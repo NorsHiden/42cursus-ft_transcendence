@@ -7,11 +7,13 @@ import { User } from 'src/typeorm/user.entity';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
 import { NotificationModule } from 'src/notification/notification.module';
 import { UsersModule } from 'src/users/users.module';
+import { AchievementModule } from 'src/achievement/achievement.module';
 
 @Module({
   imports: [
     UsersModule,
     NotificationModule,
+    AchievementModule,
     TypeOrmModule.forFeature([User, Friendlist]),
   ],
   controllers: [FriendlistController],

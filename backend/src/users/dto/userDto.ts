@@ -26,6 +26,9 @@ export class UserDto {
 
   @IsString()
   @IsOptional()
+  @Length(0, 300, {
+    message: 'Bio must be less than 300 characters',
+  })
   readonly about?: string;
 
   @IsString()

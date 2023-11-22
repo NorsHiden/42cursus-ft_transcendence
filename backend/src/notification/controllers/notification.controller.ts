@@ -29,7 +29,7 @@ export class NotificationController {
    * @returns An array of notifications for the authenticated user.
    */
   @Get()
-  async getNotifications(@Req() req, @Query('page') page: number) {
+  async getNotifications(@Req() req, @Query('page') page: number = 0) {
     return this.notificationService.getNotifications(req.user.sub, page);
   }
 
