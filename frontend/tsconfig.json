@@ -21,14 +21,14 @@
     "noFallthroughCasesInSwitch": true,
 
     /* Aliases */
-    "baseUrl": "./src", 
+    "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
+      "@context/*": ["src/context/*"],
+      "@globalTypes/*": ["src/globalTypes/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@pages/*": ["src/pages/*"],
-      "@utils/*": ["src/utils/*"],
-      "@types/*": ["./types/*"],
+      "@pages/*": ["src/pages/*"]
     }
   },
   "include": ["src"],

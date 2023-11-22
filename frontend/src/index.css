@@ -13,4 +13,8 @@
   .input-placeholder::placeholder {
     color: #71717A; /* Replace with your desired color */
   }
+
+  .center {
+    @apply flex justify-center items-center;
+  }
 }

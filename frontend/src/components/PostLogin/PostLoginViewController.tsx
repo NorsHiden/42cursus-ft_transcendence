@@ -55,4 +55,4 @@ const PostLoginViewController = ()=>{
   }
 }
 
-export default PostLoginViewController
+export default PostLoginViewController;

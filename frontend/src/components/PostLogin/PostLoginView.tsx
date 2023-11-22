@@ -11,7 +11,6 @@ import illustation from '../../assets/illustration.svg';
 import { to } from 'mathjs';
 
 const PostLoginView = () => {
-
   const {
     handleInput,
     handlesubmit,
