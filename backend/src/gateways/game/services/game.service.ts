@@ -4,6 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 <<<<<<< HEAD
 <<<<<<< HEAD
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
+<<<<<<< HEAD
 import { Services, WebSocketEvents } from 'src/utils/consts';
 import { Socket, Server } from 'socket.io';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
@@ -17,6 +18,15 @@ import { GameMode } from '../types/GameMode.type';
 import { IMatchHistoryService } from 'src/match_history/interfaces/match_history.interface';
 import { MatchHistory } from 'src/typeorm/match_history.entity';
 import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
+=======
+import { Services } from 'src/utils/consts';
+import { Server, Socket } from 'socket.io';
+import { InGame } from '../interfaces/InGame.interface';
+import { LobbyUser } from '../interfaces/LobbyUser.interface';
+import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
+import { INotificationService } from 'src/notification/interfaces/notification.interface';
+import { Notification } from 'src/typeorm/notification.entity';
+>>>>>>> fce8b4b (Invitation Process)
 
 @Injectable()
 export class GameService {
@@ -31,10 +41,13 @@ export class GameService {
     private readonly usersService: IUsersService,
     @Inject(Services.Notification)
     private readonly notificationService: INotificationService,
+<<<<<<< HEAD
     @Inject(Services.Achievement)
     private readonly achievementService: IAchievementService,
     @Inject(Services.MatchHistory)
     private readonly matchHistoryService: IMatchHistoryService,
+=======
+>>>>>>> fce8b4b (Invitation Process)
   ) {
     this.users = new Map();
     this.lobby = [];
@@ -218,6 +231,61 @@ export class GameService {
     };
   }
 
+  async getUser(user_id: string) {
+    try {
+      return await this.usersService.getUser(user_id);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async inviteFriend(client: Socket, target_id: string, game_mode: string) {
+    const user = await this.usersService.getFriends(this.users[client.id]);
+    const target = await this.getUser(target_id);
+    if (!target)
+      return {
+        action: 'NOT_FOUND',
+        message: "Invited User Doesn't Exist",
+      };
+    // if (!user.friendlist.friends.find((friend) => friend.id == target.id))
+    //   return {
+    //     action: 'NOT_FOUND',
+    //     message: 'Friend Not Found',
+    //   };
+
+    // Prepare client lobby information
+    const clientLobby = {
+      id: client.id,
+      socket: client,
+      game_mode: game_mode,
+      score_points: 0,
+      invited: true,
+    };
+    if (this.lobby.find((user) => user.id == client.id))
+      return {
+        action: 'ALREADY_INLOBBY',
+        message: "You're Already In Lobby",
+      };
+    this.lobby.push(clientLobby);
+    this.notificationService.addNotification(target.id, {
+      action: 'GAME_REQUEST',
+      recipient: target,
+      sender: user,
+    } as Notification);
+    return {
+      action: 'LOBBY',
+      message: `Wating For ${target.username}...`,
+    };
+  }
+
+  cancelLobby(client_id: string) {
+    this.lobby = this.lobby.filter((user) => user.id != client_id);
+    return {
+      action: 'CANCEL',
+      message: "You've Been Removed From The Lobby",
+    };
+  }
+
   // Find a lobby for a client based on game mode
   findLobby(client: Socket, server: Server, game_mode: string) {
     // Check if the client is already in a game
@@ -235,7 +303,9 @@ export class GameService {
     // Find an opponent in the lobby with the same game mode
     const opponent = this.lobby.find(
       (opponent) =>
-        game_mode === opponent.game_mode && client.id !== opponent.id,
+        game_mode === opponent.game_mode &&
+        client.id !== opponent.id &&
+        !opponent.invited,
     );
 
     // Prepare client lobby information

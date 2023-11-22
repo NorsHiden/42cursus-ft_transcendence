@@ -10,6 +10,7 @@ import { GameGateway } from './gateway/game.gateway';
 import { GatewaysService } from '../services/gateways.service';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { UsersModule } from 'src/users/users.module';
 import { NotificationModule } from 'src/notification/notification.module';
 import { MatchHistoryModule } from 'src/match_history/match_history.module';
@@ -46,6 +47,13 @@ import { GameGateway } from './gateway/game.gateway';
 @Module({
   imports: [],
 >>>>>>> 475422b (game init)
+=======
+import { UsersModule } from 'src/users/users.module';
+import { NotificationModule } from 'src/notification/notification.module';
+
+@Module({
+  imports: [UsersModule, NotificationModule],
+>>>>>>> fce8b4b (Invitation Process)
   providers: [
     {
       provide: Services.Game,
