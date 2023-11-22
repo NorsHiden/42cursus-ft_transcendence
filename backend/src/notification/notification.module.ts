@@ -5,18 +5,19 @@ import { NotificationController } from './controllers/notification.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/user.entity';
 import { Notification } from 'src/typeorm/notification.entity';
-import { EventService } from './services/events.service';
+import { EventService } from './events/services/events.service';
 import { UsersModule } from 'src/users/users.module';
 import { AchievementModule } from 'src/achievement/achievement.module';
+import { EventModule } from './events/events.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Notification]),
     forwardRef(() => UsersModule),
+    EventModule,
   ],
   controllers: [NotificationController],
   providers: [
-    EventService,
     {
       provide: Services.Notification,
       useClass: NotificationService,

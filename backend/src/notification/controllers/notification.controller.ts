@@ -10,9 +10,7 @@ import {
 } from '@nestjs/common';
 import { Routes, Services } from 'src/utils/consts';
 import { INotificationService } from '../interfaces/notification.interface';
-import { EventService } from '../services/events.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 
 @Controller(Routes.NOTIFICATION)
 @UseGuards(JwtAuthGuard)
@@ -41,6 +39,6 @@ export class NotificationController {
    */
   @Sse('sse-notifications')
   notifications(@Req() req, @Res() res) {
-    return this.notificationService.subscribeToEvent(req.user.id, res);
+    return this.notificationService.subscribeToEvent(req.user.sub, res);
   }
 }

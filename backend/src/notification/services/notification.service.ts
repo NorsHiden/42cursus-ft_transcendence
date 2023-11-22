@@ -5,9 +5,8 @@ import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from 'src/typeorm/notification.entity';
 import { Repository } from 'typeorm';
-import { EventService } from './events.service';
+import { EventService } from '../events/services/events.service';
 import { Response } from 'express';
-import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 
 @Injectable()
 export class NotificationService implements INotificationService {
@@ -90,4 +89,5 @@ export class NotificationService implements INotificationService {
     // Return the userEvent.
     return userEvent;
   }
+
 }
