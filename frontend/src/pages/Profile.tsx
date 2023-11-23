@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom"
 import ProfileTabsView from "../components/profile/ProfileTabs/ProfileTbasView"
 import ProfileAboutMeView from "../components/profile/ProfileAboutMe/ProfileAboutMeView"
-import { Divider } from "@mui/material"
+// import { Divider } from "@mui/material"
+import axios from "axios"
 
 function Profile(){
     return (

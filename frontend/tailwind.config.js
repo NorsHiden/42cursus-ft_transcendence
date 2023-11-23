@@ -40,6 +40,7 @@ const config = {
     },
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],
+      'inter': ['Inter', 'sans-serif'],
       serif: ['Rowdies', 'serif'],
       mono: ['ui-monospace', 'monospace'],
     },

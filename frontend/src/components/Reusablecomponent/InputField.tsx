@@ -8,18 +8,20 @@ interface InputFieldProps {
   value?: string;
   type?: string;
   disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ placeholder, className, id, style,value,type,disabled}) => (
+const InputField: React.FC<InputFieldProps> = ({ placeholder, className, id, style,value,type,disabled, onChange}) => (
   <input
     id={id}
-    className={`input-placeholder rounded-lg sm:rounded-xl md:rounded-2xl bg-input-color border border-input-border-color font-inter text-input-text-color text-sm sm:text-base focus:outline-none ${className}`}
+    className={`input-placeholder rounded-lg sm:rounded-xl md:rounded-2xl bg-[#1E1F23] border border-[#3E4048] font-inter text-[#71717A] text-sm sm:text-base focus:outline-none ${className}`}
     placeholder={placeholder}
     style={style}
     value={value}
     type={type}
     autoComplete="off"
     disabled={disabled}
+    onChange={onChange}
   />
 );
 
