@@ -13,6 +13,7 @@ import {
   WebSocketGateway,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   WsException,
 } from '@nestjs/websockets';
 import { Inject, UseGuards } from '@nestjs/common';
@@ -32,6 +33,11 @@ import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 } from '@nestjs/websockets';
 >>>>>>> 9c25fe2 (joining rooms)
 import { Inject, UseGuards } from '@nestjs/common';
+=======
+  WsException,
+} from '@nestjs/websockets';
+import { Inject, UseFilters, UseGuards } from '@nestjs/common';
+>>>>>>> 0232c7e (game init)
 import { Namespaces, Services } from 'src/utils/consts';
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
@@ -82,6 +88,7 @@ export class GameGateway {
 =======
   // Event handler for when a client connects to the WebSocket server
   async handleConnection(client: Socket) {
+<<<<<<< HEAD
     // Call the game service to handle the connection
 >>>>>>> 8ebad9c (implementing game_mode matchmaking)
 =======
@@ -89,11 +96,14 @@ export class GameGateway {
   async handleConnection(client: Socket) {
     // Call the game service to handle the connection
 >>>>>>> 46b0e30 (implementing game_mode matchmaking)
+=======
+>>>>>>> 0232c7e (game init)
     await this.gameService.handleConnection(client);
   }
 
   // Event handler for when a client disconnects from the WebSocket server
   async handleDisconnect(client: Socket) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     await this.gameService.closeConnection(client);
@@ -156,42 +166,18 @@ export class GameGateway {
 >>>>>>> eeab70f (joining rooms)
 =======
     // Call the game service to close the connection
+=======
+>>>>>>> 0232c7e (game init)
     await this.gameService.closeConnection(client);
   }
 
-  @SubscribeMessage('invite')
-  async inviteFriend(
-    @ConnectedSocket() client: Socket,
-    @MessageBody('target_id') target_id: string,
-    @MessageBody('game_mode') game_mode: string,
-  ) {
-    // Check if the provided game mode is valid
-    if (
-      game_mode !== 'REGULAR' &&
-      game_mode !== 'CURSED' &&
-      game_mode !== 'VANISH' &&
-      game_mode !== 'GOLD_RUSH'
-    ) {
-      // If not valid, return an error response
-      return {
-        action: 'NOT_FOUND',
-        message: 'Game Mode Not Found',
-      };
-    }
-    return await this.gameService.inviteFriend(client, target_id, game_mode);
-  }
-
-  @SubscribeMessage('cancel')
-  cancelLobby(@ConnectedSocket() client: Socket) {
-    return this.gameService.cancelLobby(client.id);
-  }
-
-  // Event handler for the 'lobby' message, used for joining game lobbies
   @SubscribeMessage('lobby')
-  async lobby(
+  async manageLobby(
     @ConnectedSocket() client: Socket,
-    @MessageBody('game_mode') game_mode: string,
+    @MessageBody('action') action: string,
+    @MessageBody('target_id') target_id?: string,
   ) {
+<<<<<<< HEAD
 =======
     // Call the game service to close the connection
     await this.gameService.closeConnection(client);
@@ -252,4 +238,14 @@ export class GameGateway {
 =======
 >>>>>>> 46b0e30 (implementing game_mode matchmaking)
   }
+=======
+    const user_id = this.gameService.getId(client.id);
+  }
+
+  @SubscribeMessage('ingame')
+  async manageInGame() {}
+
+  @SubscribeMessage('spectators')
+  async manageSpectators() {}
+>>>>>>> 0232c7e (game init)
 }

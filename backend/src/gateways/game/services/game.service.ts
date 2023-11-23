@@ -20,13 +20,18 @@ import { MatchHistory } from 'src/typeorm/match_history.entity';
 import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 =======
 import { Services } from 'src/utils/consts';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import { InGame } from '../interfaces/InGame.interface';
 import { LobbyUser } from '../interfaces/LobbyUser.interface';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
+<<<<<<< HEAD
 import { Notification } from 'src/typeorm/notification.entity';
 >>>>>>> fce8b4b (Invitation Process)
+=======
+import { WsException } from '@nestjs/websockets';
+import { User } from 'src/typeorm/user.entity';
+>>>>>>> 0232c7e (game init)
 
 @Injectable()
 export class GameService {
@@ -59,13 +64,18 @@ export class GameService {
     const id = await this.gatewaysService.getUserId(client, []);
     if (!id) return;
 
+<<<<<<< HEAD
     this.users.set(client.id, id.toString());
+=======
+    this.users.set(client.id, id);
+>>>>>>> 0232c7e (game init)
 
     return Promise.resolve();
   }
 
   // Asynchronously handle a client disconnection
   async closeConnection(client: Socket): Promise<void> {
+<<<<<<< HEAD
     this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
     this.ingame.forEach((game) => {
       const specIndex = game.spectators.findIndex(
@@ -229,15 +239,26 @@ export class GameService {
       message: 'Match Found',
       game_id: game_id,
     };
+=======
+    this.users.delete(client.id);
+
+    this.lobby = this.lobby.filter((player) => player.id != client.id);
+    client.disconnect();
+  }
+  getId(client_id: string): number {
+    if (!this.users.has(client_id)) throw new WsException('Client Not Found');
+    return this.users[client_id];
+>>>>>>> 0232c7e (game init)
   }
 
-  async getUser(user_id: string) {
+  async getUser(user_id: string): Promise<User> {
     try {
       return await this.usersService.getUser(user_id);
     } catch (e) {
-      return null;
+      throw new WsException('User Not Found');
     }
   }
+<<<<<<< HEAD
 
   async inviteFriend(client: Socket, target_id: string, game_mode: string) {
     const user = await this.usersService.getFriends(this.users[client.id]);
@@ -1050,4 +1071,6 @@ export class GameService {
     };
   }
 >>>>>>> 46b0e30 (implementing game_mode matchmaking)
+=======
+>>>>>>> 0232c7e (game init)
 }
