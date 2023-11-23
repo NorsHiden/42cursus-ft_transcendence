@@ -42,8 +42,14 @@ export class GameGateway {
     @ConnectedSocket() client: Socket,
     @MessageBody('action') action: string,
     @MessageBody('target_id') target_id?: string,
+    @MessageBody('game_mode') game_mode?: string,
   ) {
-    const user_id = this.gameService.getId(client.id);
+    return await this.gameService.manageLobby(
+      client,
+      action,
+      target_id,
+      game_mode,
+    );
   }
 
   @SubscribeMessage('ingame')
