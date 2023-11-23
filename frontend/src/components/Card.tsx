@@ -1,19 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import Polygon, { PolygonProps } from './Polygon';
-import useDimensions from '../hooks/useDimensions';
+import Polygon, { PolygonProps } from '@components/Polygon';
+import useDimensions from '@hooks/useDimensions';
 
 type CardProps = Omit<PolygonProps, 'width' | 'height'> & {
   className?: string;
   children?: React.ReactNode;
 };
 
-const Card: React.FC<CardProps> = ({
-  className,
-  children,
-  ...PolygonProps
-}) => {
+const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps }) => {
   const { ref, dimensions } = useDimensions<HTMLDivElement>();
 
   return (
