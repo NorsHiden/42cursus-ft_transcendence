@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
 import { Services } from 'src/utils/consts';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import { InGame } from '../interfaces/InGame.interface';
 import { LobbyUser } from '../interfaces/LobbyUser.interface';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
-import { Notification } from 'src/typeorm/notification.entity';
+import { WsException } from '@nestjs/websockets';
+import { User } from 'src/typeorm/user.entity';
 
 @Injectable()
 export class GameService {
@@ -29,33 +30,26 @@ export class GameService {
 
   // Asynchronously handle a new client connection
   async handleConnection(client: Socket): Promise<void> {
-    // Get the user ID associated with the client from the gateways service
     const id = await this.gatewaysService.getUserId(client, []);
 
-    // Store the user ID in the 'users' map with the client ID as the key
     this.users.set(client.id, id);
 
-    // Log that a client has connected
-    console.log(`client ${client.id} has connected.`);
-
-    // Resolve the promise to complete the connection handling
     return Promise.resolve();
   }
 
   // Asynchronously handle a client disconnection
   async closeConnection(client: Socket): Promise<void> {
-    // Remove the user from the 'users' map
     this.users.delete(client.id);
 
-    // Remove the client from the lobby and disconnect it
     this.lobby = this.lobby.filter((player) => player.id != client.id);
     client.disconnect();
-
-    // Log that a client has disconnected
-    console.log(`client ${client.id} has disconnected.`);
+  }
+  getId(client_id: string): number {
+    if (!this.users.has(client_id)) throw new WsException('Client Not Found');
+    return this.users[client_id];
   }
 
-  async getUser(user_id: string) {
+  async getUser(user_id: string): Promise<User> {
     try {
       return await this.usersService.getUser(user_id);
     } catch (e) {
