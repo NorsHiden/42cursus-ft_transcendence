@@ -33,6 +33,15 @@ export default {
         },
         black: '#1B191D',
         lightBlack: '#1E1F23',
+        darkGray: '#2C2D33',
+        gray: '#5E6069',
+        white: '#FFFFFF',
+        primary: '#FE5821',
+        green: '#D5FF5C',
+        blue: '#3DFFFB',
+        purple: '#6B26FF',
+        pink: '#FF2695',
+        red: '#FF2633',
       },
     },
     fontFamily: {
@@ -44,8 +53,7 @@ export default {
       xs: '0.50rem',
       sm: '0.75rem',
       base: '1rem',
-      md: '1.125rem',
-      lg: '1.25rem',
+      lg: '1.125rem',
       xl: '1.25rem',
       '2xl': '1.563rem',
       '3xl': '1.953rem',
@@ -55,3 +63,19 @@ export default {
   },
   plugins: [debugScreensPlugin],
 };
+
+/*
+
+
+--background: #1B191D;
+--cards: #1E1F23;
+--icons: #5E6069;
+--white: #FFFFFF;
+--accent: #FE5821;
+--green: #D5FF5C;
+--blue: #3DFFFB;
+--purple: #6B26FF;
+--pink: #FF2695;
+--red: #FF2633;
+
+*/

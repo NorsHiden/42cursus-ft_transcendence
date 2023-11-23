@@ -15,6 +15,7 @@ const FriendsBar: React.FC = () => {
         <div className="empty w-10 h-10 rounded-full"></div>
         <div className="empty w-10 h-10 rounded-full"></div>
         <div className="empty w-10 h-10 rounded-full"></div>
+        <div className="empty w-10 h-10 rounded-full"></div>
       </div>
     </aside>
   );

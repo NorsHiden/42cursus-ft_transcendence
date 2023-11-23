@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LineChart, Line, Tooltip } from 'recharts';
 
 import Card from '@components/Card';
@@ -32,7 +32,7 @@ const GameModeSection: React.FC = () => {
           </Card>
         ))}
       </div>
-      <Card className="flex text-[#FE5821]">
+      <Card cut={20} className="flex text-primary">
         <button className="text-white text-xl font-serif py-4 px-10 rounded z-10">PLAY</button>
       </Card>
     </section>
@@ -40,51 +40,66 @@ const GameModeSection: React.FC = () => {
 };
 
 const StatsSection: React.FC = () => {
+  let [posData, setposData] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
   const data = [
-    { name: 'Page A', value: 10 },
-    { name: 'Page B', value: 0 },
-    { name: 'Page C', value: 90 },
-    { name: 'Page C', value: 55 },
-    { name: 'Page C', value: 61 },
-    { name: 'Page A', value: 10 },
+    { value: 10 },
+    { value: 0 },
+    { value: 90 },
+    { value: 55 },
+    { value: 61 },
+    { value: 10 },
   ];
 
-  // const CustomTooltip = ({ active, payload }) => {
-  //   if (active && payload && payload.length) {
-  //     return (
-  //       <div className="center px-2 rounded text-black bg-white">
-  //         <span className="block">{payload[0].value}</span>
-  //       </div>
-  //     );
-  //   }
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="center px-2 rounded text-sm text-black bg-white">
+          <span className="block">{payload[0].value}</span>
+        </div>
+      );
+    }
 
-  //   return null;
-  // };
+    return null;
+  };
 
   return (
-    <section className="col-span-2 flex flex-col items-center gap-y-5">
+    <section className="justify-self-center col-span-2 flex flex-col items-center gap-y-5">
       <div className="flex items-center gap-x-10">
         <div className="flex flex-col flex-shrink-0 items-baseline">
           <h1 className="font-serif text-white text-4xl">641 pts</h1>
-          <div className="flex items-center gap-x-[0.3rem] px-3 py-1 rounded bg-[#6B26FF] mt-2 mb-3">
+          <div className="flex items-center gap-x-[0.3rem] px-3 py-1 rounded bg-purple mt-2 mb-3">
             <AlertCircleSolid size={16} className="text-white" />
             <span className="text-[10px] text-white">New personal record</span>
           </div>
-          <p className="text-[#4A525E] text-[10px] font-medium">
-            Your previous best <span className="text-[#61686F] font-semibold">622pts</span>
+          <p className="text-gray text-[10px] font-medium">
+            Your previous best <span className="font-semibold">622pts</span>
           </p>
         </div>
-        <LineChart width={300} height={100} data={data} className="flex-grow hidden lg:block">
+        <LineChart width={300} height={120} data={data} className="flex-grow hidden lg:block">
           <Tooltip
             cursor={false}
             isAnimationActive={false}
             offset={0}
-            // content={<CustomTooltip />}
+            content={CustomTooltip}
+            position={{ x: 0 }}
+            style
           />
-          <Line dot={false} type="monotone" dataKey="value" stroke="#FE5821" strokeWidth={4} />
+          <Line
+            dot={false}
+            isAnimationActive={false}
+            type="monotone"
+            dataKey="value"
+            stroke="#FE5821"
+            strokeWidth={4}
+            onMouseOver={(data) => {
+              // console.log('data', data);
+              setposData(data);
+            }}
+          />
         </LineChart>
       </div>
-      <hr className="w-8/12 border border-[#29272C]" />
+      <hr className="w-full border border-white/5" />
       <div className="flex items-center gap-x-4">
         <div className="empty w-10 h-10 rounded-lg"></div>
         <div className="empty w-10 h-10 rounded-lg"></div>
@@ -97,14 +112,23 @@ const StatsSection: React.FC = () => {
   );
 };
 
+enum GameMode {
+  REGULAR = 'regular',
+  CURSED = 'cursed',
+  VANISH = 'vanish',
+  GOLD_RUSH = 'goldRush',
+}
+
 type Game = {
-  mode: 'regular' | 'cursed' | 'vanish' | 'goldRush';
+  isLive: boolean;
+  mode: GameMode;
   duration: string;
-  player1: { name: string; avatar: string; score: number };
-  player2: { name: string; avatar: string; score: number };
+  player1: { name: string; avatar: string };
+  player2: { name: string; avatar: string };
+  score: { player1: number; player2: number };
 };
 
-const GameCard: React.FC<Game> = ({ mode, duration, player1, player2 }) => {
+const GameCard: React.FC<Game> = ({ mode, duration, player1, player2, score }) => {
   const modeIcon = modes.find((presetMode) => presetMode.name === mode) || modes[0];
 
   return (
@@ -139,14 +163,14 @@ const GameCard: React.FC<Game> = ({ mode, duration, player1, player2 }) => {
       <div className="center gap-x-6 py-8">
         <img className="w-14 h-14 rounded-full" src={player1.avatar} alt="" />
         <h1 className="font-serif text-4xl">
-          {player1.score} : {player2.score}
+          {score.player1} : {score.player2}
         </h1>
         <img className="w-14 h-14 rounded-full" src={player2.avatar} alt="" />
       </div>
       <div className="flex justify-center">
         <Card
-          className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
-          cut={10}
+          className="z-10 px-4 py-[2px] font-serif text-sm text-[#1B191D]"
+          cut={30}
           fill="#D5FF5C"
           borderColor="#E0FF85"
           borderWidth={1}
@@ -161,46 +185,58 @@ const GameCard: React.FC<Game> = ({ mode, duration, player1, player2 }) => {
 const PreviousGamesSection: React.FC = () => {
   const games: Game[] = [
     {
-      mode: 'regular',
+      isLive: true,
+      mode: GameMode.REGULAR,
       duration: '02:13',
-      player1: { name: 'Leanne', avatar: userAvatar, score: 10 },
-      player2: { name: 'Ervin', avatar: userAvatar, score: 3 },
+      player1: { name: 'Leanne', avatar: userAvatar },
+      player2: { name: 'Ervin', avatar: userAvatar },
+      score: { player1: 5, player2: 8 },
     },
     {
-      mode: 'cursed',
+      isLive: true,
+      mode: GameMode.CURSED,
       duration: '03:30',
-      player1: { name: 'Clementine', avatar: userAvatar, score: 0 },
-      player2: { name: 'ramiro', avatar: userAvatar, score: 3 },
+      player1: { name: 'Clementine', avatar: userAvatar },
+      player2: { name: 'ramiro', avatar: userAvatar },
+      score: { player1: 5, player2: 8 },
     },
     {
-      mode: 'goldRush',
+      isLive: true,
+      mode: GameMode.GOLD_RUSH,
       duration: '09:59',
-      player1: { name: 'John', avatar: userAvatar, score: 1 },
-      player2: { name: 'Jane', avatar: userAvatar, score: 20 },
+      player1: { name: 'John', avatar: userAvatar },
+      player2: { name: 'Jane', avatar: userAvatar },
+      score: { player1: 5, player2: 8 },
     },
     {
-      mode: 'cursed',
+      isLive: true,
+      mode: GameMode.CURSED,
       duration: '07:33',
-      player1: { name: 'John', avatar: userAvatar, score: 4 },
-      player2: { name: 'Jane', avatar: userAvatar, score: 4 },
+      player1: { name: 'John', avatar: userAvatar },
+      player2: { name: 'Jane', avatar: userAvatar },
+      score: { player1: 5, player2: 8 },
     },
     {
-      mode: 'regular',
+      isLive: true,
+      mode: GameMode.REGULAR,
       duration: '08:00',
-      player1: { name: 'John', avatar: userAvatar, score: 5 },
-      player2: { name: 'Jane', avatar: userAvatar, score: 8 },
+      player1: { name: 'John', avatar: userAvatar },
+      player2: { name: 'Jane', avatar: userAvatar },
+      score: { player1: 5, player2: 8 },
     },
     {
-      mode: 'vanish',
+      isLive: true,
+      mode: GameMode.VANISH,
       duration: '10:12',
-      player1: { name: 'John', avatar: userAvatar, score: 5 },
-      player2: { name: 'Jane', avatar: userAvatar, score: 12 },
+      player1: { name: 'John', avatar: userAvatar },
+      player2: { name: 'Jane', avatar: userAvatar },
+      score: { player1: 5, player2: 8 },
     },
   ];
 
   return (
     <section className="col-span-4 2xl:col-span-3">
-      <header className="flex items-center justify-between pb-4">
+      <header className="flex items-center justify-between pb-6">
         <h1 className="font-serif text-xl text-white">Recent Matches</h1>
         <div className="flex items-center gap-x-6 text-white">
           <label htmlFor="allRadio">

@@ -17,11 +17,11 @@ const Polygon: React.FC<PolygonProps> = ({
   fill,
   borderWidth = 0,
   borderColor = '#000',
-  borderRadius = 10,
+  borderRadius = 20,
   cut = 10,
   className,
 }) => {
-  cut = width * (Math.min(cut, 40) / 100);
+  cut = Math.min(width * (Math.min(cut, 40) / 100), height * (Math.min(cut, 40) / 100));
   borderRadius = Math.min(borderRadius, cut / 2);
 
   return (
