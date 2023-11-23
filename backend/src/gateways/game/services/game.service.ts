@@ -1,17 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
 import { Services } from 'src/utils/consts';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { InGame } from '../interfaces/InGame.interface';
 import { LobbyUser } from '../interfaces/LobbyUser.interface';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
 import { WsException } from '@nestjs/websockets';
 import { User } from 'src/typeorm/user.entity';
+import { Notification } from 'src/typeorm/notification.entity';
 
 @Injectable()
 export class GameService {
-  private users: Map<string, number>;
+  private users: Map<string, string>;
   private lobby: LobbyUser[];
   private ingame: InGame[];
 
@@ -32,7 +33,7 @@ export class GameService {
   async handleConnection(client: Socket): Promise<void> {
     const id = await this.gatewaysService.getUserId(client, []);
 
-    this.users.set(client.id, id);
+    this.users.set(client.id, id.toString());
 
     return Promise.resolve();
   }
@@ -41,10 +42,10 @@ export class GameService {
   async closeConnection(client: Socket): Promise<void> {
     this.users.delete(client.id);
 
-    this.lobby = this.lobby.filter((player) => player.id != client.id);
+    this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
     client.disconnect();
   }
-  getId(client_id: string): number {
+  getId(client_id: string): string {
     if (!this.users.has(client_id)) throw new WsException('Client Not Found');
     return this.users[client_id];
   }
