@@ -176,7 +176,9 @@ export class GameGateway {
     @ConnectedSocket() client: Socket,
     @MessageBody('action') action: string,
     @MessageBody('target_id') target_id?: string,
+    @MessageBody('game_mode') game_mode?: string,
   ) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     // Call the game service to close the connection
@@ -240,6 +242,14 @@ export class GameGateway {
   }
 =======
     const user_id = this.gameService.getId(client.id);
+=======
+    return await this.gameService.manageLobby(
+      client,
+      action,
+      target_id,
+      game_mode,
+    );
+>>>>>>> 964df2d (lobby management and invite has been implemented)
   }
 
   @SubscribeMessage('ingame')
