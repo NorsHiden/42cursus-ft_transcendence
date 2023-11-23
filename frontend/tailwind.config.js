@@ -1,13 +1,10 @@
 /** @type {import('tailwindcss').Config} */
-import t from 'tailwindcss-debug-screens';
 
-const config = {
+import debugScreensPlugin from 'tailwindcss-debug-screens';
+
+export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  safelist: [
-    {
-      pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/,
-    },
-  ],
+  safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ }],
   theme: {
     extend: {
       gridTemplateColumns: {
@@ -44,9 +41,11 @@ const config = {
       mono: ['ui-monospace', 'monospace'],
     },
     fontSize: {
-      xs: '0.5',
-      sm: '0.8rem',
+      xs: '0.50rem',
+      sm: '0.75rem',
       base: '1rem',
+      md: '1.125rem',
+      lg: '1.25rem',
       xl: '1.25rem',
       '2xl': '1.563rem',
       '3xl': '1.953rem',
@@ -54,7 +53,5 @@ const config = {
       '5xl': '3.052rem',
     },
   },
-  plugins: [t],
+  plugins: [debugScreensPlugin],
 };
-
-export default config;

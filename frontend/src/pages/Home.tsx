@@ -4,22 +4,22 @@ import { LineChart, Line, Tooltip } from 'recharts';
 import Card from '@components/Card';
 
 import { RegularIcon, CursedIcon, VanishIcon, GoldRushIcon } from '@assets/gameIcons';
-import { AlertCircleSolid } from '@assets/novaIcons';
+import AlertCircleSolid from '@assets/novaIcons/solid/AlertCircleSolid';
 import userAvatar from '@assets/images/user.jpeg';
-import { getColorValue } from '../utils/getColorValue';
+import { getColorValue } from '@utils/getColorValue';
+
+const modes = [
+  { name: 'regular', icon: RegularIcon },
+  { name: 'cursed', icon: CursedIcon },
+  { name: 'vanish', icon: VanishIcon },
+  { name: 'goldRush', icon: GoldRushIcon },
+];
 
 const GameModeSection: React.FC = () => {
-  const modes = [
-    { name: 'regular', icon: RegularIcon },
-    { name: 'cursed', icon: CursedIcon },
-    { name: 'vanish', icon: VanishIcon },
-    { name: 'goldRush', icon: GoldRushIcon },
-  ];
-
   return (
     <section className="col-span-2 flex flex-col items-start gap-y-6">
       <h1 className="font-serif text-xl text-white">Game Modes</h1>
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 gap-y-3 flex-wrap">
         {modes.map((mode) => (
           <Card
             className={`center py-5 px-8 text-${mode.name}-dark`}
@@ -74,7 +74,7 @@ const StatsSection: React.FC = () => {
             Your previous best <span className="text-[#61686F] font-semibold">622pts</span>
           </p>
         </div>
-        <LineChart width={300} height={100} data={data} className="flex-grow">
+        <LineChart width={300} height={100} data={data} className="flex-grow hidden lg:block">
           <Tooltip
             cursor={false}
             isAnimationActive={false}
@@ -97,12 +97,112 @@ const StatsSection: React.FC = () => {
   );
 };
 
-const PreviousGamesSection: React.FC = () => {
+type Game = {
+  mode: 'regular' | 'cursed' | 'vanish' | 'goldRush';
+  duration: string;
+  player1: { name: string; avatar: string; score: number };
+  player2: { name: string; avatar: string; score: number };
+};
+
+const GameCard: React.FC<Game> = ({ mode, duration, player1, player2 }) => {
+  const modeIcon = modes.find((presetMode) => presetMode.name === mode) || modes[0];
+
   return (
-    <section className="col-span-3">
-      <header className="flex items-center justify-between mb-6">
+    <Card
+      className="w-full py-6 px-8 text-white"
+      cut={8}
+      borderWidth={1}
+      fill="#1E1F23"
+      borderColor="#2C2D33"
+    >
+      <header className="w-full flex items-center justify-between">
+        <div className="flex items-center gap-x-2">
+          <div className={`w-8 h-8 center rounded-full bg-${mode}-color`}>
+            {<modeIcon.icon size={18} className={`text-${mode}-dark`} />}
+          </div>
+          <div>
+            <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
+              Mode
+            </span>
+            <span className="block font-semibold uppercase text-white">{mode}</span>
+          </div>
+        </div>
+        <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
+          <div>
+            <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
+              Time
+            </span>
+            <span className="block font-semibold uppercase text-white">{duration}</span>
+          </div>
+        </div>
+      </header>
+      <div className="center gap-x-6 py-8">
+        <img className="w-14 h-14 rounded-full" src={player1.avatar} alt="" />
+        <h1 className="font-serif text-4xl">
+          {player1.score} : {player2.score}
+        </h1>
+        <img className="w-14 h-14 rounded-full" src={player2.avatar} alt="" />
+      </div>
+      <div className="flex justify-center">
+        <Card
+          className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
+          cut={10}
+          fill="#D5FF5C"
+          borderColor="#E0FF85"
+          borderWidth={1}
+        >
+          Live
+        </Card>
+      </div>
+    </Card>
+  );
+};
+
+const PreviousGamesSection: React.FC = () => {
+  const games: Game[] = [
+    {
+      mode: 'regular',
+      duration: '02:13',
+      player1: { name: 'Leanne', avatar: userAvatar, score: 10 },
+      player2: { name: 'Ervin', avatar: userAvatar, score: 3 },
+    },
+    {
+      mode: 'cursed',
+      duration: '03:30',
+      player1: { name: 'Clementine', avatar: userAvatar, score: 0 },
+      player2: { name: 'ramiro', avatar: userAvatar, score: 3 },
+    },
+    {
+      mode: 'goldRush',
+      duration: '09:59',
+      player1: { name: 'John', avatar: userAvatar, score: 1 },
+      player2: { name: 'Jane', avatar: userAvatar, score: 20 },
+    },
+    {
+      mode: 'cursed',
+      duration: '07:33',
+      player1: { name: 'John', avatar: userAvatar, score: 4 },
+      player2: { name: 'Jane', avatar: userAvatar, score: 4 },
+    },
+    {
+      mode: 'regular',
+      duration: '08:00',
+      player1: { name: 'John', avatar: userAvatar, score: 5 },
+      player2: { name: 'Jane', avatar: userAvatar, score: 8 },
+    },
+    {
+      mode: 'vanish',
+      duration: '10:12',
+      player1: { name: 'John', avatar: userAvatar, score: 5 },
+      player2: { name: 'Jane', avatar: userAvatar, score: 12 },
+    },
+  ];
+
+  return (
+    <section className="col-span-4 2xl:col-span-3">
+      <header className="flex items-center justify-between pb-4">
         <h1 className="font-serif text-xl text-white">Recent Matches</h1>
-        <div className="flex gap-x-6">
+        <div className="flex items-center gap-x-6 text-white">
           <label htmlFor="allRadio">
             <input type="radio" name="filter" value="all" id="allRadio" /> All
           </label>
@@ -112,7 +212,10 @@ const PreviousGamesSection: React.FC = () => {
           <label htmlFor="doneRadio">
             <input type="radio" name="filter" value="done" id="doneRadio" /> Done
           </label>
-          <select defaultValue="_" name="" id="" className="w-32">
+          <select
+            className="w-32 px-3 text-base/10 border rounded border-[#2c2d33] bg-[#1B191D]"
+            defaultValue="_"
+          >
             <option value="_" disabled hidden>
               Sort By
             </option>
@@ -121,284 +224,19 @@ const PreviousGamesSection: React.FC = () => {
           </select>
         </div>
       </header>
-      <main className="grid grid-cols-3 gap-x-4 gap-y-4">
-        <Card
-          className="w-full py-6 px-8 text-white"
-          cut={8}
-          borderWidth={1}
-          fill="#1E1F23"
-          borderColor="#2C2D33"
-        >
-          <header className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-x-2">
-              <div className="w-8 h-8 center rounded-full bg-[#3DFFFB]">
-                <CursedIcon size={18} className="text-[#041F1E]" />
-              </div>
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Mode
-                </span>
-                <span className="block font-semibold uppercase text-white">Cursed</span>
-              </div>
-            </div>
-            <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Time
-                </span>
-                <span className="block font-semibold uppercase text-white">04:23</span>
-              </div>
-            </div>
-          </header>
-          <div className="center gap-x-6 py-8">
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-            <h1 className="font-serif text-4xl">2 : 5</h1>
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-          </div>
-          <div className="flex justify-center">
-            <Card
-              className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
-              cut={10}
-              fill="#D5FF5C"
-              borderColor="#E0FF85"
-              borderWidth={1}
-            >
-              Live
-            </Card>
-          </div>
-        </Card>
-        <Card
-          className="w-full py-6 px-8 text-white"
-          cut={8}
-          borderWidth={1}
-          fill="#1E1F23"
-          borderColor="#2C2D33"
-        >
-          <header className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-x-2">
-              <div className="w-8 h-8 center rounded-full bg-[#C2784F]">
-                <RegularIcon size={18} className="text-[#301D13]" />
-              </div>
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Mode
-                </span>
-                <span className="block font-semibold uppercase text-white">Regular</span>
-              </div>
-            </div>
-            <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Time
-                </span>
-                <span className="block font-semibold uppercase text-white">02:13</span>
-              </div>
-            </div>
-          </header>
-          <div className="center gap-x-6 py-8">
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-            <h1 className="font-serif text-4xl">7 : 6</h1>
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-          </div>
-          <div className="flex justify-center">
-            <Card
-              className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
-              cut={10}
-              fill="#D5FF5C"
-              borderColor="#E0FF85"
-              borderWidth={1}
-            >
-              Live
-            </Card>
-          </div>
-        </Card>
-        <Card
-          className="w-full py-6 px-8 text-white"
-          cut={8}
-          borderWidth={1}
-          fill="#1E1F23"
-          borderColor="#2C2D33"
-        >
-          <header className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-x-2">
-              <div className="w-8 h-8 center rounded-full bg-[#8654F4]">
-                <VanishIcon size={18} className="text-[#1D1333]" />
-              </div>
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Mode
-                </span>
-                <span className="block font-semibold uppercase text-white">Vanish</span>
-              </div>
-            </div>
-            <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Time
-                </span>
-                <span className="block font-semibold uppercase text-white">02:13</span>
-              </div>
-            </div>
-          </header>
-          <div className="center gap-x-6 py-8">
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-            <h1 className="font-serif text-4xl">9 : 4</h1>
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-          </div>
-          <div className="flex justify-center">
-            <Card
-              className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
-              cut={10}
-              fill="#D5FF5C"
-              borderColor="#E0FF85"
-              borderWidth={1}
-            >
-              Live
-            </Card>
-          </div>
-        </Card>
-        <Card
-          className="w-full py-6 px-8 text-white"
-          cut={8}
-          borderWidth={1}
-          fill="#1E1F23"
-          borderColor="#2C2D33"
-        >
-          <header className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-x-2">
-              <div className="w-8 h-8 center rounded-full bg-[#3DFFFB]">
-                <CursedIcon size={18} className="text-[#041F1E]" />
-              </div>
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Mode
-                </span>
-                <span className="block font-semibold uppercase text-white">Cursed</span>
-              </div>
-            </div>
-            <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Time
-                </span>
-                <span className="block font-semibold uppercase text-white">04:23</span>
-              </div>
-            </div>
-          </header>
-          <div className="center gap-x-6 py-8">
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-            <h1 className="font-serif text-4xl">2 : 5</h1>
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-          </div>
-          <div className="flex justify-center">
-            <Card
-              className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
-              cut={10}
-              fill="#D5FF5C"
-              borderColor="#E0FF85"
-              borderWidth={1}
-            >
-              Live
-            </Card>
-          </div>
-        </Card>
-        <Card
-          className="w-full py-6 px-8 text-white"
-          cut={8}
-          borderWidth={1}
-          fill="#1E1F23"
-          borderColor="#2C2D33"
-        >
-          <header className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-x-2">
-              <div className="w-8 h-8 center rounded-full bg-[#C2784F]">
-                <RegularIcon size={18} className="text-[#301D13]" />
-              </div>
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Mode
-                </span>
-                <span className="block font-semibold uppercase text-white">Regular</span>
-              </div>
-            </div>
-            <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Time
-                </span>
-                <span className="block font-semibold uppercase text-white">02:13</span>
-              </div>
-            </div>
-          </header>
-          <div className="center gap-x-6 py-8">
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-            <h1 className="font-serif text-4xl">7 : 6</h1>
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-          </div>
-          <div className="flex justify-center">
-            <Card
-              className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
-              cut={10}
-              fill="#D5FF5C"
-              borderColor="#E0FF85"
-              borderWidth={1}
-            >
-              Live
-            </Card>
-          </div>
-        </Card>
-        <Card
-          className="w-full py-6 px-8 text-white"
-          cut={8}
-          borderWidth={1}
-          fill="#1E1F23"
-          borderColor="#2C2D33"
-        >
-          <header className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-x-2">
-              <div className="w-8 h-8 center rounded-full bg-[#8654F4]">
-                <VanishIcon size={18} className="text-[#1D1333]" />
-              </div>
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Mode
-                </span>
-                <span className="block font-semibold uppercase text-white">Vanish</span>
-              </div>
-            </div>
-            <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
-              <div>
-                <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-                  Time
-                </span>
-                <span className="block font-semibold uppercase text-white">02:13</span>
-              </div>
-            </div>
-          </header>
-          <div className="center gap-x-6 py-8">
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-            <h1 className="font-serif text-4xl">9 : 4</h1>
-            <img className="w-14 h-14 rounded-full" src={userAvatar} alt="" />
-          </div>
-          <div className="flex justify-center">
-            <Card
-              className="z-10 px-6 py-[2px] font-serif text-sm text-[#1B191D]"
-              cut={10}
-              fill="#D5FF5C"
-              borderColor="#E0FF85"
-              borderWidth={1}
-            >
-              Live
-            </Card>
-          </div>
-        </Card>
+      <main className="grid grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-x-4 gap-y-4">
+        {games.map((game) => (
+          <GameCard {...game} />
+        ))}
       </main>
     </section>
   );
 };
 
 const GeneralChat: React.FC = () => {
-  return <section className="col-span-1 flex flex-col items-center">General Chat</section>;
+  return (
+    <section className="col-span-1 hidden 2xl:flex flex-col items-center">General Chat</section>
+  );
 };
 
 const Home: React.FC = () => {

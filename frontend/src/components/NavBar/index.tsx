@@ -1,7 +1,8 @@
 import React from 'react';
 
 import Logo from '/logo.svg';
-import { SearchOutline, BellSolid } from '@assets/novaIcons';
+import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
+import BellSolid from '@assets/novaIcons/solid/BellSolid';
 
 const NavBar: React.FC = () => {
   return (

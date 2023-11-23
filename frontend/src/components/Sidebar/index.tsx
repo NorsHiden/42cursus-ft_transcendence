@@ -1,14 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import {
-  BarChartSolid,
-  CompassSolid,
-  Home4Solid,
-  Message1Solid,
-  PlusCircleSolid,
-  SettingSolid,
-} from '@assets/novaIcons';
+import BarChartSolid from '@assets/novaIcons/solid/BarChartSolid';
+import CompassSolid from '@assets/novaIcons/solid/CompassSolid';
+import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
+import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
+import PlusCircleSolid from '@assets/novaIcons/solid/PlusCircleSolid';
+import SettingSolid from '@assets/novaIcons/solid/SettingSolid';
 
 const SideBar: React.FC = () => {
   return (

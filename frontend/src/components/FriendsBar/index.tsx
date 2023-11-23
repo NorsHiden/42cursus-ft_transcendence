@@ -2,7 +2,7 @@ import React from 'react';
 
 const FriendsBar: React.FC = () => {
   return (
-    <aside className="w-full h-full flex flex-col items-center py-6">
+    <aside className=" w-full h-full flex flex-col items-center py-6">
       <div>
         <h1 className="font-bold text-white text-center">Friends</h1>
         <h2 className="font-bold text-[#1B191D] text-center text-sm bg-[#D5FF5C] rounded">
