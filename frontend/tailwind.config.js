@@ -9,11 +9,30 @@ const config = {
     },
   ],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',
       },
       colors: {
+        vibrantOrange: '#FE5821',
+        background:'#1B191D',
+        'input-color': '#1E1F23',
+        'input-border-color':'#3E4048',
+        'input-text-color':'#71717A',
         regular: {
           color: '#C2784F',
           dark: '#24150D',
@@ -37,23 +56,35 @@ const config = {
         black: '#1B191D',
         lightBlack: '#1E1F23',
       },
+      spacing: {
+        '14': '3.5rem',
+        '15': '3.75rem',
+        '17': '4.25rem',
+        '32': '8rem',
+        '34': '8.5rem',
+        '39': '9.75rem',
+      },
+       
+      },
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+        serif: ['Rowdies', 'serif'],
+        mono: ['ui-monospace', 'monospace'],
+        'inter': ['Inter', 'sans-serif'],
+        'inter': ['Inter', 'sans-serif'],
+      },
+      fontSize: {
+        xs: '0.5',
+        sm: '0.8rem',
+        base: '1rem',
+        lg: '1.25rem',
+        xl: '1.30rem',
+        '2xl': '1.563rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
+      },
     },
-    fontFamily: {
-      sans: ['Poppins', 'sans-serif'],
-      serif: ['Rowdies', 'serif'],
-      mono: ['ui-monospace', 'monospace'],
-    },
-    fontSize: {
-      xs: '0.5',
-      sm: '0.8rem',
-      base: '1rem',
-      xl: '1.25rem',
-      '2xl': '1.563rem',
-      '3xl': '1.953rem',
-      '4xl': '2.441rem',
-      '5xl': '3.052rem',
-    },
-  },
   plugins: [t],
 };
 

@@ -7,6 +7,12 @@
     background-color: #1e1f23;
     border: 1px solid #2c2d33;
   }
+  .input-placeholder::placeholder {
+    color: #71717A; /* Replace with your desired color */
+  }
+  .input-placeholder::placeholder {
+    color: #71717A; /* Replace with your desired color */
+  }
 
   .center {
     @apply flex justify-center items-center;
