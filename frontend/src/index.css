@@ -10,13 +10,17 @@
   .input-placeholder::placeholder {
     color: #71717A; 
   }
+  
+  .input-placeholder::placeholder {
+    color: #71717A; /* Replace with your desired color */
+  }
+
   .center {
     @apply flex justify-center items-center;
   }
+
   html, body {
     overflow: auto;
     background-color: #1B191D; /* Replace with your desired color */
-
-  
   }
 }

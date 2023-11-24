@@ -38,7 +38,7 @@ const GameModeSection: React.FC = () => {
     </section>
   );
 };
-
+ 
 const StatsSection: React.FC = () => {
   const data = [
     { name: 'Page A', value: 10 },

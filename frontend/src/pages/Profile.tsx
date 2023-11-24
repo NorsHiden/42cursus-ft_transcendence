@@ -4,6 +4,16 @@ import ProfileAboutMeView from "../components/profile/ProfileAboutMe/ProfileAbou
 // import { Divider } from "@mui/material"
 import axios from "axios"
 
+export async function profileLoader() {
+    const res = await fetch('/api/users/@me');
+    console.log("res",res)
+    if (res.status !== 200) {
+      throw new Error('Failed to load user');
+    }
+    // console.log("data",res.json())
+    return res.json();
+  }
+
 function Profile(){
     return (
         <>

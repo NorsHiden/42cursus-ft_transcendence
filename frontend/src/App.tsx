@@ -1,22 +1,19 @@
 import React from 'react';
+import { Toaster } from 'sonner';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Profile from './pages/Profile';
-import Settings from './components/profile/ProfileTabs/Settings/Settings';
+
+
+import Settings from '@components/profile/ProfileTabs/Settings/Settings';
+import Profile from '@pages/Profile';
 import Layout from '@pages/Layout';
 import Home from '@pages/Home';
-import { Toaster } from 'sonner';
-// import profileLoader from '@pages/Profile';
+import Login from '@pages/Login';
+import PostLogin from '@pages/PostLogin';
+import { postLoginLoader } from '@pages/PostLogin';
+import {profileLoader} from '@pages/Profile';
 
 
-async function profileLoader() {
-  const res = await fetch('/api/users/@me');
-  console.log("res",res)
-  if (res.status !== 200) {
-    throw new Error('Failed to load user');
-  }
-  // console.log("data",res.json())
-  return res.json();
-}
+
 
 const router = createBrowserRouter([
   {
@@ -40,13 +37,23 @@ const router = createBrowserRouter([
         ]
       },
     ],
-  }, 
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/postlogin',
+    loader:postLoginLoader,
+    element: <PostLogin />,
+  },
+  
 ]);
 
 const App: React.FC = () => {
   return (
     <>
-      <Toaster />
+      <Toaster richColors />
       <RouterProvider router={router} />
     </>
   );
