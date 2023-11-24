@@ -1,14 +1,14 @@
+import React from 'react';
 import GoogleIcon from '@assets/socialIcons/GoogleIcon.tsx';
 import FortyTwoIcon from '@assets/socialIcons/FortyTwoIcon';
 import DiscordIcon from '@assets/socialIcons/DiscordIcon.tsx';
-import { useGetAuthLink } from './hooks';
-import { FC } from 'react';
+
 
 type ProviderIconsProps = {
   className?: string;
 };
 
-const ProviderIcons:FC<ProviderIconsProps> = (
+const ProviderIcons:React.FC<ProviderIconsProps> = (
   {
     className
   }
