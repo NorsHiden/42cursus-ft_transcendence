@@ -2,13 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
 import { Services } from 'src/utils/consts';
 import { Socket, Server } from 'socket.io';
-import { InGame } from '../interfaces/InGame.interface';
-import { LobbyUser } from '../interfaces/LobbyUser.interface';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
 import { WsException } from '@nestjs/websockets';
 import { User } from 'src/typeorm/user.entity';
 import { Notification } from 'src/typeorm/notification.entity';
+import { LobbyUser } from '../types/LobbyUser.type';
+import { InGame } from '../types/InGame.type';
+import { GameData } from '../types/GameData.type';
 
 @Injectable()
 export class GameService {
@@ -32,6 +33,7 @@ export class GameService {
   // Asynchronously handle a new client connection
   async handleConnection(client: Socket): Promise<void> {
     const id = await this.gatewaysService.getUserId(client, []);
+    if (!id) return;
 
     this.users.set(client.id, id.toString());
 
@@ -43,6 +45,11 @@ export class GameService {
     this.users.delete(client.id);
 
     this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
+    const interval_id = this.ingame.find(
+      (game) => game.home_player.socket.id == client.id,
+    )?.interval_id;
+    if (interval_id) clearInterval(interval_id);
+    this.ingame = [];
     client.disconnect();
   }
   getId(client_id: string): string {
