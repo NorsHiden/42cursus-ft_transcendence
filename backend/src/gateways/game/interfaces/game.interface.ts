@@ -1,6 +1,6 @@
-import { Socket } from 'socket.io';
-import { LobbyUser } from './LobbyUser.interface';
+import { Socket, Server } from 'socket.io';
 import { User } from 'src/typeorm/user.entity';
+import { LobbyUser } from '../types/LobbyUser.type';
 export interface IGameService {
   handleConnection(client: Socket): Promise<void>;
   closeConnection(client: Socket): Promise<void>;
@@ -21,4 +21,5 @@ export interface IGameService {
     target_id: string,
     game_mode: string,
   );
+  manageInGame(client: Socket, server: Server, action: string, game_id: string);
 }

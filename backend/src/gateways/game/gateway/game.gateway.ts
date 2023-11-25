@@ -11,11 +11,13 @@ import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';
 import { WebSocketServer } from '@nestjs/websockets';
+import { GameData } from '../types/GameData.type';
 
 @WebSocketGateway({
   namespace: Namespaces.Game,
   cors: {
     origin: '*',
+    credentials: true,
   },
 })
 @UseGuards(WsGuard)
@@ -53,7 +55,20 @@ export class GameGateway {
   }
 
   @SubscribeMessage('ingame')
-  async manageInGame() {}
+  async manageInGame(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('action') action: string,
+    @MessageBody('game_id') game_id: string,
+  ) {
+    if (action != 'UP' && action != 'DOWN' && action != 'JOIN')
+      throw new WsException('Action Not Found');
+    return await this.gameService.manageInGame(
+      client,
+      this.server,
+      action,
+      game_id,
+    );
+  }
 
   @SubscribeMessage('spectators')
   async manageSpectators() {}
