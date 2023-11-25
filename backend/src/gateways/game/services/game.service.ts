@@ -45,11 +45,6 @@ export class GameService {
     this.users.delete(client.id);
 
     this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
-    const interval_id = this.ingame.find(
-      (game) => game.home_player.socket.id == client.id,
-    )?.interval_id;
-    if (interval_id) clearInterval(interval_id);
-    this.ingame = [];
     client.disconnect();
   }
   getId(client_id: string): string {
@@ -150,14 +145,24 @@ export class GameService {
     };
   }
 
-  async createGame(client: Socket, opponent: LobbyUser): Promise<object> {
+  startGameLoop(server: Server, ingame: InGame) {
+    if (!ingame.game_data.home.is_ready || !ingame.game_data.away.is_ready)
+      return;
+    server.in(ingame.id).emit(ingame.id, ingame.game_data);
+  }
+
+  async createGame(
+    client: Socket,
+    server: Server,
+    opponent: LobbyUser,
+  ): Promise<object> {
     const clientLobby = {
       id: this.users.get(client.id),
       socket: client,
       game_mode: opponent.game_mode,
       invitation: false,
     };
-    this.ingame.push({
+    const createdGame: InGame = {
       id: `${opponent.socket.id}${client.id}`,
       home_player: clientLobby,
       away_player: opponent,
@@ -166,10 +171,14 @@ export class GameService {
       game_mode: opponent.game_mode,
       spectators: [],
       game_data: await this.initGame(opponent, clientLobby),
-    });
+    };
+    this.ingame.push(createdGame);
     this.lobby = this.lobby.filter(
       (user) =>
         user.socket.id != client.id && user.socket.id != opponent.socket.id,
+    );
+    createdGame.interval_id = setInterval(() =>
+      this.startGameLoop(server, createdGame),
     );
     opponent.socket.emit('lobby', {
       state: 'MATCH_FOUND',
@@ -185,6 +194,7 @@ export class GameService {
 
   async manageLobby(
     client: Socket,
+    server: Server,
     action: string,
     target_id: string,
     game_mode: string,
@@ -202,13 +212,15 @@ export class GameService {
       return await this.joinLobby(client, action, target_id, game_mode);
     if (!opponent && action == 'ACCEPT')
       throw new WsException("Inviter doesn't exist");
-    return await this.createGame(client, opponent);
+    return await this.createGame(client, server, opponent);
   }
 
   async joinGame(client: Socket, inGameIndex: number): Promise<void> {
-    if (client.id === this.ingame[inGameIndex].home_player.socket.id)
+    if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
       this.ingame[inGameIndex].game_data.home.is_ready = true;
-    else if (client.id === this.ingame[inGameIndex].away_player.socket.id)
+    else if (
+      this.users.get(client.id) === this.ingame[inGameIndex].away_player.id
+    )
       this.ingame[inGameIndex].game_data.away.is_ready = true;
     else {
       const spectator = await this.usersService.getUser(
@@ -221,45 +233,10 @@ export class GameService {
       });
     }
     client.join(this.ingame[inGameIndex].id);
+    console.log(this.ingame[inGameIndex]);
   }
 
-  async debugGame(client: Socket, server: Server, game_id: string) {
-    await this.createGame(client, {
-      game_mode: 'REGULAR',
-      id: this.users.get(client.id),
-      invitation: false,
-      socket: client,
-    });
-
-    const gameIndex = this.ingame.findIndex(
-      (game) => game.id == `${client.id}${client.id}`,
-    );
-    this.ingame[gameIndex].id = game_id;
-    client.join(game_id);
-    this.ingame[gameIndex].interval_id = setInterval(() => {
-      this.startGameLoop(server, this.ingame[gameIndex]);
-    }, 1000 / 60);
-  }
-
-  startGameLoop(server: Server, ingame: InGame) {
-    ingame.game_data.ball.x += ingame.game_data.ball.speed.x;
-    ingame.game_data.ball.y += ingame.game_data.ball.speed.y;
-    // if (ingame.game_data.ball.x <= 0 || ingame.game_data.ball.x >= 100)
-    //   ingame.game_data.ball.speed.x = -ingame.game_data.ball.speed.x;
-
-    if (ingame.game_data.ball.y <= 0 || ingame.game_data.ball.y >= 100)
-      ingame.game_data.ball.speed.y = -ingame.game_data.ball.speed.y;
-    server.in(ingame.id).emit(ingame.id, ingame.game_data);
-  }
-
-  async manageInGame(
-    client: Socket,
-    server: Server,
-    action: string,
-    game_id: string,
-  ) {
-    if (action == 'JOIN' && game_id == 'game-test')
-      return await this.debugGame(client, server, game_id);
+  async manageInGame(client: Socket, action: string, game_id: string) {
     const inGameIndex = this.ingame.findIndex((game) => game.id == game_id);
     if (inGameIndex < 0) throw new WsException('Game Not Found');
 
@@ -270,9 +247,11 @@ export class GameService {
       else if (action === 'DOWN' && player.y < 80) player.y += 2;
     };
 
-    if (client.id === this.ingame[inGameIndex].home_player.socket.id)
+    if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
       updatePlayerPosition(this.ingame[inGameIndex].game_data.home, action);
-    else if (client.id === this.ingame[inGameIndex].away_player.socket.id)
+    else if (
+      this.users.get(client.id) === this.ingame[inGameIndex].away_player.id
+    )
       updatePlayerPosition(this.ingame[inGameIndex].game_data.away, action);
   }
 }
