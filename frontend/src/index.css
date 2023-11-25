@@ -11,4 +11,8 @@
   .center {
     @apply flex justify-center items-center;
   }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

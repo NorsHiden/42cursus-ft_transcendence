@@ -7,6 +7,7 @@ import { RegularIcon, CursedIcon, VanishIcon, GoldRushIcon } from '@assets/gameI
 import AlertCircleSolid from '@assets/novaIcons/solid/AlertCircleSolid';
 import userAvatar from '@assets/images/user.jpeg';
 import { getColorValue } from '@utils/getColorValue';
+import GeneralChat from '@components/home/GeneralChat/GeneralChat';
 
 const modes = [
   { name: 'regular', icon: RegularIcon },
@@ -236,8 +237,8 @@ const PreviousGamesSection: React.FC = () => {
 
   return (
     <section className="col-span-4 2xl:col-span-3">
-      <header className="flex items-center justify-between pb-6">
-        <h1 className="font-serif text-xl text-white">Recent Matches</h1>
+      <header className="flex items-center justify-between pb-4">
+        <h1 className="font-serif text-2xl text-white">Recent Matches</h1>
         <div className="flex items-center gap-x-6 text-white">
           <label htmlFor="allRadio">
             <input type="radio" name="filter" value="all" id="allRadio" /> All
@@ -269,15 +270,15 @@ const PreviousGamesSection: React.FC = () => {
   );
 };
 
-const GeneralChat: React.FC = () => {
-  return (
-    <section className="col-span-1 hidden 2xl:flex flex-col items-center">General Chat</section>
-  );
-};
+// const GeneralChat: React.FC = () => {
+//   return (
+//     <section className="col-span-1 hidden 2xl:flex flex-col items-center">General Chat</section>
+//   );
+// };
 
 const Home: React.FC = () => {
   return (
-    <div className="w-full h-full grid grid-cols-4 grid-rows-[max-content] gap-x-5 gap-y-8 pt-4">
+    <div className="w-full h-full grid grid-cols-4 grid-rows-section gap-x-5 gap-y-8 pt-4">
       <GameModeSection />
       <StatsSection />
       <PreviousGamesSection />

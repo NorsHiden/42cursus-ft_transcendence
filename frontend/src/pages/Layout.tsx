@@ -7,17 +7,17 @@ import FriendsBar from '@components/FriendsBar';
 
 const Layout: React.FC = () => {
   return (
-    <div className="w-full h-screen bg-[#1B191D] grid grid-cols-layout grid-rows-[120px] gap-x-[20px]">
-      <div className="pt-2 p-2 w-full col-start-1 col-end-6 row-span-1">
+    <div className="w-full h-screen bg-[#1B191D] grid grid-cols-layout grid-rows-layout gap-x-[20px] overflow-hidden">
+      <div className="w-full h-full col-start-1 col-end-6 row-span-1 pt-2 p-2">
         <NavBar />
       </div>
-      <div className="w-full col-start-1 col-end-2 row-span-2">
+      <div className="w-full h-full col-start-1 col-end-2 row-span-2">
         <SideBar />
       </div>
-      <div className="w-full col-start-2 col-end-6 row-span-2 z-10">
+      <div className="w-full h-full col-start-2 col-end-6 row-span-2 z-10">
         <Outlet />
       </div>
-      <div className="w-full col-start-6 col-end-7 row-start-1 row-end-4">
+      <div className="w-full h-full col-start-6 col-end-7 row-start-1 row-end-4">
         <FriendsBar />
       </div>
     </div>

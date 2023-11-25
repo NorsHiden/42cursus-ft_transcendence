@@ -11,11 +11,17 @@ type CardProps = Omit<PolygonProps, 'width' | 'height'> & {
 
 const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps }) => {
   const { ref, dimensions } = useDimensions<HTMLDivElement>();
+  const clipPathID = `polygon-clip-${Math.random()}`;
 
   return (
-    <div ref={ref} className={clsx('relative', className)}>
+    <div
+      ref={ref}
+      style={{ clipPath: `url(#${clipPathID})` }}
+      className={clsx('relative', className)}
+    >
       {children}
       <Polygon
+        clipPathID={clipPathID}
         className="absolute inset-0 -z-10"
         width={dimensions.width}
         height={dimensions.height}

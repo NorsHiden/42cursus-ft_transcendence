@@ -10,6 +10,11 @@ export default {
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',
       },
+      gridTemplateRows: {
+        layout: '120px minmax(0, 1fr)',
+        section: 'auto minmax(0, 1fr)',
+        chat: 'auto minmax(0, 1fr) max-content',
+      },
       colors: {
         regular: {
           color: '#C2784F',
