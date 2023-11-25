@@ -250,6 +250,7 @@ export class GameGateway {
 =======
     return await this.gameService.manageLobby(
       client,
+      this.server,
       action,
       target_id,
       game_mode,
@@ -265,12 +266,7 @@ export class GameGateway {
   ) {
     if (action != 'UP' && action != 'DOWN' && action != 'JOIN')
       throw new WsException('Action Not Found');
-    return await this.gameService.manageInGame(
-      client,
-      this.server,
-      action,
-      game_id,
-    );
+    return await this.gameService.manageInGame(client, action, game_id);
   }
 
   @SubscribeMessage('spectators')

@@ -70,11 +70,12 @@ export interface IGameService {
   ): Promise<object>;
   manageLobby(
     client: Socket,
+    server: Server,
     action: string,
     target_id: string,
     game_mode: string,
   );
-  manageInGame(client: Socket, server: Server, action: string, game_id: string);
+  manageInGame(client: Socket, action: string, game_id: string);
 }
 >>>>>>> eeab70f (joining rooms)
 =======
