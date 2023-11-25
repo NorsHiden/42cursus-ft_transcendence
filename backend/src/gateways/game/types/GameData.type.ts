@@ -30,6 +30,9 @@ export type GameData = {
   score: { home: number; away: number };
   mode: string;
   will_reverse: boolean;
+<<<<<<< HEAD
   ready_timer: number;
   is_finished: boolean;
+=======
+>>>>>>> d68e69d (game mechanics)
 };

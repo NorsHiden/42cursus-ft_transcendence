@@ -5,6 +5,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Socket, Server } from 'socket.io';
 <<<<<<< HEAD
 import { User } from 'src/typeorm/user.entity';
@@ -48,6 +49,11 @@ import { Socket } from 'socket.io';
 import { LobbyUser } from './LobbyUser.interface';
 import { User } from 'src/typeorm/user.entity';
 >>>>>>> 964df2d (lobby management and invite has been implemented)
+=======
+import { Socket, Server } from 'socket.io';
+import { User } from 'src/typeorm/user.entity';
+import { LobbyUser } from '../types/LobbyUser.type';
+>>>>>>> d68e69d (game mechanics)
 export interface IGameService {
   handleConnection(client: Socket): Promise<void>;
   closeConnection(client: Socket): Promise<void>;
@@ -68,6 +74,7 @@ export interface IGameService {
     target_id: string,
     game_mode: string,
   );
+  manageInGame(client: Socket, server: Server, action: string, game_id: string);
 }
 >>>>>>> eeab70f (joining rooms)
 =======

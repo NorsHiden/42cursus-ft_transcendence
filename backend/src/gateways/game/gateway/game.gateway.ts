@@ -56,6 +56,7 @@ import { Server } from 'socket.io';
 import { Server, Socket } from 'socket.io';
 >>>>>>> 9c25fe2 (joining rooms)
 import { WebSocketServer } from '@nestjs/websockets';
+import { GameData } from '../types/GameData.type';
 
 @WebSocketGateway({
   namespace: Namespaces.Game,
@@ -63,11 +64,15 @@ import { WebSocketServer } from '@nestjs/websockets';
     origin: '*',
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     credentials: true,
 =======
 >>>>>>> ccf63eb (game init)
 =======
 >>>>>>> 475422b (game init)
+=======
+    credentials: true,
+>>>>>>> d68e69d (game mechanics)
   },
 })
 @UseGuards(WsGuard)
@@ -253,7 +258,20 @@ export class GameGateway {
   }
 
   @SubscribeMessage('ingame')
-  async manageInGame() {}
+  async manageInGame(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('action') action: string,
+    @MessageBody('game_id') game_id: string,
+  ) {
+    if (action != 'UP' && action != 'DOWN' && action != 'JOIN')
+      throw new WsException('Action Not Found');
+    return await this.gameService.manageInGame(
+      client,
+      this.server,
+      action,
+      game_id,
+    );
+  }
 
   @SubscribeMessage('spectators')
   async manageSpectators() {}
