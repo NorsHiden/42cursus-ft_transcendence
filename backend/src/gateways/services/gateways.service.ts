@@ -12,6 +12,7 @@ export class GatewaysService implements IGatwaysService {
 
   public async getUserId(client: any, ...args: any[]): Promise<number> {
     const cookies = client.handshake.headers.cookie;
+    console.log(cookies);
 
     if (!cookies) {
       client.disconnect();
