@@ -45,11 +45,6 @@ export class GameService {
     this.users.delete(client.id);
 
     this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
-    const interval_id = this.ingame.find(
-      (game) => game.home_player.socket.id == client.id,
-    )?.interval_id;
-    if (interval_id) clearInterval(interval_id);
-    this.ingame = [];
     client.disconnect();
   }
   getId(client_id: string): string {
