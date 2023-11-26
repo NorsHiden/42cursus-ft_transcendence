@@ -79,7 +79,7 @@ export class ChannelsService implements IChannelsService {
       relations: ['members'],
     };
 
-    return paginate(query, this.channelRepository, config);
+    return await paginate(query, this.channelRepository, config);
   }
 
   public async findOne(id: number): Promise<Channel> {
@@ -93,6 +93,36 @@ export class ChannelsService implements IChannelsService {
     return channel;
   }
 
+  async findMembers(
+    id: number,
+    query: PaginateQuery,
+  ): Promise<Paginated<UserChannel>> {
+    const config: PaginateConfig<UserChannel> = {
+      searchableColumns: ['user.username', 'user.display_name'],
+      select: [
+        'id',
+        'role',
+        'state',
+        'timeout',
+        'user.id',
+        'user.username',
+        'user.display_name',
+        'user.profile.avatar',
+        'user.presence',
+      ],
+      defaultSortBy: [['user.display_name', 'ASC']],
+      sortableColumns: ['user.display_name'],
+      relations: ['user', 'user.profile', 'channel'],
+      where: { channel: { id } },
+    };
+
+    return await paginate<UserChannel>(
+      query,
+      this.userChannelRepository,
+      config,
+    );
+  }
+
   public async update(
     id: number,
     details: UpdateChannelDetails,
@@ -101,7 +131,7 @@ export class ChannelsService implements IChannelsService {
     const channel = await this.findOne(id);
 
     if (this.isRole(channel, user, 'owner') === false) {
-      throw new UnauthorizedException('You cannot delete this channel.');
+      throw new UnauthorizedException('You cannot update this channel.');
     }
 
     const hashedPassword = details.password

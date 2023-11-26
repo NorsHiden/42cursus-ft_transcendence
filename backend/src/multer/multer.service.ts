@@ -16,9 +16,9 @@ export class MulterConfigService implements MulterOptionsFactory {
           let dir = '../imgs';
 
           if (req.path.includes('users')) {
-            dir += `/users/${file.fieldname}s/${req.user.id}`;
+            dir += `/users/${file.fieldname}s/${req.user.sub}`;
           } else if (req.path.includes('channels')) {
-            dir += `/channels/${file.fieldname}s/${req.user.id}`;
+            dir += `/channels/${file.fieldname}s/${req.user.sub}`;
           }
 
           if (!fs.existsSync(dir)) {

@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Channel } from './channel.entity';
-import { ChannelRole, MemberStatus } from 'src/utils/types';
+import { ChannelRole, MemberState } from 'src/utils/types';
 
 @Entity({ name: 'userchannel' })
 export class UserChannel {
@@ -12,7 +12,7 @@ export class UserChannel {
   role: ChannelRole;
 
   @Column('text', { nullable: true })
-  status: MemberStatus;
+  state: MemberState;
 
   @Column('timestamp', { nullable: true })
   timeout: number;
@@ -20,6 +20,8 @@ export class UserChannel {
   @ManyToOne(() => User, (user) => user.channels)
   user: User;
 
-  @ManyToOne(() => Channel, (channel) => channel.members, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Channel, (channel) => channel.members, {
+    onDelete: 'CASCADE',
+  })
   channel: Channel;
 }

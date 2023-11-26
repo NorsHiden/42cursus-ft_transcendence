@@ -68,6 +68,12 @@ export class ChannelsController {
     return this.channelsService.findOne(+id);
   }
 
+  @Get(':id/members')
+  @UseInterceptors(ClassSerializerInterceptor)
+  findMembers(@Param('id') id: string, @Paginate() query: PaginateQuery) {
+    return this.channelsService.findMembers(+id, query);
+  }
+
   @Patch(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   update(

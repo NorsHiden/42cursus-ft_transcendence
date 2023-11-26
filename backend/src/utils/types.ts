@@ -5,7 +5,7 @@ export type JwtPayload = {
   is_2fa_verified: boolean;
 };
 
-export type MemberStatus = 'banned' | 'muted';
+export type MemberState = 'banned' | 'muted';
 
 export type ChannelRole = 'owner' | 'admin' | 'member';
 
