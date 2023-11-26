@@ -37,6 +37,23 @@ export class UsersService implements IUsersService {
     }
   }
 
+  // Method to retrieve user information by user ID.
+  async getUserByUsername(username: string): Promise<User> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          username: username,
+          verified: true,
+        },
+        relations: ['profile'],
+      });
+      if (!user) throw new NotFoundException('User Not Found.');
+      return user;
+    } catch {
+      throw new NotFoundException('User Not Found.');
+    }
+  }
+
   // Method to set user information in the database.
   async setUser(user: User): Promise<User> {
     return await this.userRepository.save(user);
