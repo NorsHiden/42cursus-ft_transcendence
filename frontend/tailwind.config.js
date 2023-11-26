@@ -30,8 +30,8 @@ const config = {
       colors: {
         accent: '#FE5821',
         background:'#1B191D',
-        'input-color': '#1E1F23',
-        'input-border-color':'#3E4048',
+        // 'input-color': '#1E1F23',
+        // 'input-border-color':'#3E4048',
         gray :'#71717A',
         regular: {
           color: '#C2784F',
