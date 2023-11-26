@@ -66,12 +66,21 @@ export class User {
   @Column({ default: false })
   verified: boolean;
 
+  /**
+   * Indicates whether two-factor authentication (2FA) is enabled for the user, with a default value of `false`.
+   */
   @Column({ default: false })
   is_2fa_enabled: boolean;
 
-  @Exclude()
+  /**
+   * The secret key used for two-factor authentication (2FA). Excluded from serialization.
+   */
+  @Exclude() // Excludes this property from serialization using class-transformer
   @Column({ default: '' })
   _2fa_secret: string;
+
+  @Column({ default: 'offline' })
+  presence: 'online' | 'offline' | 'in-game';
 
   // Many-to-many relationships with friendlists
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.friends)

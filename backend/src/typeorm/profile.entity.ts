@@ -22,6 +22,18 @@ export class Profile {
   @Column({ default: '' })
   banner: string;
 
+  /**
+   * User's location, with a default value of 'n/a'.
+   */
+  @Column({ default: 'n/a' })
+  location: string;
+
+  /**
+   * User's birthdate, with a default value of the current date and time.
+   */
+  @Column({ default: new Date() })
+  birthdate: Date;
+
   // The user to whom this profile belongs.
   // Establishes a one-to-one relationship between the profile and the user.
   @OneToOne((type) => User, (user) => user.profile, {

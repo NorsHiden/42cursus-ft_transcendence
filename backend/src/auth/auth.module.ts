@@ -15,9 +15,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Services } from 'src/utils/consts';
 import { Profile } from 'src/typeorm/profile.entity';
-import { UsersService } from 'src/users/services/users.service';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
-import { NotificationModule } from 'src/notification/notification.module';
+import { UsersModule } from 'src/users/users.module';
+import { AchievementModule } from 'src/achievement/achievement.module';
 
 /**
  * The `AuthModule` encapsulates the authentication-related functionality of the application.
@@ -26,7 +26,6 @@ import { NotificationModule } from 'src/notification/notification.module';
  */
 @Module({
   imports: [
-    NotificationModule,
     // Configures the JWT module for token-based authentication.
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -39,6 +38,9 @@ import { NotificationModule } from 'src/notification/notification.module';
 
     // Configures TypeORM to work with the `User` and `Profile` entities.
     TypeOrmModule.forFeature([User, Friendlist, Profile]),
+
+    UsersModule,
+    AchievementModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -62,11 +64,6 @@ import { NotificationModule } from 'src/notification/notification.module';
     {
       provide: Services.Auth,
       useClass: AuthService,
-    },
-    // The user service responsible for user management.
-    {
-      provide: Services.Users,
-      useClass: UsersService,
     },
   ],
   exports: [

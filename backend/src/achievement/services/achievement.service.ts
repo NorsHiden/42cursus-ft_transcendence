@@ -21,7 +21,7 @@ export class AchievementService {
 
   async onApplicationBootstrap(): Promise<void> {
     const achievements = await this.achievementRepository.find({});
-    if (achievements) return;
+    if (achievements.length > 0) return;
     achievementData.forEach(
       async (achievement) => await this.achievementRepository.save(achievement),
     );

@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Res } from '@nestjs/common';
 import { INotificationService } from '../interfaces/notification.interface';
 import { Services } from 'src/utils/consts';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from 'src/typeorm/notification.entity';
 import { Repository } from 'typeorm';
 import { EventService } from './events.service';
+import { Response } from 'express';
+import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 
 @Injectable()
 export class NotificationService implements INotificationService {
@@ -39,7 +41,7 @@ export class NotificationService implements INotificationService {
         created_at: 'DESC',
       },
       take: 10,
-      skip: page * 10,
+      skip: page ? page * 10 : 0,
     });
 
     return notifications;
@@ -64,5 +66,28 @@ export class NotificationService implements INotificationService {
 
     // Emit an event to notify the user about the new notification.
     this.eventService.emit(target_id, notification);
+  }
+
+  /**
+   * Subscribe a response object to user-specific events.
+   * @param user_id The ID of the user to subscribe.
+   * @param res The response object to subscribe.
+   * @returns The user-specific event.
+   */
+  subscribeToEvent(user_id: string, @Res() res: Response) {
+    const userEvent = this.eventService.subscribe(user_id, res);
+
+    // Listen for the 'close' event on the response object.
+    res.on('close', async () => {
+      if (this.eventService.getEvent().listenerCount(user_id) <= 1) {
+        await this.usersService.setPresence(user_id, 'offline');
+      }
+    });
+
+    // Set the user's presence to 'online'.
+    this.usersService.setPresence(user_id, 'online');
+
+    // Return the userEvent.
+    return userEvent;
   }
 }

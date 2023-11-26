@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import {
+  IsDateString,
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Length,
+} from 'class-validator';
 
 export class UserDto {
   @IsString()
@@ -19,7 +26,18 @@ export class UserDto {
 
   @IsString()
   @IsOptional()
+  @Length(0, 300, {
+    message: 'Bio must be less than 300 characters',
+  })
   readonly about?: string;
+
+  @IsString()
+  @IsOptional()
+  readonly location?: string;
+
+  @IsDateString()
+  @IsOptional()
+  readonly birthdate?: string;
 
   @IsUrl()
   @IsOptional()

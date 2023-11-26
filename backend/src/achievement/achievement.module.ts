@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AchievementService } from './services/achievement.service';
 import { AchievementController } from './controllers/achievement.controller';
 import { Services } from 'src/utils/consts';
@@ -12,11 +12,17 @@ import { Notification } from 'src/typeorm/notification.entity';
 @Module({
   imports: [
     NotificationModule,
-    UsersModule,
+    forwardRef(() => UsersModule),
     TypeOrmModule.forFeature([User, Notification, Achievement]),
   ],
   controllers: [AchievementController],
   providers: [
+    {
+      provide: Services.Achievement,
+      useClass: AchievementService,
+    },
+  ],
+  exports: [
     {
       provide: Services.Achievement,
       useClass: AchievementService,
