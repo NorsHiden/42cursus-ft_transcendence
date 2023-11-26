@@ -23,7 +23,11 @@ import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { AuthUser } from 'src/utils/decorators';
 import { User } from 'src/typeorm/user.entity';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { CreateChannelArgs, ImagesFiles } from 'src/utils/types';
+import {
+  CreateChannelDetails,
+  ImagesFiles,
+  UpdateChannelDetails,
+} from 'src/utils/types';
 
 @UseGuards(JwtAuthGuard)
 @Controller(Routes.CHANNELS)
@@ -43,13 +47,13 @@ export class ChannelsController {
     @UploadedFiles() files: ImagesFiles,
     @AuthUser() user: User,
   ) {
-    const args: CreateChannelArgs = {
+    const details: CreateChannelDetails = {
       ...createChannelDto,
       avatar: files?.avatar?.[0],
       banner: files?.banner?.[0],
     };
 
-    return this.channelsService.create(args, user.id);
+    return this.channelsService.create(details, user.id);
   }
 
   @Get()
@@ -69,9 +73,15 @@ export class ChannelsController {
   update(
     @Param('id') id: string,
     @Body() updateChannelDto: UpdateChannelDto,
+    @UploadedFiles() files: ImagesFiles,
     @AuthUser() user: User,
   ) {
-    return this.channelsService.update(+id, updateChannelDto, user);
+    const details: UpdateChannelDetails = {
+      ...updateChannelDto,
+      avatar: files?.avatar?.[0],
+      banner: files?.banner?.[0],
+    };
+    return this.channelsService.update(+id, details, user);
   }
 
   @Delete(':id')

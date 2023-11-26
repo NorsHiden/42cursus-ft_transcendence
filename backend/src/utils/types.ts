@@ -11,9 +11,17 @@ export type ChannelRole = 'owner' | 'admin' | 'member';
 
 export type ChannelType = 'public' | 'private';
 
-export type CreateChannelArgs = {
+export type CreateChannelDetails = {
   name: string;
   type: ChannelType;
+  password?: string;
+  avatar?: Express.Multer.File;
+  banner?: Express.Multer.File;
+};
+
+export type UpdateChannelDetails = {
+  name?: string;
+  type?: ChannelType;
   password?: string;
   avatar?: Express.Multer.File;
   banner?: Express.Multer.File;

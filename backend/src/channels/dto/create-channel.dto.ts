@@ -7,6 +7,7 @@ import {
   IsStrongPassword,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateChannelDto {
@@ -21,6 +22,7 @@ export class CreateChannelDto {
   @IsString()
   type: ChannelType;
 
+  @ValidateIf((o) => o.type === 'public')
   @IsNotEmpty()
   @MaxLength(100)
   @IsStrongPassword()

@@ -13,7 +13,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UpdateChannelDto } from '../dto/update-channel.dto';
-import { CreateChannelArgs } from 'src/utils/types';
+import {
+  CreateChannelDetails,
+  ImagesFiles,
+  UpdateChannelDetails,
+} from 'src/utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserChannel } from 'src/typeorm/userchannel.entity';
@@ -24,7 +28,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'src/typeorm/user.entity';
 
 @Injectable()
-export class ChannelsService {
+export class ChannelsService implements IChannelsService {
   constructor(
     @InjectRepository(UserChannel)
     private userChannelRepository: Repository<UserChannel>,
@@ -33,22 +37,22 @@ export class ChannelsService {
   ) {}
 
   public async create(
-    args: CreateChannelArgs,
+    details: CreateChannelDetails,
     userId: string,
   ): Promise<Channel> {
     const owner = await this.usersService.getUser(userId);
 
-    const hashedPassword = args.password
-      ? await this.hashPassword(args.password)
+    const hashedPassword = details.password
+      ? await this.hashPassword(details.password)
       : null;
 
     const newChannel = this.channelRepository.create({
-      name: args.name,
-      type: args.type,
-      protected: args.password ? true : false,
+      name: details.name,
+      type: details.type,
+      protected: details.password ? true : false,
       password: hashedPassword,
-      avatar: args.avatar?.path?.slice(2),
-      banner: args.banner?.path?.slice(2),
+      avatar: details.avatar?.path?.slice(2),
+      banner: details.banner?.path?.slice(2),
     });
 
     const channel = await this.channelRepository.save(newChannel);
@@ -91,7 +95,7 @@ export class ChannelsService {
 
   public async update(
     id: number,
-    updateChannelDto: UpdateChannelDto,
+    details: UpdateChannelDetails,
     user: User,
   ): Promise<Channel> {
     const channel = await this.findOne(id);
@@ -100,14 +104,14 @@ export class ChannelsService {
       throw new UnauthorizedException('You cannot delete this channel.');
     }
 
-    const hashedPassword = updateChannelDto.password
-      ? await this.hashPassword(updateChannelDto.password)
+    const hashedPassword = details.password
+      ? await this.hashPassword(details.password)
       : undefined;
 
     const newChannel = this.channelRepository.create({
-      name: updateChannelDto.name,
-      type: updateChannelDto.type,
-      protected: updateChannelDto.password ? true : undefined,
+      name: details.name,
+      type: details.type,
+      protected: details.password ? true : undefined,
       password: hashedPassword,
     });
 
