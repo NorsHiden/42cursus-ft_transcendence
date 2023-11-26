@@ -1,14 +1,9 @@
 import logo from '/logo.svg';
 import ProviderIcons from '@components/login/ProviderIcons.tsx';
-import axios from 'axios';
 
-export async function loadUser() {
-  const res = await axios.get('/api/users/@me');
-  if (res.status !== 200) {
-    throw new Error('Failed to load user');
-  }
-  return res.data;
-}
+
+
+
 
 
 function Login() {

@@ -5,7 +5,7 @@ const config = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [
     {
-      pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/,
+      pattern: /(text|bg)-(regular|cursed|vanish|goldRush|accent)-(color|dark|lightDark)/,
     },
   ],
   theme: {
@@ -28,11 +28,11 @@ const config = {
         layout: '8% repeat(4, 1fr) 8%',
       },
       colors: {
-        vibrantOrange: '#FE5821',
+        accent: '#FE5821',
         background:'#1B191D',
-        'input-color': '#1E1F23',
-        'input-border-color':'#3E4048',
-        'input-text-color':'#71717A',
+        // 'input-color': '#1E1F23',
+        // 'input-border-color':'#3E4048',
+        gray :'#71717A',
         regular: {
           color: '#C2784F',
           dark: '#24150D',
@@ -57,14 +57,7 @@ const config = {
         lightBlack: '#1E1F23',
       },
       spacing: {
-        '14': '3.5rem',
-        '15': '3.75rem',
-        '17': '4.25rem',
-        '32': '8rem',
-        '34': '8.5rem',
-        '39': '9.75rem',
-      },
-       
+        '14': '3.5rem', /* Replace with your desired color */
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
@@ -85,6 +78,23 @@ const config = {
         '5xl': '3.052rem',
       },
     },
+    fontFamily: {
+      sans: ['Poppins', 'sans-serif'],
+      'inter': ['Inter', 'sans-serif'],
+      serif: ['Rowdies', 'serif'],
+      mono: ['ui-monospace', 'monospace'],
+    },
+    fontSize: {
+      xs: '0.5',
+      sm: '0.8rem',
+      base: '1rem',
+      xl: '1.25rem',
+      '2xl': '1.563rem',
+      '3xl': '1.953rem',
+      '4xl': '2.441rem',
+      '5xl': '3.052rem',
+    },
+  },
   plugins: [t],
 };
 

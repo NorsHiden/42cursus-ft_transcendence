@@ -1,11 +1,13 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Toaster } from 'sonner';
+
+
 import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import PostLogin from '@pages/PostLogin';
-import { Toaster } from 'sonner';
-import { loadUser } from '@pages/Login';
+import { postLoginLoader } from '@pages/PostLogin';
 
 const router = createBrowserRouter([
   {
@@ -24,7 +26,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/postlogin',
-    loader:loadUser,
+    loader:postLoginLoader,
     element: <PostLogin />,
   },
 ]);
@@ -32,7 +34,7 @@ const router = createBrowserRouter([
 const App: React.FC = () => {
   return (
     <>
-      <Toaster />
+      <Toaster richColors/>
       <RouterProvider router={router} />
     </>
   );

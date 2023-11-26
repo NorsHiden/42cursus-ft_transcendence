@@ -17,10 +17,3 @@ export type User = {
     profile: UserProfile;
 }
 
-export enum ScreenType {
-  BigScreen = 'bigScreen',
-  DesktopOrLaptop = 'desktopOrLaptop',
-  TabletOrMobile = 'tabletOrMobile',
-  Portrait = 'portrait',
-  Unknown = 'unknown'
-}
