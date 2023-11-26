@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import Logo from '/logo.svg';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
@@ -6,24 +7,26 @@ import BellSolid from '@assets/novaIcons/solid/BellSolid';
 
 const NavBar: React.FC = () => {
   return (
-    <nav className="fix w-full h-full pl-14 flex items-center justify-between">
-      <img className="h-10" src={Logo} alt="Pong Logo" />
+    <nav className="fix w-full h-full pl-16 flex items-center justify-between">
+      <Link to="/">
+        <img className="h-12" src={Logo} alt="Pong Logo" />
+      </Link>
       <div className="flex items-center gap-x-10">
         <div className="flex items-center gap-x-8">
-          <button>
-            <SearchOutline size={20} className="text-[#5E6069]" />
+          <button className="text-gray hover:text-white transition-all">
+            <SearchOutline size={22} />
           </button>
-          <button>
-            <BellSolid size={20} className="text-[#5E6069]" />
+          <button className="text-gray hover:text-white transition-all">
+            <BellSolid size={22} />
           </button>
         </div>
-        <button className="flex items-center gap-x-2">
-          <div className="w-10 h-10 rounded-full empty"></div>
+        <Link className="group flex items-center gap-x-2" to="profile">
+          <div className="w-12 h-12 rounded-full empty group-hover:border-primary transition-all"></div>
           <div className="text-left">
             <p className="font-sans font-medium text-white">display_name</p>
-            <p className="font-sans font-medium text-[#5E6069] text-xs">@username</p>
+            <p className="font-sans font-medium text-gray text-sm">@username</p>
           </div>
-        </button>
+        </Link>
       </div>
     </nav>
   );
