@@ -36,17 +36,13 @@ const GameCard: React.FC<Game> = ({ mode, duration, player1, player2, score }) =
             {<modeIcon.icon size={18} className={`text-${mode}-dark`} />}
           </div>
           <div>
-            <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-              Mode
-            </span>
+            <span className="block text-[8px] font-semibold uppercase text-gray -mb-1">Mode</span>
             <span className="block font-semibold uppercase text-white">{mode}</span>
           </div>
         </div>
-        <div className="flex justify-start gap-x-2 before:w-1 before:bg-[#FE5821]">
+        <div className="flex justify-start gap-x-2 before:w-1 before:bg-primary">
           <div>
-            <span className="block text-[8px] font-semibold uppercase text-[#5F5E61] -mb-1">
-              Time
-            </span>
+            <span className="block text-[8px] font-semibold uppercase text-gray -mb-1">Time</span>
             <span className="block font-semibold uppercase text-white">{duration}</span>
           </div>
         </div>
@@ -60,12 +56,11 @@ const GameCard: React.FC<Game> = ({ mode, duration, player1, player2, score }) =
       </div>
       <Card
         cut={30}
-        fill="#D5FF5C"
         borderWidth={1}
         borderColor="#E0FF85"
-        className="z-10 px-4 py-1 font-serif mx-auto w-fit text-sm text-[#1B191D]"
+        className="z-10 mx-auto w-fit text-green"
       >
-        Live
+        <span className="py-1 px-4 font-serif text-sm text-black uppercase">Live</span>
       </Card>
     </Card>
   );
@@ -138,7 +133,7 @@ const PreviousGames: React.FC = () => {
             <input type="radio" name="filter" value="done" id="doneRadio" /> Done
           </label>
           <select
-            className="w-32 px-3 text-base/10 border rounded border-[#2c2d33] bg-[#1B191D]"
+            className="w-32 px-3 text-base/10 border rounded bg-black border-gray"
             defaultValue="_"
           >
             <option value="_" disabled hidden>

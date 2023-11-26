@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, Tooltip } from 'recharts';
+import { LineChart, Line } from 'recharts';
 
 import AlertCircleSolid from '@assets/novaIcons/solid/AlertCircleSolid';
 
@@ -30,11 +30,11 @@ const PointsGraphSection: React.FC = () => {
       <div className="flex items-center gap-x-10">
         <div className="flex flex-col flex-shrink-0 items-baseline">
           <h1 className="font-serif text-white text-4xl">641 pts</h1>
-          <div className="flex items-center gap-x-[0.3rem] px-3 py-1 rounded bg-purple mt-2 mb-3">
-            <AlertCircleSolid size={16} className="text-white" />
-            <span className="text-[10px] text-white">New personal record</span>
+          <div className="flex items-center gap-x-1 py-1 px-3 my-3 rounded bg-purple">
+            <AlertCircleSolid size={18} className="text-white" />
+            <span className="text-sm text-white">New personal record</span>
           </div>
-          <p className="text-gray text-[10px] font-medium">
+          <p className="text-gray text-base font-medium">
             Your previous best <span className="font-semibold">622pts</span>
           </p>
         </div>
@@ -42,22 +42,22 @@ const PointsGraphSection: React.FC = () => {
           {/* <Tooltip cursor={false} isAnimationActive={false} offset={0} position={{ y: 0 }} /> */}
           <Line
             dot={false}
-            isAnimationActive={false}
             type="monotone"
             dataKey="value"
+            isAnimationActive={false}
             stroke="#FE5821"
-            strokeWidth={4}
+            strokeWidth="4"
           />
         </LineChart>
       </div>
       <hr className="w-full border border-white/5" />
       <div className="flex items-center gap-x-4">
-        <div className="empty w-10 h-10 rounded-lg"></div>
-        <div className="empty w-10 h-10 rounded-lg"></div>
-        <div className="empty w-10 h-10 rounded-lg"></div>
-        <div className="empty w-10 h-10 rounded-lg"></div>
-        <div className="empty w-10 h-10 rounded-lg"></div>
-        <div className="text-[10px] text-white">+3 more</div>
+        <div className="empty w-12 h-12 rounded-lg"></div>
+        <div className="empty w-12 h-12 rounded-lg"></div>
+        <div className="empty w-12 h-12 rounded-lg"></div>
+        <div className="empty w-12 h-12 rounded-lg"></div>
+        <div className="empty w-12 h-12 rounded-lg"></div>
+        <div className="text-sm text-white">+3 more</div>
       </div>
     </section>
   );

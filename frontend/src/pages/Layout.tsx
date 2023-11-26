@@ -7,7 +7,7 @@ import FriendsBar from '@components/FriendsBar';
 
 const Layout: React.FC = () => {
   return (
-    <div className="w-full h-screen bg-[#1B191D] grid grid-cols-layout grid-rows-layout gap-x-[20px] overflow-hidden">
+    <div className="w-full h-screen bg-black grid grid-cols-layout grid-rows-layout gap-x-5 overflow-hidden">
       <div className="w-full h-full col-start-1 col-end-6 row-span-1 pt-2 p-2">
         <NavBar />
       </div>

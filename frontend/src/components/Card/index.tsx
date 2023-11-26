@@ -1,6 +1,6 @@
 import React from 'react';
-import clsx from 'clsx';
 
+import twclsx from '@utils/twclsx';
 import Polygon, { PolygonProps } from './Polygon';
 import useDimensions from '@hooks/useDimensions';
 
@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps }) => 
     <div
       ref={ref}
       style={{ clipPath: `url(#${clipPathID})` }}
-      className={clsx('relative', className)}
+      className={twclsx('relative', className)}
     >
       {children}
       <Polygon

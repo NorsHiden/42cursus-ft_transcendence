@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Card from '@components/Card';
 import { getColorValue } from '@utils/getColorValue';
 import { GAME_MODES } from '@globalTypes/gameModes';
+import Card from '@components/Card';
 
 const GameModes: React.FC = () => {
   return (

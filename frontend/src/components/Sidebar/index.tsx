@@ -1,7 +1,7 @@
 import React from 'react';
-import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
 
+import twclsx from '@utils/twclsx';
 import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
 import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
 import BarChartSolid from '@assets/novaIcons/solid/BarChartSolid';
@@ -41,7 +41,7 @@ const SideBar: React.FC = () => {
             {({ isActive }) => (
               <Icon
                 size={28}
-                className={clsx('transition-all', {
+                className={twclsx('transition-all', {
                   'text-white': isActive,
                   'text-gray hover:text-white': !isActive,
                 })}
