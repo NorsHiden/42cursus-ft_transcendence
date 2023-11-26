@@ -505,7 +505,10 @@ export class GameService {
 
     // Reflect the ball when hitting the top or bottom boundaries
     if (ball.y + ball.radius >= 100 || ball.y - ball.radius <= 0)
-      ball.speed.y = -ball.speed.y;
+      ball.speed.y =
+        ball.y - ball.radius <= 0
+          ? Math.abs(ball.speed.y)
+          : -Math.abs(ball.speed.y);
 
     // Check collision with the home paddle
     const hitsHomePaddle =
@@ -524,6 +527,11 @@ export class GameService {
       ball.speed.x = hitsHomePaddle
         ? Math.abs(ball.speed.x)
         : -Math.abs(ball.speed.x);
+      // Calculate the relative position of the ball on the paddle
+      const relativeY =
+        (ball.y - (hitsHomePaddle ? home.y : away.y)) / home.height;
+
+      ball.speed.y = relativeY < 0.5 ? -(1 - relativeY) : (relativeY - 0.5) * 2;
     }
     // Clear round when no one hits the ball
     if (ball.x <= 0 || ball.x >= 100) this.clearRound(ingame);
@@ -539,7 +547,7 @@ export class GameService {
     if (score.home == 5 || score.away == 5) ingame.game_data.is_finished = true;
     ball.x = 50;
     ball.y = 50;
-    ball.speed.x = Math.random() >= 0.5 ? 0.5 : -0.5;
+    ball.speed.x = Math.random() >= 0.5 ? 0.7 : -0.7;
     ball.speed.y = Math.random();
     ingame.count = 0;
     ingame.round++;
