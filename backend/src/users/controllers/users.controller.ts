@@ -98,8 +98,8 @@ export class UsersController {
    * @param id The ID of the user to retrieve.
    * @returns The user's information.
    */
-  @Get(':id')
-  async getUser(@Param('id') id: string) {
-    return await this.usersService.getUser(id);
+  @Get(':username')
+  async getUser(@Param('username') username: string) {
+    return await this.usersService.getUserByUsername(username);
   }
 }
