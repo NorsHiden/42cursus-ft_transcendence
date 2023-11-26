@@ -10,6 +10,8 @@ export type InGame = {
     display_name: string;
     avatar: string;
   }[];
+  count: number;
+  round: number;
   game_data: GameData;
   game_mode: string;
   interval_id?: NodeJS.Timer;

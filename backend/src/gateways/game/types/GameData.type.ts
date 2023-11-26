@@ -30,4 +30,6 @@ export type GameData = {
   score: { home: number; away: number };
   mode: string;
   will_reverse: boolean;
+  ready_timer: number;
+  is_finished: boolean;
 };
