@@ -17,7 +17,11 @@ import {
   WsException,
 } from '@nestjs/websockets';
 import { Inject, UseGuards } from '@nestjs/common';
+<<<<<<< HEAD
 import { Namespaces, Services, WebSocketEvents } from 'src/utils/consts';
+=======
+import { Namespaces, Services } from 'src/utils/consts';
+>>>>>>> 095bd02 (game_modes has been added.)
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';

@@ -15,12 +15,15 @@ export type InGame = {
   count: number;
   round: number;
   is_reversed: boolean;
+<<<<<<< HEAD
 =======
 >>>>>>> d68e69d (game mechanics)
 =======
   count: number;
   round: number;
 >>>>>>> 5281f6a (game mechanics)
+=======
+>>>>>>> 095bd02 (game_modes has been added.)
   game_data: GameData;
   game_mode: string;
   interval_id?: NodeJS.Timer;
