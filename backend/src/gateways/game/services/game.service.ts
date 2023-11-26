@@ -9,6 +9,7 @@ import { User } from 'src/typeorm/user.entity';
 import { Notification } from 'src/typeorm/notification.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
 import { InGame } from '../types/InGame.type';
+import { GameMode } from '../types/GameMode.type';
 
 @Injectable()
 export class GameService {
@@ -167,6 +168,7 @@ export class GameService {
       spectators: [],
       count: 0,
       round: 0,
+      is_reversed: false,
       game_data: await this.initGame(opponent, clientLobby),
     };
     this.ingame.push(createdGame);
@@ -238,8 +240,13 @@ export class GameService {
     if (action == 'JOIN') return await this.joinGame(client, inGameIndex);
 
     const updatePlayerPosition = (player: { y: number }, action: string) => {
-      if (action === 'UP' && player.y > 0) player.y -= 2;
-      else if (action === 'DOWN' && player.y < 80) player.y += 2;
+      if (this.ingame[inGameIndex].is_reversed) {
+        if (action === 'UP' && player.y < 80) player.y += 2;
+        else if (action === 'DOWN' && player.y > 0) player.y -= 2;
+      } else {
+        if (action === 'UP' && player.y > 0) player.y -= 2;
+        else if (action === 'DOWN' && player.y < 80) player.y += 2;
+      }
     };
 
     if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
@@ -305,6 +312,28 @@ export class GameService {
 
       ball.speed.y = relativeY < 0.5 ? -(1 - relativeY) : (relativeY - 0.5) * 2;
     }
+
+    if (ingame.game_data.mode === GameMode.CURSED) {
+      if (!(ingame.count % (60 * 7)) && !ingame.game_data.will_reverse) {
+        ingame.game_data.will_reverse = true;
+        setTimeout(() => {
+          if (!ingame.game_data.will_reverse) return;
+          ingame.game_data.will_reverse = false;
+          ingame.is_reversed = !ingame.is_reversed;
+        }, 3000);
+      }
+    }
+
+    if (
+      ingame.game_mode === GameMode.VANISH &&
+      !ingame.game_data.ball.is_hidden
+    ) {
+      if (Math.random() <= 0.005) {
+        ingame.game_data.ball.is_hidden = true;
+        setTimeout(() => (ingame.game_data.ball.is_hidden = false), 700);
+      }
+    }
+
     // Clear round when no one hits the ball
     if (ball.x <= 0 || ball.x >= 100) this.clearRound(ingame);
   }
@@ -324,6 +353,9 @@ export class GameService {
     ingame.count = 0;
     ingame.round++;
     ingame.game_data.ready_timer = 3;
+    ingame.game_data.will_reverse = false;
+    ingame.is_reversed = false;
+    ingame.game_data.ball.is_hidden = false;
   }
 
   endGame(server: Server, ingame: InGame): boolean {
