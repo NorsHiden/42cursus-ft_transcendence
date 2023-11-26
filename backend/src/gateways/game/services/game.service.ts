@@ -9,7 +9,6 @@ import { User } from 'src/typeorm/user.entity';
 import { Notification } from 'src/typeorm/notification.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
 import { InGame } from '../types/InGame.type';
-import { GameData } from '../types/GameData.type';
 
 @Injectable()
 export class GameService {
@@ -475,5 +474,82 @@ export class GameService {
       message: 'Match Found',
       game_id: game_id,
     };
+  }
+
+  countdown(server: Server, ingame: InGame) {
+    if (ingame.game_data.ready_timer > 0 && ingame.count <= 60 * 3) {
+      ingame.game_data.ready_timer = 3 - Math.round(ingame.count / 60);
+      server.in(ingame.id).emit(ingame.id, ingame.game_data);
+      return true;
+    }
+    return false;
+  }
+
+  startGameLoop(server: Server, ingame: InGame) {
+    if (!ingame.game_data.home.is_ready || !ingame.game_data.away.is_ready)
+      return;
+    ingame.count += 1;
+    if (this.countdown(server, ingame)) return;
+    this.startRound(ingame);
+    if (this.endGame(server, ingame)) return;
+    server.in(ingame.id).emit(ingame.id, ingame.game_data);
+  }
+
+  startRound(ingame: InGame) {
+    const ball = ingame.game_data.ball;
+    const home = ingame.game_data.home;
+    const away = ingame.game_data.away;
+
+    ball.x += ball.speed.x;
+    ball.y += ball.speed.y;
+
+    // Reflect the ball when hitting the top or bottom boundaries
+    if (ball.y + ball.radius >= 100 || ball.y - ball.radius <= 0)
+      ball.speed.y = -ball.speed.y;
+
+    // Check collision with the home paddle
+    const hitsHomePaddle =
+      ball.x - ball.radius / 2 <= 0 + home.width &&
+      ball.y <= home.y + home.height &&
+      ball.y + ball.radius >= home.y;
+
+    // Check collision with the away paddle
+    const hitsAwayPaddle =
+      ball.x + ball.radius / 2 >= 100 - away.width &&
+      ball.y <= away.y + away.height &&
+      ball.y + ball.radius >= away.y;
+
+    // Reflect the ball when hitting a paddle
+    if (hitsHomePaddle || hitsAwayPaddle) {
+      ball.speed.x = hitsHomePaddle
+        ? Math.abs(ball.speed.x)
+        : -Math.abs(ball.speed.x);
+    }
+    // Clear round when no one hits the ball
+    if (ball.x <= 0 || ball.x >= 100) this.clearRound(ingame);
+  }
+
+  clearRound(ingame: InGame) {
+    const ball = ingame.game_data.ball;
+    const score = ingame.game_data.score;
+
+    if (ball.x <= 0) score.home++;
+    else if (ball.x >= 100) score.away++;
+
+    if (score.home == 5 || score.away == 5) ingame.game_data.is_finished = true;
+    ball.x = 50;
+    ball.y = 50;
+    ball.speed.x = Math.random() >= 0.5 ? 0.5 : -0.5;
+    ball.speed.y = Math.random();
+    ingame.count = 0;
+    ingame.round++;
+    ingame.game_data.ready_timer = 3;
+  }
+
+  endGame(server: Server, ingame: InGame): boolean {
+    if (!ingame.game_data.is_finished) return false;
+    server.in(ingame.id).emit(ingame.id, ingame.game_data);
+    clearInterval(ingame.interval_id);
+    this.ingame = this.ingame.filter((game) => game.id != ingame.id);
   }
 }
