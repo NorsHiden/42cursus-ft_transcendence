@@ -11,11 +11,16 @@ export type InGame = {
     avatar: string;
   }[];
 <<<<<<< HEAD
+<<<<<<< HEAD
   count: number;
   round: number;
   is_reversed: boolean;
 =======
 >>>>>>> d68e69d (game mechanics)
+=======
+  count: number;
+  round: number;
+>>>>>>> 5281f6a (game mechanics)
   game_data: GameData;
   game_mode: string;
   interval_id?: NodeJS.Timer;
