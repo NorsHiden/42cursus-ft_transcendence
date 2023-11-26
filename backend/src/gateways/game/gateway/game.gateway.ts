@@ -5,7 +5,7 @@ import {
   WebSocketGateway,
   WsException,
 } from '@nestjs/websockets';
-import { Inject, UseFilters, UseGuards } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { Namespaces, Services } from 'src/utils/consts';
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';

@@ -12,6 +12,7 @@ export type InGame = {
   }[];
   count: number;
   round: number;
+  is_reversed: boolean;
   game_data: GameData;
   game_mode: string;
   interval_id?: NodeJS.Timer;
