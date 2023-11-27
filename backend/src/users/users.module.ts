@@ -11,6 +11,7 @@ import { Notification } from 'src/typeorm/notification.entity';
 import { Achievement } from 'src/typeorm/achievement.entity';
 import { MulterConfigService } from 'src/multer/multer.service';
 import { AchievementModule } from 'src/achievement/achievement.module';
+import { MatchHistory } from 'src/typeorm/match_history.entity';
 
 /**
  * The `UsersModule` encapsulates user-related functionality within the application.
@@ -25,6 +26,7 @@ import { AchievementModule } from 'src/achievement/achievement.module';
       Profile,
       Notification,
       Achievement,
+      MatchHistory,
     ]),
 
     // Configures Multer for handling file uploads and storing avatars.

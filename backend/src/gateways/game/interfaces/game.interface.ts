@@ -6,15 +6,15 @@ export interface IGameService {
   closeConnection(client: Socket): Promise<void>;
   getId(id: string): number;
   getUser(user_id: string): Promise<User>;
-  createGame(client: Socket, opponent: LobbyUser): object;
+  createGame(client: Socket, opponent: LobbyUser): Promise<void>;
   findOpponent(target_id: string, action: string, game_mode: string): LobbyUser;
-  leaveLobby(client: Socket): Promise<object>;
+  leaveLobby(client: Socket): Promise<void>;
   joinLobby(
     client: Socket,
     action: string,
     target_id: string,
     game_mode: string,
-  ): Promise<object>;
+  ): Promise<void>;
   manageLobby(
     client: Socket,
     server: Server,

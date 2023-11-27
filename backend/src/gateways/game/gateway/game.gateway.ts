@@ -6,12 +6,11 @@ import {
   WsException,
 } from '@nestjs/websockets';
 import { Inject, UseGuards } from '@nestjs/common';
-import { Namespaces, Services } from 'src/utils/consts';
+import { Namespaces, Services, WebSocketEvents } from 'src/utils/consts';
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';
 import { WebSocketServer } from '@nestjs/websockets';
-import { GameData } from '../types/GameData.type';
 
 @WebSocketGateway({
   namespace: Namespaces.Game,
@@ -39,7 +38,7 @@ export class GameGateway {
     await this.gameService.closeConnection(client);
   }
 
-  @SubscribeMessage('lobby')
+  @SubscribeMessage(WebSocketEvents.Lobby)
   async manageLobby(
     @ConnectedSocket() client: Socket,
     @MessageBody('action') action: string,
@@ -55,17 +54,17 @@ export class GameGateway {
     );
   }
 
-  @SubscribeMessage('ingame')
+  @SubscribeMessage(WebSocketEvents.InGame)
   async manageInGame(
     @ConnectedSocket() client: Socket,
     @MessageBody('action') action: string,
     @MessageBody('game_id') game_id: string,
   ) {
     if (action != 'UP' && action != 'DOWN' && action != 'JOIN')
-      throw new WsException('Action Not Found');
+      throw new WsException('Invalid Action');
     return await this.gameService.manageInGame(client, action, game_id);
   }
 
-  @SubscribeMessage('spectators')
+  @SubscribeMessage(WebSocketEvents.Spectators)
   async manageSpectators() {}
 }
