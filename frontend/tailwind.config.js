@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import t from 'tailwindcss-debug-screens';
-
+import g from '@tailwindcss/aspect-ratio'
 const config = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [
@@ -26,6 +26,9 @@ const config = {
     extend: {
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',
+      },
+      mixBlendMode: {
+        'color-dodge': 'color-dodge',
       },
       colors: {
         accent: '#FE5821',
@@ -61,10 +64,13 @@ const config = {
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
-        serif: ['Rowdies', 'serif'],
+        'rowdies': ['Rowdies', 'sans-serif'],
         mono: ['ui-monospace', 'monospace'],
         'inter': ['Inter', 'sans-serif'],
         'inter': ['Inter', 'sans-serif'],
+      },
+      aspectRatio: {
+        '7/10': '70%',
       },
       fontSize: {
         xs: '0.5',
@@ -95,7 +101,11 @@ const config = {
       '5xl': '3.052rem',
     },
   },
-  plugins: [t],
+  variants: {
+    extend: {
+      mixBlendMode: ['responsive'],
+    },},
+  plugins: [t,g],
 };
 
 export default config;

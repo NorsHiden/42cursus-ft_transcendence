@@ -1,17 +1,28 @@
 import React from 'react';
 import { Toaster } from 'sonner';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, useRouteLoaderData } from 'react-router-dom';
 
 
-import Settings from '@components/profile/ProfileTabs/Settings/Settings';
-import Profile from '@pages/Profile';
 import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
-import PostLogin from '@pages/PostLogin';
-import { postLoginLoader } from '@pages/PostLogin';
-import {profileLoader} from '@pages/Profile';
+import PostLogin,{ postLoginLoader } from '@pages/PostLogin';
+import Profile,{profileLoader} from '@pages/Profile';
+import {Overview,MatchHistory,Achievements,Settings,Friends} from '@components/profile';
 
+
+function Layoutloader() {
+  return {
+    username: 'test',
+    display_name: 'test',
+    avatar: {
+      path: 'test',
+      file: new File([], ''),
+    },
+  };
+}
+
+// import {Settings} from '@components/profile';
 
 
 
@@ -19,6 +30,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    loader:Layoutloader,
     children: [
       {
         path: '/home',
@@ -31,8 +43,24 @@ const router = createBrowserRouter([
         loader:profileLoader,
         children:[
           {
-            path:'/:user/Settings',
+            path:'/:user/settings',
             element:<Settings/>
+          },
+          {
+            path:'/:user/overview',
+            element:<Overview/>
+          },
+          {
+            path:'/:user/matchhistory',
+            element:<MatchHistory/>
+          },
+          {
+            path:'/:user/achievements',
+            element:<Achievements/>
+          },
+          {
+            path:'/:user/friends',
+            element:<Friends/>
           },
         ]
       },

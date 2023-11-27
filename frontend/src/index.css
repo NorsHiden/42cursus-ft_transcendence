@@ -1,20 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Rowdies&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @layer utilities {
   .empty {
     background-color: #1e1f23;
     border: 1px solid #2c2d33;
   }
-  .input-placeholder::placeholder {
-    color: #71717A; 
+  .color-dodge {
+    mix-blend-mode: color-dodge;
   }
-  
-  .input-placeholder::placeholder {
-    color: #71717A; /* Replace with your desired color */
-  }
-
   .center {
     @apply flex justify-center items-center;
   }

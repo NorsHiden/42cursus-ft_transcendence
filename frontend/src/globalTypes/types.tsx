@@ -3,6 +3,8 @@ type UserProfile = {
     about: string;
     avatar: string;
     banner: string;
+    location:string;
+    birthdate: string;
   }
   
 type User = {

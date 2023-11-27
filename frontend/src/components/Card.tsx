@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 
 import Polygon, { PolygonProps } from '@components/Polygon';
@@ -11,6 +11,10 @@ type CardProps = Omit<PolygonProps, 'width' | 'height'> & {
 
 const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps }) => {
   const { ref, dimensions } = useDimensions<HTMLDivElement>();
+  
+  useEffect(() => {
+    
+  }, [ref.current]);
 
   return (
     <div ref={ref} className={clsx('relative', className)}>
