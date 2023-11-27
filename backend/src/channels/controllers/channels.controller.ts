@@ -86,7 +86,6 @@ export class ChannelsController {
     @UploadedFiles() files: ImagesFiles,
     @AuthUser() user: JwtUser,
   ) {
-    console.log(files);
     const details: UpdateChannelDetails = {
       ...updateChannelDto,
       avatar: files?.avatar?.[0],
