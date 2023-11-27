@@ -18,10 +18,10 @@ export class Channel {
   @Column('text')
   name: string;
 
-  @Column('text', { nullable: true })
+  @Column('text', { nullable: true, default: '/imgs/defaults/avatar.png' })
   avatar: string;
 
-  @Column('text', { nullable: true })
+  @Column('text', { nullable: true, default: '/imgs/defaults/banner.png' })
   banner: string;
 
   @Column('text', { default: 'public' })
@@ -40,6 +40,9 @@ export class Channel {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: number;
 
-  @OneToMany(() => UserChannel, (userChannel) => userChannel.channel, {cascade: true, onDelete: 'CASCADE'})
+  @OneToMany(() => UserChannel, (userChannel) => userChannel.channel, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   members: UserChannel[];
 }
