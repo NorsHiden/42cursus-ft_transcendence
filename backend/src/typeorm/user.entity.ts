@@ -12,6 +12,7 @@ import { Friendlist } from './friendlist.entity';
 import { Notification } from './notification.entity';
 import { Achievement } from './achievement.entity';
 import { Exclude } from 'class-transformer';
+import { UserChannel } from './userchannel.entity';
 
 @Entity()
 export class User {
@@ -90,4 +91,7 @@ export class User {
 
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.blocked)
   blocked: Friendlist[];
+
+  @OneToMany(() => UserChannel, (userChannel) => userChannel.user)
+  channels: UserChannel[];
 }

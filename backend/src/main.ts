@@ -12,7 +12,7 @@ async function bootstrap() {
   const PORT = configService.get<number>('PORT');
 
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.use(
     session({
       secret: configService.get<string>('SESSION_SECRET'),
