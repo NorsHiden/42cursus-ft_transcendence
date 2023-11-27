@@ -1,7 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 
-import { EditCircleOutline } from '@assets/novaIcons';
 import { userData } from '@pages/PostLogin';
+import EditCircleOutline from '@assets/novaIcons/outline/EditCircleOutline';
 
 interface AvatarInputProps {
   NewUser: userData;

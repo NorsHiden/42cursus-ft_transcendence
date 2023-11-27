@@ -2,7 +2,6 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
-
 import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
@@ -26,7 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/postlogin',
-    loader:postLoginLoader,
+    loader: postLoginLoader,
     element: <PostLogin />,
   },
 ]);
@@ -34,7 +33,7 @@ const router = createBrowserRouter([
 const App: React.FC = () => {
   return (
     <>
-      <Toaster richColors/>
+      <Toaster richColors />
       <RouterProvider router={router} />
     </>
   );
