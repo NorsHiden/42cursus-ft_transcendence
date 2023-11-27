@@ -9,7 +9,7 @@ import { PaginateQuery, Paginated } from 'nestjs-paginate';
 export interface IChannelsService {
   create(details: CreateChannelDetails, userId: string): Promise<Channel>;
   findOne(id: number): Promise<Channel>;
-  findAll(query: PaginateQuery): Promise<Paginated<Channel>>;
+  //   findAll(query: PaginateQuery): Promise<Paginated<Channel>>;
   //   findMembers(id: number): Promise<ChannelMember[]>;
   update(
     id: number,

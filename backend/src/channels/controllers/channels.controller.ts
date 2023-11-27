@@ -26,6 +26,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
   CreateChannelDetails,
   ImagesFiles,
+  JwtUser,
   UpdateChannelDetails,
 } from 'src/utils/types';
 
@@ -45,7 +46,7 @@ export class ChannelsController {
   create(
     @Body() createChannelDto: CreateChannelDto,
     @UploadedFiles() files: ImagesFiles,
-    @AuthUser() user: User,
+    @AuthUser() user: JwtUser,
   ) {
     const details: CreateChannelDetails = {
       ...createChannelDto,
@@ -53,13 +54,13 @@ export class ChannelsController {
       banner: files?.banner?.[0],
     };
 
-    return this.channelsService.create(details, user.id);
+    return this.channelsService.create(details, user.sub);
   }
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  findAll(@Paginate() query: PaginateQuery) {
-    return this.channelsService.findAll(query);
+  findAll(@Paginate() query: PaginateQuery, @AuthUser() user: JwtUser) {
+    return this.channelsService.findAll(query, user);
   }
 
   @Get(':id')
@@ -75,13 +76,17 @@ export class ChannelsController {
   }
 
   @Patch(':id')
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(
+    ClassSerializerInterceptor,
+    FileFieldsInterceptor(imagesFileFields),
+  )
   update(
     @Param('id') id: string,
     @Body() updateChannelDto: UpdateChannelDto,
     @UploadedFiles() files: ImagesFiles,
-    @AuthUser() user: User,
+    @AuthUser() user: JwtUser,
   ) {
+    console.log(files);
     const details: UpdateChannelDetails = {
       ...updateChannelDto,
       avatar: files?.avatar?.[0],
@@ -92,7 +97,7 @@ export class ChannelsController {
 
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  remove(@Param('id') id: string, @AuthUser() user: User) {
+  remove(@Param('id') id: string, @AuthUser() user: JwtUser) {
     return this.channelsService.remove(+id, user);
   }
 }

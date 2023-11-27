@@ -12,20 +12,18 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UpdateChannelDto } from '../dto/update-channel.dto';
 import {
   CreateChannelDetails,
-  ImagesFiles,
+  JwtUser,
   UpdateChannelDetails,
 } from 'src/utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { UserChannel } from 'src/typeorm/userchannel.entity';
 import { Channel } from 'src/typeorm/channel.entity';
 import { Services } from 'src/utils/consts';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/typeorm/user.entity';
 
 @Injectable()
 export class ChannelsService implements IChannelsService {
@@ -41,6 +39,9 @@ export class ChannelsService implements IChannelsService {
     userId: string,
   ): Promise<Channel> {
     const owner = await this.usersService.getUser(userId);
+
+    details.password =
+      details.type === 'private' ? details.password : undefined;
 
     const hashedPassword = details.password
       ? await this.hashPassword(details.password)
@@ -67,7 +68,32 @@ export class ChannelsService implements IChannelsService {
     return channel;
   }
 
-  public async findAll(query: PaginateQuery): Promise<Paginated<Channel>> {
+  public async findAll(
+    query: PaginateQuery,
+    user: any,
+  ): Promise<Paginated<Channel>> {
+    const brackets = new Brackets((qb) => {
+      qb.where('channel.type = :public', { public: 'public' });
+      qb.orWhere('channel.type = :private', { private: 'private' });
+      qb.andWhere('members.user.id = :userId', { userId: user.sub });
+    });
+
+    const queryBuilder = this.channelRepository
+      .createQueryBuilder('channel')
+      .leftJoinAndSelect('channel.members', 'members')
+      .leftJoinAndSelect('members.user', 'user')
+      .where(brackets)
+      .select([
+        'channel.id',
+        'channel.name',
+        'channel.type',
+        'channel.protected',
+        'channel.avatar',
+        'channel.banner',
+        'channel.createdAt',
+        'channel.updatedAt',
+      ]);
+
     const config: PaginateConfig<Channel> = {
       sortableColumns: ['id', 'name', 'createdAt'],
       searchableColumns: ['name'],
@@ -76,10 +102,9 @@ export class ChannelsService implements IChannelsService {
         type: [FilterOperator.EQ],
         protected: [FilterOperator.EQ],
       },
-      relations: ['members'],
     };
 
-    return await paginate(query, this.channelRepository, config);
+    return await paginate<Channel>(query, queryBuilder, config);
   }
 
   public async findOne(id: number): Promise<Channel> {
@@ -126,13 +151,16 @@ export class ChannelsService implements IChannelsService {
   public async update(
     id: number,
     details: UpdateChannelDetails,
-    user: User,
+    user: JwtUser,
   ): Promise<Channel> {
     const channel = await this.findOne(id);
 
     if (this.isRole(channel, user, 'owner') === false) {
       throw new UnauthorizedException('You cannot update this channel.');
     }
+
+    details.password =
+      details.type === 'private' ? undefined : details.password;
 
     const hashedPassword = details.password
       ? await this.hashPassword(details.password)
@@ -143,6 +171,8 @@ export class ChannelsService implements IChannelsService {
       type: details.type,
       protected: details.password ? true : undefined,
       password: hashedPassword,
+      avatar: details.avatar?.path?.slice(2),
+      banner: details.banner?.path?.slice(2),
     });
 
     const updatedChannel = await this.channelRepository
@@ -155,7 +185,7 @@ export class ChannelsService implements IChannelsService {
     return updatedChannel.raw[0];
   }
 
-  public async remove(id: number, user: User): Promise<Channel> {
+  public async remove(id: number, user: JwtUser): Promise<Channel> {
     const channel = await this.findOne(id);
 
     if (this.isRole(channel, user, 'owner') === false) {
@@ -171,9 +201,9 @@ export class ChannelsService implements IChannelsService {
     return await bcrypt.hash(password, salt);
   }
 
-  private isRole(channel: Channel, user: User, role: string): boolean {
+  private isRole(channel: Channel, user: JwtUser, role: string): boolean {
     return channel.members.some(
-      (member) => member.user.id === user.id && member.role === role,
+      (member) => member.user.id === user.sub && member.role === role,
     );
   }
 }
