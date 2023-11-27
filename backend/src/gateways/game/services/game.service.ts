@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
-import { Services } from 'src/utils/consts';
+import { Services, WebSocketEvents } from 'src/utils/consts';
 import { Socket, Server } from 'socket.io';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
@@ -10,6 +10,8 @@ import { Notification } from 'src/typeorm/notification.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
 import { InGame } from '../types/InGame.type';
 import { GameMode } from '../types/GameMode.type';
+import { IMatchHistoryService } from 'src/match_history/interfaces/match_history.interface';
+import { MatchHistory } from 'src/typeorm/match_history.entity';
 
 @Injectable()
 export class GameService {
@@ -24,6 +26,8 @@ export class GameService {
     private readonly usersService: IUsersService,
     @Inject(Services.Notification)
     private readonly notificationService: INotificationService,
+    @Inject(Services.MatchHistory)
+    private readonly matchHistoryService: IMatchHistoryService,
   ) {
     this.users = new Map();
     this.lobby = [];
@@ -72,11 +76,11 @@ export class GameService {
     return null;
   }
 
-  async leaveLobby(client: Socket): Promise<object> {
+  async leaveLobby(client: Socket): Promise<void> {
     this.lobby = this.lobby.filter((user) => user.socket.id != client.id);
-    return {
+    client.emit(WebSocketEvents.Lobby, {
       message: "You've left the lobby",
-    };
+    });
   }
 
   async joinLobby(
@@ -84,7 +88,7 @@ export class GameService {
     action: string,
     target_id: string,
     game_mode: string,
-  ): Promise<object> {
+  ): Promise<void> {
     this.lobby.push({
       id: this.users.get(client.id),
       socket: client,
@@ -97,10 +101,10 @@ export class GameService {
         sender: await this.getUser(target_id),
         action: 'GAME_REQUEST',
       } as Notification);
-    return {
+    client.emit(WebSocketEvents.Lobby, {
       state: 'WAITING',
       message: 'Waiting for the opponent...',
-    };
+    });
   }
 
   async initGame(home: LobbyUser, away: LobbyUser) {
@@ -151,7 +155,7 @@ export class GameService {
     client: Socket,
     server: Server,
     opponent: LobbyUser,
-  ): Promise<object> {
+  ): Promise<void> {
     const clientLobby = {
       id: this.users.get(client.id),
       socket: client,
@@ -177,19 +181,19 @@ export class GameService {
         user.socket.id != client.id && user.socket.id != opponent.socket.id,
     );
     createdGame.interval_id = setInterval(
-      () => this.startGameLoop(server, createdGame),
+      async () => await this.startGameLoop(server, createdGame),
       1000 / 60,
     );
-    opponent.socket.emit('lobby', {
+    opponent.socket.emit(WebSocketEvents.Lobby, {
       state: 'MATCH_FOUND',
       game_id: `${opponent.socket.id}${client.id}`,
       message: 'Game has been created.',
     });
-    return {
+    client.emit(WebSocketEvents.Lobby, {
       state: 'MATCH_FOUND',
       game_id: `${opponent.socket.id}${client.id}`,
       message: 'Game has been created.',
-    };
+    });
   }
 
   async manageLobby(
@@ -264,13 +268,13 @@ export class GameService {
     return false;
   }
 
-  startGameLoop(server: Server, ingame: InGame) {
+  async startGameLoop(server: Server, ingame: InGame): Promise<void> {
     if (!ingame.game_data.home.is_ready || !ingame.game_data.away.is_ready)
       return;
     ingame.count += 1;
     if (this.countdown(server, ingame)) return;
     this.startRound(ingame);
-    if (this.endGame(server, ingame)) return;
+    if (await this.endGame(server, ingame)) return;
     server.in(ingame.id).emit(ingame.id, ingame.game_data);
   }
 
@@ -358,9 +362,27 @@ export class GameService {
     ingame.game_data.ball.is_hidden = false;
   }
 
-  endGame(server: Server, ingame: InGame): boolean {
+  async endGame(server: Server, ingame: InGame): Promise<boolean> {
     if (!ingame.game_data.is_finished) return false;
     server.in(ingame.id).emit(ingame.id, ingame.game_data);
+    const home = await this.usersService.getUser(ingame.home_player.id);
+    const away = await this.usersService.getUser(ingame.away_player.id);
+    const winner =
+      ingame.game_data.score.home > ingame.game_data.score.away ? home : away;
+    const loser =
+      ingame.game_data.score.home < ingame.game_data.score.away ? home : away;
+    winner.wins++;
+    loser.loses++;
+    // need to be continued tomorrow.
+    await this.matchHistoryService.setMatch({
+      home_player: home,
+      away_player: away,
+      home_score: ingame.game_data.score.home,
+      away_score: ingame.game_data.score.away,
+      created_at: ingame.created_at,
+      ended_at: new Date(),
+      game_mode: ingame.game_mode,
+    } as MatchHistory);
     clearInterval(ingame.interval_id);
     this.ingame = this.ingame.filter((game) => game.id != ingame.id);
   }
