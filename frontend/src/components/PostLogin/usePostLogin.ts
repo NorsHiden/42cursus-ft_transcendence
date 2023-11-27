@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { userData } from '@pages/PostLogin.tsx';
 
-export function usePostLogin(initialData: userData) {
+export const usePostLogin = (initialData: userData) => {
   const [NewUser, setNewUser] = useState<userData>(initialData);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -44,9 +44,9 @@ export function usePostLogin(initialData: userData) {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       const path = URL.createObjectURL(file);
-      setNewUser((prevUser) => ({ ...prevUser!, avatar: { path: path, file: file } }));
+      setNewUser((prevUser) => ({ ...prevUser!, avatar: { path, file } }));
     }
   };
 
   return { NewUser, handleInput, handlesubmit, handleUpload, isSubmitting };
-}
+};

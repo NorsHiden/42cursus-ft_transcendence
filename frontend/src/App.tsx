@@ -5,8 +5,7 @@ import { Toaster } from 'sonner';
 import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
-import PostLogin from '@pages/PostLogin';
-import { postLoginLoader } from '@pages/PostLogin';
+import PostLogin, { postLoginLoader } from '@pages/PostLogin';
 
 const router = createBrowserRouter([
   {
