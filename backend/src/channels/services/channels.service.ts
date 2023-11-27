@@ -70,7 +70,7 @@ export class ChannelsService implements IChannelsService {
 
   public async findAll(
     query: PaginateQuery,
-    user: any,
+    user: JwtUser,
   ): Promise<Paginated<Channel>> {
     const brackets = new Brackets((qb) => {
       qb.where('channel.type = :public', { public: 'public' });
@@ -108,10 +108,22 @@ export class ChannelsService implements IChannelsService {
   }
 
   public async findOne(id: number): Promise<Channel> {
-    const channel: Channel = await this.channelRepository.findOne({
-      where: { id },
-      relations: ['members', 'members.user'],
-    });
+    const channel: Channel = await this.channelRepository
+      .createQueryBuilder('channel')
+      .leftJoinAndSelect('channel.members', 'members')
+      .leftJoinAndSelect('members.user', 'user')
+      .where('channel.id = :id', { id })
+      .select([
+        'channel.id',
+        'channel.name',
+        'channel.type',
+        'channel.protected',
+        'channel.avatar',
+        'channel.banner',
+        'channel.createdAt',
+        'channel.updatedAt',
+      ])
+      .getOne();
 
     if (!channel) throw new NotFoundException('Channel Not Found.');
 

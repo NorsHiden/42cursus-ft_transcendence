@@ -1,4 +1,3 @@
-import { ChannelsService } from '../services/channels.service';
 import {
   Controller,
   Get,
@@ -13,6 +12,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UploadedFiles,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CreateChannelDto } from '../dto/create-channel.dto';
 import { UpdateChannelDto } from '../dto/update-channel.dto';
@@ -21,7 +21,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
 import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { AuthUser } from 'src/utils/decorators';
-import { User } from 'src/typeorm/user.entity';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
   CreateChannelDetails,
@@ -35,7 +34,7 @@ import {
 export class ChannelsController {
   constructor(
     @Inject(Services.Channels)
-    private readonly channelsService: ChannelsService,
+    private readonly channelsService: IChannelsService,
   ) {}
 
   @Post()
@@ -65,14 +64,17 @@ export class ChannelsController {
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  findOne(@Param('id') id: string) {
-    return this.channelsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.channelsService.findOne(id);
   }
 
   @Get(':id/members')
   @UseInterceptors(ClassSerializerInterceptor)
-  findMembers(@Param('id') id: string, @Paginate() query: PaginateQuery) {
-    return this.channelsService.findMembers(+id, query);
+  findMembers(
+    @Param('id', ParseIntPipe) id: number,
+    @Paginate() query: PaginateQuery,
+  ) {
+    return this.channelsService.findMembers(id, query);
   }
 
   @Patch(':id')
@@ -81,7 +83,7 @@ export class ChannelsController {
     FileFieldsInterceptor(imagesFileFields),
   )
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateChannelDto: UpdateChannelDto,
     @UploadedFiles() files: ImagesFiles,
     @AuthUser() user: JwtUser,
@@ -91,12 +93,12 @@ export class ChannelsController {
       avatar: files?.avatar?.[0],
       banner: files?.banner?.[0],
     };
-    return this.channelsService.update(+id, details, user);
+    return this.channelsService.update(id, details, user);
   }
 
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  remove(@Param('id') id: string, @AuthUser() user: JwtUser) {
-    return this.channelsService.remove(+id, user);
+  remove(@Param('id', ParseIntPipe) id: number, @AuthUser() user: JwtUser) {
+    return this.channelsService.remove(id, user);
   }
 }
