@@ -6,7 +6,10 @@ export enum Routes {
   FRIENDLIST = 'friendlist',
   NOTIFICATION = 'notification',
   ACHIEVEMENT = 'Achievement',
+<<<<<<< HEAD
   CHANNELS = 'channels',
+=======
+>>>>>>> f2aee2a (match history has been added)
   MATCH_HISTORY = 'match_history',
 }
 
@@ -22,9 +25,12 @@ export enum Services {
   Channels = 'CHANNELS_SERVICE',
   Game = 'GAME_SERVICE',
   MatchHistory = 'MATCH_HISTORY',
+<<<<<<< HEAD
 =======
   Game = 'GAME_SERVICE',
 >>>>>>> ccf63eb (game init)
+=======
+>>>>>>> f2aee2a (match history has been added)
 }
 
 export enum Namespaces {
@@ -43,4 +49,10 @@ export enum WebSocketEvents {
   Spectators = 'spectators',
 =======
 >>>>>>> ccf63eb (game init)
+}
+
+export enum WebSocketEvents {
+  Lobby = 'lobby',
+  InGame = 'ingame',
+  Spectators = 'spectators',
 }

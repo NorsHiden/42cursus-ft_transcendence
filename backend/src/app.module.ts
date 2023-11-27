@@ -9,7 +9,10 @@ import { NotificationModule } from './notification/notification.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { MatchHistoryModule } from './match_history/match_history.module';
+<<<<<<< HEAD
 import { ChannelsModule } from './channels/channels.module';
+=======
+>>>>>>> f2aee2a (match history has been added)
 
 const configService = new ConfigService();
 

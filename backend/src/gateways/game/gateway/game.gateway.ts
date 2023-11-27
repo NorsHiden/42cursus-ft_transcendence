@@ -18,10 +18,14 @@ import {
 } from '@nestjs/websockets';
 import { Inject, UseGuards } from '@nestjs/common';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Namespaces, Services, WebSocketEvents } from 'src/utils/consts';
 =======
 import { Namespaces, Services } from 'src/utils/consts';
 >>>>>>> 095bd02 (game_modes has been added.)
+=======
+import { Namespaces, Services, WebSocketEvents } from 'src/utils/consts';
+>>>>>>> f2aee2a (match history has been added)
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';
@@ -60,7 +64,6 @@ import { Server } from 'socket.io';
 import { Server, Socket } from 'socket.io';
 >>>>>>> 9c25fe2 (joining rooms)
 import { WebSocketServer } from '@nestjs/websockets';
-import { GameData } from '../types/GameData.type';
 
 @WebSocketGateway({
   namespace: Namespaces.Game,
@@ -135,6 +138,7 @@ export class GameGateway {
   }
 
   @SubscribeMessage(WebSocketEvents.InGame)
+<<<<<<< HEAD
   async manageInGame(
     @ConnectedSocket() client: Socket,
     @MessageBody('action') action: string,
@@ -263,17 +267,19 @@ export class GameGateway {
   }
 
   @SubscribeMessage('ingame')
+=======
+>>>>>>> f2aee2a (match history has been added)
   async manageInGame(
     @ConnectedSocket() client: Socket,
     @MessageBody('action') action: string,
     @MessageBody('game_id') game_id: string,
   ) {
     if (action != 'UP' && action != 'DOWN' && action != 'JOIN')
-      throw new WsException('Action Not Found');
+      throw new WsException('Invalid Action');
     return await this.gameService.manageInGame(client, action, game_id);
   }
 
-  @SubscribeMessage('spectators')
+  @SubscribeMessage(WebSocketEvents.Spectators)
   async manageSpectators() {}
 >>>>>>> 0232c7e (game init)
 }
