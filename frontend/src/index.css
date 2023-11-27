@@ -4,11 +4,14 @@
 
 @layer utilities {
   .empty {
-    background-color: #1e1f23;
-    border: 1px solid #2c2d33;
+    @apply bg-black border border-darkGray;
   }
-  
+
   .center {
     @apply flex justify-center items-center;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }

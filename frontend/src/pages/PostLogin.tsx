@@ -1,11 +1,12 @@
+import React from 'react';
 import { useLoaderData } from 'react-router';
 import axios from 'axios';
 
 import logo from '/logo.svg';
 import illustation from '@assets/images/illustration.svg';
-import { AvatarInput, UserForm, usePostLogin } from '@components/PostLogin/index';
+import { AvatarInput, UserForm, usePostLogin } from '@components/PostLogin';
 
-export async function postLoginLoader() {
+export const postLoginLoader = async () => {
   const searchParams = new URLSearchParams(window.location.search);
   const username = searchParams.get('username');
   const display_name = searchParams.get('display_name');
@@ -41,7 +42,7 @@ export async function postLoginLoader() {
   } catch (error) {
     throw new Error('Failed to load user');
   }
-}
+};
 
 export type userData = {
   username: string;
@@ -52,21 +53,21 @@ export type userData = {
   };
 };
 
-function PostLogin() {
+const PostLogin: React.FC = () => {
   const data = useLoaderData() as userData;
   const { NewUser, handleInput, handlesubmit, handleUpload, isSubmitting } = usePostLogin(data);
 
   return (
     <div className="relative overflow-hidden">
-      <div className="absolute bottom-0 right-0  hidden lg:block w-[50%] h-full  z-10">
+      <div className="absolute bottom-0 bg-brown right-0 hidden lg:block w-1/2 h-full z-10">
         <img
           src={illustation}
           alt="Illustration"
-          className="relative  object-none w-full h-full transform  object-right-top "
+          className="relative object-none w-full h-full transform object-right-top"
         />
       </div>
-      <div className="grid relative lg:grid-cols-2 h-[100vh] w-[100vw] grid-cols-1  overflow-hidden">
-        <div id="login_section" className="w-full h-full  bg-background">
+      <div className="grid relative lg:grid-cols-2 h-screen w-screen grid-cols-1 overflow-hidden">
+        <div id="login_section" className="w-full h-full bg-black">
           <div id="logo" className="flex justify-center mt-5 sm:mt-7 md:mt-10 lg:mt-14 xl:mt-17">
             <img src={logo} alt="logo" className="w-32 sm:w-36 md:w-40 lg:w-44 xl:w-48" />
           </div>
@@ -82,13 +83,9 @@ function PostLogin() {
             </div>
           </div>
         </div>
-        <div
-          id="loginIlustration"
-          className="bottom-0 right-0  hidden lg:block w-full h-full bg-[#70311E]"
-        ></div>
       </div>
     </div>
   );
-}
+};
 
 export default PostLogin;
