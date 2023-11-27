@@ -6,6 +6,7 @@ export enum Routes {
   FRIENDLIST = 'friendlist',
   NOTIFICATION = 'notification',
   ACHIEVEMENT = 'Achievement',
+  MATCH_HISTORY = 'match_history',
 }
 
 export enum Services {
@@ -17,9 +18,16 @@ export enum Services {
   Gateways = 'GATEWAYS_SERVICE',
   Chat = 'CHAT_SERVICE',
   Game = 'GAME_SERVICE',
+  MatchHistory = 'MATCH_HISTORY',
 }
 
 export enum Namespaces {
   Chat = '/chat',
   Game = '/game',
+}
+
+export enum WebSocketEvents {
+  Lobby = 'lobby',
+  InGame = 'ingame',
+  Spectators = 'spectators',
 }

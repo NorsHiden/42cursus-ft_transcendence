@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
-import { Services } from 'src/utils/consts';
+import { Services, WebSocketEvents } from 'src/utils/consts';
 import { Socket, Server } from 'socket.io';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
@@ -10,6 +10,8 @@ import { Notification } from 'src/typeorm/notification.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
 import { InGame } from '../types/InGame.type';
 import { GameMode } from '../types/GameMode.type';
+import { IMatchHistoryService } from 'src/match_history/interfaces/match_history.interface';
+import { MatchHistory } from 'src/typeorm/match_history.entity';
 
 @Injectable()
 export class GameService {
@@ -24,6 +26,8 @@ export class GameService {
     private readonly usersService: IUsersService,
     @Inject(Services.Notification)
     private readonly notificationService: INotificationService,
+    @Inject(Services.MatchHistory)
+    private readonly matchHistoryService: IMatchHistoryService,
   ) {
     this.users = new Map();
     this.lobby = [];
@@ -486,13 +490,13 @@ export class GameService {
     return false;
   }
 
-  startGameLoop(server: Server, ingame: InGame) {
+  async startGameLoop(server: Server, ingame: InGame): Promise<void> {
     if (!ingame.game_data.home.is_ready || !ingame.game_data.away.is_ready)
       return;
     ingame.count += 1;
     if (this.countdown(server, ingame)) return;
     this.startRound(ingame);
-    if (this.endGame(server, ingame)) return;
+    if (await this.endGame(server, ingame)) return;
     server.in(ingame.id).emit(ingame.id, ingame.game_data);
   }
 
@@ -580,9 +584,27 @@ export class GameService {
     ingame.game_data.ball.is_hidden = false;
   }
 
-  endGame(server: Server, ingame: InGame): boolean {
+  async endGame(server: Server, ingame: InGame): Promise<boolean> {
     if (!ingame.game_data.is_finished) return false;
     server.in(ingame.id).emit(ingame.id, ingame.game_data);
+    const home = await this.usersService.getUser(ingame.home_player.id);
+    const away = await this.usersService.getUser(ingame.away_player.id);
+    const winner =
+      ingame.game_data.score.home > ingame.game_data.score.away ? home : away;
+    const loser =
+      ingame.game_data.score.home < ingame.game_data.score.away ? home : away;
+    winner.wins++;
+    loser.loses++;
+    // need to be continued tomorrow.
+    await this.matchHistoryService.setMatch({
+      home_player: home,
+      away_player: away,
+      home_score: ingame.game_data.score.home,
+      away_score: ingame.game_data.score.away,
+      created_at: ingame.created_at,
+      ended_at: new Date(),
+      game_mode: ingame.game_mode,
+    } as MatchHistory);
     clearInterval(ingame.interval_id);
     this.ingame = this.ingame.filter((game) => game.id != ingame.id);
   }

@@ -12,6 +12,7 @@ import { Friendlist } from './friendlist.entity';
 import { Notification } from './notification.entity';
 import { Achievement } from './achievement.entity';
 import { Exclude } from 'class-transformer';
+import { MatchHistory } from './match_history.entity';
 
 @Entity()
 export class User {
@@ -60,6 +61,18 @@ export class User {
 
   @ManyToMany((type) => Achievement, (achievement) => achievement.claimers)
   achievements: Achievement[];
+
+  @OneToMany(
+    (type) => MatchHistory,
+    (match_history) => match_history.home_player,
+  )
+  home_match_histories: MatchHistory[];
+
+  @OneToMany(
+    (type) => MatchHistory,
+    (match_history) => match_history.away_player,
+  )
+  away_match_histories: MatchHistory[];
 
   // Indicates whether the user's account has been verified.
   @Column({ default: false })
