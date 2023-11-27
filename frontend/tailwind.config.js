@@ -6,6 +6,20 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ }],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',
@@ -51,6 +65,7 @@ export default {
     },
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],
+      'inter': ['Inter', 'sans-serif'],
       serif: ['Rowdies', 'serif'],
       mono: ['ui-monospace', 'monospace'],
     },
@@ -68,19 +83,3 @@ export default {
   },
   plugins: [debugScreensPlugin],
 };
-
-/*
-
-
---background: #1B191D;
---cards: #1E1F23;
---icons: #5E6069;
---white: #FFFFFF;
---accent: #FE5821;
---green: #D5FF5C;
---blue: #3DFFFB;
---purple: #6B26FF;
---pink: #FF2695;
---red: #FF2633;
-
-*/

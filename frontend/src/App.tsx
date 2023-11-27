@@ -1,35 +1,43 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Toaster } from 'sonner';
+
 
 import Layout from '@pages/Layout';
 import Home from '@pages/Home';
-// import Login from '@pages/Login';
-// import PostLogin from '@pages/PostLogin';
+import Login from '@pages/Login';
+import PostLogin from '@pages/PostLogin';
+import { postLoginLoader } from '@pages/PostLogin';
 
 const router = createBrowserRouter([
   {
-    // path: '/',
+    path: '/',
     element: <Layout />,
     children: [
       {
-        index: true,
-        // path: '/home',
+        path: '/home',
         element: <Home />,
       },
     ],
   },
-  // {
-  //   path: '/login',
-  //   element: <Login />,
-  // },
-  // {
-  //   path: '/postLogin',
-  //   element: <PostLogin />,
-  // },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/postlogin',
+    loader:postLoginLoader,
+    element: <PostLogin />,
+  },
 ]);
 
 const App: React.FC = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <Toaster richColors/>
+      <RouterProvider router={router} />
+    </>
+  );
 };
 
 export default App;
