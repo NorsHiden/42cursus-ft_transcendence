@@ -276,10 +276,24 @@ export class GameGateway {
   ) {
     if (action != 'UP' && action != 'DOWN' && action != 'JOIN')
       throw new WsException('Invalid Action');
-    return await this.gameService.manageInGame(client, action, game_id);
+    return await this.gameService.manageInGame(
+      client,
+      this.server,
+      action,
+      game_id,
+    );
   }
 
   @SubscribeMessage(WebSocketEvents.Spectators)
+<<<<<<< HEAD
   async manageSpectators() {}
 >>>>>>> 0232c7e (game init)
+=======
+  manageSpectators(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('game_id') game_id: string,
+  ) {
+    return this.gameService.getSpectators(client, game_id);
+  }
+>>>>>>> b96f429 (spectators)
 }

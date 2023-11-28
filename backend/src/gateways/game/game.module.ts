@@ -51,14 +51,24 @@ import { GameGateway } from './gateway/game.gateway';
 import { UsersModule } from 'src/users/users.module';
 import { NotificationModule } from 'src/notification/notification.module';
 import { MatchHistoryModule } from 'src/match_history/match_history.module';
+import { AchievementModule } from 'src/achievement/achievement.module';
 
 @Module({
+<<<<<<< HEAD
 <<<<<<< HEAD
   imports: [UsersModule, NotificationModule],
 >>>>>>> fce8b4b (Invitation Process)
 =======
   imports: [UsersModule, NotificationModule, MatchHistoryModule],
 >>>>>>> f2aee2a (match history has been added)
+=======
+  imports: [
+    UsersModule,
+    NotificationModule,
+    MatchHistoryModule,
+    AchievementModule,
+  ],
+>>>>>>> b96f429 (spectators)
   providers: [
     {
       provide: Services.Game,

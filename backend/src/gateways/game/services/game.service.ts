@@ -23,6 +23,7 @@ import { GameMode } from '../types/GameMode.type';
 import { IMatchHistoryService } from 'src/match_history/interfaces/match_history.interface';
 import { MatchHistory } from 'src/typeorm/match_history.entity';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 =======
 import { Services } from 'src/utils/consts';
@@ -53,6 +54,9 @@ import { GameMode } from '../types/GameMode.type';
 >>>>>>> 095bd02 (game_modes has been added.)
 =======
 >>>>>>> f2aee2a (match history has been added)
+=======
+import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
+>>>>>>> b96f429 (spectators)
 
 @Injectable()
 export class GameService {
@@ -69,6 +73,9 @@ export class GameService {
     private readonly notificationService: INotificationService,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b96f429 (spectators)
     @Inject(Services.Achievement)
     private readonly achievementService: IAchievementService,
     @Inject(Services.MatchHistory)
@@ -106,9 +113,13 @@ export class GameService {
   // Asynchronously handle a client disconnection
   async closeConnection(client: Socket): Promise<void> {
 <<<<<<< HEAD
+<<<<<<< HEAD
     this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+    this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
+>>>>>>> b96f429 (spectators)
     this.ingame.forEach((game) => {
       const specIndex = game.spectators.findIndex(
         (spec) => spec.id == this.users.get(client.id),
@@ -117,6 +128,7 @@ export class GameService {
         game.spectators = game.spectators.splice(specIndex, 1);
     });
     this.users.delete(client.id);
+<<<<<<< HEAD
 =======
     const interval_id = this.ingame.find(
       (game) => game.home_player.socket.id == client.id,
@@ -126,6 +138,8 @@ export class GameService {
 >>>>>>> d68e69d (game mechanics)
 =======
 >>>>>>> bb4c479 (before game)
+=======
+>>>>>>> b96f429 (spectators)
     client.disconnect();
   }
   getId(client_id: string): string {
@@ -1220,7 +1234,6 @@ export class GameService {
       home_player: opponent,
       away_player: clientLobby,
       created_at: new Date(),
-      end_at: undefined,
       game_mode: opponent.game_mode,
       spectators: [],
       count: 0,
@@ -1263,16 +1276,47 @@ export class GameService {
       action != 'CANCEL'
     )
       throw new WsException('Action Not Found');
+
     if (action == 'CANCEL') return this.leaveLobby(client);
+
+    const user = await this.getUser(this.users.get(client.id));
+
+    // if (this.lobby.find((lobbyUser) => lobbyUser.id == user.id))
+    //   throw new WsException('Already In Lobby');
+
+    const game = this.ingame.find(
+      (game) =>
+        game.home_player.id == user.id || game.away_player.id == user.id,
+    );
+
+    if (game) {
+      client.emit(WebSocketEvents.Lobby, {
+        state: 'MATCH_FOUND',
+        game_id: game.id,
+        message: 'Game has been found.',
+      });
+      return;
+    }
+
+    if (game_mode == GameMode.GOLD_RUSH && user.points < 300)
+      throw new WsException('Not Enough Points');
+
     const opponent = this.findOpponent(target_id, action, game_mode);
+
     if (!opponent && action != 'ACCEPT')
       return await this.joinLobby(client, action, target_id, game_mode);
+
     if (!opponent && action == 'ACCEPT')
       throw new WsException("Inviter doesn't exist");
+
     return await this.createGame(client, server, opponent);
   }
 
-  async joinGame(client: Socket, inGameIndex: number): Promise<void> {
+  async joinGame(
+    client: Socket,
+    server: Server,
+    inGameIndex: number,
+  ): Promise<void> {
     if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
       this.ingame[inGameIndex].game_data.home.is_ready = true;
     if (this.users.get(client.id) === this.ingame[inGameIndex].away_player.id)
@@ -1281,20 +1325,34 @@ export class GameService {
       const spectator = await this.usersService.getUser(
         this.users.get(client.id),
       );
-      this.ingame[inGameIndex].spectators.push({
-        id: spectator.id,
-        display_name: spectator.display_name,
-        avatar: spectator.profile.avatar,
+      if (
+        !this.ingame[inGameIndex].spectators.find(
+          (spec) => spec.id == spectator.id,
+        )
+      )
+        this.ingame[inGameIndex].spectators.push({
+          id: spectator.id,
+          display_name: spectator.display_name,
+          avatar: spectator.profile.avatar,
+        });
+      server.in(this.ingame[inGameIndex].id).emit('spectators', {
+        spectators: this.ingame[inGameIndex].spectators,
       });
     }
     client.join(this.ingame[inGameIndex].id);
   }
 
-  async manageInGame(client: Socket, action: string, game_id: string) {
+  async manageInGame(
+    client: Socket,
+    server: Server,
+    action: string,
+    game_id: string,
+  ) {
     const inGameIndex = this.ingame.findIndex((game) => game.id == game_id);
     if (inGameIndex < 0) throw new WsException('Game Not Found');
 
-    if (action == 'JOIN') return await this.joinGame(client, inGameIndex);
+    if (action == 'JOIN')
+      return await this.joinGame(client, server, inGameIndex);
 
     const updatePlayerPosition = (player: { y: number }, action: string) => {
       if (this.ingame[inGameIndex].is_reversed) {
@@ -1325,7 +1383,11 @@ export class GameService {
   }
 
   async startGameLoop(server: Server, ingame: InGame): Promise<void> {
-    if (!ingame.game_data.home.is_ready || !ingame.game_data.away.is_ready)
+    if (
+      !ingame.game_data.home.is_ready ||
+      !ingame.game_data.away.is_ready ||
+      ingame.game_data.is_finished
+    )
       return;
     ingame.count += 1;
     if (this.countdown(server, ingame)) return;
@@ -1429,7 +1491,15 @@ export class GameService {
       ingame.game_data.score.home < ingame.game_data.score.away ? home : away;
     winner.wins++;
     loser.loses++;
-    // need to be continued tomorrow.
+    if (ingame.game_mode == GameMode.REGULAR) winner.points += 50;
+    else if (ingame.game_mode == GameMode.VANISH) winner.points += 70;
+    else if (ingame.game_mode == GameMode.CURSED) winner.points += 100;
+    else if (ingame.game_mode == GameMode.GOLD_RUSH) {
+      winner.points += 400;
+      loser.points -= 300;
+    }
+    await this.usersService.setUser(winner);
+    await this.usersService.setUser(loser);
     await this.matchHistoryService.setMatch({
       home_player: home,
       away_player: away,
@@ -1440,7 +1510,32 @@ export class GameService {
       game_mode: ingame.game_mode,
     } as MatchHistory);
     clearInterval(ingame.interval_id);
+    await this.achievementService.setAchievement(winner.id, 'victory_lap');
+    await this.achievementService.setAchievement(winner.id, 'game_on');
+    await this.achievementService.setAchievement(loser.id, 'game_on');
+    if (ingame.home_player.id == loser.id && !ingame.game_data.score.home)
+      await this.achievementService.setAchievement(
+        winner.id,
+        'unbeatable_defender',
+      );
+    if (ingame.away_player.id == loser.id && !ingame.game_data.score.away)
+      await this.achievementService.setAchievement(
+        winner.id,
+        'unbeatable_defender',
+      );
+    if (winner.wins >= 10)
+      await this.achievementService.setAchievement(winner.id, 'pong_master');
     this.ingame = this.ingame.filter((game) => game.id != ingame.id);
+    return true;
+  }
+
+  getSpectators(client: Socket, game_id: string): void {
+    const ingame = this.ingame.find((game) => game.id == game_id);
+    if (!ingame) throw new WsException('Game Not Found');
+    client.emit('spectators', {
+      spectators: ingame.spectators,
+    });
+    return;
   }
 >>>>>>> 5281f6a (game mechanics)
 }

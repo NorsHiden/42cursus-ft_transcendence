@@ -33,6 +33,7 @@ export interface IGameService {
   );
   manageInGame(client: Socket, server: Server, action: string, game_id: string);
   getSpectators(client: Socket, game_id: string): void;
+<<<<<<< HEAD
 }
 =======
 export interface IGameService {}
@@ -76,6 +77,8 @@ export interface IGameService {
     game_mode: string,
   );
   manageInGame(client: Socket, action: string, game_id: string);
+=======
+>>>>>>> b96f429 (spectators)
 }
 >>>>>>> eeab70f (joining rooms)
 =======

@@ -29,7 +29,10 @@ export type InGame = {
   interval_id?: NodeJS.Timer;
   created_at: Date;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   end_at: Date;
 >>>>>>> d68e69d (game mechanics)
+=======
+>>>>>>> b96f429 (spectators)
 };
