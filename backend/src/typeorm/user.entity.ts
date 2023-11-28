@@ -12,10 +12,6 @@ import { Friendlist } from './friendlist.entity';
 import { Notification } from './notification.entity';
 import { Achievement } from './achievement.entity';
 import { Exclude } from 'class-transformer';
-<<<<<<< HEAD
-import { UserChannel } from './userchannel.entity';
-=======
->>>>>>> f2aee2a (match history has been added)
 import { MatchHistory } from './match_history.entity';
 
 @Entity()

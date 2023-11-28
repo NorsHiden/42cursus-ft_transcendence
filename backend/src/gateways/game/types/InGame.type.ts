@@ -10,29 +10,11 @@ export type InGame = {
     display_name: string;
     avatar: string;
   }[];
-<<<<<<< HEAD
-<<<<<<< HEAD
   count: number;
   round: number;
   is_reversed: boolean;
-<<<<<<< HEAD
-=======
->>>>>>> d68e69d (game mechanics)
-=======
-  count: number;
-  round: number;
->>>>>>> 5281f6a (game mechanics)
-=======
->>>>>>> 095bd02 (game_modes has been added.)
   game_data: GameData;
   game_mode: string;
   interval_id?: NodeJS.Timer;
   created_at: Date;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  end_at: Date;
->>>>>>> d68e69d (game mechanics)
-=======
->>>>>>> b96f429 (spectators)
 };
