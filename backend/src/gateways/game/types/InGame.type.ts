@@ -17,5 +17,4 @@ export type InGame = {
   game_mode: string;
   interval_id?: NodeJS.Timer;
   created_at: Date;
-  end_at: Date;
 };
