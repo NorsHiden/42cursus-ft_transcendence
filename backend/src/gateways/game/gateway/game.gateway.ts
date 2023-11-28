@@ -35,7 +35,7 @@ export class GameGateway {
 
   // Event handler for when a client disconnects from the WebSocket server
   async handleDisconnect(client: Socket) {
-    await this.gameService.closeConnection(client);
+    await this.gameService.closeConnection(client, this.server);
   }
 
   @SubscribeMessage(WebSocketEvents.Lobby)

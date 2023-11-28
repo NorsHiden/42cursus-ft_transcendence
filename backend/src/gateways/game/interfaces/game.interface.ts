@@ -3,7 +3,7 @@ import { User } from 'src/typeorm/user.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
 export interface IGameService {
   handleConnection(client: Socket): Promise<void>;
-  closeConnection(client: Socket): Promise<void>;
+  closeConnection(client: Socket, server: Server): Promise<void>;
   getId(id: string): number;
   getUser(user_id: string): Promise<User>;
   createGame(client: Socket, opponent: LobbyUser): Promise<void>;

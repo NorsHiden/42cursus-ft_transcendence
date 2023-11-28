@@ -48,7 +48,7 @@ export class GameService {
   }
 
   // Asynchronously handle a client disconnection
-  async closeConnection(client: Socket): Promise<void> {
+  async closeConnection(client: Socket, server: Server): Promise<void> {
     this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
     this.ingame.forEach((game) => {
       const specIndex = game.spectators.findIndex(
@@ -56,6 +56,9 @@ export class GameService {
       );
       if (specIndex > -1)
         game.spectators = game.spectators.splice(specIndex, 1);
+      server.in(game.id).emit('spectators', {
+        spectators: game.spectators,
+      });
     });
     this.users.delete(client.id);
     client.disconnect();
@@ -217,14 +220,14 @@ export class GameService {
       action != 'ACCEPT' &&
       action != 'CANCEL'
     )
-      throw new WsException('Action Not Found');
+      throw new WsException('Invalid Action');
 
     if (action == 'CANCEL') return this.leaveLobby(client);
 
     const user = await this.getUser(this.users.get(client.id));
 
-    // if (this.lobby.find((lobbyUser) => lobbyUser.id == user.id))
-    //   throw new WsException('Already In Lobby');
+    if (this.lobby.find((lobbyUser) => lobbyUser.id == user.id))
+      throw new WsException('Already In Lobby');
 
     const game = this.ingame.find(
       (game) =>
