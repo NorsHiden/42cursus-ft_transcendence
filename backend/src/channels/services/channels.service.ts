@@ -63,6 +63,7 @@ export class ChannelsService implements IChannelsService {
       user: owner,
       channel: channel,
     });
+
     this.userChannelRepository.save(userChannel);
 
     return channel;
@@ -108,7 +109,7 @@ export class ChannelsService implements IChannelsService {
   }
 
   public async findOne(id: number): Promise<Channel> {
-    const channel: Channel = await this.channelRepository
+    const channel = await this.channelRepository
       .createQueryBuilder('channel')
       .leftJoinAndSelect('channel.members', 'members')
       .leftJoinAndSelect('members.user', 'user')
@@ -165,9 +166,7 @@ export class ChannelsService implements IChannelsService {
     details: UpdateChannelDetails,
     user: JwtUser,
   ): Promise<Channel> {
-    const channel = await this.findOne(id);
-
-    if (this.isRole(channel, user, 'owner') === false) {
+    if ((await this.isRole(id, user, 'owner')) === false) {
       throw new UnauthorizedException('You cannot update this channel.');
     }
 
@@ -187,22 +186,23 @@ export class ChannelsService implements IChannelsService {
       banner: details.banner?.path?.slice(2),
     });
 
-    const updatedChannel = await this.channelRepository
+    await this.channelRepository
       .createQueryBuilder('channel')
       .update(newChannel)
       .where('id = :id', { id })
-      .returning('*')
       .execute();
 
-    return updatedChannel.raw[0];
+    let updatedChannel = await this.findOne(id);
+
+    return updatedChannel;
   }
 
   public async remove(id: number, user: JwtUser): Promise<Channel> {
-    const channel = await this.findOne(id);
-
-    if (this.isRole(channel, user, 'owner') === false) {
+    if ((await this.isRole(id, user, 'owner')) === false) {
       throw new UnauthorizedException('You cannot delete this channel.');
     }
+
+    const channel = await this.findOne(id);
 
     const deletedChannel = await this.channelRepository.remove(channel);
     return deletedChannel;
@@ -213,7 +213,20 @@ export class ChannelsService implements IChannelsService {
     return await bcrypt.hash(password, salt);
   }
 
-  private isRole(channel: Channel, user: JwtUser, role: string): boolean {
+  private async isRole(
+    channelId: number,
+    user: JwtUser,
+    role: string,
+  ): Promise<boolean> {
+    const channel = await this.channelRepository
+      .createQueryBuilder('channel')
+      .leftJoinAndSelect('channel.members', 'members')
+      .leftJoinAndSelect('members.user', 'user')
+      .where('channel.id = :id', { id: channelId })
+      .getOne();
+
+    console.log(channelId);
+
     return channel.members.some(
       (member) => member.user.id === user.sub && member.role === role,
     );
