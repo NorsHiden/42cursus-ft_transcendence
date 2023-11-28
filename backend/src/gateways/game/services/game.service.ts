@@ -69,425 +69,247 @@ export class GameService {
     try {
       return await this.usersService.getUser(user_id);
     } catch (e) {
-      return null;
+      throw new WsException('User Not Found');
     }
   }
 
-  async inviteFriend(client: Socket, target_id: string, game_mode: string) {
-    const user = await this.usersService.getFriends(this.users[client.id]);
-    const target = await this.getUser(target_id);
-    if (!target)
-      return {
-        action: 'NOT_FOUND',
-        message: "Invited User Doesn't Exist",
-      };
-    // if (!user.friendlist.friends.find((friend) => friend.id == target.id))
-    //   return {
-    //     action: 'NOT_FOUND',
-    //     message: 'Friend Not Found',
-    //   };
+  findOpponent(
+    target_id: string,
+    action: string,
+    game_mode: string,
+  ): LobbyUser {
+    if (action == 'ACCEPT')
+      return this.lobby.find((user) => user.id == target_id && user.invitation);
+    if (action == 'SEARCH')
+      return this.lobby.find((user) => user.game_mode == game_mode);
+    return null;
+  }
 
-    // Prepare client lobby information
-    const clientLobby = {
-      id: client.id,
+  async leaveLobby(client: Socket): Promise<void> {
+    this.lobby = this.lobby.filter((user) => user.socket.id != client.id);
+    client.emit(WebSocketEvents.Lobby, {
+      message: "You've left the lobby",
+    });
+  }
+
+  async joinLobby(
+    client: Socket,
+    action: string,
+    target_id: string,
+    game_mode: string,
+  ): Promise<void> {
+    this.lobby.push({
+      id: this.users.get(client.id),
       socket: client,
       game_mode: game_mode,
-      score_points: 0,
-      invited: true,
-    };
-    if (this.lobby.find((user) => user.id == client.id))
-      return {
-        action: 'ALREADY_INLOBBY',
-        message: "You're Already In Lobby",
-      };
-    this.lobby.push(clientLobby);
-    this.notificationService.addNotification(target.id, {
-      action: 'GAME_REQUEST',
-      recipient: target,
-      sender: user,
-    } as Notification);
+      invitation: action == 'INVITE' ? true : false,
+    });
+    if (action == 'INVITE')
+      await this.notificationService.addNotification(target_id, {
+        recipient: await this.getUser(this.users.get(client.id)),
+        sender: await this.getUser(target_id),
+        action: 'GAME_REQUEST',
+      } as Notification);
+    client.emit(WebSocketEvents.Lobby, {
+      state: 'WAITING',
+      message: 'Waiting for the opponent...',
+    });
+  }
+
+  async initGame(home: LobbyUser, away: LobbyUser) {
+    const home_user = await this.usersService.getUser(home.id);
+    const away_user = await this.usersService.getUser(away.id);
+
     return {
-      action: 'LOBBY',
-      message: `Wating For ${target.username}...`,
+      home: {
+        avatar: home_user.profile.avatar,
+        display_name: home_user.display_name,
+        width: 2,
+        height: 20,
+        x: 0,
+        y: 50 - 20 / 2, // y_pos - (height/2)
+        is_ready: false,
+      },
+      away: {
+        avatar: away_user.profile.avatar,
+        display_name: away_user.display_name,
+        width: 2,
+        height: 20,
+        x: 98, // x_pos - width
+        y: 50 - 20 / 2, // y_pos - (height/2)
+        is_ready: false,
+      },
+      ball: {
+        is_hidden: false,
+        x: 50,
+        y: 50,
+        speed: {
+          x: Math.random() >= 0.5 ? 0.7 : -0.7,
+          y: Math.random(),
+        },
+        radius: 2,
+      },
+      mode: home.game_mode,
+      score: {
+        home: 0,
+        away: 0,
+      },
+      will_reverse: false,
+      ready_timer: 3,
+      is_finished: false,
     };
   }
 
-  cancelLobby(client_id: string) {
-    this.lobby = this.lobby.filter((user) => user.id != client_id);
-    return {
-      action: 'CANCEL',
-      message: "You've Been Removed From The Lobby",
-    };
-  }
-
-  // Find a lobby for a client based on game mode
-  findLobby(client: Socket, server: Server, game_mode: string) {
-    // Check if the client is already in a game
-    if (
-      this.ingame.find(
-        (game) =>
-          game.home_player.id == client.id || game.away_player.id == client.id,
-      )
-    )
-      return {
-        action: 'ALREADY_INGAME',
-        message: 'You are already in a game.',
-      };
-
-    // Find an opponent in the lobby with the same game mode
-    const opponent = this.lobby.find(
-      (opponent) =>
-        game_mode === opponent.game_mode &&
-        client.id !== opponent.id &&
-        !opponent.invited,
-    );
-
-    // Prepare client lobby information
+  async createGame(
+    client: Socket,
+    server: Server,
+    opponent: LobbyUser,
+  ): Promise<void> {
     const clientLobby = {
-      id: client.id,
+      id: this.users.get(client.id),
       socket: client,
-      game_mode: game_mode,
-      score_points: 0,
+      game_mode: opponent.game_mode,
+      invitation: false,
     };
-
-    // If no opponent found, add the client to the lobby
-    if (!opponent) {
-      this.lobby.push(clientLobby);
-      return {
-        action: 'LOBBY',
-        message: 'Looking for an opponent...',
-      };
-    }
-
-    // If opponent found, create a new game and remove both players from the lobby
     const createdGame: InGame = {
-      id: `${opponent.id}${client.id}`,
+      id: `${opponent.socket.id}${client.id}`,
       home_player: opponent,
       away_player: clientLobby,
-      spectators: [],
-      game_mode: game_mode,
       created_at: new Date(),
-      end_at: undefined,
+      game_mode: opponent.game_mode,
+      spectators: [],
+      count: 0,
+      round: 0,
+      is_reversed: false,
+      game_data: await this.initGame(opponent, clientLobby),
     };
     this.ingame.push(createdGame);
-    client.join(createdGame.id);
-    opponent.socket.join(createdGame.id);
-
-    // Notify the opponent about the match found
-    const matchFound = {
-      action: 'MATCH_FOUND',
-      message: 'Match Found',
-      game_id: createdGame.id,
-    };
-    server.to(opponent.socket.id).emit('lobby', matchFound);
-
-    // Remove players from the lobby
-    this.lobby = this.lobby.filter((user) => user.id != opponent.id);
-
-    // Return match details
-    return matchFound;
-  }
-
-  // Allow a client to spectate an existing game
-  spectateGame(client: Socket, server: Server, game_id: string) {
-    // Find the index of the game in the 'ingame' array
-    const gameIndex = this.ingame.findIndex((game) => game.id == game_id);
-
-    // If the game is not found, return an error response
-    if (gameIndex < 0)
-      return {
-        action: 'NOT_FOUND',
-        message: 'Game Not Found.',
-      };
-
-    // Add the client as a spectator to the game and join the client to the game room
-    this.ingame[gameIndex].spectators.push({
-      id: client.id,
+    this.lobby = this.lobby.filter(
+      (user) =>
+        user.socket.id != client.id && user.socket.id != opponent.socket.id,
+    );
+    createdGame.interval_id = setInterval(
+      async () => await this.startGameLoop(server, createdGame),
+      1000 / 60,
+    );
+    opponent.socket.emit(WebSocketEvents.Lobby, {
+      state: 'MATCH_FOUND',
+      game_id: `${opponent.socket.id}${client.id}`,
+      message: 'Game has been created.',
     });
-    client.join(game_id);
-
-    // Return a response indicating successful spectating
-    return {
-      action: 'SPECTATE',
-      message: 'Match Found',
-      game_id: game_id,
-    };
+    client.emit(WebSocketEvents.Lobby, {
+      state: 'MATCH_FOUND',
+      game_id: `${opponent.socket.id}${client.id}`,
+      message: 'Game has been created.',
+    });
   }
 
-  // Find a lobby for a client based on game mode
-  findLobby(client: Socket, server: Server, game_mode: string) {
-    // Check if the client is already in a game
+  async manageLobby(
+    client: Socket,
+    server: Server,
+    action: string,
+    target_id: string,
+    game_mode: string,
+  ) {
     if (
-      this.ingame.find(
-        (game) =>
-          game.home_player.id == client.id || game.away_player.id == client.id,
-      )
+      action != 'SEARCH' &&
+      action != 'INVITE' &&
+      action != 'ACCEPT' &&
+      action != 'CANCEL'
     )
-      return {
-        action: 'ALREADY_INGAME',
-        message: 'You are already in a game.',
-      };
+      throw new WsException('Action Not Found');
 
-    // Find an opponent in the lobby with the same game mode
-    const opponent = this.lobby.find(
-      (opponent) =>
-        game_mode === opponent.game_mode && client.id !== opponent.id,
+    if (action == 'CANCEL') return this.leaveLobby(client);
+
+    const user = await this.getUser(this.users.get(client.id));
+
+    // if (this.lobby.find((lobbyUser) => lobbyUser.id == user.id))
+    //   throw new WsException('Already In Lobby');
+
+    const game = this.ingame.find(
+      (game) =>
+        game.home_player.id == user.id || game.away_player.id == user.id,
     );
 
-    // Prepare client lobby information
-    const clientLobby = {
-      id: client.id,
-      socket: client,
-      game_mode: game_mode,
-      score_points: 0,
-    };
-
-    // If no opponent found, add the client to the lobby
-    if (!opponent) {
-      this.lobby.push(clientLobby);
-      return {
-        action: 'LOBBY',
-        message: 'Looking for an opponent...',
-      };
+    if (game) {
+      client.emit(WebSocketEvents.Lobby, {
+        state: 'MATCH_FOUND',
+        game_id: game.id,
+        message: 'Game has been found.',
+      });
+      return;
     }
 
-    // If opponent found, create a new game and remove both players from the lobby
-    const createdGame: InGame = {
-      id: `${opponent.id}${client.id}`,
-      home_player: opponent,
-      away_player: clientLobby,
-      spectators: [],
-      game_mode: game_mode,
-      created_at: new Date(),
-      end_at: undefined,
-    };
-    this.ingame.push(createdGame);
-    client.join(createdGame.id);
-    opponent.socket.join(createdGame.id);
+    if (game_mode == GameMode.GOLD_RUSH && user.points < 300)
+      throw new WsException('Not Enough Points');
 
-    // Notify the opponent about the match found
-    const matchFound = {
-      action: 'MATCH_FOUND',
-      message: 'Match Found',
-      game_id: createdGame.id,
-    };
-    server.to(opponent.socket.id).emit('lobby', matchFound);
+    const opponent = this.findOpponent(target_id, action, game_mode);
 
-    // Remove players from the lobby
-    this.lobby = this.lobby.filter((user) => user.id != opponent.id);
+    if (!opponent && action != 'ACCEPT')
+      return await this.joinLobby(client, action, target_id, game_mode);
 
-    // Return match details
-    return matchFound;
+    if (!opponent && action == 'ACCEPT')
+      throw new WsException("Inviter doesn't exist");
+
+    return await this.createGame(client, server, opponent);
   }
 
-  // Allow a client to spectate an existing game
-  spectateGame(client: Socket, server: Server, game_id: string) {
-    // Find the index of the game in the 'ingame' array
-    const gameIndex = this.ingame.findIndex((game) => game.id == game_id);
-
-    // If the game is not found, return an error response
-    if (gameIndex < 0)
-      return {
-        action: 'NOT_FOUND',
-        message: 'Game Not Found.',
-      };
-
-    // Add the client as a spectator to the game and join the client to the game room
-    this.ingame[gameIndex].spectators.push({
-      id: client.id,
-    });
-    client.join(game_id);
-
-    // Return a response indicating successful spectating
-    return {
-      action: 'SPECTATE',
-      message: 'Match Found',
-      game_id: game_id,
-    };
-  }
-
-  // Find a lobby for a client based on game mode
-  findLobby(client: Socket, server: Server, game_mode: string) {
-    // Check if the client is already in a game
-    if (
-      this.ingame.find(
-        (game) =>
-          game.home_player.id == client.id || game.away_player.id == client.id,
+  async joinGame(
+    client: Socket,
+    server: Server,
+    inGameIndex: number,
+  ): Promise<void> {
+    if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
+      this.ingame[inGameIndex].game_data.home.is_ready = true;
+    if (this.users.get(client.id) === this.ingame[inGameIndex].away_player.id)
+      this.ingame[inGameIndex].game_data.away.is_ready = true;
+    else {
+      const spectator = await this.usersService.getUser(
+        this.users.get(client.id),
+      );
+      if (
+        !this.ingame[inGameIndex].spectators.find(
+          (spec) => spec.id == spectator.id,
+        )
       )
-    )
-      return {
-        action: 'ALREADY_INGAME',
-        message: 'You are already in a game.',
-      };
-
-    // Find an opponent in the lobby with the same game mode
-    const opponent = this.lobby.find(
-      (opponent) =>
-        game_mode === opponent.game_mode && client.id !== opponent.id,
-    );
-
-    // Prepare client lobby information
-    const clientLobby = {
-      id: client.id,
-      socket: client,
-      game_mode: game_mode,
-      score_points: 0,
-    };
-
-    // If no opponent found, add the client to the lobby
-    if (!opponent) {
-      this.lobby.push(clientLobby);
-      return {
-        action: 'LOBBY',
-        message: 'Looking for an opponent...',
-      };
+        this.ingame[inGameIndex].spectators.push({
+          id: spectator.id,
+          display_name: spectator.display_name,
+          avatar: spectator.profile.avatar,
+        });
+      server.in(this.ingame[inGameIndex].id).emit('spectators', {
+        spectators: this.ingame[inGameIndex].spectators,
+      });
     }
-
-    // If opponent found, create a new game and remove both players from the lobby
-    const createdGame: InGame = {
-      id: `${opponent.id}${client.id}`,
-      home_player: opponent,
-      away_player: clientLobby,
-      spectators: [],
-      game_mode: game_mode,
-      created_at: new Date(),
-      end_at: undefined,
-    };
-    this.ingame.push(createdGame);
-    client.join(createdGame.id);
-    opponent.socket.join(createdGame.id);
-
-    // Notify the opponent about the match found
-    const matchFound = {
-      action: 'MATCH_FOUND',
-      message: 'Match Found',
-      game_id: createdGame.id,
-    };
-    server.to(opponent.socket.id).emit('lobby', matchFound);
-
-    // Remove players from the lobby
-    this.lobby = this.lobby.filter((user) => user.id != opponent.id);
-
-    // Return match details
-    return matchFound;
+    client.join(this.ingame[inGameIndex].id);
   }
 
-  // Allow a client to spectate an existing game
-  spectateGame(client: Socket, server: Server, game_id: string) {
-    // Find the index of the game in the 'ingame' array
-    const gameIndex = this.ingame.findIndex((game) => game.id == game_id);
+  async manageInGame(
+    client: Socket,
+    server: Server,
+    action: string,
+    game_id: string,
+  ) {
+    const inGameIndex = this.ingame.findIndex((game) => game.id == game_id);
+    if (inGameIndex < 0) throw new WsException('Game Not Found');
 
-    // If the game is not found, return an error response
-    if (gameIndex < 0)
-      return {
-        action: 'NOT_FOUND',
-        message: 'Game Not Found.',
-      };
+    if (action == 'JOIN')
+      return await this.joinGame(client, server, inGameIndex);
 
-    // Add the client as a spectator to the game and join the client to the game room
-    this.ingame[gameIndex].spectators.push({
-      id: client.id,
-    });
-    client.join(game_id);
-
-    // Return a response indicating successful spectating
-    return {
-      action: 'SPECTATE',
-      message: 'Match Found',
-      game_id: game_id,
-    };
-  }
-
-  // Find a lobby for a client based on game mode
-  findLobby(client: Socket, server: Server, game_mode: string) {
-    // Check if the client is already in a game
-    if (
-      this.ingame.find(
-        (game) =>
-          game.home_player.id == client.id || game.away_player.id == client.id,
-      )
-    )
-      return {
-        action: 'ALREADY_INGAME',
-        message: 'You are already in a game.',
-      };
-
-    // Find an opponent in the lobby with the same game mode
-    const opponent = this.lobby.find(
-      (opponent) =>
-        game_mode === opponent.game_mode && client.id !== opponent.id,
-    );
-
-    // Prepare client lobby information
-    const clientLobby = {
-      id: client.id,
-      socket: client,
-      game_mode: game_mode,
-      score_points: 0,
+    const updatePlayerPosition = (player: { y: number }, action: string) => {
+      if (this.ingame[inGameIndex].is_reversed) {
+        if (action === 'UP' && player.y < 80) player.y += 2;
+        else if (action === 'DOWN' && player.y > 0) player.y -= 2;
+      } else {
+        if (action === 'UP' && player.y > 0) player.y -= 2;
+        else if (action === 'DOWN' && player.y < 80) player.y += 2;
+      }
     };
 
-    // If no opponent found, add the client to the lobby
-    if (!opponent) {
-      this.lobby.push(clientLobby);
-      return {
-        action: 'LOBBY',
-        message: 'Looking for an opponent...',
-      };
-    }
-
-    // If opponent found, create a new game and remove both players from the lobby
-    const createdGame: InGame = {
-      id: `${opponent.id}${client.id}`,
-      home_player: opponent,
-      away_player: clientLobby,
-      spectators: [],
-      game_mode: game_mode,
-      created_at: new Date(),
-      end_at: undefined,
-    };
-    this.ingame.push(createdGame);
-    client.join(createdGame.id);
-    opponent.socket.join(createdGame.id);
-
-    // Notify the opponent about the match found
-    const matchFound = {
-      action: 'MATCH_FOUND',
-      message: 'Match Found',
-      game_id: createdGame.id,
-    };
-    server.to(opponent.socket.id).emit('lobby', matchFound);
-
-    // Remove players from the lobby
-    this.lobby = this.lobby.filter((user) => user.id != opponent.id);
-
-    // Return match details
-    return matchFound;
-  }
-
-  // Allow a client to spectate an existing game
-  spectateGame(client: Socket, server: Server, game_id: string) {
-    // Find the index of the game in the 'ingame' array
-    const gameIndex = this.ingame.findIndex((game) => game.id == game_id);
-
-    // If the game is not found, return an error response
-    if (gameIndex < 0)
-      return {
-        action: 'NOT_FOUND',
-        message: 'Game Not Found.',
-      };
-
-    // Add the client as a spectator to the game and join the client to the game room
-    this.ingame[gameIndex].spectators.push({
-      id: client.id,
-    });
-    client.join(game_id);
-
-    // Return a response indicating successful spectating
-    return {
-      action: 'SPECTATE',
-      message: 'Match Found',
-      game_id: game_id,
-    };
+    if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
+      updatePlayerPosition(this.ingame[inGameIndex].game_data.home, action);
+    if (this.users.get(client.id) === this.ingame[inGameIndex].away_player.id)
+      updatePlayerPosition(this.ingame[inGameIndex].game_data.away, action);
   }
 
   countdown(server: Server, ingame: InGame) {
