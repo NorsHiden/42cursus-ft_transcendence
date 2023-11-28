@@ -12,6 +12,7 @@ import { JwtPayload } from 'src/utils/types';
 export interface IUsersService {
   // get user without relations
   getUser(user_id: string): Promise<User>;
+  getUserByUsername(username: string): Promise<User>;
   setUser(user: User): Promise<User>;
   createUser(user: UserDto): Promise<User>;
   findUserByEmail(email: string): Promise<User>;
