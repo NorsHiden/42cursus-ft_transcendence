@@ -22,5 +22,6 @@ export interface IGameService {
     target_id: string,
     game_mode: string,
   );
-  manageInGame(client: Socket, action: string, game_id: string);
+  manageInGame(client: Socket, server: Server, action: string, game_id: string);
+  getSpectators(client: Socket, game_id: string): void;
 }
