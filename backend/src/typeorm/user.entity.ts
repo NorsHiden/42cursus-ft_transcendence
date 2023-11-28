@@ -12,6 +12,7 @@ import { Friendlist } from './friendlist.entity';
 import { Notification } from './notification.entity';
 import { Achievement } from './achievement.entity';
 import { Exclude } from 'class-transformer';
+import { UserChannel } from './userchannel.entity';
 import { MatchHistory } from './match_history.entity';
 
 @Entity()

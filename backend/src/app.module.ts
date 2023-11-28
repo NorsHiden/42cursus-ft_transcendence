@@ -6,9 +6,8 @@ import { UsersModule } from './users/users.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { FriendlistModule } from './friendlist/friendlist.module';
 import { NotificationModule } from './notification/notification.module';
-import { AchievementModule } from './achievement/achievement.module';
 import { GatewaysModule } from './gateways/gateways.module';
-import { MatchHistoryModule } from './match_history/match_history.module';
+import { ChannelsModule } from './channels/channels.module';
 
 const configService = new ConfigService();
 

@@ -6,6 +6,7 @@ export enum Routes {
   FRIENDLIST = 'friendlist',
   NOTIFICATION = 'notification',
   ACHIEVEMENT = 'Achievement',
+  CHANNELS = 'channels',
   MATCH_HISTORY = 'match_history',
 }
 
@@ -17,6 +18,7 @@ export enum Services {
   Achievement = 'ACHIEVEMENT_SERVICE',
   Gateways = 'GATEWAYS_SERVICE',
   Chat = 'CHAT_SERVICE',
+  Channels = 'CHANNELS_SERVICE',
   Game = 'GAME_SERVICE',
   MatchHistory = 'MATCH_HISTORY',
 }
@@ -25,6 +27,11 @@ export enum Namespaces {
   Chat = '/chat',
   Game = '/game',
 }
+
+export const imagesFileFields = [
+  { name: 'avatar', maxCount: 1 },
+  { name: 'banner', maxCount: 1 },
+];
 
 export enum WebSocketEvents {
   Lobby = 'lobby',
