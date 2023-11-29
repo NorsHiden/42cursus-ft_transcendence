@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { NotificationModule } from 'src/notification/notification.module';
 import { MatchHistoryModule } from 'src/match_history/match_history.module';
 import { AchievementModule } from 'src/achievement/achievement.module';
+import { AllExceptionsFilter } from '../filters/exception.filter';
 
 @Module({
   imports: [

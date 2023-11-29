@@ -5,12 +5,13 @@ import {
   WebSocketGateway,
   WsException,
 } from '@nestjs/websockets';
-import { Inject, UseGuards } from '@nestjs/common';
+import { Inject, UseFilters, UseGuards } from '@nestjs/common';
 import { Namespaces, Services, WebSocketEvents } from 'src/utils/consts';
 import { IGameService } from '../interfaces/game.interface';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';
 import { WebSocketServer } from '@nestjs/websockets';
+import { AllExceptionsFilter } from '../../filters/exception.filter';
 
 @WebSocketGateway({
   namespace: Namespaces.Game,
@@ -19,6 +20,7 @@ import { WebSocketServer } from '@nestjs/websockets';
     credentials: true,
   },
 })
+@UseFilters(new AllExceptionsFilter())
 @UseGuards(WsGuard)
 export class GameGateway {
   @WebSocketServer()
