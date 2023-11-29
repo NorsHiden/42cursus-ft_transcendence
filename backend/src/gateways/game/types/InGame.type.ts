@@ -15,6 +15,6 @@ export type InGame = {
   is_reversed: boolean;
   game_data: GameData;
   game_mode: string;
-  interval_id?: NodeJS.Timer;
+  interval_id: NodeJS.Timeout;
   created_at: Date;
 };

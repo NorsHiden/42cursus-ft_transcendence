@@ -17,21 +17,13 @@ export class NotificationService implements INotificationService {
     private readonly eventService: EventService,
   ) {}
 
-  /**
-   * Retrieve notifications for a given user.
-   * @param user_id The ID of the user to retrieve notifications for.
-   * @param page The page number for paginated results (default is 0).
-   * @returns An array of notifications for the specified user.
-   */
   async getNotifications(
     user_id: string,
     page: number = 0,
   ): Promise<Notification[]> {
-    // Retrieve the user based on the provided user ID.
     const user = await this.usersService.getUser(user_id);
     if (!user) throw new NotFoundException('User not found.');
 
-    // Fetch notifications for the user, ordered by creation date in descending order.
     const notifications = await this.notificationRepository.find({
       where: {
         recipient: user,
@@ -46,48 +38,44 @@ export class NotificationService implements INotificationService {
     return notifications;
   }
 
-  /**
-   * Add a notification to the user's notification list and emit an event.
-   * @param target_id The ID of the user to receive the notification.
-   * @param notification The notification to be added.
-   */
+  async getNotification(notification_id: string): Promise<Notification> {
+    return this.notificationRepository.findOne({
+      where: {
+        id: notification_id,
+      },
+      relations: ['recipient', 'sender'],
+    });
+  }
+
+  async setNotification(
+    notification: Partial<Notification>,
+  ): Promise<Notification> {
+    return this.notificationRepository.save(notification);
+  }
+
+  async removeNotification(notification: Notification): Promise<Notification> {
+    return this.notificationRepository.remove(notification);
+  }
+
   async addNotification(
     target_id: string,
     notification: Notification,
   ): Promise<void> {
-    // Retrieve the user based on the provided target ID.
-    const user = await this.usersService.getNotifications(target_id);
-    if (!user) throw new NotFoundException('User not found.');
-
-    // Add the notification to the user's notification list and save the updated user.
-    user.notifications.push(notification);
-    await this.usersService.setUser(user);
-
-    // Emit an event to notify the user about the new notification.
+    await this.notificationRepository.save(notification);
     this.eventService.emit(target_id, notification);
   }
 
-  /**
-   * Subscribe a response object to user-specific events.
-   * @param user_id The ID of the user to subscribe.
-   * @param res The response object to subscribe.
-   * @returns The user-specific event.
-   */
   subscribeToEvent(user_id: string, @Res() res: Response) {
     const userEvent = this.eventService.subscribe(user_id, res);
 
-    // Listen for the 'close' event on the response object.
     res.on('close', async () => {
       if (this.eventService.getEvent().listenerCount(user_id) <= 1) {
         await this.usersService.setPresence(user_id, 'offline');
       }
     });
 
-    // Set the user's presence to 'online'.
     this.usersService.setPresence(user_id, 'online');
 
-    // Return the userEvent.
     return userEvent;
   }
-
 }

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IGatwaysService } from 'src/gateways/interfaces/IGatwaysService.interface';
-import { Services, WebSocketEvents } from 'src/utils/consts';
+import { GameMode, Services, WebSocketEvents } from 'src/utils/consts';
 import { Socket, Server } from 'socket.io';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
@@ -9,7 +9,6 @@ import { User } from 'src/typeorm/user.entity';
 import { Notification } from 'src/typeorm/notification.entity';
 import { LobbyUser } from '../types/LobbyUser.type';
 import { InGame } from '../types/InGame.type';
-import { GameMode } from '../types/GameMode.type';
 import { IMatchHistoryService } from 'src/match_history/interfaces/match_history.interface';
 import { MatchHistory } from 'src/typeorm/match_history.entity';
 import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
@@ -184,6 +183,7 @@ export class GameService {
       count: 0,
       round: 0,
       is_reversed: false,
+      interval_id: null,
       game_data: await this.initGame(opponent, clientLobby),
     };
     this.ingame.push(createdGame);
@@ -219,8 +219,9 @@ export class GameService {
       action != 'INVITE' &&
       action != 'ACCEPT' &&
       action != 'CANCEL'
-    )
+    ) {
       throw new WsException('Invalid Action');
+    }
 
     if (action == 'CANCEL') return this.leaveLobby(client);
 
