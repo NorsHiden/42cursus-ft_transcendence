@@ -13,6 +13,8 @@ export type ChannelRole = 'owner' | 'admin' | 'member';
 
 export type ChannelType = 'public' | 'private';
 
+export type NotificationStatus = 'pending' | 'accepted' | 'rejected';
+
 export type CreateChannelDetails = {
   name: string;
   type: ChannelType;

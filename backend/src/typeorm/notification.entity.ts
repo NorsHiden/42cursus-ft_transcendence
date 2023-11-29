@@ -26,11 +26,11 @@ export class Notification {
     | 'CHANNEL_INVITE';
 
   @Column({ nullable: true, default: null })
-  status?: NotificationStatus;
+  status?: NotificationStatus; // pending | accepted | rejected
 
-  // The ID of the action associated with the notification.
+  // The ID of the Record associated with the notification.
   @Column({ nullable: true, default: null })
-  action_id?: number;
+  record_id?: number;
 
   // Indicates whether the notification has been read.
   @Column({ default: false })
