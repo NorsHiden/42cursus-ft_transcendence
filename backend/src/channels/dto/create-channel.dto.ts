@@ -4,7 +4,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsStrongPassword,
   MaxLength,
   MinLength,
   ValidateIf,
@@ -25,7 +24,6 @@ export class CreateChannelDto {
   @ValidateIf((o) => o.type === 'public')
   @IsNotEmpty()
   @MaxLength(100)
-  @IsStrongPassword()
   @IsOptional()
   password?: string;
 }

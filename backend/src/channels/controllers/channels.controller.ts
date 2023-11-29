@@ -13,6 +13,7 @@ import {
   ClassSerializerInterceptor,
   UploadedFiles,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { CreateChannelDto } from '../dto/create-channel.dto';
 import { UpdateChannelDto } from '../dto/update-channel.dto';
@@ -100,5 +101,31 @@ export class ChannelsController {
   @UseInterceptors(ClassSerializerInterceptor)
   remove(@Param('id', ParseIntPipe) id: number, @AuthUser() user: JwtUser) {
     return this.channelsService.remove(id, user);
+  }
+
+  @Post(':id/join')
+  @UseInterceptors(ClassSerializerInterceptor)
+  join(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('password') password: string,
+    @AuthUser() user: JwtUser,
+  ) {
+    return this.channelsService.join(id, user, password);
+  }
+
+  @Delete(':id/leave')
+  @UseInterceptors(ClassSerializerInterceptor)
+  leave(@Param('id', ParseIntPipe) id: number, @AuthUser() user: JwtUser) {
+    return this.channelsService.leave(id, user);
+  }
+
+  @Post(':id/invite')
+  @UseInterceptors(ClassSerializerInterceptor)
+  invite(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('userId') userId: string,
+    @AuthUser() user: JwtUser,
+  ) {
+    return this.channelsService.invite(id, userId, user);
   }
 }

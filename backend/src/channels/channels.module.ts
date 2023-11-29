@@ -9,13 +9,17 @@ import { Services } from 'src/utils/consts';
 import { UsersService } from 'src/users/services/users.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from 'src/multer/multer.service';
+import { NotificationService } from 'src/notification/services/notification.service';
+import { NotificationModule } from 'src/notification/notification.module';
+import { Notification } from 'src/typeorm/notification.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Channel, UserChannel, User]),
+    TypeOrmModule.forFeature([Channel, UserChannel, User, Notification]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
+    NotificationModule,
   ],
   controllers: [ChannelsController],
   providers: [

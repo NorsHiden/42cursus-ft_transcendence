@@ -5,8 +5,8 @@ import {
   PaginateConfig,
   FilterOperator,
 } from 'nestjs-paginate';
-import { IChannelsService } from '../interfaces/IChannelsService.interface';
 import {
+  BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
@@ -17,6 +17,7 @@ import {
   JwtUser,
   UpdateChannelDetails,
 } from 'src/utils/types';
+import { IChannelsService } from '../interfaces/IChannelsService.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { UserChannel } from 'src/typeorm/userchannel.entity';
@@ -24,6 +25,9 @@ import { Channel } from 'src/typeorm/channel.entity';
 import { Services } from 'src/utils/consts';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import * as bcrypt from 'bcrypt';
+import { INotificationService } from 'src/notification/interfaces/notification.interface';
+import { Notification } from 'src/typeorm/notification.entity';
+import { User } from 'src/typeorm/user.entity';
 
 @Injectable()
 export class ChannelsService implements IChannelsService {
@@ -32,6 +36,8 @@ export class ChannelsService implements IChannelsService {
     private userChannelRepository: Repository<UserChannel>,
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @Inject(Services.Users) private readonly usersService: IUsersService,
+    @Inject(Services.Notification)
+    private readonly notificationService: INotificationService,
   ) {}
 
   public async create(
@@ -41,7 +47,7 @@ export class ChannelsService implements IChannelsService {
     const owner = await this.usersService.getUser(userId);
 
     details.password =
-      details.type === 'private' ? details.password : undefined;
+      details.type === 'private' ? undefined : details.password;
 
     const hashedPassword = details.password
       ? await this.hashPassword(details.password)
@@ -119,6 +125,7 @@ export class ChannelsService implements IChannelsService {
         'channel.name',
         'channel.type',
         'channel.protected',
+        'channel.password',
         'channel.avatar',
         'channel.banner',
         'channel.createdAt',
@@ -206,6 +213,116 @@ export class ChannelsService implements IChannelsService {
 
     const deletedChannel = await this.channelRepository.remove(channel);
     return deletedChannel;
+  }
+
+  public async join(
+    channelId: number,
+    user: JwtUser,
+    password?: string,
+  ): Promise<Channel> {
+    const channel = await this.findOne(channelId);
+
+    if (!channel) throw new NotFoundException('Channel Not Found.');
+
+    if (channel.type === 'private') {
+      let notifications = await this.notificationService.getNotifications(
+        user.sub,
+      );
+
+      const notification = notifications.find((notification) => {
+        if (
+          notification.action === 'CHANNEL_INVITE' &&
+          notification.action_id === channelId
+        ) {
+          return notification;
+        }
+      });
+
+      if (!notification)
+        throw new UnauthorizedException('You are not invited to this channel.');
+    }
+
+    if (channel.protected) {
+      console.log(password);
+      if (!password) throw new BadRequestException('Password is required.');
+
+      console.log(channel);
+
+      const isPasswordValid = await bcrypt.compare(password, channel.password);
+
+      if (!isPasswordValid) throw new BadRequestException('Invalid Password.');
+    }
+
+    const userChannel = await this.userChannelRepository.findOne({
+      where: { user: { id: user.sub }, channel: { id: channelId } },
+    });
+
+    if (userChannel) {
+      if (userChannel.state === 'banned')
+        throw new UnauthorizedException('You are banned from this channel.');
+      else throw new BadRequestException('You are already in this channel.');
+    }
+
+    const newMember = this.userChannelRepository.create({
+      role: 'member',
+      user: { id: user.sub },
+      channel: { id: channelId },
+    });
+
+    await this.userChannelRepository.save(newMember);
+
+    return channel;
+  }
+
+  public async leave(channelId: number, user: JwtUser): Promise<Channel> {
+    const channel = await this.findOne(channelId);
+
+    if (!channel) throw new NotFoundException('Channel Not Found.');
+
+    const userChannel = await this.userChannelRepository.findOne({
+      where: { user: { id: user.sub }, channel: { id: channelId } },
+    });
+
+    if (!userChannel)
+      throw new UnauthorizedException('You are not in this channel.');
+
+    await this.userChannelRepository.remove(userChannel);
+
+    return channel;
+  }
+
+  public async invite(
+    channelId: number,
+    userId: string,
+    user: JwtUser,
+  ): Promise<User> {
+    if ((await this.isRole(channelId, user, 'owner')) === false) {
+      throw new UnauthorizedException('You cannot invite to this channel.');
+    }
+
+    const channel = await this.findOne(channelId);
+
+    if (!channel) throw new NotFoundException('Channel Not Found.');
+
+    const invitedUser = await this.usersService.getUser(userId);
+
+    const userChannel = await this.userChannelRepository.findOne({
+      where: { user: { id: invitedUser.id }, channel: { id: channelId } },
+    });
+
+    if (userChannel) {
+      if (userChannel.state === 'banned')
+        throw new UnauthorizedException('User is banned from this channel.');
+      else throw new UnauthorizedException('User is already in this channel.');
+    }
+
+    this.notificationService.addNotification(invitedUser.id, {
+      action: 'ACHIEVEMENT_UNLOCKED',
+      recipient: user,
+      sender: null,
+    } as Notification);
+
+    return invitedUser;
   }
 
   private async hashPassword(password: string): Promise<string> {
