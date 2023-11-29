@@ -306,6 +306,8 @@ export class ChannelsService implements IChannelsService {
 
     const invitedUser = await this.usersService.getUser(userId);
 
+    if (!invitedUser) throw new NotFoundException('User Not Found.');
+
     const userChannel = await this.userChannelRepository.findOne({
       where: { user: { id: invitedUser.id }, channel: { id: channelId } },
     });
@@ -317,9 +319,11 @@ export class ChannelsService implements IChannelsService {
     }
 
     this.notificationService.addNotification(invitedUser.id, {
-      action: 'ACHIEVEMENT_UNLOCKED',
-      recipient: user,
+      action: 'CHANNEL_INVITE',
+      recipient: invitedUser,
       sender: null,
+      action_id: channelId,
+      status: 'pending',
     } as Notification);
 
     return invitedUser;
