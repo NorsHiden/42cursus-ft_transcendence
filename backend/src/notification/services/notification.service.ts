@@ -61,7 +61,14 @@ export class NotificationService implements INotificationService {
     target_id: string,
     notification: Notification,
   ): Promise<void> {
-    await this.notificationRepository.save(notification);
+    const user = await this.usersService.getNotifications(target_id);
+
+    if (!user) throw new NotFoundException('User not found.');
+
+    user.notifications.push(notification);
+
+    await this.usersService.setUser(user);
+
     this.eventService.emit(target_id, notification);
   }
 
