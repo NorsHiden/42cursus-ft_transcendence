@@ -20,9 +20,7 @@ const useDimensions = <T extends HTMLElement>() => {
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        if (entry.target === ref.current) {
-          handleChange();
-        }
+        if (entry.target === ref.current) handleChange();
       }
     });
 

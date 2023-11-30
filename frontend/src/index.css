@@ -7,8 +7,7 @@
 
 @layer utilities {
   .empty {
-    background-color: #1e1f23;
-    border: 1px solid #2c2d33;
+    @apply bg-black border border-darkGray;
   }
   .color-dodge {
     mix-blend-mode: color-dodge;
@@ -20,5 +19,9 @@
   html, body {
     overflow: auto;
     background-color: #1B191D; /* Replace with your desired color */
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }

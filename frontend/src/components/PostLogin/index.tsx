@@ -1,5 +1,5 @@
-import { usePostLogin } from "./usePostLogin";
-import UserForm  from "./UserForm";
-import AvatarInput from "./AvatarInput";
+import { usePostLogin } from './usePostLogin';
+import AvatarInput from './AvatarInput';
+import UserForm from './UserForm';
 
-export {usePostLogin, UserForm, AvatarInput}
+export { usePostLogin, UserForm, AvatarInput };

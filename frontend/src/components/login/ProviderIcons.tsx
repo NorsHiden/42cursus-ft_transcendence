@@ -3,38 +3,27 @@ import GoogleIcon from '@assets/socialIcons/GoogleIcon.tsx';
 import FortyTwoIcon from '@assets/socialIcons/FortyTwoIcon';
 import DiscordIcon from '@assets/socialIcons/DiscordIcon.tsx';
 
-
 type ProviderIconsProps = {
   className?: string;
 };
 
-const ProviderIcons:React.FC<ProviderIconsProps> = (
-  {
-    className
-  }
-) => {
-  const { googleLink, ftLink, discordLink } = {
-    googleLink: "/api/auth/google/login" + window.location.search,
-    ftLink: "/api/auth/42/login" + window.location.search,
-    discordLink: "/api/auth/discord/login" + window.location.search
+const ProviderIcons: React.FC<ProviderIconsProps> = ({ className }) => {
+  const { googleLink, fortyTwoLink, discordLink } = {
+    googleLink: '/api/auth/google/login' + window.location.search,
+    fortyTwoLink: '/api/auth/42/login' + window.location.search,
+    discordLink: '/api/auth/discord/login' + window.location.search,
   };
 
   return (
     <div id="providers" className={className}>
-      <a href={googleLink} className=''>
-        <div className='flex center text w-[48px] h-[48px]  lg:w-[64px] lg:h-[64px] bg-white rounded-full filter hover:opacity-75'>
-          <GoogleIcon className='w-[24px] h-[24px] md:w-[32px] md:h-[32px]' />
-        </div>
+      <a href={googleLink} className="center w-24 h-24 xl:w-20 xl:h-20 bg-white rounded-full">
+        <GoogleIcon className="text-black w-10 h-10 xl:w-8 xl:h-8" />
       </a>
-      <a href={discordLink}>
-        <div className='flex center  w-[48px] h-[48px]  lg:w-[64px] lg:h-[64px] bg-[#5562EA] rounded-full filter hover:opacity-75'>
-          <DiscordIcon className='text-white w-[24px] h-[24px] md:w-[32px] md:h-[32px]'  />
-        </div>
+      <a href={discordLink} className="center w-24 h-24  xl:w-20 xl:h-20 bg-[#5562EA] rounded-full">
+        <DiscordIcon className="text-white w-10 h-10 xl:w-8 xl:h-8" />
       </a>
-      <a href={ftLink}>
-        <div className='flex center w-[48px] h-[48px] lg:w-[64px] lg:h-[64px] bg-white rounded-full filter hover:opacity-75'>
-          <FortyTwoIcon className='text-black w-[24px] h-[24px] md:w-[32px] md:h-[32px]'  />
-        </div>
+      <a href={fortyTwoLink} className="center w-24 h-24 xl:w-20 xl:h-20 bg-white rounded-full">
+        <FortyTwoIcon className="text-black w-10 h-10 xl:w-8 xl:h-8" />
       </a>
     </div>
   );
