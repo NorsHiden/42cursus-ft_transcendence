@@ -184,7 +184,6 @@ export class GameService {
       round: 0,
       interval_id: undefined,
       is_reversed: false,
-      interval_id: null,
       game_data: await this.initGame(opponent, clientLobby),
     };
     this.ingame.push(createdGame);
