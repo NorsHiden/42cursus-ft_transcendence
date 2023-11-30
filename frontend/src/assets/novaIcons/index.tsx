@@ -143,7 +143,7 @@ import { default as AlertCircleSolid } from './solid/AlertCircleSolid';
 // import { default as User2Outline } from './outline/User2';
 // import { default as User1Outline } from './outline/User1';
 // import { default as UnlockCircleOutline } from './outline/UnlockCircle';
-// import { default as UnlockOutline } from './outline/Unlock';
+import { default as UnlockOutline } from './outline/UnlockOutline';
 // import { default as TrashFullOutline } from './outline/TrashFull';
 // import { default as Trash2Outline } from './outline/Trash2';
 // import { default as Trash1Outline } from './outline/Trash1';
@@ -466,7 +466,7 @@ export {
   // User2Outline,
   // User1Outline,
   // UnlockCircleOutline,
-  // UnlockOutline,
+  UnlockOutline,
   // TrashFullOutline,
   // Trash2Outline,
   // Trash1Outline,

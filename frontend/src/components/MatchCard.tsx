@@ -33,8 +33,8 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
       className={`relative text-[#1E1F23] w-full  ${
         type === CardType.MATCH_HISTORY ? 'aspect-[193/143]' : 'aspect-[193/106]'
       }`}
-      cut={7}
-      borderRadius={15}
+      cut={12}
+      borderRadius={20}
       borderWidth={1}
       borderColor="#2C2D33"
     >

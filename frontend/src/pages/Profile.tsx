@@ -34,24 +34,24 @@ function Profile() {
         <div className="col-span-5 col-start-2">
           <ul id="tabs" className="flex">
             <li>
-              <NavLinkButton to="Overview" cut={8}>
+              <NavLinkButton to="Overview" cut={35}>
                 Overview
               </NavLinkButton>
             </li>
             <li>
-              <NavLinkButton to="MatchHistory" cut={7}>
+              <NavLinkButton to="MatchHistory" cut={35}>
                 Match History
               </NavLinkButton>
             </li>
             <li>
-              <NavLinkButton to="Achievements" cut={6}>
+              <NavLinkButton to="Achievements" cut={35}>
                 Achievements
               </NavLinkButton>
             </li>
             {
               user.isforeign?(""):(
                 <li>
-                  <NavLinkButton to="Friends" cut={6}>
+                  <NavLinkButton to="Friends" cut={35}>
                     Friends
                   </NavLinkButton>
                 </li>
@@ -60,7 +60,7 @@ function Profile() {
             {
               user.isforeign?(""):(
                 <li>
-                  <NavLinkButton to="Settings" cut={6}>
+                  <NavLinkButton to="Settings" cut={35}>
                     Settings
                   </NavLinkButton>
                 </li>
