@@ -46,6 +46,7 @@ export class AchievementService {
       action: 'ACHIEVEMENT_UNLOCKED',
       recipient: user,
       sender: null,
+      description: `You've unlocked ${achievement.name} achievement.`,
     } as Notification);
     await this.achievementRepository.save(achievement);
   }

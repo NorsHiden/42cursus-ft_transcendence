@@ -28,6 +28,9 @@ export class Notification {
   @Column({ nullable: true, default: null })
   status?: NotificationStatus; // pending | accepted | rejected
 
+  @Column({ default: '' })
+  description: string;
+
   // The ID of the Record associated with the notification.
   @Column({ nullable: true, default: null })
   record_id?: number;

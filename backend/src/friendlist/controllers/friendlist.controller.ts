@@ -112,4 +112,12 @@ export class FriendlistController {
   async removeFriendRequest(@Req() req, @Param('id') target_id: string) {
     await this.friendlistService.removeRequest(req.user.sub, target_id);
   }
+
+  @Get(':id')
+  async getFriendListState(@Req() req, @Param('id') target_id: string) {
+    return await this.friendlistService.getFriendListState(
+      req.user.sub,
+      target_id,
+    );
+  }
 }

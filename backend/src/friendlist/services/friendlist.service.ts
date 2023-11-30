@@ -29,7 +29,7 @@ export class FriendlistService implements IFriendlistService {
    */
   async sendRequest(user_id: string, target_id: string) {
     // Ensure the user is not sending a request to themselves.
-    if (user_id === target_id) throw new ForbiddenException('Same ID as user.');
+    if (user_id == target_id) throw new ForbiddenException('Same ID as user.');
 
     // Retrieve user and target information from the Users service.
     const user = await this.usersService.getFriendList(user_id);
@@ -59,6 +59,8 @@ export class FriendlistService implements IFriendlistService {
       action: 'FRIEND_REQUEST',
       recipient: target,
       sender: user,
+      description: `Sent a friend request.`,
+      status: 'pending',
     } as Notification);
 
     // Save the updated target information.
@@ -129,6 +131,22 @@ export class FriendlistService implements IFriendlistService {
    */
   async getBlocked(user_id: string): Promise<User> {
     return await this.usersService.getBlocked(user_id);
+  }
+
+  async getFriendListState(
+    user_id: string,
+    target_id: string,
+  ): Promise<{ state: string }> {
+    const user = await this.usersService.getFriendList(user_id);
+    const target = await this.usersService.getFriendList(target_id);
+
+    if (user.friendlist.friends.find((friend) => friend.id == target_id))
+      return { state: 'FRIEND' };
+    if (target.friendlist.pending.find((pending) => pending.id == target_id))
+      return { state: 'PENDING' };
+    if (user.friendlist.blocked.find((blocked) => blocked.id == target_id))
+      return { state: 'BLOCKED' };
+    return { state: 'NONE' };
   }
 
   /**

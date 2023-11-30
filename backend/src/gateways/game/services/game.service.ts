@@ -111,6 +111,8 @@ export class GameService {
         recipient: await this.getUser(this.users.get(client.id)),
         sender: await this.getUser(target_id),
         action: 'GAME_REQUEST',
+        description: `Invited you to a ${game_mode} game.`,
+        status: 'pending',
       } as Notification);
     client.emit(WebSocketEvents.Lobby, {
       state: 'WAITING',
@@ -265,7 +267,9 @@ export class GameService {
   ): Promise<void> {
     if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
       this.ingame[inGameIndex].game_data.home.is_ready = true;
-    if (this.users.get(client.id) === this.ingame[inGameIndex].away_player.id)
+    else if (
+      this.users.get(client.id) === this.ingame[inGameIndex].away_player.id
+    )
       this.ingame[inGameIndex].game_data.away.is_ready = true;
     else {
       const spectator = await this.usersService.getUser(
@@ -407,8 +411,8 @@ export class GameService {
     const ball = ingame.game_data.ball;
     const score = ingame.game_data.score;
 
-    if (ball.x <= 0) score.home++;
-    else if (ball.x >= 100) score.away++;
+    if (ball.x <= 0) score.away++;
+    else if (ball.x >= 100) score.home++;
 
     if (score.home == 5 || score.away == 5) ingame.game_data.is_finished = true;
     ball.x = 50;
@@ -431,7 +435,7 @@ export class GameService {
     const winner =
       ingame.game_data.score.home > ingame.game_data.score.away ? home : away;
     const loser =
-      ingame.game_data.score.home < ingame.game_data.score.away ? home : away;
+      ingame.game_data.score.home < ingame.game_data.score.away ? away : home;
     winner.wins++;
     loser.loses++;
     if (ingame.game_mode == GameMode.REGULAR) winner.points += 50;
@@ -448,6 +452,9 @@ export class GameService {
       away_player: away,
       home_score: ingame.game_data.score.home,
       away_score: ingame.game_data.score.away,
+      win_gap: Math.abs(
+        ingame.game_data.score.home - ingame.game_data.score.away,
+      ),
       created_at: ingame.created_at,
       ended_at: new Date(),
       game_mode: ingame.game_mode,
