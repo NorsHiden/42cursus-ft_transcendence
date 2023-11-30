@@ -73,7 +73,7 @@ const config = {
         '7/10': '70%',
       },
       fontSize: {
-        xs: '0.5',
+        xs: '0.5rem',
         sm: '0.8rem',
         base: '1rem',
         lg: '1.25rem',

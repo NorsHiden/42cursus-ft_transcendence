@@ -317,6 +317,8 @@ import { default as AndroidSmartphoneActiveOutline } from './outline/AndroidSmar
 import { default as AndroidSmartphoneOutline } from './outline/AndroidSmartphone';
 import { default as AlertRectangleOutline } from './outline/AlertRectangle';
 import { default as AlertCircleOutline } from './outline/AlertCircle';
+import {default as Unblock} from './outline/Unblock'
+import {default as Block } from './outline/block'
 
 export {
   ZoomOutSolid,
@@ -638,4 +640,6 @@ export {
   AndroidSmartphoneOutline,
   AlertRectangleOutline,
   AlertCircleOutline,
+  Unblock,
+  Block
 };

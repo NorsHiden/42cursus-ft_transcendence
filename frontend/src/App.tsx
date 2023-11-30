@@ -10,7 +10,6 @@ import PostLogin,{ postLoginLoader } from '@pages/PostLogin';
 import Profile,{profileLoader} from '@pages/Profile';
 import {Overview,MatchHistory,Achievements,Settings,Friends} from '@components/profile';
 
-
 function Layoutloader() {
   return {
     username: 'test',
@@ -40,7 +39,8 @@ const router = createBrowserRouter([
         path:'/:user',
         id:'profile',
         element: <Profile/>,
-        loader:profileLoader,
+        loader:({ params }) =>
+          profileLoader(params.user),
         children:[
           {
             path:'/:user/settings',
