@@ -46,6 +46,12 @@ export class FriendlistService implements IFriendlistService {
       )
     )
       throw new ForbiddenException('Cannot send a request on both sides.');
+    if (
+      user.friendlist.blocked.find(
+        (blockedUser) => blockedUser.id === target.id,
+      )
+    )
+      throw new ForbiddenException('Cannot send a request to a blocked user.');
 
     // Add the request to the target's pending list and notify the target.
     target.friendlist.pending.push(user);
@@ -76,12 +82,13 @@ export class FriendlistService implements IFriendlistService {
     user.friendlist.pending = user.friendlist.pending.filter(
       (friend) => friend.id !== target.id,
     );
-    user.friendlist.friends = user.friendlist.friends.filter(
-      (friend) => friend.id !== target.id,
+    target.friendlist.friends = target.friendlist.friends.filter(
+      (friend) => friend.id !== user.id,
     );
 
     // Save the updated user information.
     await this.usersService.setUser(user);
+    await this.usersService.setUser(target);
   }
 
   /**
@@ -131,6 +138,14 @@ export class FriendlistService implements IFriendlistService {
       )
     )
       throw new NotFoundException('Target not found.');
+    if (
+      user.friendlist.blocked.find(
+        (blockedUser) => blockedUser.id === target.id,
+      )
+    )
+      throw new ForbiddenException(
+        'Cannot accept a request from a blocked user.',
+      );
 
     // Remove the target from the user's pending list and add them to the friends list.
     user.friendlist.pending = user.friendlist.pending.filter(
