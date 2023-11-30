@@ -35,5 +35,3 @@ export type ImagesFiles = Partial<{
   avatar: Express.Multer.File[];
   banner: Express.Multer.File[];
 }>;
-
-export type NotificationStatus = 'pending' | 'accepted' | 'rejected';

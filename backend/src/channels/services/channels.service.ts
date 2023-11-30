@@ -224,22 +224,25 @@ export class ChannelsService implements IChannelsService {
 
     if (!channel) throw new NotFoundException('Channel Not Found.');
 
+    const member = await this.userChannelRepository.findOne({
+      where: { user: { id: user.sub }, channel: { id: channelId } },
+    });
+
+    if (member) {
+      if (member.state === 'banned')
+        throw new UnauthorizedException('You are banned from this channel.');
+      else throw new BadRequestException('You are already in this channel.');
+    }
+
     if (channel.type === 'private') {
-      let notifications = await this.notificationService.getNotifications(
-        user.sub,
-      );
+      const invite = await this.findInvite(user.sub, channelId);
 
-      const notification = notifications.find((notification) => {
-        if (
-          notification.action === 'CHANNEL_INVITE' &&
-          notification.action_id === channelId
-        ) {
-          return notification;
-        }
-      });
-
-      if (!notification)
+      if (!invite)
         throw new UnauthorizedException('You are not invited to this channel.');
+
+      invite.status = 'accepted';
+
+      await this.notificationService.setNotification(invite);
     }
 
     if (channel.protected) {
@@ -251,16 +254,6 @@ export class ChannelsService implements IChannelsService {
       const isPasswordValid = await bcrypt.compare(password, channel.password);
 
       if (!isPasswordValid) throw new BadRequestException('Invalid Password.');
-    }
-
-    const userChannel = await this.userChannelRepository.findOne({
-      where: { user: { id: user.sub }, channel: { id: channelId } },
-    });
-
-    if (userChannel) {
-      if (userChannel.state === 'banned')
-        throw new UnauthorizedException('You are banned from this channel.');
-      else throw new BadRequestException('You are already in this channel.');
     }
 
     const newMember = this.userChannelRepository.create({
@@ -318,15 +311,43 @@ export class ChannelsService implements IChannelsService {
       else throw new UnauthorizedException('User is already in this channel.');
     }
 
+    const invite = await this.findInvite(invitedUser.id, channelId);
+
+    if (invite)
+      throw new UnauthorizedException(
+        'User is already invited to this channel.',
+      );
+
     this.notificationService.addNotification(invitedUser.id, {
       action: 'CHANNEL_INVITE',
       recipient: invitedUser,
       sender: null,
-      action_id: channelId,
+      record_id: channelId,
       status: 'pending',
     } as Notification);
 
     return invitedUser;
+  }
+
+  private async findInvite(
+    userId: string,
+    channelId: number,
+  ): Promise<Notification> {
+    const notifications = await this.notificationService.getNotifications(
+      userId,
+    );
+
+    const notification = notifications.find((notification) => {
+      if (
+        notification.action === 'CHANNEL_INVITE' &&
+        notification.record_id === channelId &&
+        notification.status === 'pending'
+      ) {
+        return notification;
+      }
+    });
+
+    return notification;
   }
 
   private async hashPassword(password: string): Promise<string> {
