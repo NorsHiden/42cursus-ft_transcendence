@@ -59,7 +59,7 @@ export class FriendlistService implements IFriendlistService {
       action: 'FRIEND_REQUEST',
       recipient: target,
       sender: user,
-      description: `${user.username} sent a friend request.`,
+      description: `Sent a friend request.`,
       status: 'pending',
     } as Notification);
 

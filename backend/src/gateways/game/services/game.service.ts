@@ -106,13 +106,12 @@ export class GameService {
       game_mode: game_mode,
       invitation: action == 'INVITE' ? true : false,
     });
-    const target = await this.getUser(target_id);
     if (action == 'INVITE')
       await this.notificationService.addNotification(target_id, {
         recipient: await this.getUser(this.users.get(client.id)),
-        sender: target,
+        sender: await this.getUser(target_id),
         action: 'GAME_REQUEST',
-        description: `Invited you a ${game_mode} game.`,
+        description: `Invited you to a ${game_mode} game.`,
         status: 'pending',
       } as Notification);
     client.emit(WebSocketEvents.Lobby, {
@@ -266,7 +265,6 @@ export class GameService {
     server: Server,
     inGameIndex: number,
   ): Promise<void> {
-    console.log(this.users.get(client.id));
     if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
       this.ingame[inGameIndex].game_data.home.is_ready = true;
     else if (
