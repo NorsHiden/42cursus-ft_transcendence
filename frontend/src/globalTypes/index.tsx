@@ -1,1 +1,1 @@
-import User from './types';
+export * from './types';
