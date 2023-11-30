@@ -56,6 +56,34 @@ export class MatchHistoryService {
     });
   }
 
+  async getUserHighlightsMatches(
+    user_id: string,
+    page: number,
+  ): Promise<MatchHistory[]> {
+    return await this.matchHistoryRepository.find({
+      where: [
+        {
+          home_player: {
+            id: user_id,
+          },
+          home_score: 5,
+        },
+        {
+          away_player: {
+            id: user_id,
+          },
+          away_score: 5,
+        },
+      ],
+      relations: ['away_player', 'home_player'],
+      order: {
+        win_gap: 'DESC',
+        created_at: 'DESC',
+      },
+      take: 6,
+    });
+  }
+
   async getUserLossMatches(
     user_id: string,
     page: number,

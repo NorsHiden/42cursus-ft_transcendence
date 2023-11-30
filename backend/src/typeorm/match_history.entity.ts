@@ -30,6 +30,9 @@ export class MatchHistory {
   away_score: number;
 
   @Column()
+  win_gap: number;
+
+  @Column()
   created_at: Date;
 
   @Column()
