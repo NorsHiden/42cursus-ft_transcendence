@@ -14,12 +14,13 @@ const TwoFaModal:React.FC = () => {
     const [OTP, setOTP] = useState('');
     const [TwoFaEnabled, setTwoFaEnabled] = useState(false);
     const [disabling, setdisabling] = useState(false);
+    const [generated, setGenerated] = useState(false);
 
     return (
     <>
     {
       isModalVisible && (
-        <TwoFaModalDialog
+      <TwoFaModalDialog
         qrCode={qrCode}
         OTP={OTP}
         setOTP={setOTP}
@@ -33,7 +34,7 @@ const TwoFaModal:React.FC = () => {
        twofaEnabled={TwoFaEnabled}
         enabling={disabling}
         handleEnable={() => {
-          generateQrCode(setQrCode);
+          generateQrCode(setQrCode, generated,setGenerated);
           setIsModalVisible(true);
         }}
         handleDisable={() => turnOff2fa(TwoFaEnabled, setTwoFaEnabled, setdisabling)}

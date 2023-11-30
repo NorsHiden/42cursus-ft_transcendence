@@ -15,8 +15,10 @@ export function hideModalDialog(
   }
 }
 
-export async function generateQrCode(setQrCode: (qrCode: string) => void) {
+export async function generateQrCode(setQrCode: (qrCode: string) => void, generated: boolean, setGenerated: (generated: boolean) => void) {
   try {
+    if (generated) return;
+    setGenerated(true);
     const response = await axios.post('/api/auth/2fa/generate');
     console.log(response.data.qrcode);
     setQrCode(response.data.qrcode);
@@ -51,8 +53,8 @@ export  function verify(
 export async function turnOff2fa(
   TwoFaEnabled: boolean,
   setTwoFaEnabled: (Enabled: boolean) => void,
-  setEnabling: (enabling: boolean) => void,
-) {
+  setEnabling: (enabling: boolean) => void, 
+  ) {
   try {
     if (!TwoFaEnabled) return;
     setEnabling(true);

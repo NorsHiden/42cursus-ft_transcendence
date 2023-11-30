@@ -25,6 +25,7 @@ export type settingsData = {
 export const useSettingsData = () => {
   const user = useRouteLoaderData("profile") as User;
 
+  if(user.isforeign) throw new Error("This is not your profile");
   const data:settingsData = {
     username : user.username,
     display_name : user.display_name,

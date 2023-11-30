@@ -1,8 +1,8 @@
 // 2FA Modal Button
 import React from 'react';
 import Card from '@components/Card';
-import Lock from '@assets/novaIcons/outline/Lock';
-import Unlock from '@assets/novaIcons/outline/Unlock';
+import Lock from '@assets/novaIcons/outline/LockOutline';
+import Unlock from '@assets/novaIcons/outline/UnlockOutline';
 
 interface TwoFaModalButtonProps {
   twofaEnabled: boolean;
@@ -23,7 +23,7 @@ const TwoFaModalButton: React.FC<TwoFaModalButtonProps> = ({
         className={`flex center w-[127px] h-[40px]  text-[#FE5821] ${
           enabling ? 'filter opacity-75' : ''
         } mt-[20px] z-10`}
-        cut={10}
+        cut={30}
         borderWidth={2}
         borderColor="#FF8C66"
         borderRadius={10}

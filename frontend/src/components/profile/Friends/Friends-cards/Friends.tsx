@@ -5,10 +5,11 @@ interface UserCardProps {
   user: string;
   name: string;
   username: string;
+  banner?: string;
   children?: React.ReactNode;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ user, name, username,children}) => {
+const UserCard: React.FC<UserCardProps> = ({ user, name, username,children,banner}) => {
   return (
     <Card
       className="text-[#1E1F23] overflow-hidden aspect-[193/179] "
@@ -18,7 +19,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, name, username,children}) => 
       borderRadius={20}
     >
       <div id="card-header" className="w-[100%] h-[40%] bg-cover bg-center">
-        <img src={user} alt="" className=" w-full h-full object-cover" />
+        <img src={banner} alt="" className=" w-full h-full object-cover" />
       </div>
       <div className="relative flex center mt-[-12%] ml-4 h-24 w-24 rounded-full border-[6px] border-[#2C2D33] z-10 ">
         <img

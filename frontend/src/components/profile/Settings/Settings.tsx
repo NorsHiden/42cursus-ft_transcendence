@@ -8,9 +8,9 @@ import React, { FC, useState, useRef, useEffect } from 'react';
 import InputField from './InputField';
 import TextErea from './TextErea';
 import Card from '@components/Card';
-import EditCircle from '@assets/novaIcons/solid/EditCircle';
+import EditCircle from '@assets/novaIcons/solid/EditCircleSolid';
 
-import EditRectangle from '@assets/novaIcons/solid/EditRectangle';
+import EditRectangle from '@assets/novaIcons/solid/EditRectangleSolid';
 import useSettingsData from './useSettingsData';
 import TwoFaModal from './TwoFaModal/TwoFaModal';
 
@@ -134,9 +134,10 @@ const Settings: FC = () => {
     setactiveChanges,
     resetForm,
   } = useSettingsData();
-
+  
   return (
     <>
+
       <TwoFaModal />
       <h1 className="font-sans font-bold text-white mb-[28px] mt-[64px]">Personal Info</h1>
       <form

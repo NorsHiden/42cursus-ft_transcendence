@@ -75,20 +75,3 @@ export const unblock = async (blocked: User[], username: string, userID: Number,
     console.log(error)
   })
 }
-
-
-// function block()
-// {
-//   // post /api/friendlist/[userId]/block
-//   const updatedFriends = friends.filter((user) => user.username !== username)
-//   console.log("updated friends", updatedFriends)
-//   setFriends(updatedFriends)
-//   axios.post(`/api/friendlist/${userID}/block`)
-//   .then((response)=>{
-//     if(response.status != 201) throw new Error("failed to block user id")
-//     console.log(friends)
-//   })
-//   .catch((error)=>{
-//     console.log(error)
-//   })
-// }

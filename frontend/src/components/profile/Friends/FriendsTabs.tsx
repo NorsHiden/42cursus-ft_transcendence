@@ -6,6 +6,7 @@ import UserCard from "./Friends-cards/Friends";
 import { CheckOutline,CloseOutline,Unblock,Block} from "@assets/novaIcons";
 import { unfriend,block, accept, unblock,} from "./utils";
 import { User } from "@globalTypes/types";
+import { useRouteLoaderData } from "react-router-dom";
 // get api/friendlist/
 // {
 //   "id":14,
@@ -94,11 +95,15 @@ const getFriendList = (data:args) => {
 }
 
 const Friends = ()=>{
+  const user = useRouteLoaderData("profile") as User;
+
+  if(user.isforeign) throw new Error("This is not your profile");
   const [friendType, setType] = useState("Accepted");
   const [friends, setFriends] = useState<User[]>([]);
   const [blocked, setBlocked] = useState<User[]>([]);
   const [pending, setPending] = useState<User[]>([]);
 
+  
   // you need to isolate lists comcerns to remove card smooth
   function handletype(e:ChangeEvent<HTMLInputElement>)
   {
@@ -113,9 +118,7 @@ const Friends = ()=>{
     getFriendList(data);
   },[friendType])
 
-  console.log("frineds : ", friends)
-  console.log("blocked : ", blocked)
-  console.log("pending :", pending)
+
   return (
       <section className="mt-24">
         <div id="redio-buttons" className="flex justify-end">
@@ -187,10 +190,9 @@ const Friends = ()=>{
                 exit={{ x: 500 }}
                 key={users.id}
                 >
-                 <motion.li>
-                <UserCard user={users.profile.avatar} name={users.display_name} username={users.username}>
+                <UserCard user={users.profile.avatar} name={users.display_name} username={users.username} banner={users.profile.banner}>
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
-                    <Card className="  text-[#F32C44] z-10 " cut={11} borderRadius={10} borderColor="#E95E6F" borderWidth={1.5}>
+                    <Card className="  text-[#F32C44] z-10 " cut={55} borderRadius={10} borderColor="#E95E6F" borderWidth={3}>
                       <div className="flex center  ">
                         <button className="flex center pl-[12px] pr-[20px] py-[8px]" onClick={(event)=>{
                           unfriend(friends, users.username,users.id,setFriends)
@@ -200,7 +202,7 @@ const Friends = ()=>{
                         </button>
                       </div>
                     </Card>
-                    <Card className="  text-[#2B1F24] z-10 " cut={11} >
+                    <Card className="  text-[#2B1F24] z-10 " cut={30} >
                       <div className="flex center  ">
                         <button className="flex center pl-[12px] pr-[20px] py-[8px] gap-1" onClick={
                           (event)=>{
@@ -216,7 +218,6 @@ const Friends = ()=>{
                   </div>
                 </UserCard>
               </motion.li>
-                </motion.li>
               ))
             ):([])
           }
@@ -230,9 +231,9 @@ const Friends = ()=>{
                 exit={{ x: 500 }}
                 key={users.id}
                 >
-                <UserCard user={users.profile.avatar} name={users.display_name} username={users.username}>
+                <UserCard user={users.profile.avatar} name={users.display_name} username={users.username} banner={users.profile.banner}>
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
-                    <Card className="  text-[#5E6069] z-10 " cut={11} borderRadius={10} borderColor="#858895" borderWidth={1.5}>
+                    <Card className="  text-[#5E6069] z-10 " cut={30} borderRadius={10} borderColor="#858895" borderWidth={1.5}>
                       <div className="flex center  ">
                         <button className="center pl-[12px] pr-[20px] py-[8px] gap-1" onClick={(event)=>{
                           unblock(blocked, users.username,users.id,setBlocked)
@@ -252,9 +253,15 @@ const Friends = ()=>{
           {
             friendType == "Pending" ? (
               pending.map((users)=>(
-                <UserCard user={users.profile.avatar} name={users.display_name} username={users.username}>
+                <motion.li 
+                initial={{ x: -500 }}
+                animate={{ x: 0 }}
+                exit={{ x: 500 }}
+                key={users.id}
+                >
+                <UserCard user={users.profile.avatar} name={users.display_name} username={users.username} banner={users.profile.banner}>
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
-                    <Card className="  text-[#FE5821] z-10 " cut={11} borderRadius={10} borderColor="#FF8C66" borderWidth={1.5}>
+                    <Card className="  text-[#FE5821] z-10 " cut={30} borderRadius={10} borderColor="#FF8C66" borderWidth={1.5}>
                       <div className="flex center  ">
                         <button className="flex center pl-[12px] pr-[20px] py-[8px]" onClick={(event)=>{
                           accept(pending, users.username,users.id,setPending)
@@ -264,21 +271,22 @@ const Friends = ()=>{
                         </button>
                       </div>
                     </Card>
-                    <Card className="  text-[#2B1F24] z-10 " cut={11} >
+                    <Card className="  text-[#2B1F24] z-10 " cut={30} >
                       <div className="flex center  ">
                         <button className="flex center pl-[12px] pr-[20px] py-[8px]" onClick={
                           (event)=>{
                           unfriend(pending, users.username,users.id,setPending)
                           }
                         }>
-                          <CloseOutline className="text-[#FF2633]"/>
+                          <CheckOutline className="text-[#FF2633]"/>
                           <p className="text-[#FF2633] font-poppins font-regular">Decline</p>
                         </button>
                       </div>
                     </Card>
                     
                   </div>
-                </UserCard> 
+                </UserCard>
+                </motion.li>
               ))
             ):([])
           }

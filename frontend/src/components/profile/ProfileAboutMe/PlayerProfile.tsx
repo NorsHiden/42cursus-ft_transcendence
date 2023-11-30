@@ -104,9 +104,9 @@ const PlayerProfile = ()=>{
           {friend ? (
             <Card
               className={`relative flex center text-[#F32C44] z-10 ${loading?'filter opacity-70':''}`}
-              cut={8}
+              cut={70}
               borderRadius={10}
-              borderWidth={1.5}
+              borderWidth={3}
               borderColor="#E95E6F" 
             >
               <button className="flex center px-4" onClick={unfriendRequest}>
@@ -117,9 +117,9 @@ const PlayerProfile = ()=>{
           ) : (
             <Card
               className={`relative flex center text-[#FE5821] z-10 ${loading?'filter opacity-70':''}`}
-              cut={8}
+              cut={30}
               borderRadius={10}
-              borderWidth={1.5}
+              borderWidth={2}
               borderColor="#FF8C66"
             >
               <button className="flex center px-4" onClick={sendFriendRequest}>
@@ -146,17 +146,18 @@ const PlayerProfile = ()=>{
         <div id="About_me" className="pt-8">
           <h1 className="font-poppins text-white font-bold text-2xl">About me</h1>
           <p className="font-sans text-[#bababa] filter opacity-70 font-bold lg:text-xs 2xl:text-sm whitespace-wrap">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc scelerisque id nunc
-            quisque viverra. In vitae, sed viverra pellentesque.
+            {
+              user.profile.about
+            }
           </p>
         </div>
-        <div id="birthdate" className="flex gap-4 pt-8">
+        <div id="birthdate" className="flex  gap-4 pt-8">
           <CalendarSolid className="w-[19px] h-[19px] lg:w-[23px] lg:h-[23px] 2xl:w-[27px] 2xl:h-[27px] text-accent" />
-          <p className="text-white font-poppins ">20/08/2006</p>
+          <p className="text-white font-poppins ">{new Date(user.profile.birthdate).toLocaleDateString()}</p>
         </div>
         <div id="location" className="flex gap-4 pt-4">
           <LocationSolid className="text-accent w-[19px] h-[19px] lg:w-[23px] lg:h-[23px] 2xl:w-[27px] 2xl:h-[27px] " />
-          <p className="text-white font-poppins ">Morocco</p>
+          <p className="text-white font-poppins ">{user.profile.location}</p>
         </div>
       </div>
     );
