@@ -79,10 +79,23 @@ export class FriendlistService implements IFriendlistService {
     const target = await this.usersService.getFriendList(target_id);
 
     // Filter out the target from the user's pending and friends lists.
+    user.friendlist.friends = user.friendlist.friends.filter(
+      (friend) => friend.id !== target.id,
+    );
     user.friendlist.pending = user.friendlist.pending.filter(
       (friend) => friend.id !== target.id,
     );
+    user.friendlist.blocked = user.friendlist.blocked.filter(
+      (friend) => friend.id !== target.id,
+    );
+
     target.friendlist.friends = target.friendlist.friends.filter(
+      (friend) => friend.id !== user.id,
+    );
+    target.friendlist.pending = target.friendlist.pending.filter(
+      (friend) => friend.id !== user.id,
+    );
+    target.friendlist.blocked = target.friendlist.blocked.filter(
       (friend) => friend.id !== user.id,
     );
 
