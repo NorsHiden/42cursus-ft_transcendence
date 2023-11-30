@@ -20,6 +20,7 @@ type UserCardProps = {
   setactiveChanges: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+
 export type settingsData = {
   username: string;
   display_name: string;

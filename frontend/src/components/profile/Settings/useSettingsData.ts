@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import  User  from '@globalTypes/types';
+import  {User}  from '@globalTypes/types';
 import {useRouteLoaderData } from "react-router-dom"
 import axios from 'axios';
 import { toast } from 'sonner';
