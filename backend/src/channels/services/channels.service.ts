@@ -143,6 +143,10 @@ export class ChannelsService implements IChannelsService {
     details: UpdateChannelDetails,
     user: JwtUser,
   ): Promise<Channel> {
+    const channel = await this.findOne(id);
+
+    if (!channel) throw new NotFoundException('Channel Not Found.');
+
     if ((await this.isRole(id, user, 'owner')) === false) {
       throw new UnauthorizedException('You cannot update this channel.');
     }
@@ -175,11 +179,13 @@ export class ChannelsService implements IChannelsService {
   }
 
   public async remove(id: number, user: JwtUser): Promise<Channel> {
+    const channel = await this.findOne(id);
+
+    if (!channel) throw new NotFoundException('Channel Not Found.');
+
     if ((await this.isRole(id, user, 'owner')) === false) {
       throw new UnauthorizedException('You cannot delete this channel.');
     }
-
-    const channel = await this.findOne(id);
 
     const deletedChannel = await this.channelRepository.remove(channel);
     return deletedChannel;
@@ -249,6 +255,17 @@ export class ChannelsService implements IChannelsService {
     if (!userChannel)
       throw new UnauthorizedException('You are not in this channel.');
 
+    if (userChannel.role === 'owner') {
+      const newOwner = await this.userChannelRepository.findOne({
+        where: { channel: { id: channelId } },
+        order: { id: 'ASC' },
+      });
+
+      newOwner.role = 'owner';
+
+      await this.userChannelRepository.save(newOwner);
+    }
+
     await this.userChannelRepository.remove(userChannel);
 
     return channel;
@@ -259,13 +276,13 @@ export class ChannelsService implements IChannelsService {
     userId: string,
     user: JwtUser,
   ): Promise<User> {
-    if ((await this.isRole(channelId, user, 'owner')) === false) {
-      throw new UnauthorizedException('You cannot invite to this channel.');
-    }
-
     const channel = await this.findOne(channelId);
 
     if (!channel) throw new NotFoundException('Channel Not Found.');
+
+    if ((await this.isRole(channelId, user, 'owner')) === false) {
+      throw new UnauthorizedException('You cannot invite to this channel.');
+    }
 
     const invitedUser = await this.usersService.getUser(userId);
 
