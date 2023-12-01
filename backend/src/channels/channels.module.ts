@@ -12,6 +12,8 @@ import { MulterConfigService } from 'src/multer/multer.service';
 import { NotificationService } from 'src/notification/services/notification.service';
 import { NotificationModule } from 'src/notification/notification.module';
 import { Notification } from 'src/typeorm/notification.entity';
+import { MembersController } from './controllers/members.controller';
+import { MembersService } from './services/members.service';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { Notification } from 'src/typeorm/notification.entity';
     }),
     NotificationModule,
   ],
-  controllers: [ChannelsController],
+  controllers: [ChannelsController, MembersController],
   providers: [
     {
       provide: Services.Channels,
@@ -30,6 +32,10 @@ import { Notification } from 'src/typeorm/notification.entity';
     {
       provide: Services.Users,
       useClass: UsersService,
+    },
+    {
+      provide: Services.Members,
+      useClass: MembersService,
     },
   ],
 })

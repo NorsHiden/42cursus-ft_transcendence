@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
   UseGuards,
   Inject,
   UseInterceptors,
@@ -67,15 +66,6 @@ export class ChannelsController {
   @UseInterceptors(ClassSerializerInterceptor)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.channelsService.findOne(id);
-  }
-
-  @Get(':id/members')
-  @UseInterceptors(ClassSerializerInterceptor)
-  findMembers(
-    @Param('id', ParseIntPipe) id: number,
-    @Paginate() query: PaginateQuery,
-  ) {
-    return this.channelsService.findMembers(id, query);
   }
 
   @Patch(':id')

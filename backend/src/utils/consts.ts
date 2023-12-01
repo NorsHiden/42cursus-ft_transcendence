@@ -7,6 +7,7 @@ export enum Routes {
   NOTIFICATION = 'notification',
   ACHIEVEMENT = 'Achievement',
   CHANNELS = 'channels',
+  MEMBERS = 'channels/:id/members',
   MATCH_HISTORY = 'match_history',
 }
 
@@ -19,6 +20,7 @@ export enum Services {
   Gateways = 'GATEWAYS_SERVICE',
   Chat = 'CHAT_SERVICE',
   Channels = 'CHANNELS_SERVICE',
+  Members = 'MEMBERS_SERVICE',
   Game = 'GAME_SERVICE',
   MatchHistory = 'MATCH_HISTORY',
 }

@@ -138,36 +138,6 @@ export class ChannelsService implements IChannelsService {
     return channel;
   }
 
-  async findMembers(
-    id: number,
-    query: PaginateQuery,
-  ): Promise<Paginated<UserChannel>> {
-    const config: PaginateConfig<UserChannel> = {
-      searchableColumns: ['user.username', 'user.display_name'],
-      select: [
-        'id',
-        'role',
-        'state',
-        'timeout',
-        'user.id',
-        'user.username',
-        'user.display_name',
-        'user.profile.avatar',
-        'user.presence',
-      ],
-      defaultSortBy: [['user.display_name', 'ASC']],
-      sortableColumns: ['user.display_name'],
-      relations: ['user', 'user.profile', 'channel'],
-      where: { channel: { id } },
-    };
-
-    return await paginate<UserChannel>(
-      query,
-      this.userChannelRepository,
-      config,
-    );
-  }
-
   public async update(
     id: number,
     details: UpdateChannelDetails,
@@ -355,6 +325,7 @@ export class ChannelsService implements IChannelsService {
     return await bcrypt.hash(password, salt);
   }
 
+  //todo: fetch directly from db without looping
   private async isRole(
     channelId: number,
     user: JwtUser,
