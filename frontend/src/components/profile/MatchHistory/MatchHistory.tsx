@@ -1,12 +1,12 @@
 import { Outlet, useLoaderData, useRouteLoaderData } from "react-router-dom"
 import { useState,useEffect,useCallback,useRef} from "react"
-import { User } from '@globalTypes/types';
+import { CardType, Game, User, player } from '@globalTypes/types';
 import axios from "axios";
 import MatchCard from "../../MatchCard.tsx";
 
 
 const MatchHistory = ()=>{
-    const user = useRouteLoaderData("profule") as User;
+    const user = useRouteLoaderData("profile") as User;
 
     const [matchType, setMatchType] = useState('all');
     const [matches, setMatches] = useState([]);
@@ -33,6 +33,7 @@ const MatchHistory = ()=>{
         console.log(url);
         try {
           const res = await axios.get(url);
+          // if (res.data.length === 0) {
           setMatches(res.data);
         } catch (error) {
           console.log(error);
@@ -74,8 +75,8 @@ const MatchHistory = ()=>{
               id="default-radio-2"
               type="radio"
               name="default-radio-2"
-              value="Won"
-              checked={matchType === 'Won'}
+              value="wins"
+              checked={matchType === 'wins'}
               className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
               onChange={handleTypeChange}
             />
@@ -91,8 +92,8 @@ const MatchHistory = ()=>{
               id="default-radio-3"
               type="radio"
               name="default-radio-3"
-              value="Lost"
-              checked={matchType === 'Lost'}
+              value="losses"
+              checked={matchType === 'losses'}
               className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
               onChange={handleTypeChange}
             />
@@ -108,10 +109,31 @@ const MatchHistory = ()=>{
         id="MatchHistory"
         className="mt-[42px] grid grid-flow-cols grid-cols-1 lg:grid-cols-3 gap-4"
       >
-        {/* {matches.map((match, index) => {
-          
-        })} */}
-        <div ref={lastMatchElementRef} />
+        {matches.map((match, index) => {
+          if (matches.length === index + 1) {
+            return (
+              <div ref={lastMatchElementRef}>
+                <MatchCard
+                  type={CardType.MATCH_HISTORY}
+                  gamemode={Game.REGULAR} 
+                  host={{name: match.home_player.username, avatar: match.home_player.avatar} as player}
+                  opponent={{name: match.away_player.username, avatar: match.away_player.avatar} as player}
+                  time={"12:00"}           
+                        />
+              </div>
+            );
+          } else {
+            <MatchCard
+            type={CardType.MATCH_HISTORY}
+            gamemode={Game.REGULAR} 
+            host={{name: match.home_player.username, avatar: match.home_player.avatar} as player}
+            opponent={{name: match.away_player.username, avatar: match.away_player.avatar} as player}
+            time={"12:00"}           
+                  />
+          }  
+        })}
+
+        {/* <div ref={lastMatchElementRef} /> */}
       </div>
       
     </section>

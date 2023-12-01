@@ -24,10 +24,10 @@ export type User = {
 
 
 export enum Game {
-  CURSED = "cursed",
-  GOLDRUSH = "goldrush",
-  VANISH = "vanish",
-  REGULAR = "regular"
+  CURSED = "CURSED",
+  GOLDRUSH = "GOLD_RUSH",
+  VANISH = "VANISH",
+  REGULAR = "REGULAR"
 
 }
 
