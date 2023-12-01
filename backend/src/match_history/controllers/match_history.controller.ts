@@ -41,10 +41,7 @@ export class MatchHistoryController {
     @Param() params: paramDto,
     @Query('page') page: number,
   ) {
-    return await this.matchHistoryService.getUserHighlightsMatches(
-      params.id,
-      page,
-    );
+    return await this.matchHistoryService.getUserHighlightsMatches(params.id);
   }
 
   @Get(':id/wins')
