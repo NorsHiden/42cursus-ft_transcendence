@@ -3,37 +3,26 @@ import LockCircleOutline from '@assets/novaIcons/outline/LockCircleOutline';
 import PlusOutline from '@assets/novaIcons/outline/PlusOutline';
 import EyeOffSolid from '@assets/novaIcons/solid/EyeOffSolid';
 import Card from '@components/Card';
-import { joinChannel, leaveChannel } from '@pages/Discovery';
-import { User } from '@globalTypes/types';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
-
-export type Channel = {
-  id: number;
-  name: string;
-  avatar: string;
-  banner: string;
-  type: string;
-  protected: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import { Channel, useChannelCard } from './useChannelCard';
+import { User, UserChannel } from '@globalTypes/user';
 
 interface ChannelCardProps {
   channel: Channel;
   me: User;
+  showPopUp: (channel: Channel) => void;
 }
 
-export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me }) => {
-  const [loading, setLoading] = useState(false);
-  const [members, setMembers] = useState([]);
-
+export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp }) => {
+  const { channelMembers, loading, joinChannel, leaveChannel, getChannelMembers } = useChannelCard(
+    channel,
+    showPopUp,
+  );
   useEffect(() => {
-    axios.get(`/api/channels/${channel.id}/members`).then((res) => {
-      setMembers(res.data.data);
-    });
-  }, [channel]);
+    if (loading) return;
+    getChannelMembers();
+  }, [loading, channel]);
 
   return (
     <Card
@@ -61,10 +50,10 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me }) => {
         <div>
           <h1 className="text-white text-3xl font-bold">{channel.name}</h1>
           <p className="text-gray text-sm font-bold">
-            {members.length} member{members.length > 1 && 's'}
+            {channelMembers.length} member{channelMembers.length > 1 && 's'}
           </p>
         </div>
-        {members.find((member: any) => member.id == me.id) ? (
+        {channelMembers.find((member: UserChannel) => member.user.id == me.id) ? (
           <Card
             fill="#5E6069"
             borderWidth={2}
@@ -74,7 +63,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me }) => {
           >
             <button
               className="flex items-center w-full h-full font-medium text-white"
-              onClick={() => leaveChannel(channel.id, setLoading)}
+              onClick={leaveChannel}
             >
               {loading ? (
                 <div className="flex items-center pl-2 gap-[6px]">
@@ -101,7 +90,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me }) => {
               className={`flex items-center w-full h-full font-medium text-white ${
                 loading && 'cursor-not-allowed'
               }`}
-              onClick={() => joinChannel(channel.id, setLoading)}
+              onClick={joinChannel}
             >
               {loading ? (
                 <div className="flex items-center pl-2 gap-[6px]">

@@ -16,3 +16,18 @@ export type User = {
   verified: boolean;
   profile: UserProfile;
 };
+
+export type UserChannel = {
+  id: 46;
+  role: string;
+  state: string;
+  user: {
+    id: number;
+    username: string;
+    display_name: string;
+    presence: 'offline' | 'online' | 'ingame';
+    profile: {
+      avatar: string;
+    };
+  };
+};

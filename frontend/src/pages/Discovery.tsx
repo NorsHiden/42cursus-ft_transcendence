@@ -1,11 +1,14 @@
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import Card from '@components/Card';
-import { Channel, ChannelCard } from '@components/Chat/Discovery/ChannelCard';
+import { ChannelCard } from '@components/Chat/Discovery/ChannelCard';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { User } from '@globalTypes/types';
 import { useLoaderData } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import EllipseOutline from '@assets/novaIcons/outline/Ellipse';
+import { Channel } from '@components/Chat/Discovery/useChannelCard';
+import { User } from '@globalTypes/user';
+import { useDiscovery } from '@components/Chat/Discovery/useDescovery';
+import { PasswordComp } from '@components/Chat/Discovery/PasswordComp';
 
 export type discoveryLoaderType = {
   channels: Channel[];
@@ -22,41 +25,19 @@ export const discoveryLoader = async () => {
   }
 };
 
-export const joinChannel = (
-  channelId: number,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
-  axios.post(`/api/channels/${channelId}/join`).then(() => {
-    setLoading(false);
-  });
-  setLoading(true);
-};
-
-export const leaveChannel = (
-  channelId: number,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
-  axios.delete(`/api/channels/${channelId}/leave`).then(() => {
-    setLoading(false);
-  });
-  setLoading(true);
-};
-
 export const Discovery = () => {
   const { channels, me } = useLoaderData() as discoveryLoaderType;
-
-  const [channelState, setChannelState] = useState<Channel[]>(channels);
-  const [page, setPage] = useState(1);
-
-  const getChannels = async () => {
-    try {
-      const res = await axios.get(`api/channels?page=${page}&limit=8&sortBy=id:ASC`);
-      setChannelState((prevData) => [...prevData, ...res.data.data]);
-      setPage(page + 1);
-    } catch (error) {
-      console.error('Failed to load channels:', error);
-    }
-  };
+  const {
+    channelState,
+    loading,
+    getChannels,
+    searchForChannel,
+    filterChannels,
+    needPassword,
+    showPopUp,
+    hidePopUp,
+    passwordChannel,
+  } = useDiscovery(channels);
 
   return (
     <div className="flex flex-col w-full h-full gap-14">
@@ -77,10 +58,12 @@ export const Discovery = () => {
               name="filter"
               id="filter"
               className="flex w-full pl-4 text-sm appearance-none outline-none bg-[#2D313A] border-gray"
+              onChange={filterChannels}
             >
-              <option value="all">Filter By</option>
-              <option value="popular">Popular</option>
-              <option value="new">New</option>
+              <option value="all">All</option>
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+              <option value="protected">Protected</option>
             </select>
           </Card>
           <Card
@@ -95,26 +78,32 @@ export const Discovery = () => {
               type="text"
               placeholder="Search"
               className="bg-transparent text-sm text-[#717178] w-full h-full outline-none placeholder:text-[#717178]"
+              onChange={searchForChannel}
             />
           </Card>
         </div>
       </header>
-      <div className="h-full overflow-auto">
-        <InfiniteScroll
-          dataLength={1}
-          next={getChannels}
-          hasMore={true}
-          loader={<div className="text-center text-white">Loading...</div>}
-          endMessage={<p className="text-white">No more data to load.</p>}
-          className="h-full overflow-auto"
-        >
-          <div className="grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-2 gap-4">
-            {channelState?.map((channel) => (
-              <ChannelCard key={channel.id} channel={channel} me={me} />
-            ))}
-          </div>
-        </InfiniteScroll>
+      <div className="flex items-start h-full justify-center overflow-auto">
+        {loading ? (
+          <EllipseOutline className="w-12 h-12 text-white animate-spin opacity-20" />
+        ) : (
+          <InfiniteScroll
+            dataLength={1}
+            next={getChannels}
+            hasMore={true}
+            loader={<div className="text-center text-white">Loading...</div>}
+            endMessage={<p className="text-white">No more data to load.</p>}
+            className="h-full overflow-auto"
+          >
+            <div className="grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-2 gap-4">
+              {channelState?.map((channel) => (
+                <ChannelCard key={channel.id} channel={channel} me={me} showPopUp={showPopUp} />
+              ))}
+            </div>
+          </InfiniteScroll>
+        )}
       </div>
+      <PasswordComp channel={passwordChannel} enabled={needPassword} hidePopUp={hidePopUp} />
     </div>
   );
 };
