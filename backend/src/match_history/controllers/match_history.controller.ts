@@ -1,9 +1,11 @@
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
   Inject,
   Param,
+  Post,
   Query,
   Req,
   UseGuards,
@@ -13,6 +15,7 @@ import { Routes, Services } from 'src/utils/consts';
 import { IMatchHistoryService } from '../interfaces/match_history.interface';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { paramDto } from '../dto/param.dto';
+import { MatchHistoryDto } from '../dto/matchHistory.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller(Routes.MATCH_HISTORY)
@@ -58,5 +61,10 @@ export class MatchHistoryController {
     @Query('page') page: number,
   ) {
     return await this.matchHistoryService.getUserLossMatches(params.id, page);
+  }
+
+  @Post('add')
+  async addMatchHistory(@Body() matchHistoryDto: MatchHistoryDto) {
+    return await this.matchHistoryService.addMatchHistory(matchHistoryDto);
   }
 }

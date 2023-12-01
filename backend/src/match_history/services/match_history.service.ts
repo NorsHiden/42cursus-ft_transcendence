@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MatchHistory } from 'src/typeorm/match_history.entity';
 import { Repository } from 'typeorm';
+import { MatchHistoryDto } from '../dto/matchHistory.dto';
+import { User } from 'src/typeorm/user.entity';
 import { MatchHistoryData } from '../types/data.type';
 
 @Injectable()
@@ -172,5 +174,20 @@ export class MatchHistoryService {
 
   async setMatch(match_history: MatchHistory): Promise<MatchHistory> {
     return this.matchHistoryRepository.save(match_history);
+  }
+
+  async addMatchHistory(match_history: MatchHistoryDto): Promise<MatchHistory> {
+    const match_history_entity = new MatchHistory();
+    match_history_entity.game_mode = match_history.game_mode;
+    match_history_entity.home_player = { id: match_history.home_id } as User;
+    match_history_entity.away_player = { id: match_history.away_id } as User;
+    match_history_entity.home_score = match_history.home_score;
+    match_history_entity.away_score = match_history.away_score;
+    match_history_entity.win_gap = Math.abs(
+      match_history.home_score - match_history.away_score,
+    );
+    match_history_entity.created_at = new Date();
+    match_history_entity.ended_at = new Date();
+    return await this.matchHistoryRepository.save(match_history_entity);
   }
 }
