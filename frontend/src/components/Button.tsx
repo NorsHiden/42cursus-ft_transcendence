@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import  Card  from '@components/Card';
 import { MouseEvent } from 'react';
 import { PolygonProps } from '@components/Card/Polygon';

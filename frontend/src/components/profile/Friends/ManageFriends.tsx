@@ -5,10 +5,13 @@ import { useRouteLoaderData } from 'react-router-dom';
 
 
 import UserCard from './Friends-cards/Friends.tsx';
-import { CheckOutline, CloseOutline, Unblock, Block } from '@assets/novaIcons';
+import CheckOutline from '@assets/novaIcons/outline/CheckOutline.tsx';
+import CloseOutline from '@assets/novaIcons/outline/CloseOutline.tsx';
+import Unblock from '@assets/novaIcons/outline/Unblock.tsx';
+import Block from '@assets/novaIcons/outline/block.tsx';
 import { unfriend, block, accept, unblock } from './utils.ts';
 import { User } from '@globalTypes/types';
-import Button from './Button.tsx';
+import Button from '../../Button.tsx';
 
 // get api/friendlist/
 // {

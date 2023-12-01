@@ -1,45 +1,35 @@
-import React, {useState}from "react";
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
-import { User } from '@globalTypes/types';
+import {useState}from "react";
+import { useRouteLoaderData } from "react-router-dom";
+import axios from "axios";
 
+import { User } from '@globalTypes/types';
 import Card from "@components/Card";
 import { PlusOutline,MessageSendSolid,CalendarSolid,LocationSolid} from "@assets/novaIcons";
-import axios from "axios";
-import { get } from "http";
-import { unfriend } from "../Friends/utils";
+import Button from "../../Button.tsx";
+import Unblock from '@assets/novaIcons/outline/Unblock.tsx';
 
-function sendFriendRequest(userId:string){
-  try {
-    const res = axios.post(`/api/friendlist/${userId}/send`);
-    res.then((res)=>{
-      console.log(res);
-    })
-    console.log(res);
-  }
-  catch(error){
-    console.log(error);
-  }
-}
 
 const PlayerProfile = ()=>{
   const user = useRouteLoaderData("profile") as User;
-  const isfriend = useLoaderData() as boolean;
-  const [friend, setFriend] = useState<boolean>(user.isfriend);
   const [loading, setLoading] = useState(false);
-  //send friend request to user if not already friends or pending
 
 
-
+  console.log(user.friendStatus);
   console.log(user);
-    const profileData = {
-      id : user.id,
-      username: user.username,
-      display_name: user.display_name,
-      avatar: user.profile.avatar,
-      about: user.profile.about,
-      location: user.profile.location,
-      birthdate: user.profile.birthdate,
-    }
+ 
+     const unblock = async (userId:number) => {
+      try {
+        setLoading(true);
+        const res = await axios.post(`/api/friendlist/${userId}/unblock`);
+        setLoading(false);
+        if (res.status == 200) {
+          console.log('i unblocked');
+        }
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
 
     function unfriendRequest(){
       try {
@@ -48,7 +38,7 @@ const PlayerProfile = ()=>{
         res.then((res)=>{
           if(res.status == 200)
           {
-            setFriend(false);
+            // setFriend(false);
           }
           setLoading(false);
           console.log(res);
@@ -57,6 +47,7 @@ const PlayerProfile = ()=>{
       }
       catch(error){
         console.log(error);
+        setLoading(false);
       }
     }
 
@@ -67,7 +58,7 @@ const PlayerProfile = ()=>{
         res.then((res)=>{
           if(res.status == 200)
           {
-            setFriend(true);
+            // setFriend(true);
           }
           setLoading(false);
           console.log(res);
@@ -101,33 +92,44 @@ const PlayerProfile = ()=>{
         </div>
         {
           user.isforeign?(<div className="pt-8 flex gap-4">
-          {friend ? (
-            <Card
-              className={`relative flex center text-[#F32C44] z-10 ${loading?'filter opacity-70':''}`}
-              cut={70}
-              borderRadius={10}
-              borderWidth={3}
-              borderColor="#E95E6F" 
+          {user.friendStatus == "FRIEND" ? (
+             <Button
+             className={`w-full h-full center pl-[12px] pr-[20px] py-[8px]  ${loading?'filter opacity-70':''}`}
+             color="BrightRed"
+             onClick={
+               unfriendRequest}
+             cut={55}
+             borderRadius={10}
+             borderWidth={3}
+             borderColor="#E95E6F"
+           >
+             <Unblock className="relative text-white w-[22px] h-[22px]" />
+             <p className="text-white font-poppins font-medium">Unfriend</p>
+           </Button>
+          ) : user.friendStatus == "NONE" ?(
+            <Button className={`w-full h-full center px-4 z-10 ${loading?'filter opacity-70':''}`} color="primary" onClick={sendFriendRequest}
+            cut={55}
+            borderRadius={10}
+            borderWidth={3}
+            borderColor="#FF8C66"
             >
-              <button className="flex center px-4" onClick={unfriendRequest}>
-                <PlusOutline className="font-bold w-[11px] h-[11px] text-white" />
-                <p className="text-white font-poppins font-medium">Unfriend</p>
-              </button>
-            </Card>
-          ) : (
-            <Card
-              className={`relative flex center text-[#FE5821] z-10 ${loading?'filter opacity-70':''}`}
-              cut={30}
-              borderRadius={10}
-              borderWidth={2}
-              borderColor="#FF8C66"
-            >
-              <button className="flex center px-4" onClick={sendFriendRequest}>
-                <PlusOutline className="font-bold w-[11px] h-[11px] text-white" />
-                <p className="text-white font-poppins font-medium">Add as friend</p>
-              </button>
-            </Card>
-          )}
+              <PlusOutline className="font-bold w-[11px] h-[11px] text-white" />
+              <p className="text-white font-poppins font-medium">Add as friend</p>
+            </Button>
+          ):user.friendStatus == "BLOCKED" ?(
+            <Button
+                      className={`w-full h-full center pl-[12px] pr-[20px] py-[8px] gap-1  ${loading?'filter opacity-70':''}`}
+                      onClick={() =>  unblock(user.id)}
+                      color="gray"
+                      cut={35}
+                      borderRadius={10}
+                      borderWidth={3}
+                      borderColor="#858895"
+                    >
+                      <Unblock className="relative text-white w-[22px] h-[22px]" />
+                      <p className="text-white font-poppins font-medium">Unblock</p>
+                    </Button>
+          ):""}
 
           <Card
             className="relative flex center text-[#2D313A] z-10 w-[37px] h-[37px]"

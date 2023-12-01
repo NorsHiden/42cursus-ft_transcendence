@@ -8,7 +8,7 @@ import { useRouteLoaderData } from 'react-router';
 
 const Overview = () => {
   const user = useRouteLoaderData('profile') as User;
-  
+    
   return (
     <>
       <div>
@@ -40,7 +40,7 @@ const Overview = () => {
               id="match-history-cards"
               className="mt-[42px] grid grid-flow-cols grid-cols-1 lg:grid-cols-3 gap-4"
             >
-            
+
               <MatchCard
                 gamemode={Game.VANISH}
                 time="04:23"
