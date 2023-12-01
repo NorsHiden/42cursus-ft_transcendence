@@ -1,4 +1,4 @@
-export {default as Friends} from './Friends/FriendsTabs.tsx';
+export {default as ManageFriends} from './Friends/ManageFriends.tsx';
 export {default as NavLinkButton } from './NavLinkButton';
 export {default as PlayerProfile} from  './ProfileAboutMe/PlayerProfile';
 export {default as Overview} from './Overview/Overview';

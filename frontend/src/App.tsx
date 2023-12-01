@@ -7,7 +7,7 @@ import Home from '@pages/Home';
 import Login from '@pages/Login';
 import PostLogin,{ postLoginLoader } from '@pages/PostLogin';
 import Profile,{profileLoader} from '@pages/Profile';
-import {Overview,MatchHistory,Achievements,Settings,Friends} from '@components/profile';
+import {Overview,MatchHistory,Achievements,Settings,ManageFriends} from '@components/profile';
 
 function Layoutloader() {
   return {
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
           },
           {
             path:'/:user/friends',
-            element:<Friends/>
+            element:<ManageFriends/>
           },
         ]
       },
