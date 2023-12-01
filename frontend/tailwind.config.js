@@ -5,7 +5,7 @@ import debugScreensPlugin from 'tailwindcss-debug-screens';
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
-  { pattern: /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red)/ },
+  { pattern: /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade)/ },
 ],
   theme: {
     screens: {
@@ -73,6 +73,10 @@ export default {
         purple: '#6B26FF',
         pink: '#FF2695',
         red: '#FF2633',
+        DarkMaroon:'#2B1F24',
+        BrightRed:'#F32C44',
+        redShade:'#E95E6F'
+
       },
       spacing: {
         '14': '3.5rem', 
