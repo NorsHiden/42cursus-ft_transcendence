@@ -9,14 +9,16 @@ export async function profileLoader(user:string | undefined) {
   try {
     const res = await axios.get(`/api/users/${user}`);
     const LogedinUser = await axios.get(`/api/users/@me`);
-    const friends = await axios.get("/api/friendlist/friends");
+    const friendStatus = await axios.get(`/api/friendlist/${res.data.id}`);
+
+    // const friends = await axios.get("/api/friendlist/friends");
     
     const username = LogedinUser.data.username;
     
     const userdata = {
       ...res.data,
       isforeign:  username !== res.data.username,
-      isfriend: friends.data.friendlist.friends.some((friend: any) => friend.username === user),
+      friendStatus: friendStatus.data.state,
     }
     // console.log(userdata);
     return userdata;

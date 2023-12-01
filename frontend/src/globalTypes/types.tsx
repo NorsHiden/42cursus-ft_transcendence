@@ -18,7 +18,7 @@ export type User = {
     verified: boolean;
     profile: UserProfile;
     isforeign: boolean;
-    isfriend: boolean;
+    friendStatus: string;
 }
 
 
