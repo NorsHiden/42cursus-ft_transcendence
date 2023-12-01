@@ -10,29 +10,39 @@ export class MatchHistoryService {
     private readonly matchHistoryRepository: Repository<MatchHistory>,
   ) {}
 
-  async getUserMatches(
-    user_id: string,
-    page: number = 0,
-  ): Promise<MatchHistory[]> {
-    return await this.matchHistoryRepository.find({
+  async getUserMatches(user_id: string, page: number) {
+    if (!page) page = 0;
+    const matches = await this.matchHistoryRepository.find({
       where: [
         { home_player: { id: user_id } },
         { away_player: { id: user_id } },
       ],
-      relations: ['home_player', 'away_player'],
+      relations: [
+        'home_player',
+        'away_player',
+        'home_player.profile',
+        'away_player.profile',
+      ],
       order: {
         created_at: 'DESC',
       },
-      take: 10,
-      skip: page ? page * 10 : 0,
     });
+    const matchesNeeded = matches.slice(page * 10, page * 10 + 10);
+    return {
+      data: matchesNeeded,
+      meta: {
+        itemsPerPage: 10,
+        totalItems: matchesNeeded.length,
+        currentPage: page,
+        TotalPages: Math.ceil(matches.length / 10),
+        sortBy: { field: 'created_at', order: 'DESC' },
+      },
+    };
   }
 
-  async getUserWinMatches(
-    user_id: string,
-    page: number,
-  ): Promise<MatchHistory[]> {
-    return await this.matchHistoryRepository.find({
+  async getUserWinMatches(user_id: string, page: number) {
+    if (!page) page = 0;
+    const matches = await this.matchHistoryRepository.find({
       where: [
         {
           home_player: {
@@ -47,20 +57,31 @@ export class MatchHistoryService {
           away_score: 5,
         },
       ],
-      relations: ['away_player', 'home_player'],
+      relations: [
+        'home_player',
+        'away_player',
+        'home_player.profile',
+        'away_player.profile',
+      ],
       order: {
         created_at: 'DESC',
       },
-      take: 10,
-      skip: page ? page * 10 : 0,
     });
+    const matchesNeeded = matches.slice(page * 10, page * 10 + 10);
+    return {
+      data: matchesNeeded,
+      meta: {
+        itemsPerPage: 10,
+        totalItems: matchesNeeded.length,
+        currentPage: page,
+        TotalPages: Math.ceil(matches.length / 10),
+        sortBy: { field: 'created_at', order: 'DESC' },
+      },
+    };
   }
 
-  async getUserHighlightsMatches(
-    user_id: string,
-    page: number,
-  ): Promise<MatchHistory[]> {
-    return await this.matchHistoryRepository.find({
+  async getUserHighlightsMatches(user_id: string) {
+    const matches = await this.matchHistoryRepository.find({
       where: [
         {
           home_player: {
@@ -75,20 +96,33 @@ export class MatchHistoryService {
           away_score: 5,
         },
       ],
-      relations: ['away_player', 'home_player'],
+      relations: [
+        'home_player',
+        'away_player',
+        'home_player.profile',
+        'away_player.profile',
+      ],
       order: {
         win_gap: 'DESC',
         created_at: 'DESC',
       },
       take: 6,
     });
+    return {
+      data: matches,
+      meta: {
+        itemsPerPage: 6,
+        totalItems: matches.length,
+        currentPage: 0,
+        TotalPages: 1,
+        sortBy: { field: 'created_at', order: 'DESC' },
+      },
+    };
   }
 
-  async getUserLossMatches(
-    user_id: string,
-    page: number,
-  ): Promise<MatchHistory[]> {
-    return await this.matchHistoryRepository.find({
+  async getUserLossMatches(user_id: string, page: number) {
+    if (!page) page = 0;
+    const matches = await this.matchHistoryRepository.find({
       where: [
         {
           home_player: {
@@ -112,9 +146,18 @@ export class MatchHistoryService {
       order: {
         created_at: 'DESC',
       },
-      take: 10,
-      skip: page ? page * 10 : 0,
     });
+    const matchesNeeded = matches.slice(page * 10, page * 10 + 10);
+    return {
+      data: matchesNeeded,
+      meta: {
+        itemsPerPage: 10,
+        totalItems: matchesNeeded.length,
+        currentPage: page,
+        TotalPages: Math.ceil(matches.length / 10),
+        sortBy: { field: 'created_at', order: 'DESC' },
+      },
+    };
   }
 
   async setMatch(match_history: MatchHistory): Promise<MatchHistory> {

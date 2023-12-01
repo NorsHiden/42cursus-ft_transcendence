@@ -5,8 +5,5 @@ export interface IMatchHistoryService {
   getUserLossMatches(user_id: string, page: number): Promise<MatchHistory[]>;
   getUserMatches(user_id: string, page: number): Promise<MatchHistory[]>;
   getUserWinMatches(user_id: string, page: number): Promise<MatchHistory[]>;
-  getUserHighlightsMatches(
-    user_id: string,
-    page: number,
-  ): Promise<MatchHistory[]>;
+  getUserHighlightsMatches(user_id: string): Promise<MatchHistory[]>;
 }
