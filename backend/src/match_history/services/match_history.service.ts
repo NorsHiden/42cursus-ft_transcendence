@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MatchHistory } from 'src/typeorm/match_history.entity';
 import { Repository } from 'typeorm';
+import { MatchHistoryData } from '../types/data.type';
 
 @Injectable()
 export class MatchHistoryService {
@@ -10,7 +11,10 @@ export class MatchHistoryService {
     private readonly matchHistoryRepository: Repository<MatchHistory>,
   ) {}
 
-  async getUserMatches(user_id: string, page: number) {
+  async getUserMatches(
+    user_id: string,
+    page: number,
+  ): Promise<MatchHistoryData> {
     if (!page) page = 0;
     const matches = await this.matchHistoryRepository.find({
       where: [
@@ -40,7 +44,10 @@ export class MatchHistoryService {
     };
   }
 
-  async getUserWinMatches(user_id: string, page: number) {
+  async getUserWinMatches(
+    user_id: string,
+    page: number,
+  ): Promise<MatchHistoryData> {
     if (!page) page = 0;
     const matches = await this.matchHistoryRepository.find({
       where: [
@@ -80,7 +87,7 @@ export class MatchHistoryService {
     };
   }
 
-  async getUserHighlightsMatches(user_id: string) {
+  async getUserHighlightsMatches(user_id: string): Promise<MatchHistoryData> {
     const matches = await this.matchHistoryRepository.find({
       where: [
         {
@@ -120,7 +127,10 @@ export class MatchHistoryService {
     };
   }
 
-  async getUserLossMatches(user_id: string, page: number) {
+  async getUserLossMatches(
+    user_id: string,
+    page: number,
+  ): Promise<MatchHistoryData> {
     if (!page) page = 0;
     const matches = await this.matchHistoryRepository.find({
       where: [
