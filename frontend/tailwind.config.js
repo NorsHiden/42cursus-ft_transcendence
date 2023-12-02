@@ -4,7 +4,9 @@ import debugScreensPlugin from 'tailwindcss-debug-screens';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ }],
+  safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
+  { pattern: /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade|gradyDarkShade)/ },
+],
   theme: {
     extend: {
       gridTemplateColumns: {
@@ -40,6 +42,7 @@ export default {
         lightBlack: '#1E1F23',
         darkGray: '#2C2D33',
         gray: '#5E6069',
+        gradyDarkShade:'#2F3136',
         white: '#FFFFFF',
         primary: '#FE5821',
         green: '#D5FF5C',
