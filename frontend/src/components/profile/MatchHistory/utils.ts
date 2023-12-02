@@ -1,15 +1,8 @@
-import {Game,player,CardType} from '@globalTypes/index'
+import {Game,match} from '@globalTypes/index'
 import axios from 'axios';
 // import { useState } from 'react';
 
-export type match =  {
-    match_id: number;
-    game_mode:Game;
-    home_player:player;
-    away_player:player;
-    created_at: Date;
-    ended_at: Date;
-}
+
 
 export const fetchMatches = async (
     matchType: string,
@@ -21,18 +14,12 @@ export const fetchMatches = async (
     prevMatches:match[],
   ): Promise<void> => {
     setLoading(true);
-    // let url = `/api/match_history/${userId}`;
-    // if (matchType !== 'all') {
-    //   url += `/${matchType}`;
-    // }
-    // url += `?page=${page}`;
     const matchTypePath = matchType !== 'all' ? `${matchType}` : '';
     const url = `/api/match_history/${userId}/${matchTypePath}?page=${page}`;
     console.log(url);
     try {
       const res = await axios.get(url);
-    //   console.log(res.data.data);
-    //   console.log(res.data.meta);
+
       if (res.data.meta.currentPage < res.data.meta.TotalPages) {
         setHasMore(true);
       }

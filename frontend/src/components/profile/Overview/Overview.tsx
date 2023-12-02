@@ -5,14 +5,44 @@ import MatchCard from '@components/MatchCard';
 import { Game,player,CardType,User} from '@globalTypes/types';
 import  OverviewCard  from './OverviewCard.tsx';
 import { useRouteLoaderData } from 'react-router';
+import {match} from '@globalTypes/index'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import emptyCard from '@assets/images/matchcardempty.png';
 
 const Overview = () => {
   const user = useRouteLoaderData('profile') as User;
-    
+  const [highlightedMatches, setHighlightedMatches] = useState<match[]>([]);
+
+   useEffect(() => {
+    axios.get(`/api/match_history/${user.id}/highlights`)
+      .then((response) =>{
+        const newMatches:match[] = res.data.data.map((match:any) => ({
+          id: match.id,
+          game_mode: match.game_mode as Game,
+          home_player: {
+              id : match.home_player.id,
+              username: match.home_player.username,
+              score: match.home_score,
+              avatar: match.home_player.profile.avatar,
+          },
+          away_player: {
+              id : match.away_player.id,
+              username: match.away_player.username,
+              score: match.away_score,
+              avatar: match.away_player.profile.avatar,
+          },
+          created_at: new Date(match.created_at),
+          ended_at: new Date(match.ended_at),
+        }));
+        setHighlightedMatches(newMatches);
+      })
+      .catch(error => console.error('Error:', error));
+  }, []);
+
   return (
-    <>
-      <div>
-        <div id="OverviewView" className="">
+   
+        <div id="OverviewView" className="h-screen overflow-auto">
           <div
             id="Overview_info"
             className="mt-[5rem] grid grid-cols-2 lg:grid-cols-5 grid-flow-cols gap-4"
@@ -40,9 +70,37 @@ const Overview = () => {
               id="match-history-cards"
               className="mt-[42px] grid grid-flow-cols grid-cols-1 lg:grid-cols-3 gap-4"
             >
-
+              {
+                highlightedMatches.slice(0, 3).map((match,index) => (
+                  
+                  <MatchCard
+                    gamemode={match.game_mode as Game}
+                    time="04:23"
+                    type={CardType.MATCH_HISTORY}
+                    host={match.home_player}
+                    opponent={match.away_player}
+                  />
+                ))
+              }
+              {
+                highlightedMatches.length === 0 && (
+                  <>
+                  <div className="flex justify-center items-center aspect-[193/143]">
+                    <img src={emptyCard} alt="" />
+                  </div>
+                  <div className="flex justify-center items-center aspect-[193/143]">
+                    <img src={emptyCard} alt="" />
+                  </div>
+                  <div className="flex justify-center items-center aspect-[193/143]">
+                    <img src={emptyCard} alt="" />
+                  </div>
+                  </>
+                  
+                )
+              }
+{/*               
               <MatchCard
-                gamemode={Game.VANISH}
+                gamemode={}
                 time="04:23"
                 type={CardType.MATCH_HISTORY}
                 host={{
@@ -91,12 +149,10 @@ const Overview = () => {
                     score: 5,
                   }
                 }
-              />
+              /> */}
             </div>
           </div>
         </div>
-      </div>
-    </>
   );
 };
 export default Overview;

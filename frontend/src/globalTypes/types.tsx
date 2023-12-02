@@ -22,6 +22,14 @@ export type User = {
 }
 
 
+export type match =  {
+  match_id: number;
+  game_mode:Game;
+  home_player:player;
+  away_player:player;
+  created_at: Date;
+  ended_at: Date;
+}
 
 export enum Game {
   CURSED = "CURSED",
@@ -38,7 +46,7 @@ export enum CardType {
 
 
 export type player = {
-  id:string;
+  id:string
   username: string;
   score: number;
   avatar: string;
