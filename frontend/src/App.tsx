@@ -6,6 +6,7 @@ import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import PostLogin, { postLoginLoader } from '@pages/PostLogin';
+import Chat from '@pages/Chat';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,16 @@ const router = createBrowserRouter([
         path: '/home',
         element: <Home />,
       },
+      {
+        path:'/chat',
+        element: <Chat />,
+        children: [
+          {
+            path: '/chat/:id',
+            element: <Chat />,
+          }
+        ]
+      }
     ],
   },
   {
@@ -27,6 +38,7 @@ const router = createBrowserRouter([
     loader: postLoginLoader,
     element: <PostLogin />,
   },
+  
 ]);
 
 const App: React.FC = () => {
