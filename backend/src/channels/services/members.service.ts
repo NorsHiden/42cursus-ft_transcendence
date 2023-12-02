@@ -15,7 +15,7 @@ import { UserChannel } from 'src/typeorm/userchannel.entity';
 import { Repository } from 'typeorm';
 import { IMembersService } from '../interfaces/IMembersService.interface';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
-import { Services } from 'src/utils/consts';
+import { Services, chatTimout } from 'src/utils/consts';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { JwtUser } from 'src/utils/types';
@@ -151,7 +151,7 @@ export class MembersService implements IMembersService {
       await this.stateResetJob(
         channelId,
         memberId,
-        new Date(Date.now() + 1000 * 10),
+        new Date(Date.now() + chatTimout),
       );
 
       return updatedMember;
@@ -185,7 +185,7 @@ export class MembersService implements IMembersService {
       await this.stateResetJob(
         channelId,
         memberId,
-        new Date(Date.now() + 1000 * 10),
+        new Date(Date.now() + chatTimout),
       );
 
       return mutedUser;

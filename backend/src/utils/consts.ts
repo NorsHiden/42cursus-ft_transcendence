@@ -41,6 +41,8 @@ export enum WebSocketEvents {
   Spectators = 'spectators',
 }
 
+export const chatTimout = 1000 * 60; // 1 minute
+
 export enum GameMode {
   REGULAR = 'REGULAR',
   CURSED = 'CURSED',
