@@ -60,6 +60,12 @@ export class ChannelsController {
     return this.channelsService.findAll(query, user);
   }
 
+  @Get('me')
+  @UseInterceptors(ClassSerializerInterceptor)
+  findMeChannels(@AuthUser() user: JwtUser, @Paginate() query: PaginateQuery) {
+    return this.channelsService.findMeChannels(user, query);
+  }
+
   @Get(':channelId')
   @UseInterceptors(ClassSerializerInterceptor)
   findOne(@Param('channelId', ParseIntPipe) channelId: number) {

@@ -19,7 +19,7 @@ import {
 } from 'src/utils/types';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, Repository } from 'typeorm';
+import { Brackets, Not, Repository } from 'typeorm';
 import { UserChannel } from 'src/typeorm/userchannel.entity';
 import { Channel } from 'src/typeorm/channel.entity';
 import { Services } from 'src/utils/consts';
@@ -28,6 +28,8 @@ import * as bcrypt from 'bcrypt';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
 import { Notification } from 'src/typeorm/notification.entity';
 import { User } from 'src/typeorm/user.entity';
+import { query } from 'express';
+import { channel } from 'diagnostics_channel';
 
 @Injectable()
 export class ChannelsService implements IChannelsService {
@@ -140,6 +142,39 @@ export class ChannelsService implements IChannelsService {
     if (!channel) throw new NotFoundException('Channel Not Found.');
 
     return channel;
+  }
+
+  public async findMeChannels(
+    user: JwtUser,
+    query: PaginateQuery,
+  ): Promise<Paginated<UserChannel>> {
+    const config: PaginateConfig<UserChannel> = {
+      searchableColumns: ['user.username', 'user.display_name'],
+      select: [
+        'id',
+        'role',
+        'state',
+        'channel.id',
+        'channel.name',
+        'channel.type',
+        'channel.protected',
+        'channel.password',
+        'channel.avatar',
+        'channel.banner',
+        'channel.createdAt',
+        'channel.updatedAt',
+      ],
+      defaultSortBy: [['channel.updatedAt', 'ASC']],
+      sortableColumns: ['channel.updatedAt'],
+      relations: ['user', 'channel'],
+      where: { user: { id: user.sub }, state: Not('banned') },
+    };
+
+    return await paginate<UserChannel>(
+      query,
+      this.userChannelRepository,
+      config,
+    );
   }
 
   public async update(

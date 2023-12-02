@@ -12,6 +12,10 @@ export interface IChannelsService {
   create(details: CreateChannelDetails, userId: string): Promise<Channel>;
   findOne(id: number): Promise<Channel>;
   findAll(query: PaginateQuery, user: JwtUser): Promise<Paginated<Channel>>;
+  findMeChannels(
+    user: JwtUser,
+    query: PaginateQuery,
+  ): Promise<Paginated<UserChannel>>;
   update(
     id: number,
     details: UpdateChannelDetails,
