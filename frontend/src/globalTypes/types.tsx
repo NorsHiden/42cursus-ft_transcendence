@@ -38,7 +38,8 @@ export enum CardType {
 
 
 export type player = {
-  name: string;
+  id:string;
+  username: string;
   score: number;
   avatar: string;
 }

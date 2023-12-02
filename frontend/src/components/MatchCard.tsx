@@ -6,6 +6,7 @@ import {CursedIcon,GoldRushIcon,VanishIcon,RegularIcon} from '@assets/gameIcons/
 // import user from '@assets/images/user.png'
 import userAvatar from '@assets/images/user.jpeg';
 import {Game,player,CardType} from '@globalTypes/index'
+// import { match } from 'assert';
 
 
 
@@ -18,13 +19,17 @@ interface MatchHistoryProps {
     time: string;
 }
 
-function time(start: Date, end: Date): string {
-    const diffInMs = Math.abs(end.getTime() - start.getTime());
-    const diffInSecs = Math.floor(diffInMs / 1000);
-    const mins = Math.floor(diffInSecs / 60);
-    const secs = diffInSecs % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  }
+// interface Match {
+//   home_player: player;
+//   away_player: player;
+//   home_score: number;
+//   away_score: number;
+//   match_type: string;
+//   match_date: string;
+//   match_time: string;
+//   match_duration: string;
+// }
+
 
   
 const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,time}) => {
@@ -108,11 +113,11 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
                 />
 
                 <p className="text-white font-poppins lg:font-medium 2xl:font-bold font-bold lg:text-sm 2xl:text-xl text-xl">
-                  RAYVENRTYU
+                  {host.username}
                 </p>
               </div>
               <h1 className="font-rowdies text-white lg:font-medium xl:font-bold lg:text-base 2xl:text-4xl  text-4xl">
-                5
+                {host.score}
               </h1>
             </div>
 
@@ -124,11 +129,11 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
                   alt=""
                 />
                 <p className="text-white font-poppins lg:font-medium 2xl:font-bold font-bold lg:text-sm 2xl:text-xl text-xl">
-                  RAYVENRTYU
+                  {opponent.username}
                 </p>
               </div>
               <h1 className="font-rowdies text-white lg:font-medium xl:font-bold lg:text-base 2xl:text-4xl  text-4xl">
-                5
+                {opponent.score}
               </h1>
             </div>
           </div>
