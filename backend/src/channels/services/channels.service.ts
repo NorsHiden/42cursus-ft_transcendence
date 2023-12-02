@@ -149,7 +149,7 @@ export class ChannelsService implements IChannelsService {
     query: PaginateQuery,
   ): Promise<Paginated<UserChannel>> {
     const config: PaginateConfig<UserChannel> = {
-      searchableColumns: ['user.username', 'user.display_name'],
+      searchableColumns: ['channel.name'],
       select: [
         'id',
         'role',
