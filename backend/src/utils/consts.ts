@@ -7,7 +7,7 @@ export enum Routes {
   NOTIFICATION = 'notification',
   ACHIEVEMENT = 'Achievement',
   CHANNELS = 'channels',
-  MEMBERS = 'channels/:id/members',
+  MEMBERS = 'channels/:channelId/members',
   MATCH_HISTORY = 'match_history',
 }
 

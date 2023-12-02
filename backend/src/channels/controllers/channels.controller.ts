@@ -12,7 +12,6 @@ import {
   ClassSerializerInterceptor,
   UploadedFiles,
   ParseIntPipe,
-  Query,
 } from '@nestjs/common';
 import { CreateChannelDto } from '../dto/create-channel.dto';
 import { UpdateChannelDto } from '../dto/update-channel.dto';
@@ -52,7 +51,6 @@ export class ChannelsController {
       avatar: files?.avatar?.[0],
       banner: files?.banner?.[0],
     };
-
     return this.channelsService.create(details, user.sub);
   }
 
@@ -62,19 +60,19 @@ export class ChannelsController {
     return this.channelsService.findAll(query, user);
   }
 
-  @Get(':id')
+  @Get(':channelId')
   @UseInterceptors(ClassSerializerInterceptor)
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.channelsService.findOne(id);
+  findOne(@Param('channelId', ParseIntPipe) channelId: number) {
+    return this.channelsService.findOne(channelId);
   }
 
-  @Patch(':id')
+  @Patch(':channelId')
   @UseInterceptors(
     ClassSerializerInterceptor,
     FileFieldsInterceptor(imagesFileFields),
   )
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Body() updateChannelDto: UpdateChannelDto,
     @UploadedFiles() files: ImagesFiles,
     @AuthUser() user: JwtUser,
@@ -84,38 +82,44 @@ export class ChannelsController {
       avatar: files?.avatar?.[0],
       banner: files?.banner?.[0],
     };
-    return this.channelsService.update(id, details, user);
+    return this.channelsService.update(channelId, details, user);
   }
 
-  @Delete(':id')
+  @Delete(':channelId')
   @UseInterceptors(ClassSerializerInterceptor)
-  remove(@Param('id', ParseIntPipe) id: number, @AuthUser() user: JwtUser) {
-    return this.channelsService.remove(id, user);
+  remove(
+    @Param('channelId', ParseIntPipe) channelId: number,
+    @AuthUser() user: JwtUser,
+  ) {
+    return this.channelsService.remove(channelId, user);
   }
 
-  @Post(':id/join')
+  @Post(':channelId/join')
   @UseInterceptors(ClassSerializerInterceptor)
   join(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Body('password') password: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.channelsService.join(id, user, password);
+    return this.channelsService.join(channelId, user, password);
   }
 
-  @Delete(':id/leave')
+  @Delete(':channelId/leave')
   @UseInterceptors(ClassSerializerInterceptor)
-  leave(@Param('id', ParseIntPipe) id: number, @AuthUser() user: JwtUser) {
-    return this.channelsService.leave(id, user);
+  leave(
+    @Param('channelId', ParseIntPipe) channelId: number,
+    @AuthUser() user: JwtUser,
+  ) {
+    return this.channelsService.leave(channelId, user);
   }
 
-  @Post(':id/invite')
+  @Post(':channelId/invite')
   @UseInterceptors(ClassSerializerInterceptor)
   invite(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Param('userId', ParseIntPipe) userId: number,
     @AuthUser() user: JwtUser,
   ) {
-    return this.channelsService.invite(id, userId.toString(), user);
+    return this.channelsService.invite(channelId, userId.toString(), user);
   }
 }

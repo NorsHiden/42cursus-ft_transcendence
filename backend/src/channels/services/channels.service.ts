@@ -44,35 +44,39 @@ export class ChannelsService implements IChannelsService {
     details: CreateChannelDetails,
     userId: string,
   ): Promise<Channel> {
-    const owner = await this.usersService.getUser(userId);
+    try {
+      const owner = await this.usersService.getUser(userId);
 
-    details.password =
-      details.type === 'private' ? undefined : details.password;
+      details.password =
+        details.type === 'private' ? undefined : details.password;
 
-    const hashedPassword = details.password
-      ? await this.hashPassword(details.password)
-      : null;
+      const hashedPassword = details.password
+        ? await this.hashPassword(details.password)
+        : null;
 
-    const newChannel = this.channelRepository.create({
-      name: details.name,
-      type: details.type,
-      protected: details.password ? true : false,
-      password: hashedPassword,
-      avatar: details.avatar?.path?.slice(2),
-      banner: details.banner?.path?.slice(2),
-    });
+      const newChannel = this.channelRepository.create({
+        name: details.name,
+        type: details.type,
+        protected: details.password ? true : false,
+        password: hashedPassword,
+        avatar: details.avatar?.path?.slice(2),
+        banner: details.banner?.path?.slice(2),
+      });
 
-    const channel = await this.channelRepository.save(newChannel);
+      const channel = await this.channelRepository.save(newChannel);
 
-    const userChannel = this.userChannelRepository.create({
-      role: 'owner',
-      user: owner,
-      channel: channel,
-    });
+      const userChannel = this.userChannelRepository.create({
+        role: 'owner',
+        user: owner,
+        channel: channel,
+      });
 
-    this.userChannelRepository.save(userChannel);
+      this.userChannelRepository.save(userChannel);
 
-    return channel;
+      return channel;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async findAll(
@@ -114,12 +118,12 @@ export class ChannelsService implements IChannelsService {
     return await paginate<Channel>(query, queryBuilder, config);
   }
 
-  public async findOne(id: number): Promise<Channel> {
+  public async findOne(channelId: number): Promise<Channel> {
     const channel = await this.channelRepository
       .createQueryBuilder('channel')
       .leftJoinAndSelect('channel.members', 'members')
       .leftJoinAndSelect('members.user', 'user')
-      .where('channel.id = :id', { id })
+      .where('channel.id = :channelId', { channelId })
       .select([
         'channel.id',
         'channel.name',
@@ -139,56 +143,61 @@ export class ChannelsService implements IChannelsService {
   }
 
   public async update(
-    id: number,
+    channelId: number,
     details: UpdateChannelDetails,
     user: JwtUser,
   ): Promise<Channel> {
-    const channel = await this.findOne(id);
+    try {
+      const channel = await this.findOne(channelId);
 
-    if (!channel) throw new NotFoundException('Channel Not Found.');
+      if (!(await this.isRole(channelId, user, 'owner'))) {
+        throw new UnauthorizedException('You cannot update this channel.');
+      }
 
-    if ((await this.isRole(id, user, 'owner')) === false) {
-      throw new UnauthorizedException('You cannot update this channel.');
+      details.password =
+        details.type === 'private' ? undefined : details.password;
+
+      const hashedPassword = details.password
+        ? await this.hashPassword(details.password)
+        : undefined;
+
+      const newChannel = this.channelRepository.create({
+        name: details.name,
+        type: details.type,
+        protected: details.password ? true : undefined,
+        password: hashedPassword,
+        avatar: details.avatar?.path?.slice(2),
+        banner: details.banner?.path?.slice(2),
+      });
+
+      await this.channelRepository
+        .createQueryBuilder('channel')
+        .update(newChannel)
+        .where('id = :channelId', { channelId })
+        .execute();
+
+      let updatedChannel = await this.findOne(channel.id);
+
+      return updatedChannel;
+    } catch (error) {
+      throw error;
     }
-
-    details.password =
-      details.type === 'private' ? undefined : details.password;
-
-    const hashedPassword = details.password
-      ? await this.hashPassword(details.password)
-      : undefined;
-
-    const newChannel = this.channelRepository.create({
-      name: details.name,
-      type: details.type,
-      protected: details.password ? true : undefined,
-      password: hashedPassword,
-      avatar: details.avatar?.path?.slice(2),
-      banner: details.banner?.path?.slice(2),
-    });
-
-    await this.channelRepository
-      .createQueryBuilder('channel')
-      .update(newChannel)
-      .where('id = :id', { id })
-      .execute();
-
-    let updatedChannel = await this.findOne(id);
-
-    return updatedChannel;
   }
 
-  public async remove(id: number, user: JwtUser): Promise<Channel> {
-    const channel = await this.findOne(id);
+  public async remove(channelId: number, user: JwtUser): Promise<Channel> {
+    try {
+      const channel = await this.findOne(channelId);
 
-    if (!channel) throw new NotFoundException('Channel Not Found.');
+      if (!(await this.isRole(channelId, user, 'owner'))) {
+        throw new UnauthorizedException('You cannot delete this channel.');
+      }
 
-    if ((await this.isRole(id, user, 'owner')) === false) {
-      throw new UnauthorizedException('You cannot delete this channel.');
+      const deletedChannel = await this.channelRepository.remove(channel);
+
+      return deletedChannel;
+    } catch (error) {
+      throw error;
     }
-
-    const deletedChannel = await this.channelRepository.remove(channel);
-    return deletedChannel;
   }
 
   public async join(
@@ -196,82 +205,88 @@ export class ChannelsService implements IChannelsService {
     user: JwtUser,
     password?: string,
   ): Promise<Channel> {
-    const channel = await this.findOne(channelId);
+    try {
+      const channel = await this.findOne(channelId);
 
-    if (!channel) throw new NotFoundException('Channel Not Found.');
+      const member = await this.userChannelRepository.findOne({
+        where: { user: { id: user.sub }, channel: { id: channelId } },
+      });
 
-    const member = await this.userChannelRepository.findOne({
-      where: { user: { id: user.sub }, channel: { id: channelId } },
-    });
-
-    if (member) {
-      if (member.state === 'banned')
-        throw new UnauthorizedException('You are banned from this channel.');
-      else throw new BadRequestException('You are already in this channel.');
-    }
-
-    if (channel.type === 'private') {
       const invite = await this.findInvite(user.sub, channelId);
 
-      if (!invite)
-        throw new UnauthorizedException('You are not invited to this channel.');
+      if (member && member.state === 'banned')
+        throw new UnauthorizedException('You are banned from this channel.');
+
+      if (member)
+        throw new BadRequestException('You are already in this channel.');
+
+      if (!invite && channel.type === 'private')
+        throw new BadRequestException('You are not invited to this channel.');
+
+      if (channel.protected) {
+        console.log(password);
+        if (!password) throw new BadRequestException('Password is required.');
+
+        console.log(channel);
+
+        const isPasswordValid = await bcrypt.compare(
+          password,
+          channel.password,
+        );
+
+        if (!isPasswordValid)
+          throw new BadRequestException('Invalid Password.');
+      }
 
       invite.status = 'accepted';
 
       await this.notificationService.setNotification(invite);
+
+      const newMember = this.userChannelRepository.create({
+        role: 'member',
+        state: 'active',
+        user: { id: user.sub },
+        channel: { id: channelId },
+      });
+
+      await this.userChannelRepository.save(newMember);
+
+      return channel;
+    } catch (error) {
+      throw error;
     }
-
-    if (channel.protected) {
-      console.log(password);
-      if (!password) throw new BadRequestException('Password is required.');
-
-      console.log(channel);
-
-      const isPasswordValid = await bcrypt.compare(password, channel.password);
-
-      if (!isPasswordValid) throw new BadRequestException('Invalid Password.');
-    }
-
-    const newMember = this.userChannelRepository.create({
-      role: 'member',
-      state: 'active',
-      user: { id: user.sub },
-      channel: { id: channelId },
-    });
-
-    await this.userChannelRepository.save(newMember);
-
-    return channel;
   }
 
   public async leave(channelId: number, user: JwtUser): Promise<Channel> {
-    const channel = await this.findOne(channelId);
+    try {
+      const channel = await this.findOne(channelId);
 
-    if (!channel) throw new NotFoundException('Channel Not Found.');
-
-    const userChannel = await this.userChannelRepository.findOne({
-      where: { user: { id: user.sub }, channel: { id: channelId } },
-    });
-
-    if (!userChannel)
-      throw new UnauthorizedException('You are not in this channel.');
-
-    if (userChannel.role === 'owner') {
-      const newOwner = await this.userChannelRepository.findOne({
-        where: { channel: { id: channelId } },
-        order: { id: 'ASC' },
+      const userChannel = await this.userChannelRepository.findOne({
+        where: { user: { id: user.sub }, channel: { id: channelId } },
       });
 
-      if (!newOwner) this.channelRepository.remove(channel);
+      if (!userChannel)
+        throw new UnauthorizedException('You are not in this channel.');
 
-      newOwner.role = 'owner';
+      if (userChannel.role === 'owner') {
+        const newOwner = await this.userChannelRepository.findOne({
+          where: { channel: { id: channelId } },
+          order: { id: 'ASC' },
+        });
 
-      await this.userChannelRepository.save(newOwner);
+        if (!newOwner) this.channelRepository.remove(channel);
+
+        newOwner.role = 'owner';
+
+        await this.userChannelRepository.save(newOwner);
+      }
+
+      await this.userChannelRepository.remove(userChannel);
+
+      return channel;
+    } catch (error) {
+      throw error;
     }
-
-    await this.userChannelRepository.remove(userChannel);
-
-    return channel;
   }
 
   public async invite(
@@ -279,44 +294,45 @@ export class ChannelsService implements IChannelsService {
     userId: string,
     user: JwtUser,
   ): Promise<User> {
-    const channel = await this.findOne(channelId);
+    try {
+      const channel = await this.findOne(channelId);
 
-    if (!channel) throw new NotFoundException('Channel Not Found.');
+      if ((await this.isRole(channelId, user, 'owner')) === false) {
+        throw new UnauthorizedException('You cannot invite to this channel.');
+      }
 
-    if ((await this.isRole(channelId, user, 'owner')) === false) {
-      throw new UnauthorizedException('You cannot invite to this channel.');
+      const invitedUser = await this.usersService.getUser(userId);
+
+      const userChannel = await this.userChannelRepository.findOne({
+        where: { user: { id: invitedUser.id }, channel: { id: channel.id } },
+      });
+
+      if (userChannel) {
+        if (userChannel.state === 'banned')
+          throw new UnauthorizedException('User is banned from this channel.');
+        else
+          throw new UnauthorizedException('User is already in this channel.');
+      }
+
+      const invite = await this.findInvite(invitedUser.id, channelId);
+
+      if (invite)
+        throw new UnauthorizedException(
+          'User is already invited to this channel.',
+        );
+
+      this.notificationService.addNotification(invitedUser.id, {
+        action: 'CHANNEL_INVITE',
+        recipient: invitedUser,
+        sender: null,
+        record_id: channelId,
+        status: 'pending',
+      } as Notification);
+
+      return invitedUser;
+    } catch (error) {
+      throw error;
     }
-
-    const invitedUser = await this.usersService.getUser(userId);
-
-    if (!invitedUser) throw new NotFoundException('User Not Found.');
-
-    const userChannel = await this.userChannelRepository.findOne({
-      where: { user: { id: invitedUser.id }, channel: { id: channelId } },
-    });
-
-    if (userChannel) {
-      if (userChannel.state === 'banned')
-        throw new UnauthorizedException('User is banned from this channel.');
-      else throw new UnauthorizedException('User is already in this channel.');
-    }
-
-    const invite = await this.findInvite(invitedUser.id, channelId);
-
-    if (invite)
-      throw new UnauthorizedException(
-        'User is already invited to this channel.',
-      );
-
-    this.notificationService.addNotification(invitedUser.id, {
-      action: 'CHANNEL_INVITE',
-      recipient: invitedUser,
-      sender: null,
-      record_id: channelId,
-      status: 'pending',
-    } as Notification);
-
-    return invitedUser;
   }
 
   private async findInvite(
@@ -345,23 +361,22 @@ export class ChannelsService implements IChannelsService {
     return await bcrypt.hash(password, salt);
   }
 
-  //todo: fetch directly from db without looping
   private async isRole(
     channelId: number,
     user: JwtUser,
     role: string,
   ): Promise<boolean> {
-    const channel = await this.channelRepository
-      .createQueryBuilder('channel')
-      .leftJoinAndSelect('channel.members', 'members')
-      .leftJoinAndSelect('members.user', 'user')
-      .where('channel.id = :id', { id: channelId })
+    const member = await this.userChannelRepository
+      .createQueryBuilder('members')
+      .leftJoinAndSelect('member.user', 'user')
+      .leftJoinAndSelect('member.channel', 'channel')
+      .where('user.id = :userId', { userId: user.sub })
+      .andWhere('channel.id = :channelId', { channelId })
+      .andWhere('uc.role = :role', { role })
       .getOne();
 
-    console.log(channelId);
+    if (!member) return false;
 
-    return channel.members.some(
-      (member) => member.user.id === user.sub && member.role === role,
-    );
+    return true;
   }
 }

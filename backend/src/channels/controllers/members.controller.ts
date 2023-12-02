@@ -28,54 +28,58 @@ export class MembersController {
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
   findAll(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Paginate() query: PaginateQuery,
   ) {
-    return this.membersService.findAll(id, query);
+    return this.membersService.findAll(channelId, query);
   }
 
   @Get(':userId')
   @UseInterceptors(ClassSerializerInterceptor)
   findOne(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Param('userId', ParseIntPipe) userId: string,
   ) {
-    return this.membersService.findOne(id, userId.toString());
+    return this.membersService.findOne(channelId, userId.toString());
   }
 
   @Delete(':userId')
   remove(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.kick(id, userId.toString(), user);
+    return this.membersService.kick(channelId, userId.toString(), user);
   }
 
   @Patch('ban/:userId')
   ban(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.ban(id, userId.toString(), user);
+    return this.membersService.ban(channelId, userId.toString(), user);
   }
 
   @Patch('mute/:userId')
   mute(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.mute(id, userId.toString(), user);
+    return this.membersService.mute(channelId, userId.toString(), user);
   }
 
   @Patch('elevate/:userId')
   elevateToAdmin(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.elevateToAdmin(id, userId.toString(), user);
+    return this.membersService.elevateToAdmin(
+      channelId,
+      userId.toString(),
+      user,
+    );
   }
 }
