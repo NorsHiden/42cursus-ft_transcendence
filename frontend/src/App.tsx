@@ -6,7 +6,7 @@ import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import PostLogin, { postLoginLoader } from '@pages/PostLogin';
-import { Discovery, discoveryLoader } from '@pages/Discovery';
+import { Discovery } from '@pages/Discovery';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,6 @@ const router = createBrowserRouter([
       },
       {
         path: '/discovery',
-        loader: discoveryLoader,
         element: <Discovery />,
       },
     ],

@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
 import { Channel, useChannelCard } from './useChannelCard';
 import { User, UserChannel } from '@globalTypes/user';
+import { useNavigate } from 'react-router-dom';
 
 interface ChannelCardProps {
   channel: Channel;
@@ -15,14 +16,16 @@ interface ChannelCardProps {
 }
 
 export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp }) => {
+  const navigate = useNavigate();
   const { channelMembers, loading, joinChannel, leaveChannel, getChannelMembers } = useChannelCard(
     channel,
     showPopUp,
+    navigate,
   );
+
   useEffect(() => {
-    if (loading) return;
     getChannelMembers();
-  }, [loading, channel]);
+  }, []);
 
   return (
     <Card
@@ -30,7 +33,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp
       borderWidth={1}
       borderColor="#4B5261"
       cut={10}
-      className="flex flex-col relative h-[22rem] w-[23rem] gap-16 text-[#1E1F23]"
+      className="flex flex-col relative gap-16 text-[#1E1F23] aspect-[193/172]"
     >
       <img src={channel.banner} className="h-32 w-full object-cover" />
       {(channel.type == 'private' || channel.protected) && (
@@ -68,7 +71,6 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp
               {loading ? (
                 <div className="flex items-center pl-2 gap-[6px]">
                   <EllipseOutline className="w-4 h-4 text-white animate-spin" />
-                  <p className="text-sm">Leaving</p>
                 </div>
               ) : (
                 <div className="flex items-center pl-4 gap-[6px]">
@@ -88,15 +90,12 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp
           >
             <button
               className={`flex items-center w-full h-full font-medium text-white ${
-                loading && 'cursor-not-allowed'
+                loading && 'cursor-not-allowed justify-center'
               }`}
               onClick={joinChannel}
             >
               {loading ? (
-                <div className="flex items-center pl-2 gap-[6px]">
-                  <EllipseOutline className="w-4 h-4 text-white animate-spin" />
-                  <p className="text-sm">Joining</p>
-                </div>
+                <EllipseOutline className="w-4 h-4 text-white animate-spin" />
               ) : (
                 <div className="flex items-center pl-4 gap-[6px]">
                   <PlusOutline className=" w-4 h-4" />

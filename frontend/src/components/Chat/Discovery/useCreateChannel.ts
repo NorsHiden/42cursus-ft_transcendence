@@ -57,7 +57,10 @@ export const useCreateChannel = (hidePopUp: () => void, navigate: NavigateFuncti
       return toast.error('Channel name must be at least 3 characters');
     formData.append('name', channel.name as string);
     if (!channel.type || !channel.type.length) return toast.error('Channel type is required');
-    formData.append('type', channel.type.toLowerCase());
+    formData.append(
+      'type',
+      channel.type.toLowerCase() == 'protected' ? 'public' : channel.type.toLowerCase(),
+    );
     if (channel.password) {
       formData.append('protected', 'true');
       formData.append('password', channel.password as string);
@@ -67,10 +70,10 @@ export const useCreateChannel = (hidePopUp: () => void, navigate: NavigateFuncti
     toast.dismiss();
     toast.promise(res, {
       loading: 'Creating channel...',
-      success: () => {
+      success: (data) => {
         setLoading(false);
         hidePopUp();
-        navigate('/discovery');
+        navigate(`/chat/${data.data.id}`);
         return 'Channel has been created';
       },
       error: (error) => {

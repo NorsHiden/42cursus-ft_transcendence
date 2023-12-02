@@ -56,17 +56,19 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) =>
                 }));
               }}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              className="h-16 w-72 p-4 text-md appearance-none outline-none bg-transparent rounded-2xl border-2 border-[#3E4048]"
-              onChange={(event) => {
-                setChannel((prev: CreateChannelType) => ({
-                  ...prev,
-                  password: event.target.value,
-                }));
-              }}
-            />
+            {channel.type?.toLowerCase() === 'protected' && (
+              <input
+                type="password"
+                placeholder="Password"
+                className="h-16 w-72 p-4 text-md appearance-none outline-none bg-transparent rounded-2xl border-2 border-[#3E4048]"
+                onChange={(event) => {
+                  setChannel((prev: CreateChannelType) => ({
+                    ...prev,
+                    password: event.target.value,
+                  }));
+                }}
+              />
+            )}
           </div>
         </label>
         <div className="flex flex-col items-center gap-2 pt-8">

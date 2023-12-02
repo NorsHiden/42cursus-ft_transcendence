@@ -1,34 +1,21 @@
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import Card from '@components/Card';
 import { ChannelCard } from '@components/Chat/Discovery/ChannelCard';
-import axios from 'axios';
-import { useLoaderData } from 'react-router-dom';
 import EllipseOutline from '@assets/novaIcons/outline/Ellipse';
 import { Channel } from '@components/Chat/Discovery/useChannelCard';
 import { User } from '@globalTypes/user';
 import { useDiscovery } from '@components/Chat/Discovery/useDiscovery';
 import { PasswordComp } from '@components/Chat/Discovery/PasswordComp';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export type discoveryLoaderType = {
   channels: Channel[];
   me: User;
 };
 
-export const discoveryLoader = async () => {
-  try {
-    const resChannel = await axios.get('api/channels?page=1&limit=8&sortBy=id:ASC');
-    const resMe = await axios.get('api/users/@me');
-    return { channels: resChannel.data.data, me: resMe.data };
-  } catch (error) {
-    throw new Error('Failed to load channels');
-  }
-};
-
 export const Discovery = () => {
-  const { channels, me } = useLoaderData() as discoveryLoaderType;
   const {
-    channelState,
+    channels,
     loading,
     getChannels,
     searchForChannel,
@@ -37,8 +24,11 @@ export const Discovery = () => {
     showPopUp,
     hidePopUp,
     hasMore,
+    setPage,
     passwordChannel,
-  } = useDiscovery(channels);
+    me,
+    getMe,
+  } = useDiscovery();
 
   const observer = useRef<
     | IntersectionObserver
@@ -48,16 +38,20 @@ export const Discovery = () => {
       }
   >();
 
-  const lastChannelElementRef = useCallback(
-    (node: HTMLDivElement) => {
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) getChannels();
-      });
-      if (node) observer.current.observe(node);
-    },
-    [getChannels],
-  );
+  const lastChannelElementRef = useCallback((node: HTMLDivElement) => {
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        getChannels();
+        setPage((prevPage) => prevPage + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, []);
+
+  useEffect(() => {
+    getMe();
+  }, []);
 
   return (
     <div className="flex flex-col w-full h-full gap-14">
@@ -109,7 +103,7 @@ export const Discovery = () => {
         ) : (
           <div className="flex flex-col w-full h-full gap-8">
             <div className="grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-2 gap-4">
-              {channelState?.map((channel, index) => (
+              {channels?.map((channel, index) => (
                 <ChannelCard key={index} channel={channel} me={me} showPopUp={showPopUp} />
               ))}
             </div>

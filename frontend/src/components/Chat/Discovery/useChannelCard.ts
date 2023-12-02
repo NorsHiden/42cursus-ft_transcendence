@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { NavigateFunction } from 'react-router-dom';
 
 export type Channel = {
   id: number;
@@ -12,24 +13,32 @@ export type Channel = {
   updatedAt: Date;
 };
 
-export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) => void) => {
+export const useChannelCard = (
+  channel: Channel,
+  showPopUp: (channel: Channel) => void,
+  navigate: NavigateFunction,
+) => {
   const [loading, setLoading] = useState(false);
   const [channelMembers, setChannelMembers] = useState([]);
 
   const joinChannel = () => {
+    if (loading) return;
     if (channel.protected) return showPopUp(channel);
     axios
       .post(`/api/channels/${channel.id}/join`)
       .then(() => {
         setLoading(false);
+        navigate(`/chat/${channel.id}`);
       })
-      .catch(() => {
+      .catch((error) => {
         setLoading(false);
+        console.log(error);
       });
     setLoading(true);
   };
 
   const leaveChannel = () => {
+    if (loading) return;
     axios.delete(`/api/channels/${channel.id}/leave`).then(() => {
       setLoading(false);
     });
@@ -37,9 +46,13 @@ export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) =
   };
 
   const getChannelMembers = () => {
+    if (loading) return;
     axios.get(`/api/channels/${channel.id}/members`).then((res) => {
+      console.log(res.data);
       setChannelMembers(res.data.data);
+      setLoading(false);
     });
+    setLoading(true);
   };
 
   return {
