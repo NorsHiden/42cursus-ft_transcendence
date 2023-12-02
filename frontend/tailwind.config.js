@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 import debugScreensPlugin from 'tailwindcss-debug-screens';
-
+import scrollbar from 'tailwind-scrollbar';
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
@@ -23,6 +23,7 @@ export default {
       '2xl': '1536px',
     },
     extend: {
+      scrollbar: ['dark'],
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',
       },
@@ -121,5 +122,5 @@ export default {
       '5xl': '3.052rem',
     },
   },
-  plugins: [debugScreensPlugin],
+  plugins: [debugScreensPlugin, scrollbar],
 };
