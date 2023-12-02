@@ -3,12 +3,12 @@ import Card from '@components/Card';
 import { ChannelCard } from '@components/Chat/Discovery/ChannelCard';
 import axios from 'axios';
 import { useLoaderData } from 'react-router-dom';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import EllipseOutline from '@assets/novaIcons/outline/Ellipse';
 import { Channel } from '@components/Chat/Discovery/useChannelCard';
 import { User } from '@globalTypes/user';
-import { useDiscovery } from '@components/Chat/Discovery/useDescovery';
+import { useDiscovery } from '@components/Chat/Discovery/useDiscovery';
 import { PasswordComp } from '@components/Chat/Discovery/PasswordComp';
+import { useCallback, useRef } from 'react';
 
 export type discoveryLoaderType = {
   channels: Channel[];
@@ -36,8 +36,28 @@ export const Discovery = () => {
     needPassword,
     showPopUp,
     hidePopUp,
+    hasMore,
     passwordChannel,
   } = useDiscovery(channels);
+
+  const observer = useRef<
+    | IntersectionObserver
+    | {
+        disconnect: () => void;
+        observe: (arg0: Element) => void;
+      }
+  >();
+
+  const lastChannelElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) getChannels();
+      });
+      if (node) observer.current.observe(node);
+    },
+    [getChannels],
+  );
 
   return (
     <div className="flex flex-col w-full h-full gap-14">
@@ -87,20 +107,21 @@ export const Discovery = () => {
         {loading ? (
           <EllipseOutline className="w-12 h-12 text-white animate-spin opacity-20" />
         ) : (
-          <InfiniteScroll
-            dataLength={1}
-            next={getChannels}
-            hasMore={true}
-            loader={<div className="text-center text-white">Loading...</div>}
-            endMessage={<p className="text-white">No more data to load.</p>}
-            className="h-full overflow-auto"
-          >
+          <div className="flex flex-col w-full h-full gap-8">
             <div className="grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-2 gap-4">
-              {channelState?.map((channel) => (
-                <ChannelCard key={channel.id} channel={channel} me={me} showPopUp={showPopUp} />
+              {channelState?.map((channel, index) => (
+                <ChannelCard key={index} channel={channel} me={me} showPopUp={showPopUp} />
               ))}
             </div>
-          </InfiniteScroll>
+            {hasMore && (
+              <div
+                ref={lastChannelElementRef}
+                className="flex items-col items-center justify-center w-full"
+              >
+                <EllipseOutline className="w-12 h-12 text-white animate-spin opacity-20" />
+              </div>
+            )}
+          </div>
         )}
       </div>
       <PasswordComp channel={passwordChannel} enabled={needPassword} hidePopUp={hidePopUp} />

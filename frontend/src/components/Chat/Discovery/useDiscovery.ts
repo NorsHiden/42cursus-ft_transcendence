@@ -5,15 +5,18 @@ import axios from 'axios';
 export const useDiscovery = (channels: Channel[]) => {
   const [channelState, setChannelState] = useState<Channel[]>(channels);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
+  const [hasMore, setHasMore] = useState(true);
   const [needPassword, setNeedPassword] = useState(false);
   const [passwordChannel, setPasswordChannel] = useState<Channel | null>(null);
 
   const getChannels = async () => {
     try {
       const res = await axios.get(`api/channels?page=${page}&limit=8&sortBy=id:ASC`);
+      console.log(page);
+      if (res.data.data.length < 8) setHasMore(false);
       setChannelState((prevData) => [...prevData, ...res.data.data]);
-      setPage(page + 1);
+      setPage((prevPage) => prevPage + 1);
     } catch (error) {
       console.error('Failed to load channels:', error);
     }
@@ -56,6 +59,7 @@ export const useDiscovery = (channels: Channel[]) => {
     needPassword,
     showPopUp,
     hidePopUp,
+    hasMore,
     passwordChannel,
   };
 };
