@@ -14,9 +14,6 @@ export class UserChannel {
   @Column('text', { nullable: true })
   state: MemberState;
 
-  @Column('timestamp', { nullable: true })
-  timeout: number;
-
   @ManyToOne(() => User, (user) => user.channels)
   user: User;
 

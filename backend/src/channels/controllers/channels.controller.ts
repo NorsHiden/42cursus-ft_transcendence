@@ -113,9 +113,9 @@ export class ChannelsController {
   @UseInterceptors(ClassSerializerInterceptor)
   invite(
     @Param('id', ParseIntPipe) id: number,
-    @Body('userId') userId: string,
+    @Param('userId', ParseIntPipe) userId: number,
     @AuthUser() user: JwtUser,
   ) {
-    return this.channelsService.invite(id, userId, user);
+    return this.channelsService.invite(id, userId.toString(), user);
   }
 }

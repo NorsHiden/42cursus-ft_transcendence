@@ -234,6 +234,7 @@ export class ChannelsService implements IChannelsService {
 
     const newMember = this.userChannelRepository.create({
       role: 'member',
+      state: 'active',
       user: { id: user.sub },
       channel: { id: channelId },
     });
@@ -260,6 +261,8 @@ export class ChannelsService implements IChannelsService {
         where: { channel: { id: channelId } },
         order: { id: 'ASC' },
       });
+
+      if (!newOwner) this.channelRepository.remove(channel);
 
       newOwner.role = 'owner';
 

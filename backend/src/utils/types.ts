@@ -7,7 +7,7 @@ export type JwtPayload = {
 
 export type JwtUser = Partial<JwtPayload>;
 
-export type MemberState = 'banned' | 'muted';
+export type MemberState = 'banned' | 'muted' | 'active';
 
 export type ChannelRole = 'owner' | 'admin' | 'member';
 
