@@ -224,10 +224,7 @@ export class ChannelsService implements IChannelsService {
         throw new BadRequestException('You are not invited to this channel.');
 
       if (channel.protected) {
-        console.log(password);
         if (!password) throw new BadRequestException('Password is required.');
-
-        console.log(channel);
 
         const isPasswordValid = await bcrypt.compare(
           password,
@@ -238,9 +235,11 @@ export class ChannelsService implements IChannelsService {
           throw new BadRequestException('Invalid Password.');
       }
 
-      invite.status = 'accepted';
+      if (invite) {
+        invite.status = 'accepted';
 
-      await this.notificationService.setNotification(invite);
+        await this.notificationService.setNotification(invite);
+      }
 
       const newMember = this.userChannelRepository.create({
         role: 'member',
