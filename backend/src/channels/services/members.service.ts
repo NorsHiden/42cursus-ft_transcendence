@@ -12,7 +12,7 @@ import {
   paginate,
 } from 'nestjs-paginate';
 import { UserChannel } from 'src/typeorm/userchannel.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { IMembersService } from '../interfaces/IMembersService.interface';
 import { IChannelsService } from '../interfaces/IChannelsService.interface';
 import { Services, chatTimout } from 'src/utils/consts';
@@ -53,7 +53,7 @@ export class MembersService implements IMembersService {
       defaultSortBy: [['user.display_name', 'ASC']],
       sortableColumns: ['user.display_name'],
       relations: ['user', 'user.profile', 'channel'],
-      where: { channel: { id } },
+      where: { channel: { id }, state: Not('banned') },
     };
 
     return await paginate<UserChannel>(
@@ -115,6 +115,9 @@ export class MembersService implements IMembersService {
       if (member.role === 'owner')
         throw new UnauthorizedException('You cannot kick the owner');
 
+      if (member.state === 'banned')
+        throw new UnauthorizedException('This user is already banned');
+
       const kickedMember = await this.userChannelRepository.remove(member);
 
       return kickedMember;
@@ -143,6 +146,14 @@ export class MembersService implements IMembersService {
 
       if (member.role === 'owner')
         throw new UnauthorizedException('You cannot ban the owner');
+
+      if (member.state === 'banned')
+        throw new UnauthorizedException('This user is already banned');
+
+      if (member.state === 'muted')
+        this.SchedulerRegistry.deleteCronJob(
+          `state-reset-${channelId}-${memberId}`,
+        );
 
       member.state = 'banned';
 
@@ -177,6 +188,15 @@ export class MembersService implements IMembersService {
         );
 
       const member = await this.findOne(channelId, memberId);
+
+      if (member.role === 'owner')
+        throw new UnauthorizedException('You cannot mute the owner');
+
+      if (member.state === 'muted')
+        throw new UnauthorizedException('This user is already muted');
+
+      if (member.state === 'banned')
+        throw new UnauthorizedException('you cannot mute a banned user');
 
       member.state = 'muted';
 
@@ -214,6 +234,9 @@ export class MembersService implements IMembersService {
 
       if (member.role !== 'member')
         throw new UnauthorizedException('You cannot elevate this user');
+
+      if (member.state === 'banned')
+        throw new UnauthorizedException('You cannot elevate a banned user');
 
       member.role = 'admin';
 
