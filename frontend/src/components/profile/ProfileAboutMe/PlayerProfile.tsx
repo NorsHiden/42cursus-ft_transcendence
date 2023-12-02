@@ -4,7 +4,10 @@ import axios from "axios";
 
 import { User } from '@globalTypes/types';
 import Card from "@components/Card";
-import { PlusOutline,MessageSendSolid,CalendarSolid,LocationSolid} from "@assets/novaIcons";
+import PlusOutline from "@assets/novaIcons/outline/PlusOutline.tsx";
+import MessageSendSolid from "@assets/novaIcons/solid/MessageSendSolid.tsx";
+import CalendarSolid from "@assets/novaIcons/solid/CalendarSolid.tsx";
+import LocationSolid from "@assets/novaIcons/solid/LocationSolid.tsx";
 import Button from "../../Button.tsx";
 import Unblock from '@assets/novaIcons/outline/Unblock.tsx';
 
