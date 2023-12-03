@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { Channel } from './useChannelCard';
 import EllipseOutline from '@assets/novaIcons/outline/Ellipse';
 import Card from '@components/Card';
-import axios from 'axios';
-import { toast } from 'sonner';
+import { usePasswordComp } from './usePasswordComp';
 
 interface PasswordCompProps {
   channel: Channel | null;
@@ -12,31 +10,7 @@ interface PasswordCompProps {
 }
 
 export const PasswordComp: React.FC<PasswordCompProps> = ({ channel, enabled, hidePopUp }) => {
-  const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState('');
-
-  const joinChannel = () => {
-    if (loading || !channel) return;
-    const res = axios.post(`api/channels/${channel.id}/join`, {
-      password: password,
-    });
-    setLoading(true);
-    toast.dismiss();
-    toast.promise(res, {
-      loading: 'Joining...',
-      success: () => {
-        setLoading(false);
-        setLoading(false);
-        hidePopUp();
-        return 'You have successfully joined the channel';
-      },
-      error: (error) => {
-        setLoading(false);
-        return error.response.data.message;
-      },
-    });
-  };
-
+  const { loading, password, setPassword, joinChannel } = usePasswordComp(channel, hidePopUp);
   return (
     <div
       className={`flex items-center justify-center absolute top-0 right-0 w-screen h-screen transition-all duration-300 ${
@@ -48,7 +22,13 @@ export const PasswordComp: React.FC<PasswordCompProps> = ({ channel, enabled, hi
           enabled ? 'opacity-100' : 'opacity-0'
         }`}
       />
-      <div className="absolute w-full h-full bg-black opacity-75" onClick={hidePopUp} />
+      <div
+        className="absolute w-full h-full bg-black opacity-75"
+        onClick={() => {
+          hidePopUp();
+          setPassword('');
+        }}
+      />
       <div className="flex relative flex-col items-center h-[80%] overflow-auto xl:h-[35rem] w-[30rem] bg-lightBlack rounded-3xl z-10 xl:overflow-hidden">
         <img src={channel?.banner} className="h-48 w-full object-cover object-center" />
         <div className="absolute h-48 w-full bg-gradient-to-b from-transparent to-lightBlack" />
@@ -59,6 +39,7 @@ export const PasswordComp: React.FC<PasswordCompProps> = ({ channel, enabled, hi
             <p className="text-gray">Enter password</p>
             <input
               type="password"
+              value={password}
               placeholder="Password"
               className="h-16 w-72 p-4 text-md appearance-none outline-none bg-transparent rounded-2xl border-2 border-[#3E4048]"
               onChange={(e) => setPassword(e.target.value)}
@@ -79,7 +60,7 @@ export const PasswordComp: React.FC<PasswordCompProps> = ({ channel, enabled, hi
                 {loading ? (
                   <EllipseOutline className="w-8 h-8 text-white animate-spin" />
                 ) : (
-                  <p className="text-3xl">Join</p>
+                  <p className="text-2xl">Join</p>
                 )}
               </button>
             </Card>

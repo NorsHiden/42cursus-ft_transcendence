@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { NavigateFunction } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export type Channel = {
   id: number;
@@ -13,42 +14,51 @@ export type Channel = {
   updatedAt: Date;
 };
 
-export const useChannelCard = (
-  channel: Channel,
-  showPopUp: (channel: Channel) => void,
-  navigate: NavigateFunction,
-) => {
+export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) => void) => {
   const [loading, setLoading] = useState(false);
   const [channelMembers, setChannelMembers] = useState([]);
+  const navigate = useNavigate();
 
   const joinChannel = () => {
     if (loading) return;
     if (channel.protected) return showPopUp(channel);
-    axios
-      .post(`/api/channels/${channel.id}/join`)
-      .then(() => {
+    const res = axios.post(`/api/channels/${channel.id}/join`);
+    setLoading(true);
+    toast.dismiss();
+    toast.promise(res, {
+      loading: `Joining ${channel.name}...`,
+      success: () => {
         setLoading(false);
         navigate(`/chat/${channel.id}`);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error);
-      });
-    setLoading(true);
+        return 'You have joined the channel successfully!';
+      },
+      error: (error) => `${error.response.data.message}`,
+      finally: () => setLoading(false),
+    });
   };
 
   const leaveChannel = () => {
     if (loading) return;
-    axios.delete(`/api/channels/${channel.id}/leave`).then(() => {
-      setLoading(false);
+    const res = axios.delete(`/api/channels/${channel.id}/leave`).then(() => {
+      getChannelMembers();
     });
     setLoading(true);
+    toast.dismiss();
+    toast.promise(res, {
+      loading: `Leaving ${channel.name}...`,
+      success: () => {
+        getChannelMembers();
+        return 'You have left the channel successfully!';
+      },
+      error: (error) => {
+        setLoading(false);
+        return error.response.data.message;
+      },
+    });
   };
 
   const getChannelMembers = () => {
-    if (loading) return;
     axios.get(`/api/channels/${channel.id}/members`).then((res) => {
-      console.log(res.data);
       setChannelMembers(res.data.data);
       setLoading(false);
     });

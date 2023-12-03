@@ -3,7 +3,6 @@ import Card from '@components/Card';
 import { CreateChannelType, useCreateChannel } from './useCreateChannel';
 import { FC } from 'react';
 import { ChannelAvatarInput, ChannelBannerInput } from './ChannelImageInput';
-import { useNavigate } from 'react-router-dom';
 
 interface CreateChannelProps {
   enabled: boolean;
@@ -11,9 +10,8 @@ interface CreateChannelProps {
 }
 
 export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) => {
-  const navigate = useNavigate();
   const { channel, setChannel, loading, handleAvatarUpload, handleBannerUpload, createChannel } =
-    useCreateChannel(hidePopUp, navigate);
+    useCreateChannel(hidePopUp);
 
   return (
     <div
@@ -31,7 +29,7 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) =>
         <ChannelBannerInput channel={channel} handleBannerUpload={handleBannerUpload} />
         <div className="absolute h-48 w-full bg-gradient-to-b from-transparent to-lightBlack" />
         <ChannelAvatarInput channel={channel} handleAvatarUpload={handleAvatarUpload} />
-        <label className="flex flex-col items-center text-white pt-72 2xl:pt-24 gap-7">
+        <label className="flex flex-col items-center text-white pt-72 lg:pt-24 gap-7">
           <p className="text-white">Create your channel and invite your friends</p>
           <div className="flex flex-col items-center justify-center gap-6">
             <input
@@ -71,7 +69,7 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) =>
             )}
           </div>
         </label>
-        <div className="flex flex-col items-center gap-2 pt-8">
+        <div className="flex flex-col items-center gap-2 my-8">
           <Card
             fill="#FE5821"
             borderWidth={2}
@@ -88,7 +86,7 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) =>
               {loading ? (
                 <EllipseOutline className="w-8 h-8 text-white animate-spin" />
               ) : (
-                <p className="text-3xl">Create</p>
+                <p className="text-2xl">Create</p>
               )}
             </button>
           </Card>

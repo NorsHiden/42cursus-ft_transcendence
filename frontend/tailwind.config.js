@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 import debugScreensPlugin from 'tailwindcss-debug-screens';
+import scrollbar from 'tailwind-scrollbar';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -67,5 +68,5 @@ export default {
       '5xl': '3.052rem',
     },
   },
-  plugins: [debugScreensPlugin],
+  plugins: [debugScreensPlugin,scrollbar],
 };

@@ -1,12 +1,12 @@
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import Card from '@components/Card';
 import { ChannelCard } from '@components/Chat/Discovery/ChannelCard';
-import EllipseOutline from '@assets/novaIcons/outline/Ellipse';
 import { Channel } from '@components/Chat/Discovery/useChannelCard';
 import { User } from '@globalTypes/user';
 import { useDiscovery } from '@components/Chat/Discovery/useDiscovery';
 import { PasswordComp } from '@components/Chat/Discovery/PasswordComp';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+import DropDown from '@assets/novaIcons/solid/DropDown';
 
 export type discoveryLoaderType = {
   channels: Channel[];
@@ -17,37 +17,18 @@ export const Discovery = () => {
   const {
     channels,
     loading,
-    getChannels,
     searchForChannel,
     filterChannels,
     needPassword,
     showPopUp,
     hidePopUp,
     hasMore,
-    setPage,
     passwordChannel,
     me,
     getMe,
+    searchLoading,
+    lastChannelElementRef,
   } = useDiscovery();
-
-  const observer = useRef<
-    | IntersectionObserver
-    | {
-        disconnect: () => void;
-        observe: (arg0: Element) => void;
-      }
-  >();
-
-  const lastChannelElementRef = useCallback((node: HTMLDivElement) => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
-        getChannels();
-        setPage((prevPage) => prevPage + 1);
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, []);
 
   useEffect(() => {
     getMe();
@@ -66,7 +47,7 @@ export const Discovery = () => {
             borderWidth={2}
             borderColor="#4B5261"
             cut={32}
-            className="flex items-center h-8 w-36 text-[#717178] justify-between"
+            className="flex group relative items-center h-8 w-36 text-[#717178] justify-between"
           >
             <select
               name="filter"
@@ -79,6 +60,7 @@ export const Discovery = () => {
               <option value="private">Private</option>
               <option value="protected">Protected</option>
             </select>
+            <DropDown className="absolute right-2 h-2 w-2" />
           </Card>
           <Card
             fill="#2D313A"
@@ -97,26 +79,27 @@ export const Discovery = () => {
           </Card>
         </div>
       </header>
-      <div className="flex items-start h-full justify-center overflow-auto">
-        {loading ? (
-          <EllipseOutline className="w-12 h-12 text-white animate-spin opacity-20" />
-        ) : (
-          <div className="flex flex-col w-full h-full gap-8">
-            <div className="grid grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-2 gap-4">
-              {channels?.map((channel, index) => (
+      <div className="flex items-start h-full justify-center overflow-y-auto overflow-x-hidden scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-[#5E6069] scrollbar-mr-4">
+        <div className="flex flex-col w-full h-full gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-2 gap-4">
+            {!searchLoading &&
+              channels?.map((channel, index) => (
                 <ChannelCard key={index} channel={channel} me={me} showPopUp={showPopUp} />
               ))}
-            </div>
-            {hasMore && (
-              <div
-                ref={lastChannelElementRef}
-                className="flex items-col items-center justify-center w-full"
-              >
-                <EllipseOutline className="w-12 h-12 text-white animate-spin opacity-20" />
-              </div>
-            )}
+            {(loading || searchLoading) &&
+              Array.from({
+                length: 4,
+              }).map((_, index) => (
+                <Card
+                  fill="#1E1F23"
+                  key={index}
+                  cut={10}
+                  className="flex flex-col relative gap-16 text-[#1E1F23] aspect-[193/172] w-full h-full animate-pulse"
+                ></Card>
+              ))}
+            {!searchLoading && hasMore && <div ref={lastChannelElementRef}></div>}
           </div>
-        )}
+        </div>
       </div>
       <PasswordComp channel={passwordChannel} enabled={needPassword} hidePopUp={hidePopUp} />
     </div>

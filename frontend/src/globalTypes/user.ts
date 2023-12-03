@@ -18,16 +18,10 @@ export type User = {
 };
 
 export type UserChannel = {
-  id: 46;
   role: string;
   state: string;
-  user: {
-    id: number;
-    username: string;
-    display_name: string;
-    presence: 'offline' | 'online' | 'ingame';
-    profile: {
-      avatar: string;
-    };
-  };
+  userId: number;
+  displayName: string;
+  presence: string;
+  avatar: string;
 };

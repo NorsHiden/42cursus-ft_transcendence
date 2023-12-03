@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { NavigateFunction } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 export type CreateChannelType = {
@@ -17,9 +17,11 @@ export type CreateChannelType = {
   password?: string;
 };
 
-export const useCreateChannel = (hidePopUp: () => void, navigate: NavigateFunction) => {
+export const useCreateChannel = (hidePopUp: () => void) => {
   const [channel, setChannel] = useState<CreateChannelType>({} as CreateChannelType);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
