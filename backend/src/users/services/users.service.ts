@@ -106,13 +106,19 @@ export class UsersService implements IUsersService {
 
   // Methods to retrieve specific lists from the user's friend list.
   async getFriends(user_id: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: {
-        id: user_id,
-      },
-      select: ['friendlist'],
-      relations: ['friendlist.friends', 'friendlist.friends.profile'],
-    });
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = :user_id', { user_id })
+      .leftJoinAndSelect('user.friendlist', 'friendlist')
+      .leftJoinAndSelect('friendlist.friends', 'friend')
+      .leftJoinAndSelect('friend.profile', 'profile')
+      .orderBy(
+        'CASE WHEN friend.presence = :online THEN 1 WHEN friend.presence = :ingame THEN 2 ELSE 3 END',
+        'ASC',
+      )
+      .setParameter('online', 'online')
+      .setParameter('ingame', 'ingame')
+      .getOne();
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
   }

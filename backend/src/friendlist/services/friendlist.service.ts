@@ -258,4 +258,5 @@ export class FriendlistService implements IFriendlistService {
     // Save the updated user information.
     await this.usersService.setUser(user);
   }
+  z;
 }
