@@ -61,7 +61,6 @@ export class ChannelsController {
   }
 
   @Get('me')
-  @UseInterceptors(ClassSerializerInterceptor)
   findMeChannels(@AuthUser() user: JwtUser, @Paginate() query: PaginateQuery) {
     return this.channelsService.findMeChannels(user, query);
   }
