@@ -13,6 +13,7 @@ export type User = {
   wins: number;
   loses: number;
   points: number;
+  presence?: 'online' | 'offline' | 'ingame';
   verified: boolean;
   profile: UserProfile;
 };

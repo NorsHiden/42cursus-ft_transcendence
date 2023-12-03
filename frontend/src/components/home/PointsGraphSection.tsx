@@ -26,7 +26,9 @@ const PointsGraphSection: React.FC = () => {
   // };
 
   return (
-    <section className="justify-self-center col-span-2 flex flex-col items-center gap-y-5">
+    <section
+      className={`hidden xl:flex flex-col items-center justify-self-center col-span-2 gap-y-5`}
+    >
       <div className="flex items-center gap-x-10">
         <div className="flex flex-col flex-shrink-0 items-baseline">
           <h1 className="font-serif text-white text-4xl">641 pts</h1>
