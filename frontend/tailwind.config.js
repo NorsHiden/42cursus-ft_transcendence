@@ -1,16 +1,35 @@
 /** @type {import('tailwindcss').Config} */
 
 import debugScreensPlugin from 'tailwindcss-debug-screens';
+import scrollbar from 'tailwind-scrollbar';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
-  { pattern: /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade|gradyDarkShade)/ },
+  { pattern: /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade)/ },
 ],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
+      scrollbar: ['dark'],
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',
+      },
+      mixBlendMode: {
+        'color-dodge': 'color-dodge',
       },
       gridTemplateRows: {
         layout: '120px minmax(0, 1fr)',
@@ -18,6 +37,11 @@ export default {
         chat: 'auto minmax(0, 1fr) max-content',
       },
       colors: {
+        accent: '#FE5821',
+        background:'#1B191D',
+        'input-color': '#1E1F23',
+        'input-border-color':'#3E4048',
+        gray :'#71717A',
         regular: {
           color: '#C2784F',
           dark: '#24150D',
@@ -41,20 +65,50 @@ export default {
         black: '#1B191D',
         lightBlack: '#1E1F23',
         darkGray: '#2C2D33',
+        CharcoalGray: '#3E4048',
         gray: '#5E6069',
-        gradyDarkShade:'#2F3136',
         white: '#FFFFFF',
         primary: '#FE5821',
+        shade: '#FF8C66',
         green: '#D5FF5C',
         blue: '#3DFFFB',
         brown: '#70311E',
         purple: '#6B26FF',
         pink: '#FF2695',
         red: '#FF2633',
+        DarkMaroon:'#2B1F24',
+        BrightRed:'#F32C44',
+        redShade:'#E95E6F'
+
+      },
+      spacing: {
+        '14': '3.5rem', 
+      },
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+        'rowdies': ['Rowdies', 'sans-serif'],
+        mono: ['ui-monospace', 'monospace'],
+        'inter': ['Inter', 'sans-serif'],
+        'inter': ['Inter', 'sans-serif'],
+      },
+      aspectRatio: {
+        '7/10': '70%',
+      },
+      fontSize: {
+        xs: '0.5rem',
+        sm: '0.8rem',
+        base: '1rem',
+        lg: '1.25rem',
+        xl: '1.30rem',
+        '2xl': '1.563rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
       },
     },
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],
+      'inter': ['Inter', 'sans-serif'],
       serif: ['Rowdies', 'serif'],
       mono: ['ui-monospace', 'monospace'],
     },
@@ -70,5 +124,5 @@ export default {
       '5xl': '3.052rem',
     },
   },
-  plugins: [debugScreensPlugin],
+  plugins: [debugScreensPlugin, scrollbar],
 };

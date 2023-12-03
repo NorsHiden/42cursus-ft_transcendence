@@ -7,6 +7,8 @@ import Home from '@pages/Home';
 import Login from '@pages/Login';
 import PostLogin, { postLoginLoader } from '@pages/PostLogin';
 import Chat from '@pages/Chat';
+import ChatMainPannel from '@components/chat/ChatMain/ChatMainPannel';
+import { ChatMainPannelLoader } from '@pages/Chat';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +25,8 @@ const router = createBrowserRouter([
         children: [
           {
             path: '/chat/:id',
-            element: <Chat />,
+            element: <ChatMainPannel />,
+            // loader:({ params }) => ChatMainPannelLoader(params.id),
           }
         ]
       }
