@@ -23,6 +23,10 @@ export type CreateChannelDetails = {
   banner?: Express.Multer.File;
 };
 
+export type CreateMessageDetails = {
+  content: string;
+};
+
 export type UpdateChannelDetails = {
   name?: string;
   type?: ChannelType;

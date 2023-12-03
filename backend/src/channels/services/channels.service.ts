@@ -69,6 +69,7 @@ export class ChannelsService implements IChannelsService {
 
       const userChannel = this.userChannelRepository.create({
         role: 'owner',
+        state: 'active',
         user: owner,
         channel: channel,
       });

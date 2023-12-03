@@ -14,16 +14,25 @@ import { NotificationModule } from 'src/notification/notification.module';
 import { Notification } from 'src/typeorm/notification.entity';
 import { MembersController } from './controllers/members.controller';
 import { MembersService } from './services/members.service';
+import { Message } from 'src/typeorm/message.entity';
+import { MessagesService } from './services/messages.service';
+import { MessagesController } from './controllers/messages.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Channel, UserChannel, User, Notification]),
+    TypeOrmModule.forFeature([
+      Channel,
+      UserChannel,
+      User,
+      Notification,
+      Message,
+    ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
     NotificationModule,
   ],
-  controllers: [ChannelsController, MembersController],
+  controllers: [ChannelsController, MembersController, MessagesController],
   providers: [
     {
       provide: Services.Channels,
@@ -36,6 +45,10 @@ import { MembersService } from './services/members.service';
     {
       provide: Services.Members,
       useClass: MembersService,
+    },
+    {
+      provide: Services.Messages,
+      useClass: MessagesService,
     },
   ],
 })

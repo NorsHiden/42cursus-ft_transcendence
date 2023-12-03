@@ -9,6 +9,7 @@ import {
 import { UserChannel } from './userchannel.entity';
 import { ChannelType } from 'src/utils/types';
 import { Exclude } from 'class-transformer';
+import { Message } from './message.entity';
 
 @Entity({ name: 'channels' })
 export class Channel {
@@ -45,4 +46,10 @@ export class Channel {
     onDelete: 'CASCADE',
   })
   members: UserChannel[];
+
+  @OneToMany(() => Message, (message) => message.channel, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  messages: Message[];
 }

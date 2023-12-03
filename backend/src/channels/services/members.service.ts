@@ -67,31 +67,33 @@ export class MembersService implements IMembersService {
     channelId: number,
     memberId: string,
   ): Promise<UserChannel> {
-    const channel = await this.channelsService.findOne(channelId);
+    try {
+      const channel = await this.channelsService.findOne(channelId);
 
-    if (!channel) throw new NotFoundException('Channel not found');
+      const member = await this.userChannelRepository
+        .createQueryBuilder('members')
+        .leftJoinAndSelect('members.user', 'user')
+        .leftJoinAndSelect('user.profile', 'profile')
+        .where('members.channel = :channelId', { channelId: channel.id })
+        .andWhere('members.user = :memberId', { memberId })
+        .select([
+          'members.id',
+          'members.role',
+          'members.state',
+          'user.id',
+          'user.username',
+          'user.display_name',
+          'profile.avatar',
+          'user.presence',
+        ])
+        .getOne();
 
-    const member = await this.userChannelRepository
-      .createQueryBuilder('members')
-      .leftJoinAndSelect('members.user', 'user')
-      .leftJoinAndSelect('user.profile', 'profile')
-      .where('members.channel = :channelId', { channelId })
-      .andWhere('members.user = :memberId', { memberId })
-      .select([
-        'members.id',
-        'members.role',
-        'members.state',
-        'user.id',
-        'user.username',
-        'user.display_name',
-        'profile.avatar',
-        'user.presence',
-      ])
-      .getOne();
+      if (!member) throw new NotFoundException('User is not in this channel');
 
-    if (!member) throw new NotFoundException('Member not found');
-
-    return member;
+      return member;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async kick(

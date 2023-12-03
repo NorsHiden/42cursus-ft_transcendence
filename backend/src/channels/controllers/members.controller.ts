@@ -18,6 +18,7 @@ import { AuthUser } from 'src/utils/decorators';
 import { JwtUser } from 'src/utils/types';
 
 @UseGuards(JwtAuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller(Routes.MEMBERS)
 export class MembersController {
   constructor(
@@ -26,7 +27,6 @@ export class MembersController {
   ) {}
 
   @Get()
-  @UseInterceptors(ClassSerializerInterceptor)
   findAll(
     @Param('channelId', ParseIntPipe) channelId: number,
     @Paginate() query: PaginateQuery,
