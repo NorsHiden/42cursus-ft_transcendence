@@ -242,7 +242,7 @@ export class UsersService implements IUsersService {
 
   async setPresence(
     user_id: string,
-    presence: 'online' | 'offline' | 'in-game',
+    presence: 'online' | 'offline' | 'ingame',
   ): Promise<User> {
     const user = await this.getUser(user_id);
     user.presence = presence;

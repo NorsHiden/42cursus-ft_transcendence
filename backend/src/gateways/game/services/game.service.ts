@@ -220,9 +220,13 @@ export class GameService {
       action != 'SEARCH' &&
       action != 'INVITE' &&
       action != 'ACCEPT' &&
-      action != 'CANCEL'
+      action != 'CANCEL' &&
+      game_mode != GameMode.REGULAR &&
+      game_mode != GameMode.VANISH &&
+      game_mode != GameMode.CURSED &&
+      game_mode != GameMode.GOLD_RUSH
     ) {
-      throw new WsException('Invalid Action');
+      throw new WsException('Invalid Action || game_mode');
     }
 
     if (action == 'CANCEL') return this.leaveLobby(client);
@@ -265,13 +269,21 @@ export class GameService {
     server: Server,
     inGameIndex: number,
   ): Promise<void> {
-    if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id)
+    if (this.users.get(client.id) === this.ingame[inGameIndex].home_player.id) {
+      await this.usersService.setPresence(
+        this.ingame[inGameIndex].home_player.id,
+        'ingame',
+      );
       this.ingame[inGameIndex].game_data.home.is_ready = true;
-    else if (
+    } else if (
       this.users.get(client.id) === this.ingame[inGameIndex].away_player.id
-    )
+    ) {
+      await this.usersService.setPresence(
+        this.ingame[inGameIndex].away_player.id,
+        'ingame',
+      );
       this.ingame[inGameIndex].game_data.away.is_ready = true;
-    else {
+    } else {
       const spectator = await this.usersService.getUser(
         this.users.get(client.id),
       );
@@ -463,6 +475,8 @@ export class GameService {
     await this.achievementService.setAchievement(winner.id, 'victory_lap');
     await this.achievementService.setAchievement(winner.id, 'game_on');
     await this.achievementService.setAchievement(loser.id, 'game_on');
+    await this.usersService.setPresence(winner.id, 'online');
+    await this.usersService.setPresence(loser.id, 'online');
     if (ingame.home_player.id == loser.id && !ingame.game_data.score.home)
       await this.achievementService.setAchievement(
         winner.id,

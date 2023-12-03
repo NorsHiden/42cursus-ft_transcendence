@@ -93,7 +93,7 @@ export class User {
   _2fa_secret: string;
 
   @Column({ default: 'offline' })
-  presence: 'online' | 'offline' | 'in-game';
+  presence: 'online' | 'offline' | 'ingame';
 
   // Many-to-many relationships with friendlists
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.friends)

@@ -36,7 +36,7 @@ export interface IUsersService {
   getUsers(query: string): Promise<User[]>;
   setPresence(
     user_id: string,
-    presence: 'online' | 'offline' | 'in-game',
+    presence: 'online' | 'offline' | 'ingame',
   ): Promise<User>;
 
   // boolean
