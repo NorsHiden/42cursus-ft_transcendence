@@ -7,11 +7,14 @@ import {
   Sse,
   UseGuards,
   Res,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { Routes, Services } from 'src/utils/consts';
 import { INotificationService } from '../interfaces/notification.interface';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller(Routes.NOTIFICATION)
 @UseGuards(JwtAuthGuard)
 export class NotificationController {

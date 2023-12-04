@@ -103,7 +103,13 @@ export class UsersService implements IUsersService {
         id: user_id,
       },
       select: ['notifications'],
-      relations: ['notifications'],
+      relations: [
+        'notifications',
+        'sender',
+        'recipient',
+        'sender.profile',
+        'recipient.profile',
+      ],
     });
     if (!user) throw new NotFoundException('User Not Found.');
     return user;

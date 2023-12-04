@@ -28,6 +28,7 @@ export class NotificationService implements INotificationService {
       where: {
         recipient: user,
       },
+      relations: ['sender', 'recipient', 'sender.profile', 'recipient.profile'],
       order: {
         created_at: 'DESC',
       },
@@ -43,7 +44,7 @@ export class NotificationService implements INotificationService {
       where: {
         id: notification_id,
       },
-      relations: ['recipient', 'sender'],
+      relations: ['sender', 'recipient', 'sender.profile', 'recipient.profile'],
     });
   }
 
