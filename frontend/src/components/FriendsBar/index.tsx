@@ -10,7 +10,7 @@ const FriendsBar: React.FC = () => {
   }, []);
 
   return (
-    <aside className=" w-full h-full flex flex-col items-center py-8">
+    <aside className="flex w-full h-full flex-col items-center py-8">
       <header>
         <h1 className="font-bold text-white">Friends</h1>
         <h2 className="font-bold text-center text-black bg-green text-sm rounded">online</h2>

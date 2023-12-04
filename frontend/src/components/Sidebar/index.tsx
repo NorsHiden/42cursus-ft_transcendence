@@ -61,7 +61,7 @@ const SideBar: React.FC = () => {
   }, []);
 
   return (
-    <aside className="w-full h-full flex flex-col items-center justify-center gap-y-6">
+    <aside className="flex w-full h-full flex-col items-center justify-center gap-y-6">
       <nav className="flex flex-col gap-y-5">
         {links.map(({ title, icon: Icon, to }) => (
           <NavLink key={title} to={to}>
