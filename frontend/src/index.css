@@ -1,28 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Rowdies&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 @layer utilities {
   .empty {
     @apply bg-black border border-darkGray;
   }
-  .color-dodge {
-    mix-blend-mode: color-dodge;
-  }
+
   .center {
     @apply flex justify-center items-center;
   }
 
-  html, body {
-    overflow: auto;
-    background-color: #1B191D; /* Replace with your desired color */
-  }
-  
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
-
 }
