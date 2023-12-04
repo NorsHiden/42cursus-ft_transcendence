@@ -17,6 +17,8 @@ import { MembersService } from './services/members.service';
 import { Message } from 'src/typeorm/message.entity';
 import { MessagesService } from './services/messages.service';
 import { MessagesController } from './controllers/messages.controller';
+import { DmsController } from './controllers/dms.controller';
+import { DmsService } from './services/dms.service';
 
 @Module({
   imports: [
@@ -32,7 +34,12 @@ import { MessagesController } from './controllers/messages.controller';
     }),
     NotificationModule,
   ],
-  controllers: [ChannelsController, MembersController, MessagesController],
+  controllers: [
+    ChannelsController,
+    MembersController,
+    MessagesController,
+    DmsController,
+  ],
   providers: [
     {
       provide: Services.Channels,
@@ -50,6 +57,10 @@ import { MessagesController } from './controllers/messages.controller';
       provide: Services.Messages,
       useClass: MessagesService,
     },
+    {
+	  provide: Services.Dms,
+	  useClass: DmsService,
+	}
   ],
 })
 export class ChannelsModule {}

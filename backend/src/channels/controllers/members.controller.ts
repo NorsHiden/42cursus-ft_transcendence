@@ -40,7 +40,7 @@ export class MembersController {
     @Param('channelId', ParseIntPipe) channelId: number,
     @Param('userId', ParseIntPipe) userId: string,
   ) {
-    return this.membersService.findOne(channelId, userId.toString());
+    return this.membersService.findOne(channelId, userId);
   }
 
   @Delete(':userId')
@@ -49,7 +49,7 @@ export class MembersController {
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.kick(channelId, userId.toString(), user);
+    return this.membersService.kick(channelId, userId, user);
   }
 
   @Patch('ban/:userId')
@@ -58,7 +58,7 @@ export class MembersController {
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.ban(channelId, userId.toString(), user);
+    return this.membersService.ban(channelId, userId, user);
   }
 
   @Patch('mute/:userId')
@@ -67,7 +67,7 @@ export class MembersController {
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.mute(channelId, userId.toString(), user);
+    return this.membersService.mute(channelId, userId, user);
   }
 
   @Patch('elevate/:userId')
@@ -76,10 +76,6 @@ export class MembersController {
     @Param('userId', ParseIntPipe) userId: string,
     @AuthUser() user: JwtUser,
   ) {
-    return this.membersService.elevateToAdmin(
-      channelId,
-      userId.toString(),
-      user,
-    );
+    return this.membersService.elevateToAdmin(channelId, userId, user);
   }
 }

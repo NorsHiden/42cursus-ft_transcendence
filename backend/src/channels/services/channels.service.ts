@@ -28,8 +28,6 @@ import * as bcrypt from 'bcrypt';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
 import { Notification } from 'src/typeorm/notification.entity';
 import { User } from 'src/typeorm/user.entity';
-import { query } from 'express';
-import { channel } from 'diagnostics_channel';
 
 @Injectable()
 export class ChannelsService implements IChannelsService {
@@ -127,6 +125,7 @@ export class ChannelsService implements IChannelsService {
       .leftJoinAndSelect('channel.members', 'members')
       .leftJoinAndSelect('members.user', 'user')
       .where('channel.id = :channelId', { channelId })
+      .andWhere(`channel.type != 'dm'`)
       .select([
         'channel.id',
         'channel.name',
@@ -168,7 +167,11 @@ export class ChannelsService implements IChannelsService {
       defaultSortBy: [['channel.updatedAt', 'ASC']],
       sortableColumns: ['channel.updatedAt'],
       relations: ['user', 'channel'],
-      where: { user: { id: user.sub }, state: Not('banned') },
+      where: {
+        user: { id: user.sub },
+        state: Not('banned'),
+        channel: { type: Not('dm') },
+      },
     };
 
     return await paginate<UserChannel>(
@@ -305,11 +308,11 @@ export class ChannelsService implements IChannelsService {
 
       if (userChannel.role === 'owner') {
         const newOwner = await this.userChannelRepository.findOne({
-          where: { channel: { id: channelId } },
+          where: { channel: { id: channelId }, role: Not('owner') },
           order: { id: 'ASC' },
         });
 
-        if (!newOwner) this.channelRepository.remove(channel);
+        if (!newOwner) return await this.channelRepository.remove(channel);
 
         newOwner.role = 'owner';
 

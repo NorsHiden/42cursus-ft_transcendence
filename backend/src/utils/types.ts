@@ -11,7 +11,7 @@ export type MemberState = 'banned' | 'muted' | 'active';
 
 export type ChannelRole = 'owner' | 'admin' | 'member';
 
-export type ChannelType = 'public' | 'private';
+export type ChannelType = 'public' | 'private' | 'dm';
 
 export type NotificationStatus = 'pending' | 'accepted' | 'rejected';
 
