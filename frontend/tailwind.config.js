@@ -65,7 +65,7 @@ export default {
         black: '#1B191D',
         lightBlack: '#1E1F23',
         darkGray: '#2C2D33',
-        CharcoalGray: '#3E4048',
+        CharcoalGray: '#2B2D32',
         gray: '#5E6069',
         white: '#FFFFFF',
         primary: '#FE5821',

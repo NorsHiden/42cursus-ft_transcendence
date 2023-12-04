@@ -43,7 +43,7 @@ const ChannelsList: React.FC = () => {
   }, [page]);
 
   return (
-    <ul id="chat-list" className="grid h-[100%] overflow-auto gap-4">
+    <ul id="chat-list" className="grid h-[100%] overflow-auto gap-4 ">
       {channels.map(
         (channel) => (
           console.log('channel', channel.avatar),
