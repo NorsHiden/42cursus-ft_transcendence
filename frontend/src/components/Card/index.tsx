@@ -7,9 +7,10 @@ import useDimensions from '@hooks/useDimensions';
 type CardProps = Omit<PolygonProps, 'width' | 'height'> & {
   className?: string;
   children?: React.ReactNode;
+  onClick?: () => void;
 };
 
-const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps }) => {
+const Card: React.FC<CardProps> = ({ className, children, onClick, ...PolygonProps }) => {
   const { ref, dimensions } = useDimensions<HTMLDivElement>();
   const clipPathID = `polygon-clip-${Math.random()}`;
 
@@ -18,6 +19,7 @@ const Card: React.FC<CardProps> = ({ className, children, ...PolygonProps }) => 
       ref={ref}
       style={{ clipPath: `url(#${clipPathID})` }}
       className={twclsx('relative', className)}
+      onClick={onClick}
     >
       {children}
       <Polygon

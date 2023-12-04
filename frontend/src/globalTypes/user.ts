@@ -12,7 +12,9 @@ export type User = {
   email: string;
   wins: number;
   loses: number;
-  points: number;
+  points: {
+    value: number;
+  }[];
   verified: boolean;
   profile: UserProfile;
 };
