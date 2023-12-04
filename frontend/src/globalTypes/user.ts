@@ -16,3 +16,12 @@ export type User = {
   verified: boolean;
   profile: UserProfile;
 };
+
+export type UserChannel = {
+  role: string;
+  state: string;
+  userId: number;
+  displayName: string;
+  presence: string;
+  avatar: string;
+};
