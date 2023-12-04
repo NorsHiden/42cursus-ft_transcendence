@@ -1,3 +1,3 @@
 import useDimensions from "./useDimensions";
 
-export { useDimensions };
+export { useDimensions, useScreenType };
