@@ -37,6 +37,7 @@ export enum WebSocketEvents {
   Lobby = 'lobby',
   InGame = 'ingame',
   Spectators = 'spectators',
+  Live = 'live',
 }
 
 export enum GameMode {

@@ -38,6 +38,7 @@ export interface IUsersService {
     user_id: string,
     presence: 'online' | 'offline' | 'ingame',
   ): Promise<User>;
+  getPoints(user_id: string): Promise<object>;
 
   // boolean
   isVerified(user_id: string): Promise<boolean>;

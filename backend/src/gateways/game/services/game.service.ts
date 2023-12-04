@@ -12,12 +12,16 @@ import { InGame } from '../types/InGame.type';
 import { IMatchHistoryService } from 'src/match_history/interfaces/match_history.interface';
 import { MatchHistory } from 'src/typeorm/match_history.entity';
 import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
+import { RecentGame } from '../types/RecentGame.type';
+import { UserFiler } from '../types/UserFilter.type';
+import { Points } from 'src/typeorm/points.entity';
 
 @Injectable()
 export class GameService {
   private users: Map<string, string>;
   private lobby: LobbyUser[];
   private ingame: InGame[];
+  private filter: Map<string, UserFiler>;
 
   constructor(
     @Inject(Services.Gateways)
@@ -34,6 +38,7 @@ export class GameService {
     this.users = new Map();
     this.lobby = [];
     this.ingame = [];
+    this.filter = new Map();
   }
 
   // Asynchronously handle a new client connection
@@ -250,7 +255,7 @@ export class GameService {
       return;
     }
 
-    if (game_mode == GameMode.GOLD_RUSH && user.points < 300)
+    if (game_mode == GameMode.GOLD_RUSH && user.points[0].value < 300)
       throw new WsException('Not Enough Points');
 
     const opponent = this.findOpponent(target_id, action, game_mode);
@@ -450,13 +455,17 @@ export class GameService {
       ingame.game_data.score.home < ingame.game_data.score.away ? away : home;
     winner.wins++;
     loser.loses++;
-    if (ingame.game_mode == GameMode.REGULAR) winner.points += 50;
-    else if (ingame.game_mode == GameMode.VANISH) winner.points += 70;
-    else if (ingame.game_mode == GameMode.CURSED) winner.points += 100;
+    let winner_points = winner.points[0].value;
+    let loser_points = loser.points[0].value;
+    if (ingame.game_mode == GameMode.REGULAR) winner_points += 50;
+    else if (ingame.game_mode == GameMode.VANISH) winner_points += 70;
+    else if (ingame.game_mode == GameMode.CURSED) winner_points += 100;
     else if (ingame.game_mode == GameMode.GOLD_RUSH) {
-      winner.points += 400;
-      loser.points -= 300;
+      winner_points += 400;
+      loser_points -= 300;
     }
+    winner.points.push({ value: winner_points } as Points);
+    loser.points.push({ value: loser_points } as Points);
     await this.usersService.setUser(winner);
     await this.usersService.setUser(loser);
     await this.matchHistoryService.setMatch({
@@ -500,5 +509,106 @@ export class GameService {
       spectators: ingame.spectators,
     });
     return;
+  }
+
+  getDurationInMinutesSeconds(created_at: Date, ended_at: Date): string {
+    const diffInMilliseconds = ended_at.getTime() - created_at.getTime();
+    const minutes = Math.floor(diffInMilliseconds / (1000 * 60));
+    const seconds = Math.floor((diffInMilliseconds % (1000 * 60)) / 1000);
+
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+      2,
+      '0',
+    )}`;
+  }
+
+  async getRecentGames(client: Socket): Promise<RecentGame[]> {
+    const filter = this.filter.get(client.id);
+    if (!filter) return [];
+    const recentMatches = this.ingame.map((game) => {
+      if (
+        (filter.game_mode != 'ALL' && filter.game_mode != game.game_mode) ||
+        filter.live == 'LIVE'
+      )
+        return null;
+      return {
+        isLive: true,
+        gamemode: game.game_mode,
+        time: this.getDurationInMinutesSeconds(
+          game.created_at,
+          new Date(Date.now()),
+        ),
+        host: {
+          id: game.home_player.id,
+          score: game.game_data.score.home,
+          username: game.game_data.home.display_name,
+          name: game.game_data.home.display_name,
+          avatar: game.game_data.home.avatar,
+        },
+        opponent: {
+          id: game.away_player.id,
+          score: game.game_data.score.away,
+          username: game.game_data.away.display_name,
+          name: game.game_data.away.display_name,
+          avatar: game.game_data.away.avatar,
+        },
+      } as RecentGame;
+    });
+    if (recentMatches.length < 6 && filter.live != 'LIVE') {
+      const matches = await this.matchHistoryService.getMatches(
+        0,
+        6 - recentMatches.length,
+        filter.game_mode,
+      );
+      recentMatches.push(
+        ...matches.map(
+          (match) =>
+            ({
+              isLive: false,
+              gamemode: match.game_mode,
+              time: this.getDurationInMinutesSeconds(
+                match.created_at,
+                match.ended_at,
+              ),
+              host: {
+                id: match.home_player.id,
+                score: match.home_score,
+                username: match.home_player.display_name,
+                name: match.home_player.display_name,
+                avatar: match.home_player.profile.avatar,
+              },
+              opponent: {
+                id: match.away_player.id,
+                score: match.away_score,
+                username: match.away_player.display_name,
+                name: match.away_player.display_name,
+                avatar: match.away_player.profile.avatar,
+              },
+            } as RecentGame),
+        ),
+      );
+    }
+    return recentMatches;
+  }
+
+  getLiveGames(
+    client: Socket,
+    game_mode: UserFiler['game_mode'],
+    live: UserFiler['live'],
+  ): void {
+    const filter = this.filter.get(client.id);
+    if (filter) {
+      this.filter.set(client.id, { game_mode, live });
+      return;
+    }
+    this.filter.set(client.id, { game_mode, live });
+    const interval_id = setInterval(
+      async () => client.emit('live', await this.getRecentGames(client)),
+      1000,
+    );
+    client.on('disconnect', () => {
+      this.filter.delete(client.id);
+      clearInterval(interval_id);
+    });
   }
 }

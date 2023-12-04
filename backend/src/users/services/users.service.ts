@@ -12,13 +12,14 @@ import { match } from 'fuzzy-tools';
 import { UserDto } from '../dto/userDto';
 import { Profile } from 'src/typeorm/profile.entity';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
-import { Services } from 'src/utils/consts';
-import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
+import { Points } from 'src/typeorm/points.entity';
 
 @Injectable()
 export class UsersService implements IUsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Points)
+    private readonly pointsRepository: Repository<Points>,
   ) {}
 
   // Method to retrieve user information by user ID.
@@ -28,13 +29,49 @@ export class UsersService implements IUsersService {
         where: {
           id: user_id,
         },
-        relations: ['profile'],
+        relations: ['profile', 'points'],
+        order: {
+          points: {
+            created_at: 'DESC',
+          },
+        },
       });
       if (!user) throw new NotFoundException('User Not Found.');
       return user;
     } catch {
       throw new NotFoundException('User Not Found.');
     }
+  }
+
+  async getPoints(user_id: string): Promise<object> {
+    const points = await this.pointsRepository.find({
+      where: {
+        user: {
+          id: user_id,
+        },
+      },
+      order: {
+        created_at: 'DESC',
+      },
+      take: 30,
+    });
+
+    const best_points = await this.pointsRepository.find({
+      where: {
+        user: {
+          id: user_id,
+        },
+      },
+      order: {
+        value: 'DESC',
+      },
+      take: 2,
+    });
+
+    return {
+      points: points,
+      best_points: best_points,
+    };
   }
 
   // Method to retrieve user information by user ID.
@@ -45,7 +82,7 @@ export class UsersService implements IUsersService {
           username: username,
           verified: true,
         },
-        relations: ['profile'],
+        relations: ['profile', 'points'],
       });
       if (!user) throw new NotFoundException('User Not Found.');
       return user;

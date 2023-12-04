@@ -13,13 +13,13 @@ export class Profile {
 
   // The URL or path to the user's avatar image.
   // This image typically represents the user's profile picture.
-  @Column({ default: '' })
+  @Column({ default: '/imgs/defaults/avatar.png' })
   avatar: string;
 
   // The URL or path to the user's banner image.
   // This image is often displayed at the top of the user's profile page
   // and serves as a cover or header image.
-  @Column({ default: '' })
+  @Column({ default: '/imgs/defaults/banner.png' })
   banner: string;
 
   /**

@@ -9,10 +9,11 @@ import { Services } from 'src/utils/consts';
 import { UsersService } from 'src/users/services/users.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { MulterConfigService } from 'src/multer/multer.service';
+import { Points } from 'src/typeorm/points.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Channel, UserChannel, User]),
+    TypeOrmModule.forFeature([Channel, UserChannel, User, Points]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),

@@ -93,6 +93,11 @@ export class UsersController {
     return await this.usersService.getUsers(search_query);
   }
 
+  @Get('points')
+  async getPoints(@Req() req) {
+    return await this.usersService.getPoints(req.user.sub);
+  }
+
   /**
    * Retrieve the information of a user by their ID.
    * @param id The ID of the user to retrieve.

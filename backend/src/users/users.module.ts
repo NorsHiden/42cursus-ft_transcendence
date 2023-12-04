@@ -12,6 +12,7 @@ import { Achievement } from 'src/typeorm/achievement.entity';
 import { MulterConfigService } from 'src/multer/multer.service';
 import { AchievementModule } from 'src/achievement/achievement.module';
 import { MatchHistory } from 'src/typeorm/match_history.entity';
+import { Points } from 'src/typeorm/points.entity';
 
 /**
  * The `UsersModule` encapsulates user-related functionality within the application.
@@ -21,6 +22,7 @@ import { MatchHistory } from 'src/typeorm/match_history.entity';
   imports: [
     // Configures TypeORM to work with the `User` and `Profile` entities.
     TypeOrmModule.forFeature([
+      Points,
       User,
       Friendlist,
       Profile,
