@@ -2,6 +2,7 @@
 
 import debugScreensPlugin from 'tailwindcss-debug-screens';
 import scrollbar from 'tailwind-scrollbar';
+
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },

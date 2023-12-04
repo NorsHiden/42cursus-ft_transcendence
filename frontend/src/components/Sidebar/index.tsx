@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import twclsx from '@utils/twclsx';
@@ -8,8 +8,10 @@ import BarChartSolid from '@assets/novaIcons/solid/BarChartSolid';
 import SettingSolid from '@assets/novaIcons/solid/SettingSolid';
 import CompassSolid from '@assets/novaIcons/solid/CompassSolid';
 import PlusCircleSolid from '@assets/novaIcons/solid/PlusCircleSolid';
+import { CreateChannel } from '@components/Chat/Discovery/CreateChannel';
 
 const SideBar: React.FC = () => {
+  const [showCreateChannel, setShowCreateChannel] = useState(false);
   const links = [
     {
       title: 'Home',
@@ -57,12 +59,27 @@ const SideBar: React.FC = () => {
         <div className="empty w-12 h-12 rounded-full"></div>
         <div className="empty w-12 h-12 rounded-full"></div>
         <div className="flex flex-col gap-y-4 mt-2">
-          <button className="text-gray hover:text-white transition-all">
+          <button
+            className="text-gray hover:text-white transition-all"
+            onClick={() => setShowCreateChannel(true)}
+          >
             <PlusCircleSolid size={28} />
           </button>
-          <button className="text-gray hover:text-white transition-all">
-            <CompassSolid size={28} />
-          </button>
+          <NavLink key="Discovery" to="/discovery">
+            {({ isActive }) => (
+              <CompassSolid
+                size={28}
+                className={twclsx('transition-all', {
+                  'text-white': isActive,
+                  'text-gray hover:text-white': !isActive,
+                })}
+              />
+            )}
+          </NavLink>
+          <CreateChannel
+            enabled={showCreateChannel}
+            hidePopUp={() => setShowCreateChannel(false)}
+          />
         </div>
       </div>
     </aside>

@@ -5,6 +5,8 @@ import { Toaster } from 'sonner';
 import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
+import { Discovery } from '@pages/Discovery';
+
 import PostLogin,{ postLoginLoader } from '@pages/PostLogin';
 import Profile,{profileLoader} from '@pages/Profile';
 import {Overview,MatchHistory,Achievements,Settings,ManageFriends} from '@components/profile';
@@ -24,6 +26,7 @@ function Layoutloader() {
 
 
 
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -33,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/home',
         element: <Home />,
+      },
+      {
+        path: '/discovery',
+        element: <Discovery />,
       },
       {
         path:'/:user',
