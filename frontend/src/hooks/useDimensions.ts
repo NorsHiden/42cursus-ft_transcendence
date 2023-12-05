@@ -2,11 +2,16 @@ import { useRef, useState, useLayoutEffect, useEffect } from 'react';
 
 const useDimensions = <T extends HTMLElement>() => {
   const ref = useRef<T>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0, top: 0, left: 0 });
 
   const getDimensions = (node: T) => {
     const boundingRect = node.getBoundingClientRect();
-    return { width: boundingRect.width, height: boundingRect.height };
+    return {
+      width: boundingRect.width,
+      height: boundingRect.height,
+      top: boundingRect.top,
+      left: boundingRect.left,
+    };
   };
 
   useLayoutEffect(() => {
