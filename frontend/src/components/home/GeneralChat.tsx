@@ -95,8 +95,8 @@ const GeneralChat: React.FC = () => {
         </div>
 
         <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4 hide-scrollbar">
-          {messages.map((message) => (
-            <Message type={message.name == user ? 'SENT' : 'RECEIVED'} {...message} />
+          {messages.map((message, index) => (
+            <Message key={index} type={message.name == user ? 'SENT' : 'RECEIVED'} {...message} />
           ))}
         </div>
 

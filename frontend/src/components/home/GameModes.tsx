@@ -4,6 +4,7 @@ import { GAME_MODES } from '@globalTypes/gameModes';
 import Card from '@components/Card';
 import { socket } from '../../socket';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const selectMode = {
   regular: 'REGULAR',
@@ -13,7 +14,6 @@ const selectMode = {
 };
 
 const GameModes: React.FC = () => {
-  const [isConnected, setIsConnected] = useState<boolean>(false);
   const [selectedMode, setSelectedMode] = useState<string>(GAME_MODES[0].name);
   const [searching, setSearching] = useState<boolean>(false);
   const [dot, setDot] = useState<string>('.');
@@ -41,17 +41,17 @@ const GameModes: React.FC = () => {
   };
 
   useEffect(() => {
-    socket.on('connect', () => setIsConnected(true));
-    socket.on('disconnect', () => setIsConnected(false));
-
     socket.on('lobby', checkLobby);
+    socket.on('error', () => {
+      toast.dismiss();
+      toast.error('You need atleast 300pts to play Gold Rush');
+      setSearching(false);
+    });
 
     const interval = setInterval(() => {
       setDot((prev) => (prev === '...' ? '.' : prev + '.'));
     }, 500);
     return () => {
-      socket.off('connect', () => setIsConnected(true));
-      socket.off('disconnect', () => setIsConnected(false));
       clearInterval(interval);
     };
   }, []);
