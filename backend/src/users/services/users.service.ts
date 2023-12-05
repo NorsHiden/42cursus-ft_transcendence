@@ -105,10 +105,10 @@ export class UsersService implements IUsersService {
       select: ['notifications'],
       relations: [
         'notifications',
-        'sender',
-        'recipient',
-        'sender.profile',
-        'recipient.profile',
+        'notifications.sender',
+        'notifications.sender.profile',
+        'notifications.recipient',
+        'notifications.recipient.profile',
       ],
     });
     if (!user) throw new NotFoundException('User Not Found.');
@@ -135,6 +135,7 @@ export class UsersService implements IUsersService {
       },
       select: ['friendlist'],
       relations: [
+        'profile',
         'friendlist.friends',
         'friendlist.friends.profile',
         'friendlist.pending',
@@ -290,6 +291,21 @@ export class UsersService implements IUsersService {
     const user = await this.getUser(user_id);
     user.presence = presence;
     return await this.setUser(user);
+  }
+
+  async orderByWins(page: number): Promise<User[]> {
+    const users = await this.userRepository.find({
+      where: {
+        verified: true,
+      },
+      relations: ['profile'],
+      order: {
+        wins: 'DESC',
+      },
+      skip: page * 10,
+      take: 10,
+    });
+    return users;
   }
 
   async isVerified(user_id: string): Promise<boolean> {

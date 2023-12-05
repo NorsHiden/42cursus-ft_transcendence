@@ -73,6 +73,19 @@ export class NotificationService implements INotificationService {
     this.eventService.emit(target_id, notification);
   }
 
+  async markNotificationAsRead(
+    user_id: string,
+    notification_id: string,
+  ): Promise<void> {
+    const notification = await this.getNotification(notification_id);
+    if (!notification && notification.recipient.id != user_id)
+      throw new NotFoundException('Notification not found.');
+
+    notification.is_read = true;
+    notification.status = 'accepted';
+    await this.setNotification(notification);
+  }
+
   subscribeToEvent(user_id: string, @Res() res: Response) {
     const userEvent = this.eventService.subscribe(user_id, res);
 

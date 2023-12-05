@@ -9,6 +9,8 @@ import {
   Res,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Post,
+  Param,
 } from '@nestjs/common';
 import { Routes, Services } from 'src/utils/consts';
 import { INotificationService } from '../interfaces/notification.interface';
@@ -32,6 +34,11 @@ export class NotificationController {
   @Get()
   async getNotifications(@Req() req, @Query('page') page: number = 0) {
     return this.notificationService.getNotifications(req.user.sub, page);
+  }
+
+  @Post(':id/mark-read')
+  async markNotificationAsRead(@Req() req, @Param('id') id: string) {
+    return this.notificationService.markNotificationAsRead(req.user.sub, id);
   }
 
   /**

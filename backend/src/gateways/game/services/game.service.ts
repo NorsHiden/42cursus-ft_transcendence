@@ -54,16 +54,6 @@ export class GameService {
   // Asynchronously handle a client disconnection
   async closeConnection(client: Socket, server: Server): Promise<void> {
     this.lobby = this.lobby.filter((player) => player.socket.id != client.id);
-    this.ingame.forEach((game) => {
-      const specIndex = game.spectators.findIndex(
-        (spec) => spec.id == this.users.get(client.id),
-      );
-      if (specIndex > -1)
-        game.spectators = game.spectators.splice(specIndex, 1);
-      server.in(game.id).emit('spectators', {
-        spectators: game.spectators,
-      });
-    });
     this.users.delete(client.id);
     client.disconnect();
   }
@@ -305,7 +295,16 @@ export class GameService {
       server.in(this.ingame[inGameIndex].id).emit('spectators', {
         spectators: this.ingame[inGameIndex].spectators,
       });
+      client.on('disconnect', () => {
+        this.ingame[inGameIndex].spectators = this.ingame[
+          inGameIndex
+        ].spectators.filter((spec) => spec.id != spectator.id);
+        server.in(this.ingame[inGameIndex].id).emit('spectators', {
+          spectators: this.ingame[inGameIndex].spectators,
+        });
+      });
     }
+
     client.join(this.ingame[inGameIndex].id);
   }
 
@@ -455,8 +454,8 @@ export class GameService {
       ingame.game_data.score.home < ingame.game_data.score.away ? away : home;
     winner.wins++;
     loser.loses++;
-    let winner_points = winner.points[0].value;
-    let loser_points = loser.points[0].value;
+    let winner_points = winner.points.length > 0 ? winner.points[0].value : 0;
+    let loser_points = loser.points.length > 0 ? loser.points[0].value : 0;
     if (ingame.game_mode == GameMode.REGULAR) winner_points += 50;
     else if (ingame.game_mode == GameMode.VANISH) winner_points += 70;
     else if (ingame.game_mode == GameMode.CURSED) winner_points += 100;
@@ -464,8 +463,18 @@ export class GameService {
       winner_points += 400;
       loser_points -= 300;
     }
-    winner.points.push({ value: winner_points } as Points);
-    loser.points.push({ value: loser_points } as Points);
+    winner.points.push({
+      value: winner_points,
+      user: {
+        id: winner.id,
+      },
+    } as Points);
+    loser.points.push({
+      value: loser_points,
+      user: {
+        id: loser.id,
+      },
+    } as Points);
     await this.usersService.setUser(winner);
     await this.usersService.setUser(loser);
     await this.matchHistoryService.setMatch({
