@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import twclsx from '@utils/twclsx';
 import { useFriendsBar } from './useFriendsBar';
+import { NavLink } from 'react-router-dom';
 
 const FriendsBar: React.FC = () => {
   const { friends, getSseRequest } = useFriendsBar();
@@ -17,8 +18,9 @@ const FriendsBar: React.FC = () => {
       </header>
       <div className="flex-grow flex flex-col items-center justify-center gap-y-5">
         {friends.map((friend, index) => (
-          <div
+          <NavLink
             key={index}
+            to={`/${friend.username}`}
             className={twclsx(
               'relative w-12 h-12 empty rounded-full cursor-pointer transition-all',
               'after:absolute after:top-0 after:right-0 after:translate-x-1/4 after:-translate-y-1/4',
@@ -33,7 +35,7 @@ const FriendsBar: React.FC = () => {
               alt="friend"
               className="w-full h-full rounded-full object-cover object-center"
             />
-          </div>
+          </NavLink>
         ))}
         {friends.length < 6 &&
           Array.from({ length: 6 - friends.length }).map((_, index) => (

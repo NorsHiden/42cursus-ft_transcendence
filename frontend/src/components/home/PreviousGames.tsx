@@ -136,13 +136,13 @@ const PreviousGames: React.FC = () => {
           </Card>
         </div>
       </header>
-      <main className="relative grid grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-x-4 gap-y-4 mb-4">
+      <main className="relative grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-x-4 gap-y-4 mb-4 overflow-auto scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-[#5E6069]">
         {games.map((game: GameType, index: number) => (
           <MatchCard key={index} type={CardType.RECENT_MATCHES} {...game} />
         ))}
         {games.length < 6 &&
           Array.from({ length: 6 - games.length }).map((_, index) => (
-            <img key={index} src={EmptyMatchCard} className="w-full aspect-[193/106]" />
+            <img key={index} src={EmptyMatchCard} className="w-full aspect-[193/106] h-full" />
           ))}
         {games.length == 0 && (
           <div className="absolute flex w-full h-full items-center justify-center">

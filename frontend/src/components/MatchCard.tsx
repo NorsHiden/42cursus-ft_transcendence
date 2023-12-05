@@ -38,8 +38,8 @@ const MatchCard: React.FC<MatchHistoryProps> = ({
 }) => {
   return (
     <Card
-      className={`relative text-[#1E1F23] w-full  ${
-        type === CardType.MATCH_HISTORY ? 'aspect-[193/143]' : 'aspect-[193/106]'
+      className={`relative text-[#1E1F23] w-full ${
+        type === CardType.MATCH_HISTORY ? 'aspect-[193/143]' : 'h-full aspect-[193/106]'
       }`}
       cut={12}
       borderRadius={20}

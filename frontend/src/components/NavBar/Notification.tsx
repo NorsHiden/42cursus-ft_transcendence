@@ -7,19 +7,47 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface NotificationMessageProps {
   notificationMessage: NotificationType;
+  setNotifications: React.Dispatch<React.SetStateAction<NotificationType[]>>;
 }
 
-const NotificationMessage: React.FC<NotificationMessageProps> = ({ notificationMessage }) => {
+const NotificationMessage: React.FC<NotificationMessageProps> = ({
+  notificationMessage,
+  setNotifications,
+}) => {
+  const acceptFriendRequest = async () => {
+    axios.post(`/api/friendlist/${notificationMessage.sender.id}/accept`).catch();
+    axios.post(`/api/notification/${notificationMessage.id}/mark-read`).catch();
+    notificationMessage.is_read = true;
+    notificationMessage.status = 'accepted';
+    setNotifications((notifications) =>
+      notifications.map((notification) =>
+        notification.id == notificationMessage.id ? notificationMessage : notification,
+      ),
+    );
+  };
+
+  const declineFriendRequest = async () => {
+    axios.delete(`/api/friendlist/${notificationMessage.sender.id}`).catch();
+    axios.post(`/api/notification/${notificationMessage.id}/mark-read`).catch();
+    notificationMessage.is_read = true;
+    notificationMessage.status = 'accepted';
+    setNotifications((notifications) =>
+      notifications.map((notification) =>
+        notification.id == notificationMessage.id ? notificationMessage : notification,
+      ),
+    );
+  };
+
   const avatar =
     notificationMessage.action == 'ACHIEVEMENT_UNLOCKED'
-      ? notificationMessage.recipient.profile.avatar
-      : notificationMessage.sender.profile.avatar;
+      ? notificationMessage.recipient?.profile?.avatar
+      : notificationMessage.sender?.profile?.avatar;
   const displayName =
     notificationMessage.action == 'ACHIEVEMENT_UNLOCKED'
       ? notificationMessage.recipient.display_name
       : notificationMessage.sender.display_name;
   return (
-    <div className="w-full " id="notification">
+    <div className="w-full" id="notification">
       <div className={'flex items-start gap-x-4'}>
         <img src={avatar} className="w-14 h-14 rounded-full empty" />
         <div className="flex flex-col">
@@ -33,12 +61,17 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({ notificationM
                 <Card
                   fill="#FE5821"
                   cut={32}
-                  className="w-24 h-8 text-white text-sm hover:brightness-110"
+                  className={`w-24 h-8 text-white text-sm hover:brightness-110`}
                 >
                   <button
                     className={`flex items-center w-full h-full gap-1 ${
                       notificationMessage.action == 'GAME_REQUEST' ? 'pl-4' : 'pl-2'
                     }`}
+                    onClick={
+                      notificationMessage.action == 'FRIEND_REQUEST'
+                        ? acceptFriendRequest
+                        : () => {}
+                    }
                   >
                     <CheckOutline className="h-5 w-5" />
                     <p>{notificationMessage.action == 'GAME_REQUEST' ? 'Play' : 'Accept'}</p>
@@ -47,9 +80,16 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({ notificationM
                 <Card
                   fill="#2B1F24"
                   cut={32}
-                  className="w-24 h-8 text-red text-sm bg-opacity-25 hover:brightness-110"
+                  className={`w-24 h-8 text-red text-sm bg-opacity-25 hover:brightness-110`}
                 >
-                  <button className="flex items-center pl-2 w-full h-full gap-1">
+                  <button
+                    className="flex items-center pl-2 w-full h-full gap-1"
+                    onClick={
+                      notificationMessage.action == 'FRIEND_REQUEST'
+                        ? declineFriendRequest
+                        : () => {}
+                    }
+                  >
                     <CloseOutline className="h-5 w-5" />
                     <p>Decline</p>
                   </button>
@@ -62,112 +102,6 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({ notificationM
   );
 };
 
-// const staticNotifications = [
-//     {
-//       id: '1',
-//       recipient: {
-//         id: 1,
-//         username: 'john_doe',
-//         display_name: 'John Doe',
-//         email: 'john@example.com',
-//         wins: 10,
-//         loses: 5,
-//         points: [{ value: 100 }],
-//         verified: true,
-//         profile: {
-//           avatar: 'https://i.pravatar.cc/150?u=1',
-//         },
-//       },
-//       sender: {
-//         id: 2,
-//         username: 'jane_doe',
-//         display_name: 'Jane Doe',
-//         email: 'jane@example.com',
-//         wins: 8,
-//         loses: 7,
-//         points: [{ value: 90 }],
-//         verified: true,
-//         profile: {
-//           avatar: 'https://i.pravatar.cc/150?u=2',
-//         },
-//       },
-//       action: 'FRIEND_REQUEST',
-//       status: 'pending',
-//       description: 'You have a new friend request',
-//       record_id: 123,
-//       is_read: false,
-//       created_at: new Date('2023-01-01T12:00:00'),
-//     },
-//     {
-//       id: '2',
-//       recipient: {
-//         id: 3,
-//         username: 'alice_smith',
-//         display_name: 'Alice Smith',
-//         email: 'alice@example.com',
-//         wins: 15,
-//         loses: 3,
-//         points: [{ value: 120 }],
-//         verified: true,
-//         profile: {
-//           avatar: 'https://i.pravatar.cc/150?u=3',
-//         },
-//       },
-//       sender: {
-//         id: 4,
-//         username: 'bob_jones',
-//         display_name: 'Bob Jones',
-//         email: 'bob@example.com',
-//         wins: 12,
-//         loses: 8,
-//         points: [{ value: 95 }],
-//         verified: true,
-//         profile: {
-//           avatar: 'https://i.pravatar.cc/150?u=4',
-//         },
-//       },
-//       action: 'GAME_REQUEST',
-//       status: 'pending',
-//       description: 'Bob Jones has challenged you to a game',
-//       record_id: 456,
-//       is_read: false,
-//       created_at: new Date('2023-01-02T15:30:00'),
-//     },
-//     {
-//       id: '3',
-//       recipient: {
-//         id: 5,
-//         username: 'charlie_brown',
-//         display_name: 'Charlie Brown',
-//         email: 'charlie@example.com',
-//         wins: 7,
-//         loses: 12,
-//         points: [{ value: 80 }],
-//         verified: true,
-//         profile: {
-//           avatar: 'https://i.pravatar.cc/150?u=5',
-//         },
-//       },
-//       sender: {
-//         id: 6,
-//         username: 'diana_williams',
-//         display_name: 'Diana Williams',
-//         email: 'diana@example.com',
-//         wins: 20,
-//         loses: 3,
-//         points: [{ value: 150 }],
-//         verified: true,
-//         profile: {
-//           avatar: 'https://i.pravatar.cc/150?u=6',
-//         },
-//       },
-//       action: 'ACHIEVEMENT_UNLOCKED',
-//       description: 'Congratulations! You have unlocked a new achievement',
-//       is_read: true,
-//       created_at: new Date('2023-01-03T08:45:00'),
-//     },
-//     // Add more static notifications as needed
-//   ];
 export const Notification: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -185,9 +119,8 @@ export const Notification: React.FC = () => {
   const getNotif = async (page: number) => {
     setSearchLoading(true);
     const res = await axios.get(`/api/notification?page=${page}`);
-
     setNotifications((notifications) => [...notifications, ...res.data]);
-    if (!res.data.length) setHasMore(false);
+    if (res.data.length < 10) setHasMore(false);
     setSearchLoading(false);
   };
 
@@ -213,27 +146,33 @@ export const Notification: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex group opacity-0 flex-col absolute top-14 w-[26rem] h-0 p-8 bg-[#1E1F23] border-2 border-[#2C2D33] gap-8 z-20 rounded-lg pointer-events-none group-focus-within:h-[22rem] group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all">
+    <div
+      className="flex flex-col fixed top-0 max-lg:left-0 lg:absolute group lg:top-14 w-full h-0 lg:w-[26rem] p-8 bg-[#1E1F23] border-2 border-[#2C2D33] gap-8 z-20 rounded-lg
+                  pointer-events-none group-focus-within:h-[calc(100vh-5rem)] lg:group-focus-within:h-[22rem] opacity-0  group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all"
+    >
       <div className="w-8 h-8 absolute bg-[#1E1F23] border-t-2 border-l-2 border-[#2C2D33] top-[-1.1rem] rounded-tl-lg right-1/2 rotate-45 translate-x-4" />
       <h1 className="text-xl text-white font-bold">Notifications</h1>
       <div className="flex flex-col gap-4 overflow-y-hidden group-hover:overflow-y-auto overflow-x-hidden scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-[#5E6069] scrollbar-mr-1">
-        {notifications.map((notification) => (
-          <>
-            <NotificationMessage notificationMessage={notification as NotificationType} />
+        {notifications.map((notification, index) => (
+          <div key={index} className="flex flex-col w-full gap-4">
+            <NotificationMessage
+              notificationMessage={notification as NotificationType}
+              setNotifications={setNotifications}
+            />
             <hr className="h-px text-darkGray" />
-          </>
+          </div>
         ))}
         {!searchLoading && hasMore && <div ref={lastNotifElementRef}></div>}
-        {hasMore && (
-          <div id="skeleton">
-            <div />
-            <div>
-              <div />
-              <div />
+        {(searchLoading || hasMore) && (
+          <div id="skeleton" className="flex items-center gap-4 animate-pulse">
+            <div className="h-14 w-14 bg-darkGray rounded-full" />
+            <div className="flex flex-col items-start gap-2">
+              <div className="h-4 w-48 bg-darkGray rounded-full" />
+              <div className="h-2 w-32 bg-darkGray rounded-full" />
             </div>
           </div>
         )}
-        {notifications.length == 0 && (
+        {!searchLoading && notifications.length == 0 && (
           <div className="flex w-full h-full items-center justify-center">
             <p className="text-gray font-serif">Empty</p>
           </div>

@@ -80,7 +80,7 @@ const SideBar: React.FC = () => {
       <hr className="w-8 border border-lightBlack" />
       <div className="flex flex-col gap-y-4 items-center">
         {channels.map((channel) => (
-          <NavLink key={channel.id} to={`/channels/${channel.id}`} className="relative group">
+          <NavLink key={channel.id} to={`/chat/channels/${channel.id}`} className="relative group">
             <div className="relative w-12 h-12 rounded-2xl overflow-hidden transition-all hover:scale-110">
               <img src={channel.avatar} alt={channel.name} className="w-full h-full object-cover" />
             </div>
