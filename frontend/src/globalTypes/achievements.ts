@@ -5,6 +5,7 @@ import GroupChatStarter from '@assets/achievementsIcons/GroupChatStarter';
 import PongMaster from '@assets/achievementsIcons/PongMaster';
 import QuickStarter from '@assets/achievementsIcons/QuickStarter';
 import SocialButterfly from '@assets/achievementsIcons/SocialButterfly';
+import SocialPioneer from '@assets/achievementsIcons/SocialPioneer';
 import UnbeatableDefender from '@assets/achievementsIcons/UnbeatableDefender';
 import VictoryLap from '@assets/achievementsIcons/VictoryLap';
 import WelcomeAboard from '@assets/achievementsIcons/WelcomeAboard';
@@ -25,7 +26,7 @@ export enum AchievementType {
 
 export const achievements = {
   [AchievementType.WELCOME_ABOARD]: { icon: WelcomeAboard, color: '#6B26FF' },
-  [AchievementType.SOCIAL_PIONEER]: { icon: SocialButterfly, color: '#6B26FF' },
+  [AchievementType.SOCIAL_PIONEER]: { icon: SocialPioneer, color: '#6B26FF' },
   [AchievementType.CIRCLE_OF_ALLIES]: { icon: CircleOfAllies, color: '#D5FF5C' },
   [AchievementType.DM_INITIATOR]: { icon: DmInitiator, color: '#FF2695' },
   [AchievementType.QUICK_STARTER]: { icon: QuickStarter, color: '#57B4DA' },
@@ -36,3 +37,17 @@ export const achievements = {
   [AchievementType.UNBEATABLE_DEFENDER]: { icon: UnbeatableDefender, color: '#57B4DA' },
   [AchievementType.PONG_MASTER]: { icon: PongMaster, color: '#FE5821' },
 };
+
+export const allAchievements = [
+  [AchievementType.WELCOME_ABOARD, 'Welcome Aboard!'],
+  [AchievementType.SOCIAL_PIONEER, 'Social Pioneer'],
+  [AchievementType.CIRCLE_OF_ALLIES, 'Circle of Allies'],
+  [AchievementType.DM_INITIATOR, 'DM Initiator'],
+  [AchievementType.QUICK_STARTER, 'Quick Starter'],
+  [AchievementType.GROUP_CHAT_STARTER, 'Group Chat Starter'],
+  [AchievementType.SOCIAL_BUTTERFLY, 'Social Butterfly'],
+  [AchievementType.GAME_ON, 'Game On!'],
+  [AchievementType.VICTORY_LAP, 'Victory Lap'],
+  [AchievementType.UNBEATABLE_DEFENDER, 'Unbeatable Defender'],
+  [AchievementType.PONG_MASTER, 'Pong Master'],
+];
