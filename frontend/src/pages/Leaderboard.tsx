@@ -22,7 +22,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
 
   return (
     <div
-      className="w-full flex items-center justify-between py-4 pl-10 pr-28"
+      className="w-full flex items-center justify-between py-4 pl-10 pr-48"
       style={{ backgroundColor: rankColor }}
     >
       <div className="flex items-center gap-x-16">
@@ -35,7 +35,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
           </div>
         </Link>
       </div>
-      <div className="flex items-center gap-x-16">
+      <div className="flex items-center gap-x-28">
         <p className="text-white">
           {matches} Match{matches > 1 ? 'es' : ''}
         </p>
