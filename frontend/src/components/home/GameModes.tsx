@@ -5,6 +5,7 @@ import Card from '@components/Card';
 import { socket } from '../../socket';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { CursedIcon, GoldRushIcon, RegularIcon, VanishIcon } from '@assets/gameIcons';
 
 const selectMode = {
   regular: 'REGULAR',
@@ -14,10 +15,17 @@ const selectMode = {
 };
 
 const GameModes: React.FC = () => {
-  const [selectedMode, setSelectedMode] = useState<string>(GAME_MODES[0].name);
+  const [selectedMode, setSelectedMode] = useState<string>(GAME_MODES.REGULAR.name);
   const [searching, setSearching] = useState<boolean>(false);
   const [dot, setDot] = useState<string>('.');
   const navigate = useNavigate();
+
+  const GameModesCards = [
+    { name: 'regular', icon: RegularIcon },
+    { name: 'cursed', icon: CursedIcon },
+    { name: 'vanish', icon: VanishIcon },
+    { name: 'goldRush', icon: GoldRushIcon },
+  ];
 
   const checkLobby = (lobby: { state: string; game_id: string; message: string }) => {
     if (lobby.state === 'MATCH_FOUND') {
@@ -53,6 +61,8 @@ const GameModes: React.FC = () => {
     }, 500);
     return () => {
       clearInterval(interval);
+      socket.off('lobby', checkLobby);
+      socket.off('error');
     };
   }, []);
 
@@ -60,7 +70,7 @@ const GameModes: React.FC = () => {
     <section className="col-span-2 flex flex-col items-start gap-y-6">
       <h1 className="font-serif text-xl text-white">Game Modes</h1>
       <div className="flex gap-x-3 gap-y-3 flex-wrap">
-        {GAME_MODES.map((mode) => (
+        {GameModesCards.map((mode) => (
           <Card
             className={`center py-5 px-8 transition-all text-${mode.name}-dark ${
               selectedMode != mode.name || searching

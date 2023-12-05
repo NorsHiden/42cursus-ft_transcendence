@@ -1,14 +1,10 @@
 import React, { useEffect } from 'react';
-import { io } from 'socket.io-client';
 import { NavLink } from 'react-router-dom';
 import EyeSolid from '@assets/novaIcons/solid/EyeSolid';
 import Card from '@components/Card';
 import { useGame } from '@components/Game/useGame';
 import { GameCanvas } from '@components/Game/GameCanvas';
-
-const gameSocket = io('ws://localhost:3001/game', {
-  withCredentials: true,
-});
+import { socket as gameSocket } from '../socket';
 
 const GamePage: React.FC = () => {
   const { game, gameId, me, spectators, dot, mode, initGame, getMe, waitingInterval } = useGame();
@@ -27,6 +23,7 @@ const GamePage: React.FC = () => {
     return () => {
       document.removeEventListener('keydown', () => {});
       clearInterval(waitingInterval);
+      gameSocket.off('ingame');
     };
   }, []);
 

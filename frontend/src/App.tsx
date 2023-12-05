@@ -12,6 +12,7 @@ import Profile, { profileLoader } from '@pages/Profile';
 import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
 import OTP2fa, { otpLoader } from '@pages/OTP2fa';
 import { Leaderboard } from '@pages/Leaderboard';
+import Game from '@pages/Game';
 
 function Layoutloader() {
   return {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: '/leaderboard',
         element: <Leaderboard />,
+      },
+      {
+        path: '/game/:gameId',
+        element: <Game />,
       },
       {
         path: '/:user',

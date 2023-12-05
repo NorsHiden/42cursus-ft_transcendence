@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 
 type Spectator = {
   id: string;
@@ -30,7 +29,7 @@ export const useGame = () => {
       .catch();
   };
 
-  const initGame = (gameSocket: Socket<DefaultEventsMap, DefaultEventsMap>) => {
+  const initGame = (gameSocket: Socket) => {
     gameSocket.emit('ingame', { action: 'JOIN', game_id: gameId });
     gameSocket.emit('spectators', { game_id: gameId });
     gameSocket.on('spectators', (data: { spectators: Spectator[] }) => {
