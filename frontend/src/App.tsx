@@ -11,6 +11,7 @@ import PostLogin, { postLoginLoader } from '@pages/PostLogin';
 import Profile, { profileLoader } from '@pages/Profile';
 import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
 import OTP2fa, { otpLoader } from '@pages/OTP2fa';
+import { Leaderboard } from '@pages/Leaderboard';
 
 function Layoutloader() {
   return {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: '/discovery',
         element: <Discovery />,
+      },
+      {
+        path: '/leaderboard',
+        element: <Leaderboard />,
       },
       {
         path: '/:user',
