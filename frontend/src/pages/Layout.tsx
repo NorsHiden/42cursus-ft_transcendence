@@ -6,6 +6,17 @@ import SideBar from '@components/Sidebar';
 import FriendsBar from '@components/FriendsBar';
 import { BottomNavBar } from '@components/NavBar/BottomNavBar';
 
+export const LayoutLoader = () => {
+  return {
+    username: 'test',
+    display_name: 'test',
+    avatar: {
+      path: 'test',
+      file: new File([], ''),
+    },
+  };
+};
+
 const Layout: React.FC = () => {
   return (
     <div className="w-full h-screen relative bg-black grid grid-cols-2 lg:grid-cols-layout grid-rows-layout gap-x-5 overflow-hidden">

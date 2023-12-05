@@ -13,7 +13,7 @@ export type discoveryLoaderType = {
   me: User;
 };
 
-export const Discovery = () => {
+const Discovery = () => {
   const {
     channels,
     loading,
@@ -105,3 +105,5 @@ export const Discovery = () => {
     </div>
   );
 };
+
+export default Discovery;

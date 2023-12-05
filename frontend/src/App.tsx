@@ -2,8 +2,11 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
-import Layout from '@pages/Layout';
+import Layout, { LayoutLoader } from '@pages/Layout';
 import Home from '@pages/Home';
+import Discovery from '@pages/Discovery';
+import Profile, { profileLoader } from '@pages/Profile';
+import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
 import Login from '@pages/Login';
 import { Discovery } from '@pages/Discovery';
 
