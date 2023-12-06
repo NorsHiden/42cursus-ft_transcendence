@@ -1,40 +1,21 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Toaster } from 'sonner';
-
-import Layout, { LayoutLoader } from '@pages/Layout';
-import Home from '@pages/Home';
-import Discovery from '@pages/Discovery';
-import Profile, { profileLoader } from '@pages/Profile';
 import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
-import Login from '@pages/Login';
-import { Discovery } from '@pages/Discovery';
-
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import PostLogin, { postLoginLoader } from '@pages/PostLogin';
 import Profile, { profileLoader } from '@pages/Profile';
-import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
+import Layout, { LayoutLoader } from '@pages/Layout';
 import OTP2fa, { otpLoader } from '@pages/OTP2fa';
 import { Leaderboard } from '@pages/Leaderboard';
+import Discovery from '@pages/Discovery';
+import Login from '@pages/Login';
+import { Toaster } from 'sonner';
+import Home from '@pages/Home';
 import Game from '@pages/Game';
-
-function Layoutloader() {
-  return {
-    username: 'test',
-    display_name: 'test',
-    avatar: {
-      path: 'test',
-      file: new File([], ''),
-    },
-  };
-}
-
-// import {Settings} from '@components/profile';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
-    loader: Layoutloader,
+    loader: LayoutLoader,
     children: [
       {
         path: '/',

@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LockSolid from '@assets/novaIcons/solid/LockSolid';
-import { AchievementType, achievements, allAchievements } from '@globalTypes/achievements';
+import {
+  AchievementType,
+  ClaimedAchievement,
+  achievements,
+  allAchievements,
+} from '@globalTypes/achievements';
 import { getColorValue } from '@utils/getColorValue';
 import useDimensions from '@hooks/useDimensions';
+import axios from 'axios';
 
 type AchievementProps = {
   isClaimed: boolean;
@@ -45,24 +51,34 @@ const Achievement: React.FC<AchievementProps> = ({ isClaimed, type, title, descr
 };
 
 const AchievementsView: React.FC = () => {
+  const [claimedAchievements, setClaimedAchievements] = useState<ClaimedAchievement[]>([]);
+
+  useEffect(() => {
+    axios.get('/api/achievement').then((res) => setClaimedAchievements(res.data));
+  }, []);
   return (
     <div id="Achievement" className="max-w-screen-lg py-24 flex flex-wrap gap-10 text-white">
-      {allAchievements.map((achievement) => (
+      {claimedAchievements.map((achievement) => (
         <Achievement
           isClaimed={true}
-          type={achievement[0]}
-          title={achievement[1]}
-          description="This will be a small description"
+          type={achievement.alt_name.toUpperCase() as AchievementType}
+          title={achievement.name}
+          description={achievement.description}
         />
       ))}
-      {allAchievements.map((achievement) => (
-        <Achievement
-          isClaimed={false}
-          type={achievement[0]}
-          title={achievement[1]}
-          description="This will be a small description"
-        />
-      ))}
+      {allAchievements.map(
+        (achievement) =>
+          !claimedAchievements.find(
+            (claimedAchievement) => claimedAchievement.alt_name.toUpperCase() == achievement[0],
+          ) && (
+            <Achievement
+              isClaimed={false}
+              type={achievement[0] as AchievementType}
+              title={achievement[1]}
+              description={achievement[2]}
+            />
+          ),
+      )}
     </div>
   );
 };

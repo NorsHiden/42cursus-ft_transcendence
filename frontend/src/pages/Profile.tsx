@@ -7,27 +7,6 @@ import { User } from '@globalTypes/types';
 
 export async function profileLoader(user: string | undefined) {
   try {
-    return {
-      id: 1,
-      username: 'wer',
-      display_name: 'wer',
-      email: 'wer',
-      wins: 4,
-      loses: 4,
-      points: 4,
-      verified: true,
-      profile: {
-        id: 0,
-        about: 'ffghfh',
-        avatar: 'fghfgh',
-        banner: 'string',
-        location: 'string',
-        birthdate: 'string',
-      },
-      isforeign: false,
-      friendStatus: 'sdf',
-    };
-
     const res = await axios.get(`/api/users/${user}`);
     const LogedinUser = await axios.get(`/api/users/@me`);
     const friendStatus = await axios.get(`/api/friendlist/${res.data.id}`);

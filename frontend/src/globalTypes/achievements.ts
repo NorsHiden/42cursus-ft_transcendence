@@ -39,15 +39,38 @@ export const achievements = {
 };
 
 export const allAchievements = [
-  [AchievementType.WELCOME_ABOARD, 'Welcome Aboard!'],
-  [AchievementType.SOCIAL_PIONEER, 'Social Pioneer'],
-  [AchievementType.CIRCLE_OF_ALLIES, 'Circle of Allies'],
-  [AchievementType.DM_INITIATOR, 'DM Initiator'],
-  [AchievementType.QUICK_STARTER, 'Quick Starter'],
-  [AchievementType.GROUP_CHAT_STARTER, 'Group Chat Starter'],
-  [AchievementType.SOCIAL_BUTTERFLY, 'Social Butterfly'],
-  [AchievementType.GAME_ON, 'Game On!'],
-  [AchievementType.VICTORY_LAP, 'Victory Lap'],
-  [AchievementType.UNBEATABLE_DEFENDER, 'Unbeatable Defender'],
-  [AchievementType.PONG_MASTER, 'Pong Master'],
+  [AchievementType.WELCOME_ABOARD, 'Welcome Aboard!', 'Logging in for the very first time.'],
+  [AchievementType.SOCIAL_PIONEER, 'Social Pioneer', 'Forging the First Friendship.'],
+  [
+    AchievementType.CIRCLE_OF_ALLIES,
+    'Circle of Allies',
+    'Gathering a diverse group of five friends.',
+  ],
+  [AchievementType.DM_INITIATOR, 'DM Initiator', 'Initiate direct message conversation.'],
+  [AchievementType.QUICK_STARTER, 'Quick Starter', 'For sending 10 messages in the chat.'],
+  [AchievementType.GROUP_CHAT_STARTER, 'Group Chat Starter', 'Create and manage group chat room.'],
+  [
+    AchievementType.SOCIAL_BUTTERFLY,
+    'Social Butterfly',
+    'Participate in 10 different group chats.',
+  ],
+  [AchievementType.GAME_ON, 'Game On!', 'Play your first game and join the fun.'],
+  [
+    AchievementType.VICTORY_LAP,
+    'Victory Lap',
+    'Win your very first game and savor the taste of success.',
+  ],
+  [
+    AchievementType.UNBEATABLE_DEFENDER,
+    'Unbeatable Defender',
+    'Win a game without allowing your opponent to score a single point.',
+  ],
+  [AchievementType.PONG_MASTER, 'Pong Master', 'Win 10 Pong matches.'],
 ];
+
+export type ClaimedAchievement = {
+  id: string;
+  name: string;
+  alt_name: string;
+  description: string;
+};
