@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Channel } from './channel.entity';
 import { ChannelRole, MemberState } from 'src/utils/types';
@@ -18,11 +24,13 @@ export class UserChannel {
 
   @Exclude()
   @ManyToOne(() => User, (user) => user.channels)
+  //   @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ManyToOne(() => Channel, (channel) => channel.members, {
     onDelete: 'CASCADE',
   })
+  //   @JoinColumn({ name: 'channel_id' })
   channel: Channel;
 
   @Expose()

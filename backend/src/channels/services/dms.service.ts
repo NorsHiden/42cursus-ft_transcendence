@@ -12,6 +12,7 @@ import {
   Paginated,
   paginate,
 } from 'nestjs-paginate';
+import { UserChannel } from 'src/typeorm/userchannel.entity';
 
 @Injectable()
 export class DmsService implements IDmsService {
@@ -89,49 +90,17 @@ export class DmsService implements IDmsService {
     }
   }
 
-  public async findOne(recipientId: string, user: JwtUser): Promise<Channel> {
-    try {
-      const brackets = new Brackets((qb) => {
-        qb.where(
-          'dm.id IN (SELECT uc.channelId FROM userchannel AS uc1 WHERE uc1.userId = :userId)',
-          { userId: user.sub },
-        );
-        qb.andWhere(
-          'dm.id IN (SELECT uc.channelId FROM userchannel AS uc2 WHERE uc2.userId = :recipientId)',
-          { recipientId },
-        );
-      });
-
-      const dm = await this.channelRepository
-        .createQueryBuilder('dm')
-        .leftJoinAndSelect('dm.members', 'members')
-        .leftJoinAndSelect('members.user', 'user')
-        .leftJoinAndSelect('user.profile', 'profile')
-        .where('dm.type = :type', { type: 'dm' })
-        .andWhere(brackets)
-        .getOne();
-
-      if (!dm) throw new NotFoundException('DM not found');
-
-      return dm;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   private async isExist(recipientId: string, user: JwtUser): Promise<boolean> {
-    const brackets = new Brackets((qb) => {
-      qb.where('members.user.id = :userId', { userId: user.sub });
-      qb.andWhere('members.user.id = :recipientId', { recipientId });
-    });
-
     const dm = await this.channelRepository
-      .createQueryBuilder('dm')
-      .innerJoinAndSelect('dm.members', 'members')
-      .innerJoinAndSelect('members.user', 'user')
-      .innerJoinAndSelect('user.profile', 'profile')
-      .where('dm.type = :type', { type: 'dm' })
-      .andWhere(brackets)
+      .createQueryBuilder('c')
+      .innerJoin('c.members', 'uc')
+      .where('uc.userId IN (:userId, :recipientId)', {
+        userId: user.sub,
+        recipientId: recipientId,
+      })
+      .andWhere('c.type = :type', { type: 'dm' })
+      .groupBy('c.id')
+      .having('COUNT(DISTINCT uc.userId) = 2')
       .getOne();
 
     if (dm) return true;
