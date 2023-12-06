@@ -15,6 +15,7 @@ export type User = {
   points: {
     value: number;
   }[];
+  presence: 'online' | 'ingame' | 'offline';
   verified: boolean;
   profile: UserProfile;
 };
