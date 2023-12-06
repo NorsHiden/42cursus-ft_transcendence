@@ -27,16 +27,29 @@ export class MatchHistoryController {
   ) {}
 
   @Get()
-  async getUserMatchHistories(@Req() req, @Query('page') page: number) {
-    return await this.matchHistoryService.getUserMatches(req.user.sub, page);
+  async getUserMatchHistories(
+    @Req() req,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return await this.matchHistoryService.getUserMatches(
+      req.user.sub,
+      page,
+      limit,
+    );
   }
 
   @Get(':id')
   async getUserMatchHistoriesById(
     @Param() params: paramDto,
     @Query('page') page: number,
+    @Query('limit') limit: number,
   ) {
-    return await this.matchHistoryService.getUserMatches(params.id, page);
+    return await this.matchHistoryService.getUserMatches(
+      params.id,
+      page,
+      limit,
+    );
   }
 
   @Get(':id/highlights')
@@ -48,16 +61,26 @@ export class MatchHistoryController {
   async getWinMatchHistories(
     @Param() params: paramDto,
     @Query('page') page: number,
+    @Query('limit') limit: number,
   ) {
-    return await this.matchHistoryService.getUserWinMatches(params.id, page);
+    return await this.matchHistoryService.getUserWinMatches(
+      params.id,
+      page,
+      limit,
+    );
   }
 
   @Get(':id/losses')
   async getLossMatchHistories(
     @Param() params: paramDto,
     @Query('page') page: number,
+    @Query('limit') limit: number,
   ) {
-    return await this.matchHistoryService.getUserLossMatches(params.id, page);
+    return await this.matchHistoryService.getUserLossMatches(
+      params.id,
+      page,
+      limit,
+    );
   }
 
   @Post('add')

@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Req,
+  Sse,
   UseGuards,
 } from '@nestjs/common';
 import { Routes, Services } from 'src/utils/consts';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { IFriendlistService } from '../interfaces/friendlist.interface';
 import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
+import { Observable, interval, map, switchMap } from 'rxjs';
+import { Request } from 'express';
 
 @Controller(Routes.FRIENDLIST)
 @UseGuards(JwtAuthGuard)
@@ -111,6 +114,16 @@ export class FriendlistController {
   @Delete(':id')
   async removeFriendRequest(@Req() req, @Param('id') target_id: string) {
     await this.friendlistService.removeRequest(req.user.sub, target_id);
+  }
+
+  @Sse('sse')
+  sse(@Req() req): Observable<any> {
+    return interval(1000).pipe(
+      switchMap(
+        async () => await this.friendlistService.getFriends(req.user.sub),
+      ),
+      map((user) => ({ data: user.friendlist.friends })),
+    );
   }
 
   @Get(':id')

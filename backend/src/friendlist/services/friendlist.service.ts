@@ -47,6 +47,12 @@ export class FriendlistService implements IFriendlistService {
     )
       throw new ForbiddenException('Cannot send a request on both sides.');
     if (
+      target.friendlist.pending.find(
+        (pendingUser) => pendingUser.id === user.id,
+      )
+    )
+      throw new ForbiddenException('Request already has been sent.');
+    if (
       user.friendlist.blocked.find(
         (blockedUser) => blockedUser.id === target.id,
       )

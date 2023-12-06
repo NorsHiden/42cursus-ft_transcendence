@@ -12,6 +12,7 @@ import { WsGuard } from 'src/gateways/guards/ws.guard';
 import { Server, Socket } from 'socket.io';
 import { WebSocketServer } from '@nestjs/websockets';
 import { AllExceptionsFilter } from '../../filters/exception.filter';
+import { UserFiler } from '../types/UserFilter.type';
 
 @WebSocketGateway({
   namespace: Namespaces.Game,
@@ -78,5 +79,25 @@ export class GameGateway {
     @MessageBody('game_id') game_id: string,
   ) {
     return this.gameService.getSpectators(client, game_id);
+  }
+
+  @SubscribeMessage(WebSocketEvents.Live)
+  liveMatches(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('game_mode') game_mode: UserFiler['game_mode'],
+    @MessageBody('live') live: UserFiler['live'],
+  ) {
+    if (
+      game_mode != 'REGULAR' &&
+      game_mode != 'CURSED' &&
+      game_mode != 'VANISH' &&
+      game_mode != 'GOLD_RUSH' &&
+      game_mode != 'ALL' &&
+      live != 'ALL' &&
+      live != 'LIVE' &&
+      live != 'DONE'
+    )
+      throw new WsException('Invalid Game Mode');
+    return this.gameService.getLiveGames(client, game_mode, live);
   }
 }

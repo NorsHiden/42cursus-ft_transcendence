@@ -61,6 +61,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (
       payload.is_2fa_enabled &&
       !req.path.includes('2fa/verify') &&
+      !req.path.includes('users/@me') &&
       !payload.is_2fa_verified
     )
       throw new ForbiddenException('2fa not verified');

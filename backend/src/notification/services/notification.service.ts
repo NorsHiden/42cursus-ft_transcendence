@@ -28,6 +28,7 @@ export class NotificationService implements INotificationService {
       where: {
         recipient: user,
       },
+      relations: ['sender', 'recipient', 'sender.profile', 'recipient.profile'],
       order: {
         created_at: 'DESC',
       },
@@ -43,7 +44,7 @@ export class NotificationService implements INotificationService {
       where: {
         id: notification_id,
       },
-      relations: ['recipient', 'sender'],
+      relations: ['sender', 'recipient', 'sender.profile', 'recipient.profile'],
     });
   }
 
@@ -70,6 +71,19 @@ export class NotificationService implements INotificationService {
     await this.usersService.setUser(user);
 
     this.eventService.emit(target_id, notification);
+  }
+
+  async markNotificationAsRead(
+    user_id: string,
+    notification_id: string,
+  ): Promise<void> {
+    const notification = await this.getNotification(notification_id);
+    if (!notification && notification.recipient.id != user_id)
+      throw new NotFoundException('Notification not found.');
+
+    notification.is_read = true;
+    notification.status = 'accepted';
+    await this.setNotification(notification);
   }
 
   subscribeToEvent(user_id: string, @Res() res: Response) {

@@ -13,11 +13,35 @@ export class MatchHistoryService {
     private readonly matchHistoryRepository: Repository<MatchHistory>,
   ) {}
 
+  async getMatches(
+    page: number,
+    limit: number,
+    game_mode: string,
+  ): Promise<MatchHistory[]> {
+    if (!page) page = 0;
+    if (!limit) limit = 10;
+    const matches = await this.matchHistoryRepository.find({
+      where: game_mode === 'ALL' ? {} : { game_mode },
+      relations: [
+        'home_player',
+        'away_player',
+        'home_player.profile',
+        'away_player.profile',
+      ],
+      order: {
+        created_at: 'DESC',
+      },
+    });
+    return matches.slice(page * limit, page * limit + limit);
+  }
+
   async getUserMatches(
     user_id: string,
     page: number,
+    limit: number,
   ): Promise<MatchHistoryData> {
     if (!page) page = 0;
+    if (!limit) limit = 10;
     const matches = await this.matchHistoryRepository.find({
       where: [
         { home_player: { id: user_id } },
@@ -33,14 +57,14 @@ export class MatchHistoryService {
         created_at: 'DESC',
       },
     });
-    const matchesNeeded = matches.slice(page * 10, page * 10 + 10);
+    const matchesNeeded = matches.slice(page * limit, page * limit + limit);
     return {
       data: matchesNeeded,
       meta: {
-        itemsPerPage: 10,
+        itemsPerPage: limit,
         totalItems: matchesNeeded.length,
         currentPage: page,
-        TotalPages: Math.ceil(matches.length / 10),
+        TotalPages: Math.ceil(matches.length / limit),
         sortBy: { field: 'created_at', order: 'DESC' },
       },
     };
@@ -49,8 +73,10 @@ export class MatchHistoryService {
   async getUserWinMatches(
     user_id: string,
     page: number,
+    limit: number,
   ): Promise<MatchHistoryData> {
     if (!page) page = 0;
+    if (!limit) limit = 10;
     const matches = await this.matchHistoryRepository.find({
       where: [
         {
@@ -76,14 +102,14 @@ export class MatchHistoryService {
         created_at: 'DESC',
       },
     });
-    const matchesNeeded = matches.slice(page * 10, page * 10 + 10);
+    const matchesNeeded = matches.slice(page * limit, page * limit + limit);
     return {
       data: matchesNeeded,
       meta: {
-        itemsPerPage: 10,
+        itemsPerPage: limit,
         totalItems: matchesNeeded.length,
         currentPage: page,
-        TotalPages: Math.ceil(matches.length / 10),
+        TotalPages: Math.ceil(matches.length / limit),
         sortBy: { field: 'created_at', order: 'DESC' },
       },
     };
@@ -132,8 +158,10 @@ export class MatchHistoryService {
   async getUserLossMatches(
     user_id: string,
     page: number,
+    limit: number,
   ): Promise<MatchHistoryData> {
     if (!page) page = 0;
+    if (!limit) limit = 10;
     const matches = await this.matchHistoryRepository.find({
       where: [
         {
@@ -159,14 +187,14 @@ export class MatchHistoryService {
         created_at: 'DESC',
       },
     });
-    const matchesNeeded = matches.slice(page * 10, page * 10 + 10);
+    const matchesNeeded = matches.slice(page * limit, page * limit + limit);
     return {
       data: matchesNeeded,
       meta: {
-        itemsPerPage: 10,
+        itemsPerPage: limit,
         totalItems: matchesNeeded.length,
         currentPage: page,
-        TotalPages: Math.ceil(matches.length / 10),
+        TotalPages: Math.ceil(matches.length / limit),
         sortBy: { field: 'created_at', order: 'DESC' },
       },
     };

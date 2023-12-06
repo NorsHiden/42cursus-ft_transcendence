@@ -14,6 +14,7 @@ import { Achievement } from './achievement.entity';
 import { Exclude } from 'class-transformer';
 import { UserChannel } from './userchannel.entity';
 import { MatchHistory } from './match_history.entity';
+import { Points } from './points.entity';
 
 @Entity()
 export class User {
@@ -39,8 +40,10 @@ export class User {
   @Column({ default: 0 })
   loses: number;
 
-  @Column({ default: 0 })
-  points: number;
+  @OneToMany((type) => Points, (points) => points.user, {
+    cascade: true,
+  })
+  points: Points[];
 
   // Stores the user's profile information, including avatar, banner, and other details.
   @OneToOne((type) => Profile, (profile) => profile.owner, { cascade: true })
@@ -93,7 +96,7 @@ export class User {
   _2fa_secret: string;
 
   @Column({ default: 'offline' })
-  presence: 'online' | 'offline' | 'in-game';
+  presence: 'online' | 'offline' | 'ingame';
 
   // Many-to-many relationships with friendlists
   @ManyToMany((type) => Friendlist, (friendlist) => friendlist.friends)
