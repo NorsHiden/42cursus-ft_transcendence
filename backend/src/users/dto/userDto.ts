@@ -1,6 +1,7 @@
 import {
   IsDateString,
   IsEmail,
+  IsLowercase,
   IsOptional,
   IsString,
   IsUrl,
@@ -11,6 +12,7 @@ import {
 export class UserDto {
   @IsString()
   @IsOptional()
+  @IsLowercase()
   @Matches(/^[a-zA-Z0-9_-]+$/, {
     message:
       'Username can only contain letters, numbers, underscores, and hyphens',

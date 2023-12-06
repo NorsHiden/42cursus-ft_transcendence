@@ -258,7 +258,9 @@ export class UsersService implements IUsersService {
         },
       });
       if (otherUser && otherUser.id != user_id)
-        throw new BadRequestException('Username Already exists');
+        throw new BadRequestException({
+          message: ['Username Already exists'],
+        });
     }
     const user = await this.getProfile(user_id);
     const updatedVersion: User = { ...user, ...userDto, email: user.email };
