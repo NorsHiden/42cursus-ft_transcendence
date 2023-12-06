@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IconProps from '../IconProps';
+import IconProps from '@assets/IconProps';
 
 const AndroidSmartphoneMinusOutline: React.FC<IconProps> = ({ size, className }) => {
   return (

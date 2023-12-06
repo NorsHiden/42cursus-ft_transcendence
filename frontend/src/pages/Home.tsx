@@ -7,7 +7,7 @@ import GeneralChatSection from '@components/home/GeneralChat';
 
 const Home: React.FC = () => {
   return (
-    <div className="w-full h-full grid grid-cols-4 grid-rows-section gap-x-5 gap-y-8 pt-4">
+    <div className="w-full h-full grid grid-cols-2 2xl:grid-cols-4 grid-rows-section gap-x-5 gap-y-8 pt-4">
       <GameModesSection />
       <PointsGraphSection />
       <PreviousGamesSection />

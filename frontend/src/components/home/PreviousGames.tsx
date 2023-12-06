@@ -1,154 +1,154 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import MatchCard from '@components/MatchCard';
+import { CardType, Game, player } from '@globalTypes/types';
+import { socket } from '../../socket';
 import Card from '@components/Card';
-import userAvatar from '@assets/images/user.jpeg';
-import { GAME_MODES } from '@globalTypes/gameModes';
+import DropDown from '@assets/novaIcons/solid/DropDown';
+import EmptyMatchCard from '@assets/images/matchcardempty.png';
 
-enum GameMode {
-  REGULAR = 'regular',
-  CURSED = 'cursed',
-  VANISH = 'vanish',
-  GOLD_RUSH = 'goldRush',
-}
-
-type Game = {
+type GameType = {
   isLive: boolean;
-  mode: GameMode;
-  duration: string;
-  player1: { name: string; avatar: string };
-  player2: { name: string; avatar: string };
-  score: { player1: number; player2: number };
-};
-
-const GameCard: React.FC<Game> = ({ mode, duration, player1, player2, score }) => {
-  const modeIcon = GAME_MODES.find((presetMode) => presetMode.name === mode) || GAME_MODES[0];
-
-  return (
-    <Card
-      fill="#1E1F23"
-      borderWidth={1}
-      borderColor="#2C2D33"
-      className="w-full p-8 text-white flex flex-col items-center justify-between"
-    >
-      <header className="w-full flex items-center justify-between">
-        <div className="flex items-center gap-x-2">
-          <div className={`w-8 h-8 center rounded-full bg-${mode}-color`}>
-            {<modeIcon.icon size={18} className={`text-${mode}-dark`} />}
-          </div>
-          <div>
-            <span className="block text-[8px] font-semibold uppercase text-gray -mb-1">Mode</span>
-            <span className="block font-semibold uppercase text-white">{mode}</span>
-          </div>
-        </div>
-        <div className="flex justify-start gap-x-2 before:w-1 before:bg-primary">
-          <div>
-            <span className="block text-[8px] font-semibold uppercase text-gray -mb-1">Time</span>
-            <span className="block font-semibold uppercase text-white">{duration}</span>
-          </div>
-        </div>
-      </header>
-      <div className="center gap-x-6 py-4">
-        <img className="w-14 h-14 rounded-full" src={player1.avatar} alt="" />
-        <h1 className="font-serif text-4xl">
-          {score.player1} : {score.player2}
-        </h1>
-        <img className="w-14 h-14 rounded-full" src={player2.avatar} alt="" />
-      </div>
-      <Card
-        cut={30}
-        borderWidth={1}
-        borderColor="#E0FF85"
-        className="z-10 mx-auto w-fit text-green"
-      >
-        <span className="py-1 px-4 font-serif text-sm text-black uppercase">Live</span>
-      </Card>
-    </Card>
-  );
+  game_id: string;
+  gamemode: Game;
+  time: string;
+  host: player;
+  opponent: player;
+  score: { host: number; opponent: number };
 };
 
 const PreviousGames: React.FC = () => {
-  const games: Game[] = [
-    {
-      isLive: true,
-      mode: GameMode.REGULAR,
-      duration: '02:13',
-      player1: { name: 'Leanne', avatar: userAvatar },
-      player2: { name: 'Ervin', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.CURSED,
-      duration: '03:30',
-      player1: { name: 'Clementine', avatar: userAvatar },
-      player2: { name: 'ramiro', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.GOLD_RUSH,
-      duration: '09:59',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.CURSED,
-      duration: '07:33',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.REGULAR,
-      duration: '08:00',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.VANISH,
-      duration: '10:12',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-  ];
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [games, setGames] = useState<GameType[]>([]);
+  const [gameType, setGameType] = useState<string>('All');
+  const [gameMode, setGameMode] = useState<string>('ALL');
+
+  const updateGameType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGameType(event.target.value);
+    socket.emit('live', {
+      game_mode: gameMode,
+      live: event.target.value.toUpperCase(),
+    });
+  };
+
+  const updateGameMode = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setGameMode(event.target.value);
+    socket.emit('live', {
+      game_mode: event.target.value,
+      live: gameType.toUpperCase(),
+    });
+  };
+
+  useEffect(() => {
+    socket.on('connect', () => setIsConnected(true));
+    socket.on('disconnect', () => setIsConnected(false));
+
+    socket.emit('live', {
+      game_mode: 'ALL',
+      live: gameType.toUpperCase(),
+    });
+    socket.on('live', (liveGames: GameType[]) => setGames(liveGames));
+
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('live');
+    };
+  }, []);
 
   return (
     <section className="col-span-4 2xl:col-span-3 grid grid-rows-section gap-y-4">
       <header className="flex items-center justify-between">
         <h1 className="font-serif text-2xl text-white">Recent Matches</h1>
         <div className="flex items-center gap-x-6 text-white">
-          <label htmlFor="allRadio">
-            <input type="radio" name="filter" value="all" id="allRadio" /> All
-          </label>
-          <label htmlFor="liveRadio">
-            <input type="radio" name="filter" value="live" id="liveRadio" /> Live
-          </label>
-          <label htmlFor="doneRadio">
-            <input type="radio" name="filter" value="done" id="doneRadio" /> Done
-          </label>
-          <select
-            className="w-32 px-3 text-base/10 border rounded bg-black border-gray"
-            defaultValue="_"
+          <div id="redio-buttons" className="flex justify-end">
+            <div id="All" className="flex items-center ml-[30px]">
+              <input
+                id="default-radio-1"
+                type="radio"
+                name="default-radio"
+                value="All"
+                checked={gameType === 'All'}
+                className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none cursor-pointer"
+                onChange={updateGameType}
+              />
+              <label
+                htmlFor="default-radio-1"
+                className={`  ml-2 text-['1rem'] font-medium text-[#717178] `}
+              >
+                All
+              </label>
+            </div>
+            <div id="Live" className="flex items-center ml-[30px]">
+              <input
+                id="default-radio-2"
+                type="radio"
+                value="Live"
+                checked={gameType === 'Live'}
+                name="default-radio"
+                className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none cursor-pointer"
+                onChange={updateGameType}
+              />
+              <label
+                htmlFor="default-radio-2"
+                className={`  font-poppins ml-2 text-['1rem'] font-medium text-[#717178] `}
+              >
+                Live
+              </label>
+            </div>
+            <div id="Done" className="flex items-center ml-[30px]">
+              <input
+                id="default-radio-3"
+                type="radio"
+                value="Done"
+                checked={gameType === 'Done'}
+                name="default-radio"
+                className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none cursor-pointer"
+                onChange={updateGameType}
+              />
+              <label
+                htmlFor="default-radio-3"
+                className={`ml-2 text-[${'1rem'}px] font-medium text-[#717178] `}
+              >
+                Done
+              </label>
+            </div>
+          </div>
+          <Card
+            fill="#2D313A"
+            borderWidth={2}
+            borderColor="#4B5261"
+            cut={32}
+            className="flex group relative items-center h-8 w-36 text-[#717178] justify-between"
           >
-            <option value="_" disabled hidden>
-              Sort By
-            </option>
-            <option value="qwe">qwe</option>
-            <option value="yerye">yerye</option>
-          </select>
+            <select
+              name="filter"
+              id="filter"
+              className="flex w-full pl-4 text-sm appearance-none outline-none bg-[#2D313A] border-gray"
+              onChange={updateGameMode}
+            >
+              <option value="ALL">All</option>
+              <option value="REGULAR">Regular</option>
+              <option value="VANISH">Vanish</option>
+              <option value="CURSED">Cursed</option>
+              <option value="GOLD_RUSH">Gold Rush</option>
+            </select>
+            <DropDown className="absolute right-2 h-2 w-2" />
+          </Card>
         </div>
       </header>
-
-      <main className="grid grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-x-4 gap-y-4 mb-4">
-        {games.map((game) => (
-          <GameCard {...game} />
+      <main className="relative grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-x-4 gap-y-4 mb-4 overflow-auto scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-[#5E6069]">
+        {games.map((game: GameType, index: number) => (
+          <MatchCard key={index} type={CardType.RECENT_MATCHES} {...game} />
         ))}
+        {games.length < 6 &&
+          Array.from({ length: 6 - games.length }).map((_, index) => (
+            <img key={index} src={EmptyMatchCard} className="w-full aspect-[193/106] h-full" />
+          ))}
+        {games.length == 0 && (
+          <div className="absolute flex w-full h-full items-center justify-center">
+            <p className="text-[#8E8E8E] font-serif text-[60px]">NO MATCH FOUND !</p>
+          </div>
+        )}
       </main>
     </section>
   );

@@ -2,21 +2,19 @@ import React from 'react';
 
 import Card from '@components/Card';
 
-import {CursedIcon,GoldRushIcon,VanishIcon,RegularIcon} from '@assets/gameIcons/'
+import { CursedIcon, GoldRushIcon, VanishIcon, RegularIcon } from '@assets/gameIcons/';
 // import user from '@assets/images/user.png'
 import userAvatar from '@assets/images/user.jpeg';
-import {Game,player,CardType} from '@globalTypes/index'
+import { Game, player, CardType } from '@globalTypes/index';
 // import { match } from 'assert';
 
-
-
-
 interface MatchHistoryProps {
-    type: CardType;
-    gamemode: Game;
-    host: player;
-    opponent: player;
-    time: string;
+  type: CardType;
+  gamemode: Game;
+  host: player;
+  opponent: player;
+  time: string;
+  isLive?: boolean;
 }
 
 // interface Match {
@@ -30,13 +28,18 @@ interface MatchHistoryProps {
 //   match_duration: string;
 // }
 
-
-  
-const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,time}) => {
+const MatchCard: React.FC<MatchHistoryProps> = ({
+  type,
+  gamemode,
+  host,
+  opponent,
+  time,
+  isLive,
+}) => {
   return (
     <Card
-      className={`relative text-[#1E1F23] w-full  ${
-        type === CardType.MATCH_HISTORY ? 'aspect-[193/143]' : 'aspect-[193/106]'
+      className={`relative text-[#1E1F23] w-full ${
+        type === CardType.MATCH_HISTORY ? 'aspect-[193/143]' : 'h-full aspect-[193/106]'
       }`}
       cut={12}
       borderRadius={20}
@@ -46,7 +49,8 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
       <div id="content" className=" lg:p-4 xl:p-5 2xl:p-6 p-6">
         <header className="w-full flex items-center justify-between">
           <div className="flex items-center justify-center lg:gap-x-2 xl:gap-x-3 2xl:gap-x-3 gap-x-3  lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
-            <div className={`flex lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 center rounded-full 
+            <div
+              className={`flex lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 center rounded-full 
               ${
                 gamemode === Game.CURSED
                   ? 'bg-[#3DFFFB]'
@@ -58,7 +62,8 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
                   ? 'bg-[#C2784F]'
                   : ''
               }
-            `}>
+            `}
+            >
               {gamemode === Game.CURSED ? (
                 <CursedIcon className=" lg:w-2 lg:h-2  2xl:h-4 h-4 2xl:w-4 w-4 " />
               ) : gamemode === Game.GOLDRUSH ? (
@@ -138,18 +143,29 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
             </div>
           </div>
         ) : (
-          <div className="center gap-x-6 py-8">
-            <img
-              className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
-              src={host.avatar}
-              alt=""
-            />
-            <h1 className="font-serif text-white text-xl lg:text-2xl 2xl:text-4xl">9 : 4</h1>
-            <img
-              className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
-              src={opponent.avatar}
-              alt=""
-            />
+          <div className="flex flex-col items-center justify-center">
+            <div className="center gap-x-6 py-8">
+              <img
+                className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
+                src={host.avatar}
+              />
+              <h1 className="font-serif text-white text-xl lg:text-2xl 2xl:text-4xl">
+                {host.score} : {opponent.score}
+              </h1>
+              <img
+                className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
+                src={opponent.avatar}
+              />
+            </div>
+            <Card
+              className="center w-12 h-6"
+              cut={35}
+              fill={isLive ? '#D5FF5C' : '#5E6069'}
+              borderWidth={1}
+              borderColor={isLive ? '#E0FF85' : '#767984'}
+            >
+              <p className="text-sm font-serif">{isLive ? 'Live' : 'Done'}</p>
+            </Card>
           </div>
         )}
       </div>

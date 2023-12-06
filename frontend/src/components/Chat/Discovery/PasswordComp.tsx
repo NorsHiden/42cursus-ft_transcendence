@@ -60,7 +60,7 @@ export const PasswordComp: React.FC<PasswordCompProps> = ({ channel, enabled, hi
                 {loading ? (
                   <EllipseOutline className="w-8 h-8 text-white animate-spin" />
                 ) : (
-                  <p className="text-2xl">Join</p>
+                  <p className="text-2xl font-serif">Join</p>
                 )}
               </button>
             </Card>

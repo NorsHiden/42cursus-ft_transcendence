@@ -13,7 +13,7 @@ export type discoveryLoaderType = {
   me: User;
 };
 
-export const Discovery = () => {
+const Discovery = () => {
   const {
     channels,
     loading,
@@ -81,7 +81,7 @@ export const Discovery = () => {
       </header>
       <div className="flex items-start h-full justify-center overflow-y-auto overflow-x-hidden scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-[#5E6069] scrollbar-mr-4">
         <div className="flex flex-col w-full h-full gap-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 grid-rows-2 gap-4">
             {!searchLoading &&
               channels?.map((channel, index) => (
                 <ChannelCard key={index} channel={channel} me={me} showPopUp={showPopUp} />
@@ -105,3 +105,5 @@ export const Discovery = () => {
     </div>
   );
 };
+
+export default Discovery;
