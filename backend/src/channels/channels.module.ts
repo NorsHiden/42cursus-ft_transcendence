@@ -19,6 +19,7 @@ import { MessagesService } from './services/messages.service';
 import { MessagesController } from './controllers/messages.controller';
 import { DmsController } from './controllers/dms.controller';
 import { DmsService } from './services/dms.service';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { DmsService } from './services/dms.service';
       useClass: MulterConfigService,
     }),
     NotificationModule,
+    UsersModule,
   ],
   controllers: [
     ChannelsController,
@@ -44,10 +46,6 @@ import { DmsService } from './services/dms.service';
     {
       provide: Services.Channels,
       useClass: ChannelsService,
-    },
-    {
-      provide: Services.Users,
-      useClass: UsersService,
     },
     {
       provide: Services.Members,
