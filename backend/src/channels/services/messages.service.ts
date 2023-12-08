@@ -20,6 +20,7 @@ import { Services } from 'src/utils/consts';
 import { IMembersService } from '../interfaces/IMembersService.interface';
 import { Channel } from 'src/typeorm/channel.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 @Injectable()
 export class MessagesService implements IMessagesService {
   constructor(
@@ -28,6 +29,8 @@ export class MessagesService implements IMessagesService {
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @Inject(Services.Users) private readonly usersService: IUsersService,
     @Inject(Services.Members) private readonly membersService: IMembersService,
+    @Inject(Services.Achievement)
+    private readonly achievementsService: IAchievementService,
     private eventEmitter: EventEmitter2,
   ) {}
 
@@ -62,6 +65,9 @@ export class MessagesService implements IMessagesService {
       });
 
       const savedMessage = await this.messageRepository.save(message);
+
+      if ((await this.countMessages(channelId)) === 10)
+        this.achievementsService.setAchievement(user.sub, 'quick_starter');
 
       this.eventEmitter.emit('message.created', savedMessage);
 
@@ -122,5 +128,17 @@ export class MessagesService implements IMessagesService {
     if (!message) throw new NotFoundException('Message not found');
 
     return message;
+  }
+
+  public async countMessages(channelId: number): Promise<number> {
+    try {
+      const count = await this.messageRepository.count({
+        where: { channel: { id: channelId } },
+      });
+
+      return count;
+    } catch (error) {
+      throw error;
+    }
   }
 }

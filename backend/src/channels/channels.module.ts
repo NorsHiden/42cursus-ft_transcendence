@@ -20,6 +20,7 @@ import { MessagesController } from './controllers/messages.controller';
 import { DmsController } from './controllers/dms.controller';
 import { DmsService } from './services/dms.service';
 import { UsersModule } from 'src/users/users.module';
+import { AchievementModule } from 'src/achievement/achievement.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { UsersModule } from 'src/users/users.module';
     }),
     NotificationModule,
     UsersModule,
+    AchievementModule,
   ],
   controllers: [
     ChannelsController,

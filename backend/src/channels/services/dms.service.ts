@@ -13,12 +13,15 @@ import {
   paginate,
 } from 'nestjs-paginate';
 import { UserChannel } from 'src/typeorm/userchannel.entity';
+import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 
 @Injectable()
 export class DmsService implements IDmsService {
   constructor(
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @Inject(Services.Users) private readonly usersService: IUsersService,
+    @Inject(Services.Achievement)
+    private readonly achievementsService: IAchievementService,
   ) {}
 
   public async create(recipientId: string, user: JwtUser): Promise<Channel> {
@@ -50,6 +53,9 @@ export class DmsService implements IDmsService {
       });
 
       const newDm = await this.channelRepository.save(dm);
+
+      if ((await this.countDms(user.sub)) === 1)
+        await this.achievementsService.setAchievement(user.sub, 'dm_initiator');
 
       return newDm;
     } catch (error) {
@@ -106,5 +112,16 @@ export class DmsService implements IDmsService {
     if (dm) return true;
 
     return false;
+  }
+
+  private async countDms(userId: string): Promise<number> {
+    const count = await this.channelRepository
+      .createQueryBuilder('channel')
+      .innerJoin('channel.members', 'members')
+      .where('members.userId = :userId', { userId })
+      .andWhere('channel.type = :type', { type: 'dm' })
+      .getCount();
+
+    return count;
   }
 }

@@ -28,6 +28,7 @@ import * as bcrypt from 'bcrypt';
 import { INotificationService } from 'src/notification/interfaces/notification.interface';
 import { Notification } from 'src/typeorm/notification.entity';
 import { User } from 'src/typeorm/user.entity';
+import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
 
 @Injectable()
 export class ChannelsService implements IChannelsService {
@@ -38,6 +39,8 @@ export class ChannelsService implements IChannelsService {
     @Inject(Services.Users) private readonly usersService: IUsersService,
     @Inject(Services.Notification)
     private readonly notificationService: INotificationService,
+    @Inject(Services.Achievement)
+    private readonly achievementsService: IAchievementService,
   ) {}
 
   public async create(
@@ -73,6 +76,12 @@ export class ChannelsService implements IChannelsService {
       });
 
       this.userChannelRepository.save(userChannel);
+
+      if ((await this.countOwnedChannels(userId)) === 1)
+        await this.achievementsService.setAchievement(
+          userId,
+          'group_chat_starter',
+        );
 
       return channel;
     } catch (error) {
@@ -289,6 +298,12 @@ export class ChannelsService implements IChannelsService {
 
       await this.userChannelRepository.save(newMember);
 
+      if ((await this.countMyChannels(user.sub)) === 10)
+        await this.achievementsService.setAchievement(
+          user.sub,
+          'social_butterfly',
+        );
+
       return channel;
     } catch (error) {
       throw error;
@@ -416,6 +431,22 @@ export class ChannelsService implements IChannelsService {
     if (!member) return false;
 
     return true;
+  }
+
+  private async countOwnedChannels(userId: string): Promise<number> {
+    const count = await this.userChannelRepository.count({
+      where: { user: { id: userId }, role: 'owner' },
+    });
+
+    return count;
+  }
+
+  private async countMyChannels(userId: string): Promise<number> {
+    const count = await this.userChannelRepository.count({
+      where: { user: { id: userId } },
+    });
+
+    return count;
   }
 
   public async hasMember(channelId: number, userId: string): Promise<boolean> {
