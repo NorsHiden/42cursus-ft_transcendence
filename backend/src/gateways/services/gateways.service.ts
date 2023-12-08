@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IGatwaysService } from '../interfaces/IGatwaysService.interface';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class GatewaysService implements IGatwaysService {
@@ -10,9 +11,8 @@ export class GatewaysService implements IGatwaysService {
     private readonly configService: ConfigService,
   ) {}
 
-  public async getUserId(client: any, ...args: any[]): Promise<number> {
+  public async getUserId(client: Socket): Promise<number> {
     const cookies = client.handshake.headers.cookie;
-    console.log(cookies);
 
     if (!cookies) {
       client.disconnect();
@@ -29,14 +29,10 @@ export class GatewaysService implements IGatwaysService {
       return;
     }
 
-    console.log(token);
-
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
-
-      console.log(payload);
 
       return payload.sub;
     } catch (error) {

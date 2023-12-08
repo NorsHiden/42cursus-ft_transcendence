@@ -38,7 +38,7 @@ export class GameService {
 
   // Asynchronously handle a new client connection
   async handleConnection(client: Socket): Promise<void> {
-    const id = await this.gatewaysService.getUserId(client, []);
+    const id = await this.gatewaysService.getUserId(client);
     if (!id) return;
 
     this.users.set(client.id, id.toString());

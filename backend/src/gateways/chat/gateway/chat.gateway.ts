@@ -7,13 +7,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { WsGuard } from 'src/gateways/guards/ws.guard';
-import {
-  ClassSerializerInterceptor,
-  Inject,
-  UseFilters,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Inject, UseFilters, UseGuards } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { Namespaces, Services } from 'src/utils/consts';
 import { Socket } from 'socket.io';
@@ -38,8 +32,12 @@ export class ChatGateway {
   @WebSocketServer()
   public server: Server;
 
-  public handleConnection(client: Socket, ...args: any[]) {
-    this.chatService.handleConnection(client, ...args);
+  public handleConnection(client: Socket) {
+    this.chatService.handleConnection(client);
+  }
+
+  public handleDisconnect(client: Socket) {
+    this.chatService.handleDisconnect(client);
   }
 
   @SubscribeMessage('joinChannel')

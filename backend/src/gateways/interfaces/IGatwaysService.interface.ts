@@ -1,3 +1,5 @@
+import { Socket } from 'socket.io';
+
 export interface IGatwaysService {
-  getUserId(client: any, ...args: any[]): Promise<number>;
+  getUserId(client: Socket): Promise<number>;
 }

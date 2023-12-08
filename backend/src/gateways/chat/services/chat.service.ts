@@ -4,7 +4,6 @@ import { Services } from 'src/utils/consts';
 import { IChatService } from '../interfaces/IChatService.interface';
 import { Socket, Server } from 'socket.io';
 import { Message } from 'src/typeorm/message.entity';
-import { IMembersService } from 'src/channels/interfaces/IMembersService.interface';
 import { WsException } from '@nestjs/websockets';
 import { IChannelsService } from 'src/channels/interfaces/IChannelsService.interface';
 
@@ -13,20 +12,28 @@ export class ChatService implements IChatService {
   constructor(
     @Inject(Services.Gateways)
     private readonly gatewaysService: IGatwaysService,
-    @Inject(Services.Members) private readonly membersService: IMembersService,
     @Inject(Services.Channels)
     private readonly channelsService: IChannelsService,
   ) {}
 
   private users: Map<number, string> = new Map();
 
-  async handleConnection(client: any, ...args: any[]): Promise<void> {
-    const id = await this.gatewaysService.getUserId(client, ...args);
+  public async handleConnection(client: Socket): Promise<void> {
+    const id = await this.gatewaysService.getUserId(client);
     this.users.set(id, client.id);
     return Promise.resolve();
   }
 
-  handleMessage(server: Server, channelId: number, message: Message): void {
+  handleDisconnect(client: any): void {
+    console.log('handleDisconnect');
+    this.users.delete(client.id);
+  }
+
+  public handleMessage(
+    server: Server,
+    channelId: number,
+    message: Message,
+  ): void {
     const serializedMessage = {
       id: message.id,
       content: message.content,
@@ -42,7 +49,7 @@ export class ChatService implements IChatService {
     server.to(`channel-${channelId}`).emit('message', serializedMessage);
   }
 
-  async joinChannel(client: Socket, channelId: number): Promise<void> {
+  public async joinChannel(client: Socket, channelId: number): Promise<void> {
     try {
       const userId = await this.gatewaysService.getUserId(client);
 
@@ -61,7 +68,7 @@ export class ChatService implements IChatService {
     }
   }
 
-  async leaveChannel(client: Socket, channelId: number): Promise<void> {
+  public async leaveChannel(client: Socket, channelId: number): Promise<void> {
     try {
       const userId = await this.gatewaysService.getUserId(client);
 
