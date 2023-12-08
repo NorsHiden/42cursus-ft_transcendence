@@ -1,3 +1,5 @@
+import { Message } from 'src/typeorm/message.entity';
+
 export type JwtPayload = {
   sub: string;
   email: string;
@@ -39,3 +41,8 @@ export type ImagesFiles = Partial<{
   avatar: Express.Multer.File[];
   banner: Express.Multer.File[];
 }>;
+
+export type MessageEventPayload = {
+  message: Message;
+  channelId: number;
+};

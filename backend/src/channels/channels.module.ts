@@ -58,9 +58,27 @@ import { DmsService } from './services/dms.service';
       useClass: MessagesService,
     },
     {
-	  provide: Services.Dms,
-	  useClass: DmsService,
-	}
+      provide: Services.Dms,
+      useClass: DmsService,
+    },
+  ],
+  exports: [
+    {
+      provide: Services.Channels,
+      useClass: ChannelsService,
+    },
+    {
+      provide: Services.Members,
+      useClass: MembersService,
+    },
+    {
+      provide: Services.Messages,
+      useClass: MessagesService,
+    },
+    {
+      provide: Services.Dms,
+      useClass: DmsService,
+    },
   ],
 })
 export class ChannelsModule {}

@@ -6,8 +6,10 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Services } from 'src/utils/consts';
 import { GatewaysService } from '../services/gateways.service';
+import { ChannelsModule } from 'src/channels/channels.module';
 
 @Module({
+  imports: [ChannelsModule],
   providers: [
     {
       provide: Services.Chat,

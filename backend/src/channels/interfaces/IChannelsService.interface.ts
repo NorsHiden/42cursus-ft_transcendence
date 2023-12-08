@@ -25,4 +25,5 @@ export interface IChannelsService {
   join(channelId: number, user: JwtUser, password?: string): Promise<Channel>;
   leave(channelId: number, user: JwtUser): Promise<Channel>;
   invite(channelId: number, userId: string, user: JwtUser): Promise<User>;
+  hasMember(channelId: number, userId: string): Promise<boolean>;
 }

@@ -19,6 +19,7 @@ import { IUsersService } from 'src/users/interfaces/IUsersService.interface';
 import { Services } from 'src/utils/consts';
 import { IMembersService } from '../interfaces/IMembersService.interface';
 import { Channel } from 'src/typeorm/channel.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 @Injectable()
 export class MessagesService implements IMessagesService {
   constructor(
@@ -27,6 +28,7 @@ export class MessagesService implements IMessagesService {
     @InjectRepository(Channel) private channelRepository: Repository<Channel>,
     @Inject(Services.Users) private readonly usersService: IUsersService,
     @Inject(Services.Members) private readonly membersService: IMembersService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   public async create(
@@ -60,6 +62,8 @@ export class MessagesService implements IMessagesService {
       });
 
       const savedMessage = await this.messageRepository.save(message);
+
+      this.eventEmitter.emit('message.created', savedMessage);
 
       return savedMessage;
     } catch (error) {

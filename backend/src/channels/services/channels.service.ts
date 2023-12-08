@@ -417,4 +417,14 @@ export class ChannelsService implements IChannelsService {
 
     return true;
   }
+
+  public async hasMember(channelId: number, userId: string): Promise<boolean> {
+    const member = await this.userChannelRepository.findOne({
+      where: { user: { id: userId }, channel: { id: channelId } },
+    });
+
+    if (!member) return false;
+
+    return true;
+  }
 }
