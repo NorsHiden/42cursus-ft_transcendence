@@ -8,6 +8,8 @@ import { FriendlistModule } from './friendlist/friendlist.module';
 import { NotificationModule } from './notification/notification.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { ChannelsModule } from './channels/channels.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 const configService = new ConfigService();
 
@@ -22,6 +24,10 @@ const configService = new ConfigService();
       isGlobal: true,
       envFilePath: '.env.dev',
     }),
+
+    ScheduleModule.forRoot(),
+
+    EventEmitterModule.forRoot(),
 
     // Configures TypeORM to connect to the PostgreSQL database.
     TypeOrmModule.forRoot({

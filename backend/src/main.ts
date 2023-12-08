@@ -5,6 +5,7 @@ import * as morgan from 'morgan';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
+import { AllExceptionsFilter } from './gateways/filters/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

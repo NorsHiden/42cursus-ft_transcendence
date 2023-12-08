@@ -12,8 +12,8 @@ export interface IChannelsService {
   create(details: CreateChannelDetails, userId: string): Promise<Channel>;
   findOne(id: number): Promise<Channel>;
   findAll(query: PaginateQuery, user: JwtUser): Promise<Paginated<Channel>>;
-  findMembers(
-    id: number,
+  findMeChannels(
+    user: JwtUser,
     query: PaginateQuery,
   ): Promise<Paginated<UserChannel>>;
   update(
@@ -22,4 +22,8 @@ export interface IChannelsService {
     user: JwtUser,
   ): Promise<Channel>;
   remove(id: number, user: JwtUser): Promise<Channel>;
+  join(channelId: number, user: JwtUser, password?: string): Promise<Channel>;
+  leave(channelId: number, user: JwtUser): Promise<Channel>;
+  invite(channelId: number, userId: string, user: JwtUser): Promise<User>;
+  hasMember(channelId: number, userId: string): Promise<boolean>;
 }

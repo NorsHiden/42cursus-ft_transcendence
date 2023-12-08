@@ -1,3 +1,5 @@
+import { Message } from 'src/typeorm/message.entity';
+
 export type JwtPayload = {
   sub: string;
   email: string;
@@ -7,11 +9,11 @@ export type JwtPayload = {
 
 export type JwtUser = Partial<JwtPayload>;
 
-export type MemberState = 'banned' | 'muted';
+export type MemberState = 'banned' | 'muted' | 'active';
 
 export type ChannelRole = 'owner' | 'admin' | 'member';
 
-export type ChannelType = 'public' | 'private';
+export type ChannelType = 'public' | 'private' | 'dm';
 
 export type NotificationStatus = 'pending' | 'accepted' | 'rejected';
 
@@ -21,6 +23,10 @@ export type CreateChannelDetails = {
   password?: string;
   avatar?: Express.Multer.File;
   banner?: Express.Multer.File;
+};
+
+export type CreateMessageDetails = {
+  content: string;
 };
 
 export type UpdateChannelDetails = {
@@ -35,3 +41,8 @@ export type ImagesFiles = Partial<{
   avatar: Express.Multer.File[];
   banner: Express.Multer.File[];
 }>;
+
+export type MessageEventPayload = {
+  message: Message;
+  channelId: number;
+};

@@ -15,6 +15,7 @@ import { Exclude } from 'class-transformer';
 import { UserChannel } from './userchannel.entity';
 import { MatchHistory } from './match_history.entity';
 import { Points } from './points.entity';
+import { Message } from './message.entity';
 
 @Entity()
 export class User {
@@ -110,4 +111,7 @@ export class User {
 
   @OneToMany(() => UserChannel, (userChannel) => userChannel.user)
   channels: UserChannel[];
+
+  @OneToMany(() => Message, (message) => message.author)
+  messages: Message[];
 }

@@ -7,6 +7,9 @@ export enum Routes {
   NOTIFICATION = 'notification',
   ACHIEVEMENT = 'Achievement',
   CHANNELS = 'channels',
+  MEMBERS = 'channels/:channelId/members',
+  MESSAGES = 'channels/:channelId/messages',
+  DMS = 'channels/me/dms',
   MATCH_HISTORY = 'match_history',
 }
 
@@ -19,6 +22,9 @@ export enum Services {
   Gateways = 'GATEWAYS_SERVICE',
   Chat = 'CHAT_SERVICE',
   Channels = 'CHANNELS_SERVICE',
+  Members = 'MEMBERS_SERVICE',
+  Messages = 'MESSAGES_SERVICE',
+  Dms = 'DMS_SERVICE',
   Game = 'GAME_SERVICE',
   MatchHistory = 'MATCH_HISTORY',
 }
@@ -39,6 +45,8 @@ export enum WebSocketEvents {
   Spectators = 'spectators',
   Live = 'live',
 }
+
+export const chatTimout = 1000 * 60; // 1 minute
 
 export enum GameMode {
   REGULAR = 'REGULAR',

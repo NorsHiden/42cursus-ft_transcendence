@@ -10,4 +10,5 @@ export interface INotificationService {
     notification_id: string,
   ): Promise<void>;
   subscribeToEvent(user_id: string, res: Response): Observable<unknown>;
+  setNotification(notification: Partial<Notification>): Promise<Notification>;
 }
