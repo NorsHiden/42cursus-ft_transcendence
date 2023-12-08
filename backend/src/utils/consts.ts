@@ -43,6 +43,7 @@ export enum WebSocketEvents {
   Lobby = 'lobby',
   InGame = 'ingame',
   Spectators = 'spectators',
+  Live = 'live',
 }
 
 export const chatTimout = 1000 * 60; // 1 minute

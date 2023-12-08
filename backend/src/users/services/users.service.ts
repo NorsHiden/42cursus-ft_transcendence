@@ -12,13 +12,14 @@ import { match } from 'fuzzy-tools';
 import { UserDto } from '../dto/userDto';
 import { Profile } from 'src/typeorm/profile.entity';
 import { Friendlist } from 'src/typeorm/friendlist.entity';
-import { Services } from 'src/utils/consts';
-import { IAchievementService } from 'src/achievement/interfaces/achievement.interface';
+import { Points } from 'src/typeorm/points.entity';
 
 @Injectable()
 export class UsersService implements IUsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Points)
+    private readonly pointsRepository: Repository<Points>,
   ) {}
 
   // Method to retrieve user information by user ID.
@@ -28,13 +29,49 @@ export class UsersService implements IUsersService {
         where: {
           id: user_id,
         },
-        relations: ['profile'],
+        relations: ['profile', 'points'],
+        order: {
+          points: {
+            created_at: 'DESC',
+          },
+        },
       });
       if (!user) throw new NotFoundException('User Not Found.');
       return user;
     } catch {
       throw new NotFoundException('User Not Found.');
     }
+  }
+
+  async getPoints(user_id: string): Promise<object> {
+    const points = await this.pointsRepository.find({
+      where: {
+        user: {
+          id: user_id,
+        },
+      },
+      order: {
+        created_at: 'DESC',
+      },
+      take: 30,
+    });
+
+    const best_points = await this.pointsRepository.find({
+      where: {
+        user: {
+          id: user_id,
+        },
+      },
+      order: {
+        value: 'DESC',
+      },
+      take: 2,
+    });
+
+    return {
+      points: points,
+      best_points: best_points,
+    };
   }
 
   // Method to retrieve user information by user ID.
@@ -45,7 +82,7 @@ export class UsersService implements IUsersService {
           username: username,
           verified: true,
         },
-        relations: ['profile'],
+        relations: ['profile', 'points'],
       });
       if (!user) throw new NotFoundException('User Not Found.');
       return user;
@@ -66,7 +103,13 @@ export class UsersService implements IUsersService {
         id: user_id,
       },
       select: ['notifications'],
-      relations: ['notifications'],
+      relations: [
+        'notifications',
+        'notifications.sender',
+        'notifications.sender.profile',
+        'notifications.recipient',
+        'notifications.recipient.profile',
+      ],
     });
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
@@ -92,6 +135,7 @@ export class UsersService implements IUsersService {
       },
       select: ['friendlist'],
       relations: [
+        'profile',
         'friendlist.friends',
         'friendlist.friends.profile',
         'friendlist.pending',
@@ -106,13 +150,19 @@ export class UsersService implements IUsersService {
 
   // Methods to retrieve specific lists from the user's friend list.
   async getFriends(user_id: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: {
-        id: user_id,
-      },
-      select: ['friendlist'],
-      relations: ['friendlist.friends', 'friendlist.friends.profile'],
-    });
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = :user_id', { user_id })
+      .leftJoinAndSelect('user.friendlist', 'friendlist')
+      .leftJoinAndSelect('friendlist.friends', 'friend')
+      .leftJoinAndSelect('friend.profile', 'profile')
+      .orderBy(
+        'CASE WHEN friend.presence = :online THEN 1 WHEN friend.presence = :ingame THEN 2 ELSE 3 END',
+        'ASC',
+      )
+      .setParameter('online', 'online')
+      .setParameter('ingame', 'ingame')
+      .getOne();
     if (!user) throw new NotFoundException('User Not Found.');
     return user;
   }
@@ -208,7 +258,9 @@ export class UsersService implements IUsersService {
         },
       });
       if (otherUser && otherUser.id != user_id)
-        throw new BadRequestException('Username Already exists');
+        throw new BadRequestException({
+          message: ['Username Already exists'],
+        });
     }
     const user = await this.getProfile(user_id);
     const updatedVersion: User = { ...user, ...userDto, email: user.email };
@@ -236,11 +288,26 @@ export class UsersService implements IUsersService {
 
   async setPresence(
     user_id: string,
-    presence: 'online' | 'offline' | 'in-game',
+    presence: 'online' | 'offline' | 'ingame',
   ): Promise<User> {
     const user = await this.getUser(user_id);
     user.presence = presence;
     return await this.setUser(user);
+  }
+
+  async orderByWins(page: number): Promise<User[]> {
+    const users = await this.userRepository.find({
+      where: {
+        verified: true,
+      },
+      relations: ['profile'],
+      order: {
+        wins: 'DESC',
+      },
+      skip: page * 10,
+      take: 10,
+    });
+    return users;
   }
 
   async isVerified(user_id: string): Promise<boolean> {

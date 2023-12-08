@@ -84,7 +84,9 @@ export class AuthService implements IAuthService {
       return {
         url: `${this.configService.get('CLIENT_URL')}/2fa-verification`,
       };
-    return { url: `${this.configService.get('CLIENT_URL')}/${state}` };
+    return {
+      url: `${this.configService.get('CLIENT_URL')}${state}`,
+    };
   }
 
   /**

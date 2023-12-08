@@ -36,8 +36,10 @@ export interface IUsersService {
   getUsers(query: string): Promise<User[]>;
   setPresence(
     user_id: string,
-    presence: 'online' | 'offline' | 'in-game',
+    presence: 'online' | 'offline' | 'ingame',
   ): Promise<User>;
+  orderByWins(page: number): Promise<User[]>;
+  getPoints(user_id: string): Promise<object>;
 
   // boolean
   isVerified(user_id: string): Promise<boolean>;

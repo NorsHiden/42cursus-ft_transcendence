@@ -1,15 +1,22 @@
 import {
   IsDateString,
   IsEmail,
+  IsLowercase,
   IsOptional,
   IsString,
   IsUrl,
   Length,
+  Matches,
 } from 'class-validator';
 
 export class UserDto {
   @IsString()
   @IsOptional()
+  @IsLowercase()
+  @Matches(/^[a-zA-Z0-9_-]+$/, {
+    message:
+      'Username can only contain letters, numbers, underscores, and hyphens',
+  })
   @Length(3, 10, { message: 'Username must be between 3 and 10 characters' })
   readonly username?: string;
 

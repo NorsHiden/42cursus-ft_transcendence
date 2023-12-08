@@ -29,7 +29,7 @@ export class FriendlistService implements IFriendlistService {
    */
   async sendRequest(user_id: string, target_id: string) {
     // Ensure the user is not sending a request to themselves.
-    if (user_id === target_id) throw new ForbiddenException('Same ID as user.');
+    if (user_id == target_id) throw new ForbiddenException('Same ID as user.');
 
     // Retrieve user and target information from the Users service.
     const user = await this.usersService.getFriendList(user_id);
@@ -46,6 +46,18 @@ export class FriendlistService implements IFriendlistService {
       )
     )
       throw new ForbiddenException('Cannot send a request on both sides.');
+    if (
+      target.friendlist.pending.find(
+        (pendingUser) => pendingUser.id === user.id,
+      )
+    )
+      throw new ForbiddenException('Request already has been sent.');
+    if (
+      user.friendlist.blocked.find(
+        (blockedUser) => blockedUser.id === target.id,
+      )
+    )
+      throw new ForbiddenException('Cannot send a request to a blocked user.');
 
     // Add the request to the target's pending list and notify the target.
     target.friendlist.pending.push(user);
@@ -53,6 +65,8 @@ export class FriendlistService implements IFriendlistService {
       action: 'FRIEND_REQUEST',
       recipient: target,
       sender: user,
+      description: `Sent a friend request.`,
+      status: 'pending',
     } as Notification);
 
     // Save the updated target information.
@@ -73,15 +87,29 @@ export class FriendlistService implements IFriendlistService {
     const target = await this.usersService.getFriendList(target_id);
 
     // Filter out the target from the user's pending and friends lists.
+    user.friendlist.friends = user.friendlist.friends.filter(
+      (friend) => friend.id !== target.id,
+    );
     user.friendlist.pending = user.friendlist.pending.filter(
       (friend) => friend.id !== target.id,
     );
-    user.friendlist.friends = user.friendlist.friends.filter(
+    user.friendlist.blocked = user.friendlist.blocked.filter(
       (friend) => friend.id !== target.id,
+    );
+
+    target.friendlist.friends = target.friendlist.friends.filter(
+      (friend) => friend.id !== user.id,
+    );
+    target.friendlist.pending = target.friendlist.pending.filter(
+      (friend) => friend.id !== user.id,
+    );
+    target.friendlist.blocked = target.friendlist.blocked.filter(
+      (friend) => friend.id !== user.id,
     );
 
     // Save the updated user information.
     await this.usersService.setUser(user);
+    await this.usersService.setUser(target);
   }
 
   /**
@@ -111,6 +139,22 @@ export class FriendlistService implements IFriendlistService {
     return await this.usersService.getBlocked(user_id);
   }
 
+  async getFriendListState(
+    user_id: string,
+    target_id: string,
+  ): Promise<{ state: string }> {
+    const user = await this.usersService.getFriendList(user_id);
+    const target = await this.usersService.getFriendList(target_id);
+
+    if (user.friendlist.friends.find((friend) => friend.id == target_id))
+      return { state: 'FRIEND' };
+    if (target.friendlist.pending.find((pending) => pending.id == target_id))
+      return { state: 'PENDING' };
+    if (user.friendlist.blocked.find((blocked) => blocked.id == target_id))
+      return { state: 'BLOCKED' };
+    return { state: 'NONE' };
+  }
+
   /**
    * Accept a friend request from the target user.
    * @param user_id The ID of the user accepting the request.
@@ -131,6 +175,14 @@ export class FriendlistService implements IFriendlistService {
       )
     )
       throw new NotFoundException('Target not found.');
+    if (
+      user.friendlist.blocked.find(
+        (blockedUser) => blockedUser.id === target.id,
+      )
+    )
+      throw new ForbiddenException(
+        'Cannot accept a request from a blocked user.',
+      );
 
     // Remove the target from the user's pending list and add them to the friends list.
     user.friendlist.pending = user.friendlist.pending.filter(
