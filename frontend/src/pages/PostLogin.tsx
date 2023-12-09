@@ -6,7 +6,7 @@ import logo from '/logo.svg';
 import illustation from '@assets/images/illustration.svg';
 import { AvatarInput, UserForm, usePostLogin } from '@components/PostLogin';
 
-export const postLoginLoader = async () => {
+export const PostLoginLoader = async () => {
   const searchParams = new URLSearchParams(window.location.search);
   const username = searchParams.get('username');
   const display_name = searchParams.get('display_name');

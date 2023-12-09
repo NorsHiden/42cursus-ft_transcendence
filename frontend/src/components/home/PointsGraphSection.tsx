@@ -30,8 +30,8 @@ const PointsGraphSection: React.FC = () => {
     <section className="hidden justify-self-center col-span-2 xl:flex flex-col items-start gap-y-5">
       <div className="flex items-center gap-x-10 pl-4">
         <div className="flex flex-col flex-shrink-0 items-baseline">
-          <h1 className="font-serif text-white text-4xl">
-            {points.points?.length ? points.points[0].value : '0'}pts
+          <h1 className="font-serif text-white text-5xl/relaxed">
+            {points.points?.length ? points.points[0].value : '0 '} pts
           </h1>
           {points.points?.length > 1 &&
             (points.points[0].value == points.best_points[1].value ||
@@ -56,7 +56,7 @@ const PointsGraphSection: React.FC = () => {
         <LineChart
           width={300}
           height={120}
-          data={points.points?.length ? [...points.points].reverse() : []}
+          data={points.points?.length ? [...points.points].reverse() : data}
           className="flex-grow hidden lg:block"
         >
           <Line
@@ -64,8 +64,9 @@ const PointsGraphSection: React.FC = () => {
             type="monotone"
             dataKey="value"
             isAnimationActive={false}
-            stroke="#FE5821"
+            stroke={points.points?.length ? '#FE5821' : '#5E6069'}
             strokeWidth="4"
+            strokeLinecap="round"
           />
         </LineChart>
       </div>

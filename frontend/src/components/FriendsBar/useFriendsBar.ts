@@ -1,5 +1,5 @@
-import { User } from '@globalTypes/user';
 import { useState } from 'react';
+import { User } from '@globalTypes/user';
 
 export const useFriendsBar = () => {
   const [friends, setFriends] = useState<User[]>([]);
@@ -9,6 +9,7 @@ export const useFriendsBar = () => {
     sse.onmessage = (event) => {
       setFriends(JSON.parse(event.data).slice(0, 6));
     };
+
     return () => {
       sse.close();
     };

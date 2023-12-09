@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+
+import { Channel } from '@globalTypes/channel';
+import { CreateChannel } from '@components/Chat/Discovery/CreateChannel';
 import twclsx from '@utils/twclsx';
 import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
 import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
@@ -7,9 +11,6 @@ import BarChartSolid from '@assets/novaIcons/solid/BarChartSolid';
 import SettingSolid from '@assets/novaIcons/solid/SettingSolid';
 import CompassSolid from '@assets/novaIcons/solid/CompassSolid';
 import PlusCircleSolid from '@assets/novaIcons/solid/PlusCircleSolid';
-import axios from 'axios';
-import { Channel } from '@globalTypes/channel';
-import { CreateChannel } from '@components/Chat/Discovery/CreateChannel';
 
 const useSideBar = () => {
   const [channels, setChannels] = useState<Channel[]>([]);

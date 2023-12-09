@@ -4,10 +4,10 @@ import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
 import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
 import twclsx from '@utils/twclsx';
 import { NavLink } from 'react-router-dom';
-import { Notification } from './Notification';
+import Notification from './Notification';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 
-export const BottomNavBar = () => {
+const BottomNavBar = () => {
   const links = [
     {
       title: 'Home',
@@ -52,3 +52,5 @@ export const BottomNavBar = () => {
     </div>
   );
 };
+
+export default BottomNavBar;

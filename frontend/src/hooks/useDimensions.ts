@@ -14,15 +14,15 @@ const useDimensions = <T extends HTMLElement>() => {
     };
   };
 
-  useLayoutEffect(() => {
+  const handleChange = () => {
     if (ref.current) setDimensions(getDimensions(ref.current));
+  };
+
+  useLayoutEffect(() => {
+    handleChange();
   }, []);
 
   useEffect(() => {
-    const handleChange = () => {
-      if (ref.current) setDimensions(getDimensions(ref.current));
-    };
-
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         if (entry.target === ref.current) handleChange();
