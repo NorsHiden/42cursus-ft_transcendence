@@ -56,7 +56,7 @@ const PointsGraphSection: React.FC = () => {
         <LineChart
           width={300}
           height={120}
-          data={points.points?.length ? [...points.points].reverse() : data}
+          data={points.points?.length ? [...points.points].reverse() : [0]}
           className="flex-grow hidden lg:block"
         >
           <Line
