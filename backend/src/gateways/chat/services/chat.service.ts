@@ -41,7 +41,7 @@ export class ChatService implements IChatService {
       updatedAt: message.updatedAt,
       author: {
         id: message.author.id,
-        username: message.author.username,
+        display_name: message.author.display_name,
         avatar: message.author.profile.avatar,
       },
     };
