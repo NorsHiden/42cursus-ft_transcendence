@@ -43,11 +43,13 @@ const NavBar: React.FC = () => {
         <img className="h-12" src={Logo} alt="Pong Logo" />
       </Link>
       <div className="flex items-center gap-x-10">
-        <div className="hidden group lg:flex items-center gap-x-8">
-          <button className="text-gray hover:text-white transition-all">
-            <SearchOutline size={22} />
-          </button>
-          <SearchBar />
+        <div className="hidden lg:flex items-center gap-x-8">
+          <div className="group">
+            <button className="text-gray hover:text-white transition-all">
+              <SearchOutline size={22} />
+            </button>
+            <SearchBar />
+          </div>
           <NotificationBox />
         </div>
         <Link className="group flex items-center gap-x-2" to={currentUser?.username}>

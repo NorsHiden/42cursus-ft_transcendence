@@ -9,9 +9,9 @@ interface SearchUserProps {
 }
 
 export const SearchUser: FC<SearchUserProps> = ({ user, index, length }) => {
-  const myElementRef = useRef(null);
+  const myElementRef = useRef<HTMLAnchorElement>(null);
 
-  const handleClick = () => {
+  const removeFocus = () => {
     if (myElementRef.current) {
       myElementRef.current.blur();
     }
@@ -21,7 +21,7 @@ export const SearchUser: FC<SearchUserProps> = ({ user, index, length }) => {
     <NavLink
       to={`/${user.username}/overview`}
       className="flex flex-col gap-4 hover:bg-gray p-2 rounded-lg hover:bg-opacity-20 cursor-pointer"
-      onClick={() => handleClick}
+      onClick={() => removeFocus()}
       ref={myElementRef}
     >
       <div className="flex items-center gap-4">

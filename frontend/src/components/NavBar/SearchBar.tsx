@@ -37,7 +37,7 @@ export const SearchBar = () => {
 
   return (
     <div
-      className="flex absolute opacity-0 items-center justify-center top-0 left-0 w-screen h-screen z-20 backdrop-blur-xl
+      className="flex fixed opacity-0 items-center justify-center top-0 left-0 w-screen h-[calc(100vh-5rem)] lg:h-screen z-20 backdrop-blur-xl
           group-focus-within:opacity-100 group-focus-within:pointer-events-auto pointer-events-none transition-all duration-300"
     >
       <div
