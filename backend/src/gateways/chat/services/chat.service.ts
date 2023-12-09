@@ -60,9 +60,6 @@ export class ChatService implements IChatService {
       }
 
       client.join(`channel-${channelId}`);
-      client
-        .to(`channel-${channelId}`)
-        .emit('message', { message: 'User joined channel-' + channelId });
     } catch (error) {
       client.emit('error', { message: error.message });
     }
@@ -79,9 +76,6 @@ export class ChatService implements IChatService {
       }
 
       client.leave(`channel-${channelId}`);
-      client
-        .to(`channel-${channelId}`)
-        .emit('message', { message: 'User left channel-' + channelId });
     } catch (error) {
       client.emit('error', { message: error.message });
     }
