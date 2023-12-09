@@ -1,9 +1,10 @@
-import CheckOutline from '@assets/novaIcons/outline/CheckOutline';
-import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+
 import Card from '@components/Card';
 import { NotificationType } from '@globalTypes/notification';
-import axios from 'axios';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import CheckOutline from '@assets/novaIcons/outline/CheckOutline';
+import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
 
 interface NotificationMessageProps {
   notificationMessage: NotificationType;
@@ -102,10 +103,10 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
   );
 };
 
-export const Notification: React.FC = () => {
+const Notification: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [searchLoading, setSearchLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
 
   const observer = useRef<
@@ -116,12 +117,12 @@ export const Notification: React.FC = () => {
       }
   >();
 
-  const getNotif = async (page: number) => {
-    setSearchLoading(true);
+  const getNotification = async (page: number) => {
+    setIsLoading(true);
     const res = await axios.get(`/api/notification?page=${page}`);
     setNotifications((notifications) => [...notifications, ...res.data]);
     if (res.data.length < 10) setHasMore(false);
-    setSearchLoading(false);
+    setIsLoading(false);
   };
 
   const lastNotifElementRef = useCallback((node: HTMLDivElement) => {
@@ -129,7 +130,7 @@ export const Notification: React.FC = () => {
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasMore) {
         setPage((prevPage) => {
-          getNotif(prevPage);
+          getNotification(prevPage);
           return prevPage + 1;
         });
       }
@@ -143,13 +144,14 @@ export const Notification: React.FC = () => {
       const notification = JSON.parse(event.data);
       setNotifications((notifications) => [notification, ...notifications]);
     };
+
+    return () => {
+      event.close();
+    };
   }, []);
 
   return (
-    <div
-      className="flex flex-col fixed top-0 max-lg:left-0 lg:absolute group lg:top-14 w-full h-0 lg:w-[26rem] p-8 bg-[#1E1F23] border-2 border-[#2C2D33] gap-8 z-20 rounded-lg
-                  pointer-events-none group-focus-within:h-[calc(100vh-5rem)] lg:group-focus-within:h-[22rem] opacity-0  group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all"
-    >
+    <div className="flex flex-col fixed top-0 max-lg:left-0 lg:absolute group lg:top-14 w-full h-0 lg:w-[26rem] p-8 bg-[#1E1F23] border-2 border-[#2C2D33] gap-8 z-20 rounded-lg pointer-events-none group-focus-within:h-[calc(100vh-5rem)] lg:group-focus-within:h-[22rem] opacity-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all">
       <div className="w-8 h-8 absolute bg-[#1E1F23] border-t-2 border-l-2 border-[#2C2D33] top-[-1.1rem] rounded-tl-lg right-1/2 rotate-45 translate-x-4" />
       <h1 className="text-xl text-white font-bold">Notifications</h1>
       <div className="flex flex-col gap-4 overflow-y-hidden group-hover:overflow-y-auto overflow-x-hidden scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-[#5E6069] scrollbar-mr-1">
@@ -162,8 +164,8 @@ export const Notification: React.FC = () => {
             <hr className="h-px text-darkGray" />
           </div>
         ))}
-        {!searchLoading && hasMore && <div ref={lastNotifElementRef}></div>}
-        {(searchLoading || hasMore) && (
+        {!isLoading && hasMore && <div ref={lastNotifElementRef}></div>}
+        {(isLoading || hasMore) && (
           <div id="skeleton" className="flex items-center gap-4 animate-pulse">
             <div className="h-14 w-14 bg-darkGray rounded-full" />
             <div className="flex flex-col items-start gap-2">
@@ -172,7 +174,7 @@ export const Notification: React.FC = () => {
             </div>
           </div>
         )}
-        {!searchLoading && notifications.length == 0 && (
+        {!isLoading && notifications.length == 0 && (
           <div className="flex w-full h-full items-center justify-center">
             <p className="text-gray font-serif">Empty</p>
           </div>
@@ -181,3 +183,5 @@ export const Notification: React.FC = () => {
     </div>
   );
 };
+
+export default Notification;

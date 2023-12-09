@@ -1,28 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Rowdies&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Rowdies:wght@300;400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 @layer utilities {
+  html,
+  body {
+    overflow: auto;
+    background-color: #1b191d;
+  }
+
   .empty {
     @apply bg-black border border-darkGray;
   }
+
   .color-dodge {
     mix-blend-mode: color-dodge;
   }
+
   .center {
     @apply flex justify-center items-center;
   }
 
-  html, body {
-    overflow: auto;
-    background-color: #1B191D; /* Replace with your desired color */
-  }
-  
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
+  @keyframes dots-animation {
+    to {
+      clip-path: inset(0 -34% 0 0);
+    }
+  }
+
+  .loading-dots::after {
+    content: '...';
+    clip-path: inset(0 100% 0 0);
+    animation: dots-animation 2s steps(4) infinite;
+  }
 }

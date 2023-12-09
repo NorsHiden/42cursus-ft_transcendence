@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Card from '@components/Card';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
+import Card from '@components/Card';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';

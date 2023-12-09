@@ -1,6 +1,6 @@
+import React, { useCallback, useRef, useState } from 'react';
 import { User } from '@globalTypes/user';
 import axios from 'axios';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
 
 interface LeaderboardRecordProps {
   record: User;
@@ -8,19 +8,17 @@ interface LeaderboardRecordProps {
   index: number;
 }
 
-const LeaderboardRecord: FC<LeaderboardRecordProps> = ({ record, color, index }) => {
+const LeaderboardRecord: React.FC<LeaderboardRecordProps> = ({ record, color, index }) => {
   return (
     <div
       className="flex items-center w-full min-h-[6rem] justify-between rounded-xl overflow-hidden"
-      style={{
-        backgroundColor: color,
-      }}
+      style={{ backgroundColor: color }}
     >
       <div className="flex items-center gap-8 md:gap-16 pl-10">
         <p className="text-xl font-bold">{index + 1}</p>
         <div className="flex items-center gap-4">
           <img src={record.profile.avatar} alt="avatar" className="w-16 h-16 rounded-full" />
-          <div className="w-18 lg:w-24 xl:w-64 overflow-hidden">
+          <div className="w-16 lg:w-24 xl:w-64 overflow-hidden">
             <p className="text-sm font-bold truncate">@{record.username}</p>
           </div>
         </div>
@@ -33,7 +31,7 @@ const LeaderboardRecord: FC<LeaderboardRecordProps> = ({ record, color, index })
   );
 };
 
-export const Leaderboard: React.FC = () => {
+const Leaderboard: React.FC = () => {
   const [records, setRecords] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -100,3 +98,5 @@ export const Leaderboard: React.FC = () => {
     </div>
   );
 };
+
+export default Leaderboard;

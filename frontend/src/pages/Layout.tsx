@@ -19,7 +19,7 @@ export const LayoutLoader = () => {
 
 const Layout: React.FC = () => {
   return (
-    <div className="w-full h-screen relative bg-black grid grid-cols-2 lg:grid-cols-layout grid-rows-layout gap-x-5 overflow-hidden">
+    <div className="w-full h-screen relative bg-black grid grid-cols-2 lg:grid-cols-layout grid-rows-layout gap-x-5 overflow-x-hidden overflow-y-auto scrollbar-none">
       <div className="w-full h-full col-start-1 col-end-6 row-span-1 pt-2 p-2">
         <NavBar />
       </div>

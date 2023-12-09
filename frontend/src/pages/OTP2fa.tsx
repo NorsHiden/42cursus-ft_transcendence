@@ -1,25 +1,24 @@
 import React from 'react';
-import { useLoaderData } from 'react-router';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'sonner';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import OTPInput from 'otp-input-react';
 
 import logo from '/logo.svg';
 import illustation from '@assets/images/illustration.svg';
 import { User } from '@globalTypes/user';
-import { toast } from 'sonner';
 import Card from '@components/Card';
 
-export const otpLoader = async () => {
+export const TwoFactorAuthLoader = async () => {
   try {
-    const res = await axios.get('/api/users/@me');
+    const res = await axios.get<User>('/api/users/@me');
     return res.data;
   } catch (error) {
     throw new Error('Failed to load user');
   }
 };
 
-const PostLogin: React.FC = () => {
+const OTP2fa: React.FC = () => {
   const user = useLoaderData() as User;
   const [OTP, setOTP] = React.useState('');
   const navigate = useNavigate();
@@ -99,4 +98,4 @@ const PostLogin: React.FC = () => {
   );
 };
 
-export default PostLogin;
+export default OTP2fa;
