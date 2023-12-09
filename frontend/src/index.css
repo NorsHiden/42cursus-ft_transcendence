@@ -38,4 +38,8 @@
     clip-path: inset(0 100% 0 0);
     animation: dots-animation 2s steps(4) infinite;
   }
+
+  .caret {
+    @apply before:w-8 before:h-8 before:bg-lightBlack before:border-t-2 before:border-l-2 before:border-darkGray before:rounded-tl-lg before:rotate-45 before:absolute before:top-0 before:-translate-y-[55%] before:left-1/2 before:-translate-x-1/2;
+  }
 }

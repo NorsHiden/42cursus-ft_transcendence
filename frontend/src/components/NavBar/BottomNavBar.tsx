@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import Notification from './Notification';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 
-export const BottomNavBar = () => {
+const BottomNavBar = () => {
   const links = [
     {
       title: 'Home',
@@ -52,3 +52,5 @@ export const BottomNavBar = () => {
     </div>
   );
 };
+
+export default BottomNavBar;

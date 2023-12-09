@@ -5,17 +5,17 @@ import { PlayerProfile } from '../components/profile';
 import { NavLinkButton } from '@components/profile';
 import { User } from '@globalTypes/types';
 
-export async function profileLoader(user: string | undefined) {
+export async function profileLoader(user?: string) {
   try {
-    const res = await axios.get(`/api/users/${user}`);
-    const LogedinUser = await axios.get(`/api/users/@me`);
-    const friendStatus = await axios.get(`/api/friendlist/${res.data.id}`);
+    const userData = await axios.get(`/api/users/${user}`);
+    const currentUser = await axios.get(`/api/users/@me`);
+    const friendStatus = await axios.get(`/api/friendlist/${userData.data.id}`);
 
-    const username = LogedinUser.data.username;
+    const username = currentUser.data.username;
 
     return {
-      ...res.data,
-      isforeign: username !== res.data.username,
+      ...userData.data,
+      isforeign: username !== userData.data.username,
       friendStatus: friendStatus.data.state,
     };
   } catch (error) {

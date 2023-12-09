@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import NavBar from '@components/NavBar';
 import SideBar from '@components/Sidebar';
 import FriendsBar from '@components/FriendsBar';
-import { BottomNavBar } from '@components/NavBar/BottomNavBar';
+import BottomNavBar from '@components/NavBar/BottomNavBar';
 
 export const LayoutLoader = () => {
   return {
@@ -32,7 +32,7 @@ const Layout: React.FC = () => {
       <div className="hidden lg:flex w-full h-full col-start-6 col-end-7 row-start-1 row-end-4">
         <FriendsBar />
       </div>
-      <div className="sticky lg:hidden bottom-0 w-screen h-20 bg-[#27292E] z-20">
+      <div className="fixed lg:hidden bottom-0 w-screen h-20 bg-[#27292E] z-20">
         <BottomNavBar />
       </div>
     </div>

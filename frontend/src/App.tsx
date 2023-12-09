@@ -15,12 +15,13 @@ import TwoFactorAuth, { TwoFactorAuthLoader } from '@pages/OTP2fa';
 
 const router = createBrowserRouter([
   {
+    id: 'layout',
     path: '/',
     element: <Layout />,
     loader: LayoutLoader,
     children: [
       {
-        path: '/',
+        index: true,
         element: <Home />,
       },
       {
