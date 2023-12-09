@@ -1,25 +1,33 @@
 import axios from 'axios';
-import { Channel } from '@globalTypes/channel';
+import { mychannel } from '@globalTypes/channel';
 
 export const fetchChannels = async (
     page: number,
-    setChannels: (channels: Channel[]) => void,
+    setChannels: (channels: mychannel[]) => void,
     setHasMore:(value:boolean)=>void,
     setLoading:(value:boolean)=>void,
-    prevChanels:Channel[],
+    prevChanels:mychannel[],
     
   ): Promise<void> => {
     setLoading(true);
     try {
-      const res  = await axios.get(`/api/channels?page=${page}&limit=10`);
- 
+      const res  = await axios.get(`/api/channels/me?page=${page}&limit=10`);
+      console.log(res.data);
+      
+      let newChannels:mychannel[] = res.data.data.map((channel:any) => ({
+        id: channel.channel.id,
+        name: channel.channel.name,
+        avatar: channel.channel.avatar,
+        role: channel.role,
+        banner: channel.channel.banner,
+      }));
       if (res.data.meta.currentPage < res.data.meta.totalPages) { 
         setHasMore(true);
       }
       else {
         setHasMore(false);
       }
-    setChannels([...prevChanels, ...res.data.data]);    
+    setChannels([...prevChanels, ...newChannels]);    
       setLoading(false);
     } catch (error) {
       setLoading(false);

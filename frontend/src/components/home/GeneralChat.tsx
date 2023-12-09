@@ -12,9 +12,9 @@ type MessageProps = {
   content: string;
 };
 
-const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) => {
+export const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) => {
   return (
-    <div className={`max-w-4/5 ${type == 'RECEIVED' ? 'self-start' : 'self-end'}`}>
+    <div className={`max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'}`}>
       <div
         className={`flex items-center justify-between text-white mb-3 ${
           type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
@@ -32,7 +32,7 @@ const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) 
       </div>
       <div
         className={`text-white ${
-          type == 'RECEIVED' ? 'bg-lightBlack' : 'bg-primary'
+          type == 'RECEIVED' ? 'bg-[#2B2F33]' : 'bg-primary'
         } text-sm py-2 px-4 ${
           type == 'RECEIVED' ? 'rounded-tr-2xl' : 'rounded-tl-2xl'
         } rounded-b-2xl`}
@@ -94,7 +94,7 @@ const GeneralChat: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4 hide-scrollbar">
+        <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4">
           {messages.map((message) => (
             <Message type={message.name == user ? 'SENT' : 'RECEIVED'} {...message} />
           ))}

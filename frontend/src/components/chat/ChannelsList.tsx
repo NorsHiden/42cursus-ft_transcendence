@@ -1,5 +1,5 @@
 import  React,{useState,useEffect,useCallback,useRef} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,NavLink, Outlet} from 'react-router-dom';
 import ChannelElement from './Channel';
 import {SelectedChannelProvider,useSelectedChannel} from '@context/Channel';
 import { Channel } from '@globalTypes/channel';
@@ -21,7 +21,8 @@ interface ChannelsListProps {
 const ChannelsList: React.FC = () => {
   const navigate = useNavigate();
   const {selectedChannel, setSelectedChannel,channels,setChannels} = useSelectedChannel();
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
+  const pageRef = useRef(1);
   const [hasMore, setHasMore] = useState(false);
   const observer = useRef<IntersectionObserver | null>();
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ const ChannelsList: React.FC = () => {
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        setPage((prevPage) => prevPage + 1);
+        pageRef.current += 1;
       }
     });
     if (node) observer.current.observe(node);
@@ -39,27 +40,37 @@ const ChannelsList: React.FC = () => {
   useEffect(() => {
     // setLoading(true);
     console.log("useEffect")
-    fetchChannels(page,setChannels,setHasMore,setLoading,channels);
-  }, [page]);
+    fetchChannels(pageRef.current,setChannels,setHasMore,setLoading,channels);
+  }, [pageRef.current]);
 
   return (
-    <ul id="chat-list" className="grid h-[100%] overflow-auto gap-4 ">
+    <>
+    <ul id="chat-list" className=" grid row-start-3 overflow-auto gap-4 scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray">
       {channels.map(
         (channel) => (
-          console.log('channel', channel.avatar),
+          // console.log('channel', channel.avatar),
           (
-            <li
-              key={channel.id}
-              className={`flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 hover:cursor-pointer ${
-                channel.id === selectedChannel.id ? 'bg-CharcoalGray p-4' : ''
-              }`}
-              onClick={() => {
-                setSelectedChannel(channel);
-                navigate(`/chat/${channel.id}`);
-              }}
+            // <li
+            //   key={channel.id}
+            //   className={`flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 ${
+            //     channel.id === selectedChannel.id ? 'bg-CharcoalGray p-4' : ''
+            //   }`}
+            //   onClick={() => {
+            //     // setSelectedChannel(channel);
+            //     navigate(`/chat/channels/${channel.id}`);
+            //   }}
+            // >
+            //   <ChannelElement name={channel.name} avatar={channel.avatar} role="sbagh" />
+            // </li>
+            <NavLink to={`/chat/channels/${channel.id}`} 
+            className={({ isActive}) => {
+              return `flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 ${
+                isActive? 'bg-CharcoalGray p-4' : ''
+              }`
+            }}
             >
               <ChannelElement name={channel.name} avatar={channel.avatar} role="sbagh" />
-            </li>
+            </NavLink>
           )
         ),
       )}
@@ -75,6 +86,7 @@ const ChannelsList: React.FC = () => {
         : ''}
       {hasMore ? <div ref={lastMatchElementRef} className=" h-[25px] w-[350px]" /> : ''}
     </ul>
+    </>
   );
 };
   

@@ -6,23 +6,19 @@ import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import Chat from '@pages/Chat';
-import ChatMainPannel from '@components/chat/ChatMain/ChatMainPannel';
+import {ChannelMainPannel,MessagesMainPannel,ChannelsList, MessagesList} from '@components/chat/';
 import { ChatMainPannelLoader } from '@pages/Chat';
 import { Discovery } from '@pages/Discovery';
 
 import PostLogin,{ postLoginLoader } from '@pages/PostLogin';
 import Profile,{profileLoader} from '@pages/Profile';
 import {Overview,MatchHistory,Achievements,Settings,ManageFriends} from '@components/profile';
+import axios from 'axios';
 
-function Layoutloader() {
-  return {
-    username: 'test',
-    display_name: 'test',
-    avatar: {
-      path: 'test',
-      file: new File([], ''),
-    },
-  };
+async function Layoutloader() {
+  const LogedinUser = await axios.get(`/api/users/@me`);
+  console.log("layout loader",LogedinUser.data);
+  return LogedinUser.data;
 }
 
 // import {Settings} from '@components/profile';
@@ -34,6 +30,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    id:'layout',
     loader:Layoutloader,
     children: [
       {
@@ -45,9 +42,28 @@ const router = createBrowserRouter([
         element: <Chat />,
         children: [
           {
-            path: '/chat/:id',
-            element: <ChatMainPannel />,
+            path: '/chat/channels/',
+            element:<ChannelsList/>,
+            children: [
+              {
+                path: '/chat/channels/:id',
+                element: <ChannelMainPannel />,
+                loader:({ params }) => ChatMainPannelLoader(params.id),
+              }
+            ]
+          },
+          {
+            path: '/chat/messages/',
+            element:<MessagesList/>,
             // loader:({ params }) => ChatMainPannelLoader(params.id),
+            children: [
+              {
+                path: '/chat/messages/:id',
+                element: <MessagesMainPannel />,
+                
+                // loader:({ params }) => ChatMainPannelLoader(params.id),
+              }
+            ]
           }
         ]
       },

@@ -1,15 +1,32 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
-import { Channel } from '@globalTypes/channel';
-const data:Channel[] = [];
+import { mychannel } from '@globalTypes/channel';
+import { io, Socket } from 'socket.io-client';
+import { useEffect } from 'react';
 
+const data:mychannel[] = [];
+
+interface Message {
+  id: string;
+  content: string;
+  author: {
+    id: number;
+    display_name: string;
+    avatar: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 // Define the shape of the context data
 interface SelectedChannelContextData {
-  selectedChannel: Channel;
-  setSelectedChannel: (channel: Channel) => void;
-  channels: Channel[];
-  setChannels: (channels: Channel[]) => void;
+  selectedChannel: mychannel;
+  setSelectedChannel: (channel: mychannel) => void;
+  channels: mychannel[];
+  setChannels: (channels: mychannel[]) => void;
+  messages: Record<string, Message[]>; 
+  setMessages: (messages: Record<string, Message[]>) => void;
+  socket:Socket | null;
 }
 
 // Create a context for the selected channel
@@ -21,11 +38,28 @@ interface SelectedChannelProviderProps {
 
 // Create a provider component for this context
 export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = ({ children }) => {
-  const [selectedChannel, setSelectedChannel] = useState<Channel>({});
-  const [channels, setChannels] = useState<Channel[]>(data);
+  const [selectedChannel, setSelectedChannel] = useState<mychannel>({});
+  const [channels, setChannels] = useState<mychannel[]>([]);
+  const [messages, setMessages] = useState<Record<string, Message[]>>({});
+  const [socket, setSocket] = useState<Socket | null>(null);
+  
+  useEffect(() => {
+    const socket = io('http://localhost:3001/chat',{
+      withCredentials: true,
+    });
+    setSocket(socket);
 
+    socket.on('connect', () => {
+      console.log('Socket.IO Client Connected');
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+  
   return (
-    <SelectedChannelContext.Provider value={{ selectedChannel, setSelectedChannel,channels,setChannels }}>
+    <SelectedChannelContext.Provider value={{ selectedChannel, setSelectedChannel,channels,setChannels,messages, setMessages,socket}}>
       {children}
     </SelectedChannelContext.Provider>
   );
