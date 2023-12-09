@@ -43,37 +43,45 @@ const Discovery = () => {
         </div>
         <div className="flex items-center gap-5">
           <Card
-            fill="#2D313A"
+            fill="#1E1F23"
             borderWidth={2}
-            borderColor="#4B5261"
-            cut={32}
-            className="flex group relative items-center h-8 w-36 text-[#717178] justify-between"
+            borderColor="#2C2D33"
+            cut={30}
+            className="relative min-w-[200px] flex items-center justify-between cursor-pointer"
           >
             <select
               name="filter"
               id="filter"
-              className="flex w-full pl-4 text-sm appearance-none outline-none bg-[#2D313A] border-gray"
+              className="flex w-full h-full px-5 py-3 appearance-none outline-none bg-transparent text-white border-gray cursor-pointer"
               onChange={filterChannels}
             >
-              <option value="all">All</option>
-              <option value="public">Public</option>
-              <option value="private">Private</option>
-              <option value="protected">Protected</option>
+              <option className="bg-lightBlack" value="all">
+                All
+              </option>
+              <option className="bg-lightBlack" value="public">
+                Public
+              </option>
+              <option className="bg-lightBlack" value="private">
+                Private
+              </option>
+              <option className="bg-lightBlack" value="protected">
+                Protected
+              </option>
             </select>
             <DropDown className="absolute right-2 h-2 w-2" />
           </Card>
           <Card
-            fill="#2D313A"
+            fill="#1E1F23"
             borderWidth={2}
-            borderColor="#4B5261"
-            cut={32}
-            className="flex items-center h-8 w-36 text-[#2D313A] gap-1"
+            borderColor="#2C2D33"
+            cut={30}
+            className="flex relative h-12 w-48 gap-2 items-center justify-between cursor-pointer"
           >
             <SearchOutline className="pl-4 h-8 w-8 text-[#717178]" />
             <input
               type="text"
               placeholder="Search"
-              className="bg-transparent text-sm text-[#717178] w-full h-full outline-none placeholder:text-[#717178]"
+              className="bg-transparent text-sm w-full h-full outline-none  text-white placeholder:text-gray"
               onChange={searchForChannel}
             />
           </Card>

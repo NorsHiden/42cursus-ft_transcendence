@@ -20,7 +20,7 @@ const FriendsBar: React.FC = () => {
         {friends.map((friend, index) => (
           <NavLink
             key={index}
-            to={`/${friend.username}`}
+            to={`/${friend.username}/overview`}
             className={twclsx(
               'relative w-12 h-12 empty rounded-full cursor-pointer transition-all',
               'after:absolute after:top-0 after:right-0 after:translate-x-1/4 after:-translate-y-1/4',
