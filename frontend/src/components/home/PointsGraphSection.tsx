@@ -74,11 +74,12 @@ const PointsGraphSection: React.FC = () => {
       <div className="flex items-center gap-x-4 pl-4">
         {allAchievements
           .map(
-            (achievement) =>
+            (achievement, index) =>
               !claimedAchievements.find(
                 (claimedAchievement) => claimedAchievement.alt_name.toUpperCase() == achievement[0],
               ) && (
                 <Achievement
+                  key={index}
                   className="flex relative items-center justify-center"
                   isClaimed={false}
                   type={achievement[0] as AchievementType}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { SearchBar } from './SearchBar';
 import { User } from '@globalTypes/user';
 import Logo from '/logo.svg';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
@@ -43,10 +43,11 @@ const NavBar: React.FC = () => {
         <img className="h-12" src={Logo} alt="Pong Logo" />
       </Link>
       <div className="flex items-center gap-x-10">
-        <div className="hidden lg:flex items-center gap-x-8">
+        <div className="hidden group lg:flex items-center gap-x-8">
           <button className="text-gray hover:text-white transition-all">
             <SearchOutline size={22} />
           </button>
+          <SearchBar />
           <NotificationBox />
         </div>
         <Link className="group flex items-center gap-x-2" to={currentUser?.username}>

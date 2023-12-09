@@ -17,7 +17,7 @@ const Overview = () => {
   useEffect(() => {
     axios
       .get(`/api/match_history/${user.id}/highlights`)
-      .then((response) => {
+      .then((res) => {
         const newMatches: match[] = res.data.data.map((match: any) => ({
           id: match.id,
           game_mode: match.game_mode as Game,
