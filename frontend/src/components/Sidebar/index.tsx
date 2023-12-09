@@ -34,7 +34,7 @@ const useSideBar = () => {
     {
       title: 'Settings',
       icon: SettingSolid,
-      to: '/settings',
+      to: '/settings', // must be changed to /:userid/settings
     },
   ];
 
