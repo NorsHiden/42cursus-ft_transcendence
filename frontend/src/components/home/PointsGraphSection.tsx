@@ -87,7 +87,8 @@ const PointsGraphSection: React.FC = () => {
                 />
               ),
           )
-          .slice(0, 5)}
+          .filter((element) => element)
+          .slice(0, 4)}
         <div className="text-sm text-white">
           +{allAchievements.length - claimedAchievements.length - 4} more
         </div>

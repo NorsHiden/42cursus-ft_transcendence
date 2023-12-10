@@ -4,7 +4,7 @@ import EyeSolid from '@assets/novaIcons/solid/EyeSolid';
 import Card from '@components/Card';
 import { useGame } from '@components/Game/useGame';
 import { GameCanvas } from '@components/Game/GameCanvas';
-import { socket as gameSocket } from '../socket';
+import { gameSocket } from '../socket';
 
 const GamePage: React.FC = () => {
   const { game, gameId, me, spectators, dot, mode, initGame, getMe, waitingInterval } = useGame();

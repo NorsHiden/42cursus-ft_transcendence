@@ -1,22 +1,23 @@
-import React from 'react';
-
+import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
-import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
 import Card from '@components/Card';
+import { chatSocket } from '../../socket';
+import { toast } from 'sonner';
+import axios from 'axios';
+import { MessageType } from '@globalTypes/channel';
+import { User } from '@globalTypes/user';
+import Loader1Outline from '@assets/novaIcons/outline/Loader1Outline';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';
-  name: string;
-  avatar: string;
-  time: string;
-  content: string;
+  message: MessageType;
 };
 
-const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) => {
+const Message: React.FC<MessageProps> = ({ type, message }) => {
   return (
     <div className={`max-w-4/5 ${type == 'RECEIVED' ? 'self-start' : 'self-end'}`}>
       <div
-        className={`flex items-center justify-between text-white mb-3 ${
+        className={`flex items-center justify-between text-white mb-3 gap-4 ${
           type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
         }`}
       >
@@ -25,10 +26,10 @@ const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) 
             type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
           } gap-x-2`}
         >
-          <img className="w-8 h-8 rounded-full" src={avatar} alt="" />
-          <p className="text-sm font-medium">{name}</p>
+          <img className="w-8 h-8 rounded-full" src={message.author.avatar} alt="" />
+          <p className="text-sm font-medium">{message.author.display_name}</p>
         </div>
-        <span className="text-sm text-gray">{time}</span>
+        <span className="text-sm text-gray">{new Date(message.createdAt).get}</span>
       </div>
       <div
         className={`text-white ${
@@ -37,40 +38,70 @@ const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) 
           type == 'RECEIVED' ? 'rounded-tr-2xl' : 'rounded-tl-2xl'
         } rounded-b-2xl`}
       >
-        {content}
+        {message.content}
       </div>
     </div>
   );
 };
 
 const GeneralChat: React.FC = () => {
-  const user = 'Cipher';
-  const messages = [
-    {
-      avatar: 'https://i.pravatar.cc/150?img=2',
-      name: 'Rockman',
-      content: 'Hey, anyone want to play a coin rush game mode?',
-      time: '13:20',
-    },
-    {
-      avatar: 'https://i.pravatar.cc/150?img=3',
-      name: 'Saphire',
-      content: "Sure, I'm down for that.",
-      time: '13:20',
-    },
-    {
-      avatar: 'https://i.pravatar.cc/150?img=4',
-      name: 'Cipher',
-      content: 'Hey, Rockman you should try Cursed mode.',
-      time: '13:21',
-    },
-    {
-      avatar: 'https://i.pravatar.cc/150?img=2',
-      name: 'Rockman',
-      content: 'That sounds fun, I will try it out.',
-      time: '13:23',
-    },
-  ];
+  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [input, setInput] = useState<string>('');
+  const [me, setMe] = useState<User>({} as User);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const SendMessage = () => {
+    if (loading) return;
+    axios
+      .post('api/channels/1/messages', {
+        content: input,
+      })
+      .then(() => {
+        setInput('');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    setLoading(true);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') SendMessage();
+  };
+
+  useEffect(() => {
+    axios.get('api/users/@me').then((res) => {
+      setMe(res.data);
+    });
+    axios
+      .get('api/channels/1/messages?page=1&limit=10')
+      .then((res) => setMessages(res.data.data.reverse()));
+    chatSocket.on('message', (message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+    chatSocket.on('error', (error) => {
+      toast.dismiss();
+      toast.error(error.message);
+    });
+    chatSocket.emit('joinChannel', {
+      channelId: 1,
+    });
+    return () => {
+      chatSocket.off('message');
+      chatSocket.off('error');
+    };
+  }, []);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (messages.length) {
+      scrollRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      });
+    }
+  }, [messages.length]);
 
   return (
     <section className="col-span-1 hidden 2xl:grid grid-rows-section gap-y-3">
@@ -88,27 +119,39 @@ const GeneralChat: React.FC = () => {
       >
         <div className="text-white bg-lightBlack py-4 px-10">
           <h1 className="font-medium text-lg">#General</h1>
-          <p className="flex items-center gap-x-1 text-sm">
-            <CircleSolid size={10} className="text-green" />
-            22 player online
-          </p>
         </div>
 
         <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4 hide-scrollbar">
           {messages.map((message, index) => (
-            <Message key={index} type={message.name == user ? 'SENT' : 'RECEIVED'} {...message} />
+            <Message
+              key={index}
+              type={message.author.display_name == me.display_name ? 'SENT' : 'RECEIVED'}
+              message={message}
+            />
           ))}
+          <div ref={scrollRef} />
         </div>
 
         <div className="p-5">
-          <div className="bg-lightBlack text-white relative rounded-full">
+          <div
+            className={`bg-lightBlack text-white relative rounded-full ${
+              loading && 'opacity-50 pointer-events-none cursor-wait'
+            }`}
+          >
             <input
               type="text"
               placeholder="Type your message"
+              value={input}
               className="w-full py-4 px-6 text-sm bg-transparent focus:outline-none"
+              onChange={(event) => !loading && setInput(event.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <button className="absolute right-5 top-1/2 -translate-y-1/2">
-              <SendSolid size={18} />
+            <button className="absolute right-5 top-1/2 -translate-y-1/2" onClick={SendMessage}>
+              {loading ? (
+                <Loader1Outline size={18} className="animate-spin" />
+              ) : (
+                <SendSolid size={18} />
+              )}
             </button>
           </div>
         </div>

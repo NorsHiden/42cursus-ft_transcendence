@@ -5,7 +5,7 @@ import { CardType, Game, player } from '@globalTypes/types';
 import Card from '@components/Card';
 import EmptyMatchCard from '@assets/images/matchcardempty.png';
 import ChevronRightOutline from '@assets/novaIcons/outline/ChevronRightOutline';
-import { socket } from '../../socket';
+import { gameSocket } from '../../socket';
 
 type GameType = {
   isLive: boolean;
@@ -98,15 +98,15 @@ const PreviousGames: React.FC = () => {
   };
 
   useEffect(() => {
-    socket.on('live', (liveGames: GameType[]) => setGames(liveGames));
+    gameSocket.on('live', (liveGames: GameType[]) => setGames(liveGames));
 
     return () => {
-      socket.off('live');
+      gameSocket.off('live');
     };
   }, []);
 
   useEffect(() => {
-    socket.emit('live', {
+    gameSocket.emit('live', {
       game_mode: gameMode.toUpperCase(),
       live: gameStatus.toUpperCase(),
     });
