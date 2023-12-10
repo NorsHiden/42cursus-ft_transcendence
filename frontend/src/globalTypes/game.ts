@@ -1,4 +1,5 @@
 import { GAMEMODE_NAME } from './gameModes';
+import { player } from './types';
 
 export type PlayerType = {
   x: number;
@@ -28,4 +29,20 @@ export type GameData = {
   ready_timer: number;
   is_finished: boolean;
   alpha: number;
+};
+
+export type LiveGameType = {
+  isLive: boolean;
+  game_id: string;
+  gamemode: GAMEMODE_NAME;
+  time: string;
+  host: player;
+  opponent: player;
+  score: { host: number; opponent: number };
+};
+
+export type GameLobby = {
+  state: string;
+  game_id: string;
+  message: string;
 };

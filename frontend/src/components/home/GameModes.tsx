@@ -2,26 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { getColorValue } from '@utils/getColorValue';
-import twclsx from '@utils/twclsx';
-import { GAME_MODES } from '@globalTypes/gameModes';
 import Card from '@components/Card';
+import { GAME_MODES } from '@globalTypes/gameModes';
+import { GameLobby } from '@globalTypes/game';
+import twclsx from '@utils/twclsx';
+import { getColorValue } from '@utils/getColorValue';
 import { socket } from '../../socket';
 import PlayRectangleSolid from '@assets/novaIcons/solid/PlayRectangleSolid';
 import CloseRectangleSolid from '@assets/novaIcons/solid/CloseRectangleSolid';
-
-type Lobby = {
-  state: string;
-  game_id: string;
-  message: string;
-};
 
 const GameModes: React.FC = () => {
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState<number>(0);
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const checkLobby = (lobby: Lobby) => {
+  const checkLobby = (lobby: GameLobby) => {
     if (lobby.state === 'MATCH_FOUND') navigate(`/game/${lobby.game_id}`);
   };
 

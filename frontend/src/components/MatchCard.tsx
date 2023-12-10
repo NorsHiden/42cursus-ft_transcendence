@@ -1,16 +1,17 @@
 import React from 'react';
 import Card from '@components/Card';
 import { CursedIcon, GoldRushIcon, VanishIcon, RegularIcon } from '@assets/gameIcons/';
-import { Game, player, CardType } from '@globalTypes/types';
+import { player, CardType } from '@globalTypes/types';
+import { GAMEMODE_NAME } from '@globalTypes/gameModes';
 
-interface MatchHistoryProps {
+type MatchHistoryProps = {
   type: CardType;
-  gamemode: Game;
+  gamemode: GAMEMODE_NAME;
   host: player;
   opponent: player;
   time: string;
   isLive?: boolean;
-}
+};
 
 const MatchCard: React.FC<MatchHistoryProps> = ({
   type,
@@ -36,25 +37,25 @@ const MatchCard: React.FC<MatchHistoryProps> = ({
             <div
               className={`flex lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 center rounded-full 
               ${
-                gamemode === Game.CURSED
+                gamemode === GAMEMODE_NAME.CURSED
                   ? 'bg-[#3DFFFB]'
-                  : gamemode === Game.GOLDRUSH
+                  : gamemode === GAMEMODE_NAME.GOLD_RUSH
                   ? 'bg-[#FFCF53]'
-                  : gamemode === Game.VANISH
+                  : gamemode === GAMEMODE_NAME.VANISH
                   ? 'bg-[#8654F4]'
-                  : gamemode === Game.REGULAR
+                  : gamemode === GAMEMODE_NAME.REGULAR
                   ? 'bg-[#C2784F]'
                   : ''
               }
             `}
             >
-              {gamemode === Game.CURSED ? (
+              {gamemode === GAMEMODE_NAME.CURSED ? (
                 <CursedIcon className=" lg:w-2 lg:h-2  2xl:h-4 h-4 2xl:w-4 w-4 " />
-              ) : gamemode === Game.GOLDRUSH ? (
+              ) : gamemode === GAMEMODE_NAME.GOLD_RUSH ? (
                 <GoldRushIcon className=" lg:w-2 lg:h-2  2xl:h-4 h-4 2xl:w-4 w-4 " />
-              ) : gamemode === Game.VANISH ? (
+              ) : gamemode === GAMEMODE_NAME.VANISH ? (
                 <VanishIcon className="lg:w-2 lg:h-2  2xl:h-4 h-4 2xl:w-4 w-4 " />
-              ) : gamemode === Game.REGULAR ? (
+              ) : gamemode === GAMEMODE_NAME.REGULAR ? (
                 <RegularIcon className="lg:w-2 lg:h-2  2xl:h-4 h-4 2xl:w-4 w-4 " />
               ) : (
                 ''
@@ -65,13 +66,13 @@ const MatchCard: React.FC<MatchHistoryProps> = ({
                 Mode
               </span>
               <span className="block lg:font-base xl:font-semibold uppercase text-white lg:text-xs  2xl:text-base text-base ">
-                {gamemode === Game.CURSED
+                {gamemode === GAMEMODE_NAME.CURSED
                   ? 'CURSED'
-                  : gamemode === Game.GOLDRUSH
+                  : gamemode === GAMEMODE_NAME.GOLD_RUSH
                   ? 'GOLDRUSH'
-                  : gamemode === Game.VANISH
+                  : gamemode === GAMEMODE_NAME.VANISH
                   ? 'VANISH'
-                  : gamemode === Game.REGULAR
+                  : gamemode === GAMEMODE_NAME.REGULAR
                   ? 'REGULAR'
                   : ''}
               </span>

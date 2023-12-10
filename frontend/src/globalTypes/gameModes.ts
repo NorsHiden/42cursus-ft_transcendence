@@ -7,6 +7,13 @@ export enum GAMEMODE_NAME {
   GOLD_RUSH = 'GOLD_RUSH',
 }
 
+export enum Game {
+  CURSED = 'CURSED',
+  GOLDRUSH = 'GOLD_RUSH',
+  VANISH = 'VANISH',
+  REGULAR = 'REGULAR',
+}
+
 export const GAME_MODES = {
   [GAMEMODE_NAME.REGULAR]: { name: 'regular', icon: RegularIcon },
   [GAMEMODE_NAME.CURSED]: { name: 'cursed', icon: CursedIcon },
