@@ -42,8 +42,8 @@ const useSideBar = () => {
   ];
 
   const getChannels = () => {
-    axios.get('/api/channels?page=1&limit=4&sortBy=id:ASC').then((res) => {
-      setChannels(res.data.data);
+    axios.get('/api/channels/me?page=1&limit=4&sortBy=id:ASC').then((res) => {
+      setChannels(res.data.data.map((data: { channel: Channel }) => data.channel));
     });
   };
   const getMe = () => {

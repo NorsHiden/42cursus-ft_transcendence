@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import useDimensions from '@hooks/useDimensions';
 import { getColorValue } from '@utils/getColorValue';
 import { AchievementType, achievements } from '@globalTypes/achievements';
