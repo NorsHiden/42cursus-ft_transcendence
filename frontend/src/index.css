@@ -23,6 +23,14 @@
     @apply flex justify-center items-center;
   }
 
+  .center-y {
+    @apply flex items-center;
+  }
+
+  .center-x {
+    @apply flex justify-center;
+  }
+
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }

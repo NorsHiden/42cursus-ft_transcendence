@@ -53,7 +53,7 @@ const Achievement: React.FC<AchievementProps> = ({
         className={isClaimed ? 'text-black' : 'text-gray'}
       />
       <div
-        className="absolute top-0 left-0 z-50 w-[max-content] max-w-[250px] invisible group-hover:visible bg-lightBlack py-4 px-6 rounded-lg transition-transform duration-200 ease-in-out"
+        className="absolute top-0 left-0 z-50 w-[max-content] max-w-[250px] invisible group-hover:visible bg-lightBlack py-4 px-6 rounded-lg transition-transform duration-75 ease-in-out"
         style={{ transform: `translate(${tooltipPosition.x}px, ${tooltipPosition.y}px)` }}
       >
         <h1 className="text-white text-base/8 font-serif font-light">{title}</h1>
