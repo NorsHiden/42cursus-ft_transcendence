@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
-// import Card from '@components/Card';
-import { useSelectedChannel } from '@context/Channel';
-import { mychannel } from '@globalTypes/channel';
+import { toast } from 'sonner';
 import axios from 'axios';
+
+import { useSelectedChannel } from '@context/Channel';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import { Message } from '@components/home/GeneralChat';
-// import { channel } from 'diagnostics_channel';
-import ChannelSidePannel from './ChannelSidePannel';
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import Members from '@assets/novaIcons/solid/Members';
-import { toast } from 'sonner';
 import { User } from '@globalTypes/user';
+import ChannelSidePannel from './ChannelSidePannel';
+import { Message as MessageType} from '@globalTypes/types';
+import { sendMessage } from './utils';
+import { getMessages } from './utils';
 
 // const data = [];
 
@@ -26,31 +27,7 @@ import { User } from '@globalTypes/user';
 //   const response = await axios.post('/api/channels', channel);
 //   return response.data;
 // }
-const getMessages = async (channelId) => {
-  try {
-    const response = await axios.get(`/api/channels/${channelId}/messages`);
-    console.log(`Messages fetched: `);
-    console.log(response.data.data);
-    console.log(response.data.data);
 
-    return response.data.data;
-  } catch (error) {
-    console.error(`Error fetching messages: ${error}`);
-  }
-};
-
-const sendMessage =  (channelId, message) => {
-    console.log('channelID', message);
-    const response =  axios.post(`/api/channels/${channelId}/messages`, {
-      content: message,
-    });
-    toast.promise(response, {
-      error: (error)=>{
-        console.log(error)
-        return error.response.data.message;
-      },
-    });
-};
 
 // /chat
 // chat/channels/3
@@ -63,6 +40,7 @@ const ChannelMainPannel: React.FC = () => {
   const navigate = useNavigate();
   const user = useRouteLoaderData('layout') as User;
   const [message, setMessage] = useState<string>('');
+  
   const containerRef = useRef(null);
   // const [messages, setMessages] = useState([]);
 
@@ -72,26 +50,32 @@ const ChannelMainPannel: React.FC = () => {
   }, [messages]);
   
   const sendMessageHandler = () => {
+    // console.log("current messages");
+    // console.log(messagesRef.current);
+
+    const newMessage:MessageType = {
+      id: '1',
+      content: message,
+      author: {
+        id: user.id,
+        display_name: user.display_name,
+        avatar: user.profile.avatar,
+      },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+    
+
+    const newMessages = { ...messagesRef.current, [selectedChannel.id]: [newMessage,...messagesRef.current[selectedChannel.id]] };
+    setMessages(newMessages);
     sendMessage(selectedChannel.id, message);
   };
 
   const [expanded, setExpanded] = useState(false);
 
-  // function handlemessage(e){
-  //   message[1](e.target.value);
-  // }
-
-  // console.log("param",param)
-  // console.log("selected chanel ",selectedChannel)
-  // console.log("channels ",channels)
-
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === Number(param.id));
     if (channel) {
-      // console.log("channel found",channel)
-      // setMessages([]);
-
-      // console.log('len', messages[channel.id]);
       if (messages[channel.id] === undefined) {
         getMessages(channel.id).then((fetchedMessages) => {
           const newMessages = { ...messages, [channel.id]: [...fetchedMessages] };
@@ -106,21 +90,20 @@ const ChannelMainPannel: React.FC = () => {
     if (socket == null) return;
     if (selectedChannel.id == null) return;
     
-    console.log('Joining channel: ' + selectedChannel.id);
     // Send joinChannel event with channelId as payload
     socket.emit('joinChannel', { channelId: selectedChannel.id });
     // Listen for message event
-    console.log(JSON.stringify({ channelId: selectedChannel.id }));
       socket.on('message', (message) => {
-      console.log('message received');
-      
-      
-      // const channelMessages = messages[selectedChannel.id];
-      // console.log('channelMessages', channelMessages);
-    
+      if (message.author.id != user.id)
+      {
         const newMessages = { ...messagesRef.current, [selectedChannel.id]: [message,...messagesRef.current[selectedChannel.id]] };
         setMessages(newMessages);  
         console.log(message);
+      }
+      else
+      {
+        console.log("message sent by user");
+      }
       // Handle received message
     });
   
@@ -133,17 +116,7 @@ const ChannelMainPannel: React.FC = () => {
     };
   }, [socket, selectedChannel.id]);
 
-  // useEffect(() => {
-  //   const fetchMessages = async () => {
-  //     const messages = await getMessages(selectedChannel.id, containerRef);
-  //     console.log('messages', messages);
-  //     setMessages(messages);
-  //   };
 
-  //   fetchMessages();
-  // }, [selectedChannel.id]);
-
-  console.log('messages', messages);
   return (
     <>
       <div
@@ -191,7 +164,6 @@ const ChannelMainPannel: React.FC = () => {
                 />
               ))}
           </div>
-          {/* <div id="chat-input" className="absolute h-[80%]"> */}
           <div className="absolute bottom-[15px] w-full flex justify-center items-center">
             <input
               type="text"
@@ -221,9 +193,6 @@ const ChannelMainPannel: React.FC = () => {
               />
             </div>
           </div>
-          {/* </div> */}
-
-          {/* <div id="chat-main-pannel-footer" className="bg-lightBlack rounded-xl h-16"></div> */}
         </div>
       </div>
       <ChannelSidePannel expanded={expanded} selectedChannel={selectedChannel} setExpanded={setExpanded}/>

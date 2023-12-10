@@ -18,17 +18,17 @@ export const Message: React.FC<MessageProps> = ({ type, name, avatar, time, cont
       <div
         className={`flex items-center justify-between text-white mb-3 ${
           type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
-        }`}
+        } gap-4`}
       >
         <div
           className={`flex items-center ${
             type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
-          } gap-x-2`}
+          } gap-x-2 `}
         >
           <img className="w-8 h-8 rounded-full" src={avatar} alt="" />
           <p className="text-sm font-medium">{name}</p>
         </div>
-        <span className="text-sm text-gray">{time}</span>
+        <span className="text-sm text-gray font-poppins font-medium">{time}</span>
       </div>
       <div
         className={`text-white ${

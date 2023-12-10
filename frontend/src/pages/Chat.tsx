@@ -47,6 +47,7 @@ enum MemberRole {
 
 const Chat: React.FC = () => {
     const navigate = useNavigate();
+    
     const match = useMatch('/chat/channels/:id');
     const match2 = useMatch('/chat/messages/:id');
     const isActiveChannels = !!match;
@@ -67,17 +68,13 @@ const Chat: React.FC = () => {
           <NavButtons />
           <Outlet />
         </div>
-        
-          {/* {routes} */}
           {
             isActiveChannels? <ChannelMainPannel />:""
           }
           {
             isActiveMessages? <MessagesMainPannel />:""
           }
-          {/* <Outlet /> */}
         </div>
-      {/* </div> */}
       </SelectedChannelProvider>
     );
 }

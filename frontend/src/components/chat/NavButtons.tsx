@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useSelectedChannel } from '@context/Channel';
 
 export const NavButtons = () => {
-  const {setChannels} = useSelectedChannel();
+  const {setChannels,setDms} = useSelectedChannel();
   // let match = useMatch('/chat/channels/:id?');
   // let isActive = !!match;
   // console.log(match);
@@ -20,7 +20,7 @@ export const NavButtons = () => {
   return (
     <>
     <div className="grid grid-flow-col  gap-4 lg:gap-2 2xl:gap-4 w-full">
-      <NavLink to="channels" className="justify-self-end " >
+      <NavLink to="channels" className="justify-self-end " onClick={()=>{setDms([])}}>
         {({ isActive }) => (
           <Card
             className={` center ${

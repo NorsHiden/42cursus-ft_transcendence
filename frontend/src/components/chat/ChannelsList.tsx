@@ -1,27 +1,13 @@
 import  React,{useState,useEffect,useCallback,useRef} from 'react';
-import { useNavigate,NavLink, Outlet} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import ChannelElement from './Channel';
-import {SelectedChannelProvider,useSelectedChannel} from '@context/Channel';
-import { Channel } from '@globalTypes/channel';
-import axios from 'axios';
+import {useSelectedChannel} from '@context/Channel';
 import  {fetchChannels}  from './utils.ts';
-
-// interface Channel {
-//     id: string;
-//     name: string;
-//     avatar: string;
-// }
-
-interface ChannelsListProps {
-    channels: Channel[];
-}
 
 
 
 const ChannelsList: React.FC = () => {
-  const navigate = useNavigate();
-  const {selectedChannel, setSelectedChannel,channels,setChannels} = useSelectedChannel();
-  // const [page, setPage] = useState(1);
+  const {channels,setChannels} = useSelectedChannel();
   const pageRef = useRef(1);
   const [hasMore, setHasMore] = useState(false);
   const observer = useRef<IntersectionObserver | null>();
@@ -38,30 +24,14 @@ const ChannelsList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // setLoading(true);
-    console.log("useEffect")
-    fetchChannels(pageRef.current,setChannels,setHasMore,setLoading,channels);
+    fetchChannels(pageRef.current,setChannels,setHasMore,setLoading);
   }, [pageRef.current]);
 
   return (
-    <>
     <ul id="chat-list" className=" grid row-start-3 overflow-auto gap-4 scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray">
       {channels.map(
         (channel) => (
-          // console.log('channel', channel.avatar),
           (
-            // <li
-            //   key={channel.id}
-            //   className={`flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 ${
-            //     channel.id === selectedChannel.id ? 'bg-CharcoalGray p-4' : ''
-            //   }`}
-            //   onClick={() => {
-            //     // setSelectedChannel(channel);
-            //     navigate(`/chat/channels/${channel.id}`);
-            //   }}
-            // >
-            //   <ChannelElement name={channel.name} avatar={channel.avatar} role="sbagh" />
-            // </li>
             <NavLink to={`/chat/channels/${channel.id}`} 
             className={({ isActive}) => {
               return `flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 ${
@@ -69,7 +39,7 @@ const ChannelsList: React.FC = () => {
               }`
             }}
             >
-              <ChannelElement name={channel.name} avatar={channel.avatar} role="sbagh" />
+              <ChannelElement name={channel.name} avatar={channel.avatar} role={channel.role} />
             </NavLink>
           )
         ),
@@ -86,7 +56,6 @@ const ChannelsList: React.FC = () => {
         : ''}
       {hasMore ? <div ref={lastMatchElementRef} className=" h-[25px] w-[350px]" /> : ''}
     </ul>
-    </>
   );
 };
   

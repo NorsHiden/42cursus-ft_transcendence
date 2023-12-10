@@ -1,74 +1,61 @@
 import  React,{useState,useEffect,useCallback,useRef} from 'react';
-import { useNavigate,NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import ChannelElement from './Channel';
-import {SelectedChannelProvider,useSelectedChannel} from '@context/Channel';
-import { Channel } from '@globalTypes/channel';
-import axios from 'axios';
+import {useSelectedChannel} from '@context/Channel';
 import  {fetchChannels}  from './utils.ts';
-
-// interface Channel {
-//     id: string;
-//     name: string;
-//     avatar: string;
-// }
-
-interface ChannelsListProps {
-    channels: Channel[];
-}
+import { DM, Member } from '@globalTypes/types';
+import { getDms } from './utils';
+import DmElement from './DmElement.tsx';
 
 
 
-const ChannelsList: React.FC = () => {
-  const navigate = useNavigate();
-  const {selectedChannel, setSelectedChannel,channels,setChannels} = useSelectedChannel();
-  const [page, setPage] = useState(1);
+const MessagesList: React.FC = () => {
+  const {Dms,setDms,LogedUser} = useSelectedChannel();
+  
+  const pageRef = useRef(1);
   const [hasMore, setHasMore] = useState(false);
   const observer = useRef<IntersectionObserver | null>();
   const [loading, setLoading] = useState(false);
+  
+  const lastMatchElementRef = useCallback((node: HTMLDivElement) => {
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        pageRef.current += 1;
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, []);
 
-//   const lastMatchElementRef = useCallback((node: HTMLDivElement) => {
-//     if (observer.current) observer.current.disconnect();
-//     observer.current = new IntersectionObserver((entries) => {
-//       if (entries[0].isIntersecting) {
-//         setPage((prevPage) => prevPage + 1);
-//       }
-//     });
-//     if (node) observer.current.observe(node);
-//   }, []);
-
-//   useEffect(() => {
-//     // setLoading(true);
-//     console.log("useEffect")
-//     fetchChannels(page,setChannels,setHasMore,setLoading,channels);
-//   }, [page]);
-
+  useEffect(() => {
+    // fetchChannels(pageRef.current,setChannels,setHasMore,setLoading,channels);
+    getDms(pageRef.current,setDms,setHasMore,setLoading,Dms);
+  }, [pageRef.current]);
+  
   return (
-    <ul id="message-list" className=" grid row-start-3 overflow-auto gap-4 scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray">
-      <h1 className='text-white font-bold font-poppins'>THis is messages</h1>
-      {/* {channels.map(
-        (channel) => (
+    <ul id="chat-list" className=" grid row-start-3 overflow-auto gap-4 scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray"> 
+      {/* <ChannelElement name={channel.name} avatar={channel.avatar} role={channel.role} /> */}
+      
+      {
+      Dms?.map(
+        (dm) => (
           (
-            <li
-              key={channel.id}
-              className={`flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 hover:cursor-pointer ${
-                channel.id === selectedChannel.id ? 'bg-CharcoalGray p-4' : ''
-              }`}
-              onClick={() => {
-                setSelectedChannel(channel);
-                navigate(`/chat/channels/${channel.id}`);
-              }}
+            <NavLink to={`/chat/messages/${dm.id}`} 
+            className={({ isActive}) => {
+              return `flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 ${
+                isActive? 'bg-CharcoalGray p-4' : ''
+              }`
+            }}
             >
-              <ChannelElement name={channel.name} avatar={channel.avatar} role="sbagh" />
-            </li>
-            // <NavLink to={`/chat/channels/${channel.id}`} 
-            // className={({ isActive}) => {
-            //   return `flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 hover:cursor-pointer ${
-            //     isActive? 'bg-CharcoalGray p-4' : ''
-            //   }`
-            // }}
-            // >
-            //   <ChannelElement name={channel.name} avatar={channel.avatar} role="sbagh" />
-            // </NavLink>
+              <DmElement name={dm.members[0].userId == LogedUser.id ?dm.members[1].displayName:dm.members[0].displayName } 
+                avatar={
+                  dm.members[0].userId == LogedUser.id ?dm.members[1].avatar:dm.members[0].avatar
+            
+                } 
+                presence={
+                  dm.members[0].userId == LogedUser.id ?dm.members[1].presence:dm.members[0].presence
+                } />
+            </NavLink>
           )
         ),
       )}
@@ -82,9 +69,9 @@ const ChannelsList: React.FC = () => {
             </li>
           ))
         : ''}
-      {hasMore ? <div ref={lastMatchElementRef} className=" h-[25px] w-[350px]" /> : ''} */}
+      {hasMore ? <div ref={lastMatchElementRef} className=" h-[25px] w-[350px]" /> : ''}
     </ul>
   );
 };
   
-  export default ChannelsList;
+  export default MessagesList;

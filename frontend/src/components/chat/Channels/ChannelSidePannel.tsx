@@ -7,14 +7,70 @@ import twclsx from '@utils/twclsx';
 import ContextMenu from '@components/ContextMenu';
 import ContexMenuIcon from '@assets/novaIcons/solid/ContexMenuIcon';
 import axios from 'axios';
-import { type } from 'os';
 import { fetchMembers } from './utils';
+import { toast } from 'sonner';
+import { useRef } from 'react';
 
 interface ChannelMainPannelProps {
   selectedChannel: mychannel;
   expanded: boolean;
   setExpanded: (arg: boolean) => void;
 }
+
+interface UserElementProps {
+  presence: string;
+  displayName: string;
+  avatar: string;
+  userId: string;
+  channelID: number;
+}
+
+const UserElement: React.FC<MemberElementProps> = ({presence,displayName,avatar,userId,channelID}) => {
+
+  function inviteUser() {
+    toast.promise(
+      axios.post(`/api/channels/${channelID}/invite/${userId}`),
+      {
+        loading: 'Inviting...',
+        success: 'Invited',
+        error: (err) => {
+          console.log(err);
+          return err.response.data.message;
+        },
+      }
+    );
+  }
+
+  return (
+    <div id="member-card" className=" flex justify-between gap-4 hover:bg-CharcoalGray rounded-2xl hover:p-2">
+      <div id="avatar&name" className="flex gap-4">
+        <div  className={twclsx(
+          'relative',
+          'w-12 h-12 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12 empty rounded-full cursor-pointer after:absolute after:top-0 after:right-0  after:bg-gray after:rounded-full after:w-3 after:h-3 after:border-[3px] after:border-lightBlack',
+          presence === 'online' && 'after:bg-green',
+          presence === 'offline' && 'after:bg-gray',
+          presence === 'ingame' && 'after:bg-primary',
+        )}>
+      
+        {/* // className="relative  w-12 h-12 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12 empty rounded-full cursor-pointer after:absolute after:top-0 after:right-0  after:bg-gray after:rounded-full after:w-3 after:h-3 after:border-[3px] after:border-lightBlack"> */}
+          <img src={avatar} alt="" className='rounded-full'/>
+        </div>
+        <div id="name" className="flex center gap-2 lg:gap-1 2xl:gap-2">
+          <p className="text-white font-poppins font-medium lg:text-sm 2xl:text-base">{displayName}</p>
+        </div>
+      </div>
+      {/* <div className='center '> */}
+     
+      {/* </div> */}
+      <button className="text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray" onClick={inviteUser}>
+        Invite
+      </button>
+
+    </div>
+    
+  );
+};
+
 
 interface MemberElementProps {
   role: string;
@@ -30,18 +86,58 @@ const MemberElement: React.FC<MemberElementProps> = ({role,presence,displayName,
 
 
 
-  let menuItems = [{label: 'Mute', onClick: () => console.log('Mute'),className:"text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray"},
-  {label: 'Kick', onClick: () => {
-    console.log('kick');
-    axios.delete(`/api/channels/${channelID}/members/${userId}`)
-    .then(response => {
-      console.log(response.data);
-      // setMembers(response.data.data);
-    })
-    .catch(error => console.error('Error:', error));
+  let menuItems = [{label: 'Mute', onClick: () => {
+    toast.promise(
+      axios.patch(`/api/channels/${channelID}/members/mute/${userId}`),
+      {
+        loading: 'Muting...',
+        success: 'Muted',
+        error: (err) => {
+          console.log(err);
+          return err.response.data.message;
+        },
+      }
+    );
   },className:"text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray"},
-  {label: 'Ban', onClick: () => console.log('ban'),className:"text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray"},
-  {label: 'Promote', onClick: () => console.log('delete'),className:"text-white cursor-pointer py-1 px-3  hover:bg-CharcoalGray"}
+  {label: 'Kick', onClick: () => {
+    toast.promise(
+      axios.delete(`/api/channels/${channelID}/members/${userId}`),
+      {
+        loading: 'Kicking...',
+        success: 'Kicked',
+        error: (err) => {
+          console.log(err);
+          return err.response.data.message;
+        },
+      }
+    );
+  },className:"text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray"},
+  {label: 'Ban', onClick: () => {
+    toast.promise(
+      axios.patch(`/api/channels/${channelID}/members/ban/${userId}`),
+      {
+        loading: 'Banning...',
+        success: 'Banned',
+        error: (err) => {
+          console.log(err);
+          return err.response.data.message;
+        },
+      }
+    );
+  },className:"text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray"},
+  {label: 'Promote', onClick: () => {
+    toast.promise(
+      axios.patch(`/api/channels/${channelID}/members/elevate/${userId}`),
+      {
+        loading: 'Promoting...',
+        success: 'Promoted',
+        error: (err) => {
+          console.log(err);
+          return err.response.data.message;
+        },
+      }
+    );
+  },className:"text-white cursor-pointer py-1 px-3  hover:bg-CharcoalGray"}
 ];
 
   return (
@@ -99,6 +195,8 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
   const [inviteUser, setInviteUser] = React.useState(false);
   const [search, setSearch] = React.useState('');
   const [members, setMembers] = React.useState<Member[]>([]);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [users, setUsers] = useState<Member[]>([]);
 
   function handlieinvite() {
     // console.log('invite user')
@@ -106,13 +204,17 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
   }
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    let interval;
-    clearInterval(interval);
-    interval = setInterval(()=>{
-      fetchMembers(selectedChannel,setMembers,search);
-      clearInterval(interval);
-    }, 600);   
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
     setSearch(event.target.value);
+    if (inviteUser) return;
+    let id = setTimeout(() => {
+      console.log("searching");
+      console.log(search);
+      fetchMembers(selectedChannel, setMembers, event.target.value);
+    }, 600);
+    setTimeoutId(id);
   }
 
   useEffect(() => {
@@ -180,10 +282,18 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
         </div>
       </div>
       <ul className="flex flex-col flex-grow h-27 px-4 lg:px-2 2xl:px-4 overflow-auto mt-8 gap-4 scroll-smooth  scrollbar  scrollbar-track-lightBlack scrollbar-track-w-[4px] scrollbar-thumb-rounded scrollbar-thumb-w-1 scrollbar-thumb-[#5E6069]">
-        {members.map((member) => (
+        {
+        !inviteUser &&
+        members.map((member) => (
           <MemberElement  {...member} channelID={selectedChannel.id} />
-        ))}
-       
+        ))
+        
+        }
+        {/* {
+        !inviteUser &&
+          
+          // <UserElement/>
+        } */}
       </ul>
       <div
         onClick={() => {

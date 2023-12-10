@@ -9,23 +9,6 @@ interface ChannelProps {
 }
 
 const ChannelElement: React.FC<ChannelProps> = ({name,avatar,role}) => {
-
-  
-    
-    //   const handleClick = (event: MouseEvent) => {
-    //     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-    //         setVisible(false);
-    //     }
-    //   };
-    
-    //   useEffect(() => {
-    //     document.addEventListener('mousedown', handleClick);
-
-    //     return () => {
-    //         document.removeEventListener('mousedown', handleClick);
-    //     };
-    // }, []);
-
     return (
         <>
         <div className="flex  items-center gap-4 ">
