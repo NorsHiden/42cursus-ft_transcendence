@@ -1,12 +1,7 @@
 import React from 'react';
-
 import Card from '@components/Card';
-
 import { CursedIcon, GoldRushIcon, VanishIcon, RegularIcon } from '@assets/gameIcons/';
-// import user from '@assets/images/user.png'
-import userAvatar from '@assets/images/user.jpeg';
 import { Game, player, CardType } from '@globalTypes/index';
-// import { match } from 'assert';
 
 interface MatchHistoryProps {
   type: CardType;
@@ -16,17 +11,6 @@ interface MatchHistoryProps {
   time: string;
   isLive?: boolean;
 }
-
-// interface Match {
-//   home_player: player;
-//   away_player: player;
-//   home_score: number;
-//   away_score: number;
-//   match_type: string;
-//   match_date: string;
-//   match_time: string;
-//   match_duration: string;
-// }
 
 const MatchCard: React.FC<MatchHistoryProps> = ({
   type,

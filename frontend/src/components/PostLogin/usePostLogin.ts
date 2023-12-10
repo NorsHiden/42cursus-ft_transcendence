@@ -30,7 +30,7 @@ export const usePostLogin = (initialData: userData) => {
       loading: 'Updating user...',
       success: () => {
         setIsSubmitting(false);
-        navigate('/home');
+        navigate('/');
         return 'User has been updated';
       },
       error: (error) => {

@@ -1,50 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+
 import { getColorValue } from '@utils/getColorValue';
+import twclsx from '@utils/twclsx';
 import { GAME_MODES } from '@globalTypes/gameModes';
 import Card from '@components/Card';
 import { socket } from '../../socket';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import { CursedIcon, GoldRushIcon, RegularIcon, VanishIcon } from '@assets/gameIcons';
+import PlayRectangleSolid from '@assets/novaIcons/solid/PlayRectangleSolid';
+import CloseRectangleSolid from '@assets/novaIcons/solid/CloseRectangleSolid';
 
-const selectMode = {
-  regular: 'REGULAR',
-  vanish: 'VANISH',
-  cursed: 'CURSED',
-  goldRush: 'GOLD_RUSH',
+type Lobby = {
+  state: string;
+  game_id: string;
+  message: string;
 };
 
 const GameModes: React.FC = () => {
-  const [selectedMode, setSelectedMode] = useState<string>(GAME_MODES.REGULAR.name);
-  const [searching, setSearching] = useState<boolean>(false);
-  const [dot, setDot] = useState<string>('.');
   const navigate = useNavigate();
+  const [selectedMode, setSelectedMode] = useState<number>(0);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const GameModesCards = [
-    { name: 'regular', icon: RegularIcon },
-    { name: 'cursed', icon: CursedIcon },
-    { name: 'vanish', icon: VanishIcon },
-    { name: 'goldRush', icon: GoldRushIcon },
-  ];
-
-  const checkLobby = (lobby: { state: string; game_id: string; message: string }) => {
-    if (lobby.state === 'MATCH_FOUND') {
-      navigate(`/game/${lobby.game_id}`);
-    }
+  const checkLobby = (lobby: Lobby) => {
+    if (lobby.state === 'MATCH_FOUND') navigate(`/game/${lobby.game_id}`);
   };
 
-  const findGame = () => {
-    if (searching) {
-      socket.emit('lobby', {
-        action: 'CANCEL',
-      });
-      setSearching(false);
+  const handleButtonClick = () => {
+    if (isSearching) {
+      socket.emit('lobby', { action: 'CANCEL' });
+      setIsSearching(false);
     } else {
       socket.emit('lobby', {
         action: 'SEARCH',
-        game_mode: selectMode[selectedMode as keyof typeof selectMode],
+        game_mode: Object.keys(GAME_MODES)[selectedMode],
       });
-      setSearching(true);
+      setIsSearching(true);
     }
   };
 
@@ -52,15 +42,11 @@ const GameModes: React.FC = () => {
     socket.on('lobby', checkLobby);
     socket.on('error', () => {
       toast.dismiss();
-      toast.error('You need atleast 300pts to play Gold Rush');
-      setSearching(false);
+      toast.error('You need at least 300pts to play Gold Rush');
+      setIsSearching(false);
     });
 
-    const interval = setInterval(() => {
-      setDot((prev) => (prev === '...' ? '.' : prev + '.'));
-    }, 500);
     return () => {
-      clearInterval(interval);
       socket.off('lobby', checkLobby);
       socket.off('error');
     };
@@ -69,21 +55,20 @@ const GameModes: React.FC = () => {
   return (
     <section className="col-span-2 flex flex-col items-start gap-y-6">
       <h1 className="font-serif text-xl text-white">Game Modes</h1>
-      <div className="flex gap-x-3 gap-y-3 flex-wrap">
-        {GameModesCards.map((mode) => (
+      <div className="flex gap-x-4 gap-y-3 flex-wrap">
+        {Object.values(GAME_MODES).map((mode, index) => (
           <Card
-            className={`center py-5 px-8 transition-all text-${mode.name}-dark ${
-              selectedMode != mode.name || searching
-                ? searching
-                  ? 'cursor-not-allowed opacity-50'
-                  : 'opacity-50 hover:scale-110 hover:opacity-100 cursor-pointer'
-                : 'brightness-150'
-            }`}
-            cut={18}
-            borderWidth={1}
+            className={twclsx(
+              `center py-6 px-9 transition-all text-${mode.name}-dark cursor-pointer opacity-80 transition-all`,
+              isSearching && 'cursor-not-allowed',
+              selectedMode == index && `brightness-150 opacity-100`,
+              selectedMode != index && !isSearching && `hover:scale-105 hover:opacity-100`,
+            )}
+            cut={20}
+            borderWidth={selectedMode == index ? 2 : 1}
             borderColor={getColorValue(mode.name, 'lightDark')}
             key={mode.name}
-            onClick={() => !searching && setSelectedMode(mode.name)}
+            onClick={() => !isSearching && setSelectedMode(index)}
           >
             <mode.icon size={50} className={`text-${mode.name}-color`} />
           </Card>
@@ -92,16 +77,22 @@ const GameModes: React.FC = () => {
       <div className="flex items-center gap-4">
         <Card
           cut={20}
-          className={`flex ${
-            searching ? 'text-gray' : 'text-primary'
-          } transition-all hover:brightness-125`}
-          onClick={findGame}
+          className={twclsx(
+            'center transition-all',
+            isSearching && 'text-gray hover:text-gray/90',
+            !isSearching && 'text-primary hover:text-primary/90',
+          )}
+          onClick={handleButtonClick}
         >
-          <button className="text-white text-xl font-serif py-4 px-10 rounded z-10">
-            {searching ? 'CANCEL' : 'PLAY'}
+          <button className="flex items-center gap-x-2 text-white text-xl font-serif py-4 px-9 z-10">
+            {!isSearching && <PlayRectangleSolid size={24} className="text-white/40" />}
+            {isSearching && <CloseRectangleSolid size={24} className="text-white/40" />}
+            {isSearching ? 'CANCEL' : 'PLAY'}
           </button>
         </Card>
-        {searching && <div className="flex text-white font-bold">Looking for an opponent{dot}</div>}
+        {isSearching && (
+          <div className="text-white font-semibold loading-dots">Looking for an opponent</div>
+        )}
       </div>
     </section>
   );

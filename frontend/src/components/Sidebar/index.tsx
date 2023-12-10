@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+
+import { Channel } from '@globalTypes/channel';
+import { CreateChannel } from '@components/Chat/Discovery/CreateChannel';
 import twclsx from '@utils/twclsx';
 import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
 import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
@@ -7,13 +11,12 @@ import BarChartSolid from '@assets/novaIcons/solid/BarChartSolid';
 import SettingSolid from '@assets/novaIcons/solid/SettingSolid';
 import CompassSolid from '@assets/novaIcons/solid/CompassSolid';
 import PlusCircleSolid from '@assets/novaIcons/solid/PlusCircleSolid';
-import axios from 'axios';
-import { Channel } from '@globalTypes/channel';
-import { CreateChannel } from '@components/Chat/Discovery/CreateChannel';
+import { User } from '@globalTypes/user';
 
 const useSideBar = () => {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [showCreateChannel, setShowCreateChannel] = useState(false);
+  const [me, setMe] = useState<User>({} as User);
 
   const links = [
     {
@@ -34,7 +37,7 @@ const useSideBar = () => {
     {
       title: 'Settings',
       icon: SettingSolid,
-      to: '/settings',
+      to: `/${me.username}/settings`,
     },
   ];
 
@@ -43,9 +46,13 @@ const useSideBar = () => {
       setChannels(res.data.data);
     });
   };
+  const getMe = () => {
+    axios.get('/api/users/@me').then((res) => setMe(res.data));
+  };
 
   return {
     links,
+    getMe,
     channels,
     getChannels,
     showCreateChannel,
@@ -54,10 +61,12 @@ const useSideBar = () => {
 };
 
 const SideBar: React.FC = () => {
-  const { links, channels, getChannels, showCreateChannel, setShowCreateChannel } = useSideBar();
+  const { links, getMe, channels, getChannels, showCreateChannel, setShowCreateChannel } =
+    useSideBar();
 
   useEffect(() => {
     getChannels();
+    getMe();
   }, []);
 
   return (

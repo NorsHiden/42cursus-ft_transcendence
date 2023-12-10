@@ -4,10 +4,11 @@ import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
 import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
 import twclsx from '@utils/twclsx';
 import { NavLink } from 'react-router-dom';
-import { Notification } from './Notification';
+import Notification from './Notification';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
+import { SearchBar } from './SearchBar';
 
-export const BottomNavBar = () => {
+const BottomNavBar = () => {
   const links = [
     {
       title: 'Home',
@@ -40,9 +41,12 @@ export const BottomNavBar = () => {
           )}
         </NavLink>
       ))}
-      <button className="text-gray hover:text-white transition-all">
-        <SearchOutline size={52} />
-      </button>
+      <div className="group">
+        <button className="text-gray hover:text-white transition-all">
+          <SearchOutline size={52} />
+        </button>
+        <SearchBar />
+      </div>
       <div tabIndex={1} className="group flex flex-col justify-between items-center">
         <button className="text-gray hover:text-white transition-all">
           <BellSolid size={52} className="group-focus-within:text-white" />
@@ -52,3 +56,5 @@ export const BottomNavBar = () => {
     </div>
   );
 };
+
+export default BottomNavBar;

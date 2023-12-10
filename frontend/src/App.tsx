@@ -1,24 +1,27 @@
-import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import PostLogin, { postLoginLoader } from '@pages/PostLogin';
-import Profile, { profileLoader } from '@pages/Profile';
-import Layout, { LayoutLoader } from '@pages/Layout';
-import OTP2fa, { otpLoader } from '@pages/OTP2fa';
-import { Leaderboard } from '@pages/Leaderboard';
-import Discovery from '@pages/Discovery';
-import Login from '@pages/Login';
+import React from 'react';
 import { Toaster } from 'sonner';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+
+import Layout, { LayoutLoader } from '@pages/Layout';
 import Home from '@pages/Home';
+import Discovery from '@pages/Discovery';
+import Leaderboard from '@pages/Leaderboard';
 import Game from '@pages/Game';
+import Profile, { profileLoader } from '@pages/Profile';
+import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
+import Login from '@pages/Login';
+import PostLogin, { PostLoginLoader } from '@pages/PostLogin';
+import TwoFactorAuth, { TwoFactorAuthLoader } from '@pages/OTP2fa';
 
 const router = createBrowserRouter([
   {
+    id: 'layout',
     path: '/',
     element: <Layout />,
     loader: LayoutLoader,
     children: [
       {
-        path: '/',
+        index: true,
         element: <Home />,
       },
       {
@@ -34,14 +37,14 @@ const router = createBrowserRouter([
         element: <Game />,
       },
       {
-        path: '/:user',
         id: 'profile',
+        path: '/:user',
         element: <Profile />,
         loader: ({ params }) => profileLoader(params.user),
         children: [
           {
-            path: '/:user/settings',
-            element: <Settings />,
+            index: true,
+            element: <Navigate to="overview" replace />,
           },
           {
             path: '/:user/overview',
@@ -59,6 +62,10 @@ const router = createBrowserRouter([
             path: '/:user/friends',
             element: <ManageFriends />,
           },
+          {
+            path: '/:user/settings',
+            element: <Settings />,
+          },
         ],
       },
     ],
@@ -69,13 +76,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/postlogin',
-    loader: postLoginLoader,
+    loader: PostLoginLoader,
     element: <PostLogin />,
   },
   {
     path: '/2fa-verification',
-    loader: otpLoader,
-    element: <OTP2fa />,
+    loader: TwoFactorAuthLoader,
+    element: <TwoFactorAuth />,
   },
 ]);
 

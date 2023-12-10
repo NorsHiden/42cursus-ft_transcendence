@@ -5,6 +5,7 @@ interface NavLinkCardProps {
   to: string;
   children: React.ReactNode;
   cut?: number;
+  replace?: boolean;
 }
 
 const NavLinkButton: React.FC<NavLinkCardProps> = ({ to, children, cut }) => (
@@ -26,6 +27,5 @@ const NavLinkButton: React.FC<NavLinkCardProps> = ({ to, children, cut }) => (
     )}
   </NavLink>
 );
-
 
 export default NavLinkButton;

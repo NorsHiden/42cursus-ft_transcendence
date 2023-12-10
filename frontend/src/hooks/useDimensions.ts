@@ -2,27 +2,27 @@ import { useRef, useState, useLayoutEffect, useEffect } from 'react';
 
 const useDimensions = <T extends HTMLElement>() => {
   const ref = useRef<T>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0, top: 0, left: 0 });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0, x: 0, y: 0 });
 
   const getDimensions = (node: T) => {
     const boundingRect = node.getBoundingClientRect();
     return {
       width: boundingRect.width,
       height: boundingRect.height,
-      top: boundingRect.top,
-      left: boundingRect.left,
+      x: node.offsetLeft,
+      y: node.offsetTop,
     };
   };
 
-  useLayoutEffect(() => {
+  const handleChange = () => {
     if (ref.current) setDimensions(getDimensions(ref.current));
+  };
+
+  useLayoutEffect(() => {
+    handleChange();
   }, []);
 
   useEffect(() => {
-    const handleChange = () => {
-      if (ref.current) setDimensions(getDimensions(ref.current));
-    };
-
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         if (entry.target === ref.current) handleChange();

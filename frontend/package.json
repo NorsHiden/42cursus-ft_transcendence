@@ -22,7 +22,8 @@
     "recharts": "^2.9.3",
     "socket.io-client": "^4.7.2",
     "sonner": "^1.2.2",
-    "tailwind-scrollbar": "^3.0.5"
+    "tailwind-scrollbar": "^3.0.5",
+    "use-debounce": "^10.0.0"
   },
   "devDependencies": {
     "@svgr/core": "^8.1.0",
