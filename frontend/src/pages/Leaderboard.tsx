@@ -1,9 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import axios from 'axios';
 
 interface LeaderboardRecordProps {
-  record: User;
+  record: UserType;
   color: string;
   index: number;
 }
@@ -32,7 +32,7 @@ const LeaderboardRecord: React.FC<LeaderboardRecordProps> = ({ record, color, in
 };
 
 const Leaderboard: React.FC = () => {
-  const [records, setRecords] = useState<User[]>([]);
+  const [records, setRecords] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);

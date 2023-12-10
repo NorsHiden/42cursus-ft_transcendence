@@ -1,6 +1,6 @@
 import { RegularIcon, CursedIcon, VanishIcon, GoldRushIcon } from '@assets/gameIcons';
 
-export enum GameModesType {
+export enum GAMEMODE_NAME {
   REGULAR = 'REGULAR',
   CURSED = 'CURSED',
   VANISH = 'VANISH',
@@ -8,8 +8,8 @@ export enum GameModesType {
 }
 
 export const GAME_MODES = {
-  [GameModesType.REGULAR]: { name: 'regular', icon: RegularIcon },
-  [GameModesType.CURSED]: { name: 'cursed', icon: CursedIcon },
-  [GameModesType.VANISH]: { name: 'vanish', icon: VanishIcon },
-  [GameModesType.GOLD_RUSH]: { name: 'goldRush', icon: GoldRushIcon },
+  [GAMEMODE_NAME.REGULAR]: { name: 'regular', icon: RegularIcon },
+  [GAMEMODE_NAME.CURSED]: { name: 'cursed', icon: CursedIcon },
+  [GAMEMODE_NAME.VANISH]: { name: 'vanish', icon: VanishIcon },
+  [GAMEMODE_NAME.GOLD_RUSH]: { name: 'goldRush', icon: GoldRushIcon },
 };

@@ -50,4 +50,3 @@ export type player = {
   score: number;
   avatar: string;
 };
-// export default User

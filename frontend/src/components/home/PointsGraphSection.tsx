@@ -4,12 +4,12 @@ import { LineChart, Line } from 'recharts';
 import AlertCircleSolid from '@assets/novaIcons/solid/AlertCircleSolid';
 import axios from 'axios';
 import { Points } from '@globalTypes/points';
-import { AchievementType, ach, allAchievements } from '@globalTypes/achievements';
-import Achievement from '@components/profile/Achievements/AchievementComp';
+import { ACHIEVEMENT_NAME, ach } from '@globalTypes/achievements';
+import Achievement from '@components/profile/Achievements/Achievement';
 
 const PointsGraphSection: React.FC = () => {
   const [points, setPoints] = useState<Points>({} as Points);
-  const [claimedAchievements, setClaimedAchievements] = useState<ach[]>([]);
+  const [achievements, setAchievements] = useState<ach[]>([]);
 
   const getPoints = async () => {
     const res = await axios.get('/api/users/points');
@@ -17,8 +17,8 @@ const PointsGraphSection: React.FC = () => {
   };
 
   const getAchievements = async () => {
-    const res = await axios.get('/api/achievement');
-    setClaimedAchievements(res.data);
+    const res = await axios.get('/api/achievement/all');
+    setAchievements(res.data);
   };
 
   useEffect(() => {
@@ -72,24 +72,20 @@ const PointsGraphSection: React.FC = () => {
       </div>
       <hr className="w-full border border-white/5" />
       <div className="flex items-center gap-x-4 pl-4">
-        {allAchievements
-          .map(
-            (achievement, index) =>
-              !claimedAchievements.find(
-                (claimedAchievement) => claimedAchievement.alt_name.toUpperCase() == achievement[0],
-              ) && (
-                <Achievement
-                  key={index}
-                  isClaimed={false}
-                  type={achievement[0] as AchievementType}
-                  title={achievement[1]}
-                  description={achievement[2]}
-                />
-              ),
-          )
-          .slice(0, 5)}
+        {achievements
+          .filter((achievement) => !achievement.isClaimed)
+          .map((achievement) => (
+            <Achievement
+              size="sm"
+              isClaimed={achievement.isClaimed}
+              name={achievement.alt_name.toUpperCase() as ACHIEVEMENT_NAME}
+              title={achievement.name}
+              description={achievement.description}
+            />
+          ))
+          .slice(0, 4)}
         <div className="text-sm text-white">
-          +{allAchievements.length - claimedAchievements.length - 4} more
+          +{achievements.filter((achievement) => !achievement.isClaimed).length - 4} more
         </div>
       </div>
     </section>

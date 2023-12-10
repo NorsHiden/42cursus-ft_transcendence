@@ -6,11 +6,11 @@ import Card from '@components/Card';
 import { useEffect } from 'react';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
 import { Channel, useChannelCard } from './useChannelCard';
-import { User, UserChannel } from '@globalTypes/user';
+import { UserType, ChannelType } from '@globalTypes/user';
 
 interface ChannelCardProps {
   channel: Channel;
-  me: User | null;
+  me: UserType | null;
   showPopUp: (channel: Channel) => void;
 }
 
@@ -52,7 +52,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp
             {channelMembers.length} member{channelMembers.length > 1 && 's'}
           </p>
         </div>
-        {channelMembers.find((member: UserChannel) => member.userId == me?.id) ? (
+        {channelMembers.find((member: ChannelType) => member.userId == me?.id) ? (
           <Card
             fill="#5E6069"
             borderWidth={2}

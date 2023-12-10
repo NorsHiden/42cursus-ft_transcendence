@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { AchievementType, ach } from '@globalTypes/achievements';
 import axios from 'axios';
-import Achievement from './AchievementComp';
+
+import { ACHIEVEMENT_NAME, AchievementType } from '@globalTypes/achievements';
+import Achievement from './Achievement';
 
 const AchievementsView: React.FC = () => {
-  const [achievements, setAchievements] = useState<ach[]>([]);
+  const [achievements, setAchievements] = useState<AchievementType[]>([]);
 
   useEffect(() => {
     axios.get('/api/achievement/all').then((res) => setAchievements(res.data));
@@ -15,7 +16,7 @@ const AchievementsView: React.FC = () => {
       {achievements.map((achievement) => (
         <Achievement
           isClaimed={achievement.isClaimed}
-          type={achievement.alt_name.toUpperCase() as AchievementType}
+          name={achievement.alt_name.toUpperCase() as ACHIEVEMENT_NAME}
           title={achievement.name}
           description={achievement.description}
         />

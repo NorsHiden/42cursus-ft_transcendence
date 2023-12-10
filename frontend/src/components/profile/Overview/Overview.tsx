@@ -1,11 +1,8 @@
-import Card from '@components/Card';
 import { AchievementIcon, LoseIcon, WonIcon, PointsIcon, LeaderIcon } from '@assets/profileIcons';
-import user from '@assets/images/user.jpeg';
 import MatchCard from '@components/MatchCard';
-import { Game, player, CardType, User } from '@globalTypes/types';
+import { Game, CardType, User, match } from '@globalTypes/types';
 import OverviewCard from './OverviewCard.tsx';
 import { useRouteLoaderData } from 'react-router';
-import { match } from '@globalTypes/index';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import emptyCard from '@assets/images/matchcardempty.png';

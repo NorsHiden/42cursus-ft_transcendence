@@ -6,12 +6,12 @@ import OTPInput from 'otp-input-react';
 
 import logo from '/logo.svg';
 import illustation from '@assets/images/illustration.svg';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import Card from '@components/Card';
 
 export const TwoFactorAuthLoader = async () => {
   try {
-    const res = await axios.get<User>('/api/users/@me');
+    const res = await axios.get<UserType>('/api/users/@me');
     return res.data;
   } catch (error) {
     throw new Error('Failed to load user');
@@ -19,7 +19,7 @@ export const TwoFactorAuthLoader = async () => {
 };
 
 const OTP2fa: React.FC = () => {
-  const user = useLoaderData() as User;
+  const user = useLoaderData() as UserType;
   const [OTP, setOTP] = React.useState('');
   const navigate = useNavigate();
 

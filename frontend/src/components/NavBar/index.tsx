@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { SearchBar } from './SearchBar';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import Logo from '/logo.svg';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import BellSolid from '@assets/novaIcons/solid/BellSolid';
@@ -28,7 +28,7 @@ const NotificationBox: React.FC = () => {
 };
 
 const NavBar: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User>({} as User);
+  const [currentUser, setCurrentUser] = useState<UserType>({} as UserType);
 
   useEffect(() => {
     axios

@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '@components/Card';
 import { CursedIcon, GoldRushIcon, VanishIcon, RegularIcon } from '@assets/gameIcons/';
-import { Game, player, CardType } from '@globalTypes/index';
+import { Game, player, CardType } from '@globalTypes/types';
 
 interface MatchHistoryProps {
   type: CardType;

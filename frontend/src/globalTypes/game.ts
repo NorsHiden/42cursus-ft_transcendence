@@ -1,6 +1,6 @@
-import { GameModesType } from './gameModes';
+import { GAMEMODE_NAME } from './gameModes';
 
-export type Player = {
+export type PlayerType = {
   x: number;
   y: number;
   width: number;
@@ -10,7 +10,7 @@ export type Player = {
   is_ready: boolean;
 };
 
-export type Ball = {
+export type BallType = {
   x: number;
   y: number;
   is_hidden: boolean;
@@ -19,11 +19,11 @@ export type Ball = {
 };
 
 export type GameData = {
-  home: Player;
-  away: Player;
-  ball: Ball;
+  home: PlayerType;
+  away: PlayerType;
+  ball: BallType;
   score: { home: number; away: number };
-  mode: GameModesType;
+  mode: GAMEMODE_NAME;
   will_reverse: boolean;
   ready_timer: number;
   is_finished: boolean;

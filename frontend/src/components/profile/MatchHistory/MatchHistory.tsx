@@ -1,29 +1,10 @@
-import {  useRouteLoaderData } from 'react-router-dom';
+import { useRouteLoaderData } from 'react-router-dom';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
 
-import { CardType, Game, User } from '@globalTypes/types';
+import { CardType, Game, User, match } from '@globalTypes/types';
 import MatchCard from '../../MatchCard.tsx';
-import { match } from './utils.ts';
 import { fetchMatches } from './utils.ts';
 import RadioButton from './RadioButton.tsx';
-
-// const matchHistory = {
-//   game_mode: 'REGULAR',
-//   home_id: '1',
-//   away_id: '2',
-//   home_score: 0,
-//   away_score: 5,
-// };
-
-// async function addMatchHistory() {
-//   try {
-//     const response = await axios.post('/api/match_history/add', matchHistory);
-//     console.log(response.data);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
 
 function time(start: Date, end: Date): string {
   const diffInMs = Math.abs(end.getTime() - start.getTime());
@@ -52,7 +33,6 @@ const MatchHistory = () => {
     });
     if (node) observer.current.observe(node);
   }, []);
-
 
   useEffect(() => {
     console.log('matchType changed');

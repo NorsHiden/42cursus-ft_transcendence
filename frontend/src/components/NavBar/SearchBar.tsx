@@ -1,6 +1,6 @@
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import { useDebounce } from 'use-debounce';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import { ChangeEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { SearchUser } from './SearchUser';
@@ -10,7 +10,7 @@ export const SearchBar = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>('');
   const [debouncedPrompt] = useDebounce<string>(prompt, 500);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserType[]>([]);
 
   const getUsers = () => {
     if (!debouncedPrompt.length) {
