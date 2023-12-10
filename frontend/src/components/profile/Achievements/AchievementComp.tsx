@@ -1,52 +1,49 @@
-import { useState } from 'react';
-import LockSolid from '@assets/novaIcons/solid/LockSolid';
-import { AchievementType, achievements } from '@globalTypes/achievements';
-import { getColorValue } from '@utils/getColorValue';
+import React, { useState } from 'react';
+
 import useDimensions from '@hooks/useDimensions';
+import { getColorValue } from '@utils/getColorValue';
+import { AchievementType, achievements } from '@globalTypes/achievements';
+import LockSolid from '@assets/novaIcons/solid/LockSolid';
 
 type AchievementProps = {
-  className: string;
   isClaimed: boolean;
   type: AchievementType;
   title: string;
   description: string;
+  size?: 'sm' | 'md' | 'lg';
 };
 
-export const Achievement: React.FC<AchievementProps> = ({
-  className,
-  isClaimed,
-  type,
-  title,
-  description,
-}) => {
-  const Icon = achievements[type].icon;
+const Achievement: React.FC<AchievementProps> = ({ isClaimed, type, title, description }) => {
+  const achievement = achievements[type];
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const { ref, dimensions } = useDimensions<HTMLDivElement>();
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const x = event.clientX - dimensions.left;
-    const y = event.clientY - dimensions.top;
-    setTooltipPosition({ x: x + 30, y: y + 30 });
+    const x = Math.abs(event.clientX - dimensions.x);
+    const y = Math.abs(event.clientY - dimensions.y);
+    setTooltipPosition({ x: x + 10, y: y + 10 });
   };
 
   return (
     <div
       ref={ref}
       onMouseMove={handleMouseMove}
-      className={className}
+      className="group relative center p-4 rounded-lg cursor-pointer"
       style={{
-        backgroundColor: isClaimed ? achievements[type].color : getColorValue('lightBlack'),
+        backgroundColor: isClaimed ? achievement.color : getColorValue('lightBlack'),
       }}
     >
       {!isClaimed && <LockSolid size={32} className="absolute text-white" />}
-      <Icon size={40} className={isClaimed ? 'text-black' : 'text-gray'} />
+      <achievement.icon size={40} className={isClaimed ? 'text-black' : 'text-gray'} />
       <div
-        className="absolute top-0 left-0 z-50 w-[max-content] invisible group-hover:visible bg-lightBlack py-4 px-6 rounded-lg transition-transform duration-75"
+        className="absolute top-0 left-0 z-50 w-[max-content] max-w-[250px] invisible group-hover:visible bg-lightBlack py-4 px-6 rounded-lg transition-transform duration-75"
         style={{ transform: `translate(${tooltipPosition.x}px, ${tooltipPosition.y}px)` }}
       >
-        <h1 className="text-white text-xl/10 font-serif font-light">{title}</h1>
-        <h2 className="text-white/70">{description}</h2>
+        <h1 className="text-white text-base/8 font-serif font-light">{title}</h1>
+        <h2 className="text-white/70 text-sm">{description}</h2>
       </div>
     </div>
   );
 };
+
+export default Achievement;

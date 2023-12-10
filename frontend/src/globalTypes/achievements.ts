@@ -68,9 +68,11 @@ export const allAchievements = [
   [AchievementType.PONG_MASTER, 'Pong Master', 'Win 10 Pong matches.'],
 ];
 
-export type ClaimedAchievement = {
-  id: string;
+export type ach = {
+  id: number;
   name: string;
   alt_name: string;
+  icon: string;
   description: string;
+  isClaimed: boolean;
 };

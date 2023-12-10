@@ -4,12 +4,12 @@ import { LineChart, Line } from 'recharts';
 import AlertCircleSolid from '@assets/novaIcons/solid/AlertCircleSolid';
 import axios from 'axios';
 import { Points } from '@globalTypes/points';
-import { AchievementType, ClaimedAchievement, allAchievements } from '@globalTypes/achievements';
-import { Achievement } from '@components/profile/Achievements/AchievementComp';
+import { AchievementType, ach, allAchievements } from '@globalTypes/achievements';
+import Achievement from '@components/profile/Achievements/AchievementComp';
 
 const PointsGraphSection: React.FC = () => {
   const [points, setPoints] = useState<Points>({} as Points);
-  const [claimedAchievements, setClaimedAchievements] = useState<ClaimedAchievement[]>([]);
+  const [claimedAchievements, setClaimedAchievements] = useState<ach[]>([]);
 
   const getPoints = async () => {
     const res = await axios.get('/api/users/points');
@@ -80,7 +80,6 @@ const PointsGraphSection: React.FC = () => {
               ) && (
                 <Achievement
                   key={index}
-                  className="flex relative items-center justify-center"
                   isClaimed={false}
                   type={achievement[0] as AchievementType}
                   title={achievement[1]}
