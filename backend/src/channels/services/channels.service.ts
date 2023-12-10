@@ -43,6 +43,19 @@ export class ChannelsService implements IChannelsService {
     private readonly achievementsService: IAchievementService,
   ) {}
 
+  public async onApplicationBootstrap() {
+    const channelCount = await this.channelRepository.count();
+
+    if (channelCount > 0) return;
+
+    const generalChannel = this.channelRepository.create({
+      name: 'general',
+      type: 'public',
+      avatar: '/imgs/defaults/general.png',
+    });
+    await this.channelRepository.save(generalChannel);
+  }
+
   public async create(
     details: CreateChannelDetails,
     userId: string,
