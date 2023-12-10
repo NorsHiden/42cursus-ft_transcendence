@@ -7,6 +7,7 @@ import CheckOutline from '@assets/novaIcons/outline/CheckOutline';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
 import useIntersectionObserver from '@hooks/useIntersectionObserver';
 import useSSE from '@hooks/useSSE';
+import twclsx from '@utils/twclsx';
 
 interface NotificationMessageProps {
   notificationMessage: NotificationType;
@@ -112,7 +113,11 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
   );
 };
 
-const Notification: React.FC = () => {
+type NotificationProps = {
+  open: boolean;
+};
+
+const Notification: React.FC<NotificationProps> = ({ open }) => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -143,8 +148,10 @@ const Notification: React.FC = () => {
 
   return (
     <div
-      className="flex flex-col group lg:absolute z-20 lg:w-[450px] lg:h-[350px] pt-5 lg:pb-0 px-6 lg:top-[calc(100%+32px)] bg-lightBlack border-2 border-darkGray rounded-lg transition-all caret
-                fixed top-0 max-lg:left-0 w-full h-[calc(100vh-5rem)] max-lg:opacity-0 group-focus-within:opacity-100 max-lg:overflow-hidden pointer-events-none group-focus-within:pointer-events-auto"
+      className={twclsx(
+        'flex flex-col group invisible absolute z-20 w-[450px] h-0 pt-5 lg:pb-0 px-6 lg:top-[calc(100%+32px)] bg-lightBlack border-2 border-darkGray rounded-lg transition-all caret',
+        open && 'visible h-[350px]',
+      )}
     >
       <h1 className="text-xl text-white font-bold mb-6">Notifications</h1>
       <div className="flex flex-col gap-4 overflow-hidden group-hover:overflow-y-auto scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-gray">

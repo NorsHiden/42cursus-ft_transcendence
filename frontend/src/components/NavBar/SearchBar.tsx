@@ -1,8 +1,9 @@
+import { ChangeEvent, useEffect, useState } from 'react';
+import axios from 'axios';
+
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import { useDebounce } from 'use-debounce';
 import { UserType } from '@globalTypes/user';
-import { ChangeEvent, useEffect, useState } from 'react';
-import axios from 'axios';
 import { SearchUser } from './SearchUser';
 import { SearchSkeleton } from './SearchSkeleton';
 
@@ -43,7 +44,7 @@ export const SearchBar = () => {
       <div
         tabIndex={0}
         className={`flex flex-col justify-start gap-2 w-[50vw] ${
-          prompt.length ? 'h-[50%]' : 'h-20'
+          prompt.length ? 'h-[50%]' : 'h-22'
         } z-10 bg-lightBlack bg-opacity-50 rounded-3xl text-white p-8 duration-300
         transition-all overflow-hidden`}
       >

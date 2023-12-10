@@ -22,7 +22,7 @@ const NotificationBox: React.FC = () => {
       >
         <BellSolid size={22} />
       </button>
-      {isOpen && <Notification />}
+      <Notification open={isOpen} />
     </div>
   );
 };
