@@ -186,7 +186,7 @@ export class ChannelsService implements IChannelsService {
         'channel.createdAt',
         'channel.updatedAt',
       ],
-      defaultSortBy: [['channel.updatedAt', 'ASC']],
+      defaultSortBy: [['channel.updatedAt', 'DESC']],
       sortableColumns: ['channel.updatedAt'],
       relations: ['user', 'channel'],
       where: {
@@ -433,12 +433,12 @@ export class ChannelsService implements IChannelsService {
     role: string,
   ): Promise<boolean> {
     const member = await this.userChannelRepository
-      .createQueryBuilder('members')
+      .createQueryBuilder('member')
       .leftJoinAndSelect('member.user', 'user')
       .leftJoinAndSelect('member.channel', 'channel')
       .where('user.id = :userId', { userId: user.sub })
       .andWhere('channel.id = :channelId', { channelId })
-      .andWhere('uc.role = :role', { role })
+      .andWhere('member.role = :role', { role })
       .getOne();
 
     if (!member) return false;

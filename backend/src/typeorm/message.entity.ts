@@ -35,6 +35,8 @@ export class Message {
   author: User;
 
   @Exclude()
-  @ManyToOne(() => Channel, (channel) => channel.messages)
+  @ManyToOne(() => Channel, (channel) => channel.messages, {
+    onDelete: 'CASCADE',
+  })
   channel: Channel;
 }
