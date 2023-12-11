@@ -57,7 +57,7 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ menuItems }) => {
      <div id="context_menu" className='center text-white  ' onClick={handleContextMenu}>
             <ContexMenuIcon className='text-white hover:cursor-pointer'/>
     </div>
-    <div ref={menuRef} style={{ top: `${coords.y}px`, left: `${coords.x}px` }} className={`z-10 fixed bg-lightBlack transition-all duration-300 ease-in-out transform rounded-xl border-2 border-[#2F3136] ${visible ? 'block' : 'hidden'}`}>
+    <div ref={menuRef} style={{ top: `${coords.y}px`, left: `${coords.x}px` }} className={`z-10 fixed bg-lightBlack transition-all duration-300 ease-in-out transform rounded-xl overflow-hidden border-2 border-[#2F3136] ${visible ? 'block' : 'hidden'}`}>
       {menuItems.map((item, index) => (
         <h1 key={index} className={item.className} onClick={() => {
           item.onClick();

@@ -12,6 +12,21 @@ type MessageProps = {
   content: string;
 };
 
+export const MessageSkeleton: React.FC = () => {
+  return (
+    <div className="max-w-[50%] pt-4 self-start">
+      <div className="flex items-center justify-between mb-3 gap-4">
+        <div className="flex items-center gap-x-2">
+          <div className="w-8 h-8 rounded-full bg-gray animate-pulse"></div>
+          <div className="text-sm rounded-full font-medium w-20 h-4 bg-gray animate-pulse"></div>
+        </div>
+        <div className="text-sm rounded-full w-16 h-4 bg-gray animate-pulse"></div>
+      </div>
+      <div className="text-sm py-4 px-4 bg-gray animate-pulse rounded-tr-2xl rounded-b-2xl"></div>
+    </div>
+  );
+};
+
 export const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) => {
   return (
     <div className={`max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'}`}>

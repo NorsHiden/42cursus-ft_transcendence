@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
-import { toast } from 'sonner';
-import axios from 'axios';
 
 import { useSelectedChannel } from '@context/Channel';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
-import { Message } from '@components/home/GeneralChat';
+import { Message,MessageSkeleton } from '@components/home/GeneralChat';
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import Members from '@assets/novaIcons/solid/Members';
 import { User } from '@globalTypes/user';
@@ -33,25 +31,20 @@ import { getMessages } from './utils';
 // chat/channels/3
 
 const ChannelMainPannel: React.FC = () => {
-  const { setChannels, channels, selectedChannel, setSelectedChannel, messages, setMessages,socket } =
-    useSelectedChannel();
+  const {channels, selectedChannel, setSelectedChannel,socket } = useSelectedChannel();
+  const [messages, setMessages] = useState<MessageType[]>();
+  const [loading, setLoading] = useState<boolean>(true);
+
   const param = useParams();
-  const messagesRef = useRef(messages);
   const navigate = useNavigate();
   const user = useRouteLoaderData('layout') as User;
   const [message, setMessage] = useState<string>('');
   
   const containerRef = useRef(null);
-  // const [messages, setMessages] = useState([]);
 
 
-  useEffect(() => {
-    messagesRef.current = messages;
-  }, [messages]);
-  
   const sendMessageHandler = () => {
-    // console.log("current messages");
-    // console.log(messagesRef.current);
+
 
     const newMessage:MessageType = {
       id: '1',
@@ -65,9 +58,13 @@ const ChannelMainPannel: React.FC = () => {
         updatedAt: new Date().toISOString(),
       }
     
+    setMessages((prev: MessageType[] | undefined) => {
+      if (prev == undefined)
+        return [newMessage];
+      else
+        return [newMessage,...prev!];
+    });
 
-    const newMessages = { ...messagesRef.current, [selectedChannel.id]: [newMessage,...messagesRef.current[selectedChannel.id]] };
-    setMessages(newMessages);
     sendMessage(selectedChannel.id, message);
   };
 
@@ -76,57 +73,75 @@ const ChannelMainPannel: React.FC = () => {
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === Number(param.id));
     if (channel) {
-      if (messages[channel.id] === undefined) {
+      setLoading(true);
         getMessages(channel.id).then((fetchedMessages) => {
-          const newMessages = { ...messages, [channel.id]: [...fetchedMessages] };
-          setMessages(newMessages);
+          setMessages((prev: MessageType[] | undefined) => {
+            console.log("prev");
+            console.log(prev);
+            console.log("fetchedMessages");
+            console.log(fetchedMessages);
+            setLoading(false);
+            if (prev == undefined)
+              return fetchedMessages;
+            else
+              return [...fetchedMessages];
+          });
+      
         });
-      }
       setSelectedChannel(channel);
     }
+    return () => {
+      setMessages([]);
+    };
   }, [channels, param.id]);
 
   useEffect(() => {
     if (socket == null) return;
     if (selectedChannel.id == null) return;
     
-    // Send joinChannel event with channelId as payload
     socket.emit('joinChannel', { channelId: selectedChannel.id });
-    // Listen for message event
       socket.on('message', (message) => {
       if (message.author.id != user.id)
       {
-        const newMessages = { ...messagesRef.current, [selectedChannel.id]: [message,...messagesRef.current[selectedChannel.id]] };
-        setMessages(newMessages);  
+
+        setMessages((prev: MessageType[] | undefined) => {
+          if (prev == undefined)
+            return [message];
+          else
+            return [message,...prev!];
+        });
         console.log(message);
       }
       else
       {
         console.log("message sent by user");
       }
-      // Handle received message
     });
   
     return () => {
       // Send leaveChannel event with channelId as payload
+      setMessages([]);
       console.log('Leaving channel: ' + selectedChannel.id);
       socket.emit('leaveChannel', { channelId: selectedChannel.id });
       // Stop listening for message event
       socket.off('message');
     };
   }, [socket, selectedChannel.id]);
-
-
+  
   return (
     <>
       <div
         id="chat-main-pannel"
-        className={`relative bg-lightBlack rounded-xl transition-all duration-500 ease-in-out lg:block ${expanded?"hidden":""} ${
-          expanded ? 'lg:col-span-2' : 'lg:col-span-3'
-        }`}
+        className={`relative bg-lightBlack rounded-xl transition-all duration-500 ease-in-out lg:block ${
+          expanded ? 'hidden' : ''
+        } ${expanded ? 'lg:col-span-2' : 'lg:col-span-3'}`}
       >
-         <div onClick={()=>{navigate(-1)}}>
-          <ArrowLeftOutline className='lg:hidden absolute top-4 left-0 text-white w-[24px] h-[24px] m-2  cursor-pointer' />
+        <div
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          <ArrowLeftOutline className="lg:hidden absolute top-4 left-0 text-white w-[24px] h-[24px] m-2  cursor-pointer" />
         </div>
         <div
           id="chat-main-pannel"
@@ -141,9 +156,11 @@ const ChannelMainPannel: React.FC = () => {
               <h1 className="text-white font-poppoins">{selectedChannel.name}</h1>
             </div>
             <div id="header_icons" className="flex items-center">
+              
               <button className=" text-white" onClick={() => setExpanded(!expanded)}>
-                <Members className={` w-[23px] ${expanded?"text-white":"text-lighgray"}`}/>
+                <Members className={` w-[23px] ${expanded ? 'text-white' : 'text-lighgray'}`} />
               </button>
+              
             </div>
           </div>
           <div
@@ -151,18 +168,22 @@ const ChannelMainPannel: React.FC = () => {
             className="flex  flex-col-reverse overflow-auto p-4 space-y-5 h-[65vh] scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray"
           >
             
-            {
-              
-            messages && Object.keys(messages).length > 0 &&
-              messages[selectedChannel.id]?.map((messagev) => (
+            {messages &&
+              Object.keys(messages).length > 0 &&
+              messages?.map((messagev) => (
                 <Message
                   type={messagev.author.id == user.id ? 'SENT' : 'RECEIVED'}
                   name={messagev.author.display_name}
                   avatar={messagev.author.avatar}
                   content={messagev.content}
-                  time='12:00'
+                  time="12:00"
                 />
               ))}
+            {loading && (
+             <div className="flex justify-center items-center py-2">
+             <div className="absolute animate-spin rounded-full h-6 w-6 bg-primary"></div>
+           </div>
+            )}
           </div>
           <div className="absolute bottom-[15px] w-full flex justify-center items-center">
             <input
@@ -195,7 +216,11 @@ const ChannelMainPannel: React.FC = () => {
           </div>
         </div>
       </div>
-      <ChannelSidePannel expanded={expanded} selectedChannel={selectedChannel} setExpanded={setExpanded}/>
+      <ChannelSidePannel
+        expanded={expanded}
+        selectedChannel={selectedChannel}
+        setExpanded={setExpanded}
+      />
     </>
   );
 };

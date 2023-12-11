@@ -1,8 +1,9 @@
 import  React,{useState,useEffect,useCallback,useRef} from 'react';
 import { NavLink } from 'react-router-dom';
-import ChannelElement from './Channel';
+import ChannelElement from './ChannelElement.tsx';
 import {useSelectedChannel} from '@context/Channel';
 import  {fetchChannels}  from './utils.ts';
+import { Channel } from 'diagnostics_channel';
 
 
 
@@ -39,7 +40,7 @@ const ChannelsList: React.FC = () => {
               }`
             }}
             >
-              <ChannelElement name={channel.name} avatar={channel.avatar} role={channel.role} />
+              <ChannelElement name={channel.name} avatar={channel.avatar} role={channel.role} ChanelId={channel.id} />
             </NavLink>
           )
         ),

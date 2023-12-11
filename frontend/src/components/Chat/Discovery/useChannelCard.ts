@@ -29,7 +29,7 @@ export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) =
       loading: `Joining ${channel.name}...`,
       success: () => {
         setLoading(false);
-        navigate(`/chat/${channel.id}`);
+        navigate(`/chat/channels/${channel.id}`);
         return 'You have joined the channel successfully!';
       },
       error: (error) => `${error.response.data.message}`,

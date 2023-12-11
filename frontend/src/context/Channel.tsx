@@ -12,22 +12,24 @@ const data: mychannel[] = [];
 // Define the shape of the context data
 interface SelectedChannelContextData {
   selectedChannel: mychannel;
-  setSelectedChannel: (channel: mychannel) => void;
+  setSelectedChannel:  React.Dispatch<React.SetStateAction<mychannel>>;
   channels: mychannel[];
-  setChannels: (channels: mychannel[]) => void;
+  setChannels: React.Dispatch<React.SetStateAction<mychannel[]>>;
   messages: Record<string, Message[]>;
-  setMessages: (messages: Record<string, Message[]>) => void;
+  setMessages: React.Dispatch<React.SetStateAction<Record<string, Message[]>>>;
   socket: Socket | null;
   Dms: DM[];
-  setDms: (dms: DM[]) => void;
-  LogedUser:User
+  setDms: React.Dispatch<React.SetStateAction<DM[]>>;
+  LogedUser:User;
   setLogedUser: (user: User) => void;
   DirectMessages: Record<string, Message[]>;
-  setDirectMessages: (messages: Record<string, Message[]>) => void;
+  setDirectMessages: React.Dispatch<React.SetStateAction<Record<string, Message[]>>>;
+  setShowUpdateChannelModal: React.Dispatch<React.SetStateAction<boolean>>;
+  ShowUpdateChannelModal: boolean;
 }
 
 // Create a context for the selected channel
-const SelectedChannelContext = createContext<SelectedChannelContextData | null>(null);
+export const SelectedChannelContext = createContext<SelectedChannelContextData | null>(null);
 
 interface SelectedChannelProviderProps {
   children: ReactNode;
@@ -43,6 +45,7 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
   const [socket, setSocket] = useState<Socket | null>(null);
   const [Dms, setDms] = useState<DM[]>([]);
   const [LogedUser, setLogedUser] = useState<User>({});
+  const [ShowUpdateChannelModal, setShowUpdateChannelModal] = useState<boolean>(false);
 
   const user = useRouteLoaderData('layout') as User;
   
@@ -79,8 +82,10 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
         setDms,
         LogedUser,
         setLogedUser,
-        DirectMessages,
         setDirectMessages,
+        DirectMessages,
+        setShowUpdateChannelModal,
+        ShowUpdateChannelModal
       }}
     >
       {children}

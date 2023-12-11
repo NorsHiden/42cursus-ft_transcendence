@@ -28,13 +28,11 @@ const MessagesList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // fetchChannels(pageRef.current,setChannels,setHasMore,setLoading,channels);
     getDms(pageRef.current,setDms,setHasMore,setLoading,Dms);
   }, [pageRef.current]);
   
   return (
     <ul id="chat-list" className=" grid row-start-3 overflow-auto gap-4 scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray"> 
-      {/* <ChannelElement name={channel.name} avatar={channel.avatar} role={channel.role} /> */}
       
       {
       Dms?.map(
