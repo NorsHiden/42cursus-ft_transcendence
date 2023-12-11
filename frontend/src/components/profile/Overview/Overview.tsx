@@ -5,7 +5,8 @@ import OverviewCard from './OverviewCard.tsx';
 import { useRouteLoaderData } from 'react-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import emptyCard from '@assets/images/matchcardempty.png';
+// import emptyCard from '@assets/images/matchcardempty.png';
+import { GAMEMODE_NAME } from '@globalTypes/gameModes.ts';
 
 const Overview = () => {
   const user = useRouteLoaderData('profile') as User;
@@ -40,7 +41,7 @@ const Overview = () => {
 
   return (
     <div id="OverviewView" className="h-screen overflow-auto">
-      <div
+      {/* <div
         id="Overview_info"
         className="mt-[5rem] grid grid-cols-2 lg:grid-cols-5 grid-flow-cols gap-4"
       >
@@ -59,15 +60,66 @@ const Overview = () => {
         <OverviewCard footer="Total Pts" number={user.points.length ? user.points[0].value : 0}>
           <PointsIcon className="w-[19px] h-[19px] lg:w-[23px] lg:h-[23px] 2xl:w-[27px] 2xl:h-[27px] text-white" />
         </OverviewCard>
-      </div>
-      <div id="hilited_matches" className="mt-[53px]">
-        <h1 className="font-poppins text-white font-bold text-2xl">Highlighted Matches</h1>
-        <p className="font-popins text-white font-bold">Best matches played</p>
-        <div
-          id="match-history-cards"
-          className="mt-[42px] grid grid-flow-cols grid-cols-1 lg:grid-cols-3 gap-4"
-        >
-          {highlightedMatches.slice(0, 3).map((match, index) => (
+      </div> */}
+      <div className="grid grid-rows-section gap-y-5 pt-20">
+        <header>
+          <h1 className="text-white font-bold text-2xl">Highlighted Matches</h1>
+          <p className="text-white font-medium">Best matches played</p>
+        </header>
+        <div className="grid grid-rows-1 grid-cols-1 lg:grid-cols-3 gap-x-4">
+          <MatchCard
+            type={CardType.MATCH_HISTORY}
+            gamemode={GAMEMODE_NAME.REGULAR}
+            host={{
+              id: '1',
+              username: 'RAYVENRTYU',
+              avatar: user.profile.avatar,
+              score: 5,
+            }}
+            opponent={{
+              id: '1',
+              username: 'ANAS',
+              avatar: user.profile.avatar,
+              score: 5,
+            }}
+            time="04:23"
+          />
+          <MatchCard
+            type={CardType.MATCH_HISTORY}
+            gamemode={GAMEMODE_NAME.VANISH}
+            host={{
+              id: '1',
+              username: 'RAYVENRTYU',
+              avatar: user.profile.avatar,
+              score: 5,
+            }}
+            opponent={{
+              id: '1',
+              username: 'ANAS',
+              avatar: user.profile.avatar,
+              score: 5,
+            }}
+            time="04:23"
+          />
+          <MatchCard
+            type={CardType.MATCH_HISTORY}
+            gamemode={GAMEMODE_NAME.VANISH}
+            host={{
+              id: '1',
+              username: 'RAYVENRTYU',
+              avatar: user.profile.avatar,
+              score: 5,
+            }}
+            opponent={{
+              id: '1',
+              username: 'ANAS',
+              avatar: user.profile.avatar,
+              score: 5,
+            }}
+            time="04:23"
+          />
+
+          {/* {highlightedMatches.slice(0, 3).map((match, index) => (
             <MatchCard
               gamemode={match.game_mode as Game}
               time="04:23"
@@ -88,59 +140,7 @@ const Overview = () => {
                 <img src={emptyCard} alt="" />
               </div>
             </>
-          )}
-          {/*               
-              <MatchCard
-                gamemode={}
-                time="04:23"
-                type={CardType.MATCH_HISTORY}
-                host={{
-                  name: "RAYVENRTYU",
-                  avatar: user.profile.avatar,
-                  score: 5,
-                }}
-                opponent={
-                  {
-                    name: 'ANAS',
-                    avatar: user.profile.avatar,
-                    score: 5,
-                  }
-                }
-              />
-              <MatchCard
-                gamemode={Game.VANISH}
-                time="04:23"
-                type={CardType.MATCH_HISTORY}
-                host={{
-                  name: "RAYVENRTYU",
-                  avatar: user.profile.avatar,
-                  score: 5,
-                }}
-                opponent={
-                  {
-                    name: 'ANAS',
-                    avatar: user.profile.avatar,
-                    score: 5,
-                  }
-                }
-              />
-              <MatchCard
-                gamemode={Game.VANISH}
-                time="04:23"
-                type={CardType.MATCH_HISTORY}
-                host={{
-                  name: "RAYVENRTYU",
-                  avatar: user.profile.avatar,
-                  score: 5,
-                }}
-                opponent={
-                  {
-                    name: 'ANAS',
-                    avatar: user.profile.avatar,
-                    score: 5,
-                  }
-                }
-              /> */}
+          )} */}
         </div>
       </div>
     </div>
