@@ -24,13 +24,11 @@ export class UserChannel {
 
   @Exclude()
   @ManyToOne(() => User, (user) => user.channels)
-  //   @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ManyToOne(() => Channel, (channel) => channel.members, {
     onDelete: 'CASCADE',
   })
-  //   @JoinColumn({ name: 'channel_id' })
   channel: Channel;
 
   @Expose()
