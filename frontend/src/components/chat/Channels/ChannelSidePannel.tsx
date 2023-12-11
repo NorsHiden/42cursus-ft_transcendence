@@ -10,6 +10,8 @@ import axios from 'axios';
 import { fetchMembers } from './utils';
 import { toast } from 'sonner';
 import { useRef } from 'react';
+import {User} from '@globalTypes/user';
+import { getUsers } from './utils.tsx';
 
 interface ChannelMainPannelProps {
   selectedChannel: mychannel;
@@ -21,11 +23,11 @@ interface UserElementProps {
   presence: string;
   displayName: string;
   avatar: string;
-  userId: string;
+  userId: number;
   channelID: number;
 }
 
-const UserElement: React.FC<MemberElementProps> = ({presence,displayName,avatar,userId,channelID}) => {
+const UserElement: React.FC<UserElementProps> = ({presence,displayName,avatar,userId,channelID}) => {
 
   function inviteUser() {
     toast.promise(
@@ -196,7 +198,7 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
   const [search, setSearch] = React.useState('');
   const [members, setMembers] = React.useState<Member[]>([]);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-  const [users, setUsers] = useState<Member[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   function handlieinvite() {
     // console.log('invite user')
@@ -208,13 +210,25 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
       clearTimeout(timeoutId);
     }
     setSearch(event.target.value);
-    if (inviteUser) return;
-    let id = setTimeout(() => {
-      console.log("searching");
-      console.log(search);
-      fetchMembers(selectedChannel, setMembers, event.target.value);
-    }, 600);
-    setTimeoutId(id);
+    console.log("invite user");
+    console.log(inviteUser);
+    if (inviteUser)
+    {      
+      let id = setTimeout(() => {
+        console.log(search);
+        getUsers(setUsers,event.target.value);
+      }, 600);
+      setTimeoutId(id);
+    }
+    else
+    {
+      let id = setTimeout(() => {
+        // console.log("searching");
+        console.log(search);
+        fetchMembers(selectedChannel, setMembers, event.target.value);
+      }, 600);
+      setTimeoutId(id);
+    }
   }
 
   useEffect(() => {
@@ -289,11 +303,12 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
         ))
         
         }
-        {/* {
-        !inviteUser &&
-          
-          // <UserElement/>
-        } */}
+        {
+        inviteUser && users &&
+        users.map((user) => (
+          <UserElement  userId={user.id}  presence={user.presence} avatar={user.profile.avatar} displayName={user.display_name} channelID={selectedChannel.id} />
+        ))
+        }
       </ul>
       <div
         onClick={() => {

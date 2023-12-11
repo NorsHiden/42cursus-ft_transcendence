@@ -2,7 +2,21 @@ import axios from 'axios';
 import { mychannel } from '@globalTypes/channel';
 import {Member} from './ChannelSidePannel';
 import { toast } from 'sonner';
+import { User } from '@globalTypes/user';
 
+export function getUsers(setUsers: React.Dispatch<React.SetStateAction<User[]>>, search: string) {
+  axios
+    .get(`/api/users/search?s=${search}`)
+    .then((response) => {
+
+      console.log(`Users : `);
+      console.log(search);
+      console.log(response.data);
+      setUsers(response.data);
+    })
+    .catch((error) => console.error('Error:', error));
+
+}
 
 export const fetchMembers = (selectedChannel:mychannel,setMembers:(arg:Member[])=>void,search:string) => {
     if (selectedChannel && JSON.stringify(selectedChannel) !== '{}') {
