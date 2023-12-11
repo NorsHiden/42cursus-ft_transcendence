@@ -23,7 +23,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
       borderWidth={1}
       borderRadius={20}
       borderColor="#2C2D33"
-      className="relative w-full h-full text-black"
+      className="relative w-full h-full text-lightBlack"
     >
       <div className="w-full h-full flex flex-col justify-between items-center py-4 px-6 lg:p-4 xl:p-5 2xl:p-6">
         <header className="w-full flex items-center justify-between">
@@ -54,7 +54,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
           </div>
         </header>
         {type === CardType.MATCH_HISTORY ? (
-          <div className="w-full h-full pt-8 flex flex-col gap-y-4">
+          <div className="w-full h-fit pt-8 flex flex-col gap-y-4">
             <div className="center-y justify-between">
               <div className="center-y lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
                 <img

@@ -67,7 +67,7 @@ const PreviousGames: React.FC = () => {
           <SelectInput name="gameMode" onChange={handleFilters} />
         </div>
       </header>
-      <main className="relative grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-x-4 gap-y-4 mb-4 overflow-auto scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-gray">
+      <main className="relative grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-x-4 gap-y-4 mb-4 overflow-hidden">
         {displayedGames.map((game, index) =>
           game ? (
             <MatchCard key={index} type={CardType.RECENT_MATCHES} {...game} />

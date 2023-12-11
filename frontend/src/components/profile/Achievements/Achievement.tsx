@@ -35,7 +35,7 @@ const Achievement: React.FC<AchievementProps> = ({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setTooltipPosition({ x: 0, y: 0 })}
-      className={`group relative center ${
+      className={`group w-fit h-fit relative center ${
         size == 'sm' ? 'p-3' : size == 'md' ? 'p-4' : 'p-6'
       } rounded-lg cursor-pointer`}
       style={{

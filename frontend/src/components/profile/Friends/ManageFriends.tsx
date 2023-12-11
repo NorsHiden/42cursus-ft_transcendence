@@ -3,11 +3,10 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useRouteLoaderData } from 'react-router-dom';
 
-
 import UserCard from './Friends-cards/Friends.tsx';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline.tsx';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline.tsx';
-import Unblock from '@assets/novaIcons/outline/Unblock.tsx';
+import Unblock from '@assets/novaIcons/outline/UnblockOutline.tsx';
 import Block from '@assets/novaIcons/outline/block.tsx';
 import { unfriend, block, accept, unblock } from './utils.ts';
 import { User } from '@globalTypes/types';

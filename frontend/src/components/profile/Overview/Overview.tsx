@@ -40,11 +40,8 @@ const Overview = () => {
   }, []);
 
   return (
-    <div id="OverviewView" className="h-screen overflow-auto">
-      {/* <div
-        id="Overview_info"
-        className="mt-[5rem] grid grid-cols-2 lg:grid-cols-5 grid-flow-cols gap-4"
-      >
+    <div className="h-screen overflow-auto">
+      <div className="grid grid-cols-2 lg:grid-cols-5 grid-flow-cols gap-4">
         <OverviewCard footer="Matches Won" number={user.wins}>
           <WonIcon className="w-[18px] h-[20px] lg:w-[21px] lg:h-[24px] 2xl:w-[25px] 2xl:h-[28px] text-white" />
         </OverviewCard>
@@ -60,7 +57,7 @@ const Overview = () => {
         <OverviewCard footer="Total Pts" number={user.points.length ? user.points[0].value : 0}>
           <PointsIcon className="w-[19px] h-[19px] lg:w-[23px] lg:h-[23px] 2xl:w-[27px] 2xl:h-[27px] text-white" />
         </OverviewCard>
-      </div> */}
+      </div>
       <div className="grid grid-rows-section gap-y-5 pt-20">
         <header>
           <h1 className="text-white font-bold text-2xl">Highlighted Matches</h1>

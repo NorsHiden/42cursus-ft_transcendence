@@ -16,9 +16,9 @@ const RadioInput: React.FC<RadioInputProps> = ({ id, name, value, label, ...prop
         name={name}
         value={value}
         {...props}
-        className="w-5 h-5 appearance-none border-4 border-gray rounded-full checked:bg-primary checked:border-primary focus:outline-none cursor-pointer transition-all"
+        className="w-4 h-4 appearance-none border-4 border-gray rounded-full checked:bg-primary checked:border-primary focus:outline-none cursor-pointer transition-all"
       />
-      <label htmlFor={id} className="text-lg font-medium text-gray cursor-pointer pl-2">
+      <label htmlFor={id} className="text-base font-medium text-gray cursor-pointer pl-2">
         {label}
       </label>
     </div>

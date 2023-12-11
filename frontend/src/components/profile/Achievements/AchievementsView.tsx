@@ -12,15 +12,17 @@ const AchievementsView: React.FC = () => {
   }, []);
 
   return (
-    <div id="Achievement" className="max-w-screen-lg py-24 flex flex-wrap gap-10 text-white">
-      {achievements.map((achievement) => (
-        <Achievement
-          isClaimed={achievement.isClaimed}
-          name={achievement.alt_name.toUpperCase() as ACHIEVEMENT_NAME}
-          title={achievement.name}
-          description={achievement.description}
-        />
-      ))}
+    <div className="w-full h-full">
+      <div className="max-w-screen-lg flex flex-wrap gap-10">
+        {achievements.map((achievement) => (
+          <Achievement
+            isClaimed={achievement.isClaimed}
+            name={achievement.alt_name.toUpperCase() as ACHIEVEMENT_NAME}
+            title={achievement.name}
+            description={achievement.description}
+          />
+        ))}
+      </div>
     </div>
   );
 };

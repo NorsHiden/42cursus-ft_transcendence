@@ -5,6 +5,7 @@ import { CardType, Game, User, match } from '@globalTypes/types';
 import MatchCard from '../../MatchCard.tsx';
 import { fetchMatches } from './utils.ts';
 import RadioButton from './RadioButton.tsx';
+import RadioInput from '@components/RadioInput';
 
 function time(start: Date, end: Date): string {
   const diffInMs = Math.abs(end.getTime() - start.getTime());
@@ -53,40 +54,40 @@ const MatchHistory = () => {
   };
 
   return (
-    <section className="mt-24">
-      <div id="redio-buttons" className="flex justify-end">
-        <RadioButton
-          id="all-1"
+    <section className="grid grid-rows-section gap-y-6">
+      <div id="radio-buttons" className="flex justify-end gap-x-4">
+        <RadioInput
+          id="allOption"
+          name="gameStatus"
           value="all"
+          label="All"
           checked={matchType === 'all'}
           onChange={handleTypeChange}
-          label="All"
         />
-        <RadioButton
-          id="win-1"
+        <RadioInput
+          id="winsOption"
+          name="gameStatus"
           value="wins"
+          label="Won"
           checked={matchType === 'wins'}
           onChange={handleTypeChange}
-          label="Won"
         />
-        <RadioButton
-          id="losses-1"
+        <RadioInput
+          id="lossesOption"
+          name="gameStatus"
           value="losses"
+          label="Lost"
           checked={matchType === 'losses'}
           onChange={handleTypeChange}
-          label="Lost"
         />
       </div>
-      <div
-        id="MatchHistory"
-        className="mt-[42px] grid grid-flow-cols grid-cols-1 lg:grid-cols-3 gap-4 overflow-auto scroll-smooth  scrollbar  scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-[#5E6069] scrollbar-mr-4"
-        style={{ height: 'calc(100vh - 42px)' }}
-      >
-        {matches.map((match, index) => {
+      <div className="h-full grid grid-flow-cols grid-cols-1 lg:grid-cols-3 gap-4 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
+        {matches.map((match) => {
           return (
             <MatchCard
+              key={match.match_id}
               type={CardType.MATCH_HISTORY}
-              gamemode={Game.REGULAR}
+              gamemode={match.game_mode}
               host={match.home_player}
               opponent={match.away_player}
               time={time(match.created_at, match.ended_at)}
@@ -103,4 +104,5 @@ const MatchHistory = () => {
     </section>
   );
 };
+
 export default MatchHistory;
