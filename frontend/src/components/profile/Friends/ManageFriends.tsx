@@ -11,6 +11,7 @@ import Block from '@assets/novaIcons/outline/block.tsx';
 import { unfriend, block, accept, unblock } from './utils.ts';
 import { User } from '@globalTypes/types';
 import Button from '../../Button.tsx';
+import RadioInput from '@components/RadioInput/index.tsx';
 
 // get api/friendlist/
 // {
@@ -112,59 +113,32 @@ const ManageFriends = () => {
   }, [friendType]);
 
   return (
-    <section className="mt-24">
-      <div id="redio-buttons" className="flex justify-end">
-        <div id="Pending" className="flex items-center ml-[30px]">
-          <input
-            id="default-radio-1"
-            type="radio"
-            name="default-radio"
-            value="Pending"
-            checked={friendType === 'Pending'}
-            className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
-            onChange={handletype}
-          />
-          <label
-            htmlFor="default-radio-1"
-            className={`  ml-2 text-['1rem'] font-medium text-[#717178] `}
-          >
-            Pending
-          </label>
-        </div>
-        <div id="Blocked" className="flex items-center ml-[30px]">
-          <input
-            id="default-radio-2"
-            type="radio"
-            value="Blocked"
-            checked={friendType === 'Blocked'}
-            name="default-radio"
-            className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
-            onChange={handletype}
-          />
-          <label
-            htmlFor="default-radio-2"
-            className={`  font-poppins ml-2 text-['1rem'] font-medium text-[#717178] `}
-          >
-            Blocked
-          </label>
-        </div>
-        <div id="Accepted" className="flex items-center ml-[30px]">
-          <input
-            id="default-radio-3"
-            type="radio"
-            value="Accepted"
-            checked={friendType === 'Accepted'}
-            name="default-radio"
-            className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
-            onChange={handletype}
-          />
-          <label
-            htmlFor="default-radio-3"
-            className={`ml-2 text-[${'1rem'}px] font-medium text-[#717178] `}
-          >
-            Accepted
-          </label>
-        </div>
+    <section className="">
+      <div className="flex justify-end gap-x-6">
+        <RadioInput
+          id="pendingOption"
+          name="friendsStatus"
+          value="Pending"
+          label="Pending"
+          checked={friendType === 'Pending'}
+          onChange={handletype}
+        />
+        <RadioInput
+          id="blockedOption"
+          name="friendsStatus"
+          value="Blocked"
+          label="Blocked"
+          checked={friendType === 'Blocked'}
+          onChange={handletype}
+        />
+        <RadioInput
+          id="acceptedOption"
+          name="friendsStatus"
+          value="Accepted"
+          label="Accepted"
+          checked={friendType === 'Accepted'}
+          onChange={handletype}
+        />
       </div>
 
       <motion.ul className="grid grid-cols-3 gap-8 mt-16">

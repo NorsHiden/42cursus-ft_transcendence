@@ -133,7 +133,6 @@ const Notification: React.FC<NotificationProps> = ({ open }) => {
 
   const lastNotificationRef = useIntersectionObserver(() => {
     if (hasMore) {
-      console.log('get more');
       getNotifications(page);
       setPage((prevPage) => prevPage + 1);
     }

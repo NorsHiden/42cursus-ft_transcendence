@@ -1,6 +1,6 @@
 import { AchievementIcon, LoseIcon, WonIcon, PointsIcon, LeaderIcon } from '@assets/profileIcons';
 import MatchCard from '@components/MatchCard';
-import { Game, CardType, User, match } from '@globalTypes/types';
+import { CardType, User, MatchType } from '@globalTypes/types';
 import OverviewCard from './OverviewCard.tsx';
 import { useRouteLoaderData } from 'react-router';
 import { useEffect, useState } from 'react';
@@ -10,15 +10,15 @@ import { GAMEMODE_NAME } from '@globalTypes/gameModes.ts';
 
 const Overview = () => {
   const user = useRouteLoaderData('profile') as User;
-  const [highlightedMatches, setHighlightedMatches] = useState<match[]>([]);
+  const [highlightedMatches, setHighlightedMatches] = useState<MatchType[]>([]);
 
   useEffect(() => {
     axios
       .get(`/api/match_history/${user.id}/highlights`)
       .then((res) => {
-        const newMatches: match[] = res.data.data.map((match: any) => ({
+        const newMatches: MatchType[] = res.data.data.map((match: any) => ({
           id: match.id,
-          game_mode: match.game_mode as Game,
+          game_mode: match.game_mode as GAMEMODE_NAME,
           home_player: {
             id: match.home_player.id,
             username: match.home_player.username,
@@ -40,7 +40,7 @@ const Overview = () => {
   }, []);
 
   return (
-    <div className="h-screen overflow-auto">
+    <div className="w-full h-full">
       <div className="grid grid-cols-2 lg:grid-cols-5 grid-flow-cols gap-4">
         <OverviewCard footer="Matches Won" number={user.wins}>
           <WonIcon className="w-[18px] h-[20px] lg:w-[21px] lg:h-[24px] 2xl:w-[25px] 2xl:h-[28px] text-white" />

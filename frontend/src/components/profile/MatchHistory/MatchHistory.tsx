@@ -1,61 +1,57 @@
+import React, { useState, useEffect } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import axios from 'axios';
 
-import { CardType, Game, User, match } from '@globalTypes/types';
-import MatchCard from '../../MatchCard.tsx';
-import { fetchMatches } from './utils.ts';
-import RadioButton from './RadioButton.tsx';
+import { CardType, User, MatchType } from '@globalTypes/types';
+import MatchCard from '@components/MatchCard.tsx';
+import { extractMatchType } from './utils.ts';
 import RadioInput from '@components/RadioInput';
+import useIntersectionObserver from '@hooks/useIntersectionObserver.ts';
+import getTimeDiff from '@utils/getTimeDiff.ts';
 
-function time(start: Date, end: Date): string {
-  const diffInMs = Math.abs(end.getTime() - start.getTime());
-  const diffInSecs = Math.floor(diffInMs / 1000);
-  const mins = Math.floor(diffInSecs / 60);
-  const secs = diffInSecs % 60;
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
-
-const MatchHistory = () => {
+const MatchHistory: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
 
+  const [matches, setMatches] = useState<MatchType[]>([]);
   const [matchType, setMatchType] = useState('all');
-  const [matches, setMatches] = useState<match[]>([]);
   const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const observer = useRef();
-  const [loading, setLoading] = useState(false);
 
-  const lastMatchElementRef = useCallback((node) => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setPage((prevPage) => prevPage + 1);
-      }
-    });
-    if (node) observer.current.observe(node);
+  const getMatchHistory = async () => {
+    setIsLoading(true);
+    const response = await axios.get(
+      `/api/match_history/${user.id}/${matchType === 'all' ? '' : matchType}?page=${page}`,
+    );
+    const newMatches = response.data.data.map((match: any) => extractMatchType(match));
+    setMatches((matches) => [...matches, ...newMatches]);
+    if (response.data.length < 10) setHasMore(false);
+    setIsLoading(false);
+  };
+
+  // const lastMatchRef = useIntersectionObserver(() => {
+  //   if (hasMore) {
+  //     console.log('last match');
+  //     getMatchHistory();
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  // });
+
+  useEffect(() => {
+    getMatchHistory();
   }, []);
 
-  useEffect(() => {
-    console.log('matchType changed');
-    console.log(matchType);
-    setMatches([]);
-    setPage(0);
-    setHasMore(false);
-  }, [matchType]);
-
-  useEffect(() => {
-    console.log('page changed');
-    fetchMatches(matchType, page, user.id, setMatches, setHasMore, setLoading, matches);
-  }, [matchType, page]);
-
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMatches([]);
+    // setMatches([]);
+    // setPage(0);
+    // setHasMore(false);
     setMatchType(event.target.value);
+    // getMatchHistory();
   };
 
   return (
     <section className="grid grid-rows-section gap-y-6">
-      <div id="radio-buttons" className="flex justify-end gap-x-4">
+      <div className="flex justify-end gap-x-4">
         <RadioInput
           id="allOption"
           name="gameStatus"
@@ -81,7 +77,7 @@ const MatchHistory = () => {
           onChange={handleTypeChange}
         />
       </div>
-      <div className="h-full grid grid-flow-cols grid-cols-1 lg:grid-cols-3 gap-4 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
+      <div className="h-full grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-4 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
         {matches.map((match) => {
           return (
             <MatchCard
@@ -90,16 +86,16 @@ const MatchHistory = () => {
               gamemode={match.game_mode}
               host={match.home_player}
               opponent={match.away_player}
-              time={time(match.created_at, match.ended_at)}
+              time={getTimeDiff(match.created_at, match.ended_at)}
             />
           );
         })}
-        {loading
-          ? Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="aspect-[193/143] animate-pulse bg-lightBlack" />
-            ))
-          : ''}
-        {hasMore ? <div ref={lastMatchElementRef} className="aspect-[193/143] tbg-white" /> : ''}
+        {/* {!isLoading && hasMore && <div ref={lastMatchRef}></div>} */}
+        {isLoading &&
+          hasMore &&
+          Array.from({ length: 10 }).map((_, i) => (
+            <div key={i} className="aspect-[193/143] animate-pulse bg-lightBlack" />
+          ))}
       </div>
     </section>
   );

@@ -34,35 +34,27 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
               <Icon className="w-4 h-4 lg:w-2 lg:h-2 2xl:w-5 2xl:h-5" />
             </div>
             <div>
-              <span className="block uppercase font-semibold text-gray -mb-1 lg:text-[2px] xl:text-[4px] 2xl:text-[6px] text-[6px]">
-                Mode
-              </span>
-              <span className="block uppercase text-white lg:font-base xl:font-semibold text-base lg:text-xs 2xl:text-base">
-                {name}
-              </span>
+              <span className="block uppercase font-semibold text-gray -mb-1 text-xs">Mode</span>
+              <span className="block uppercase text-white font-semibold text-sm">{name}</span>
             </div>
           </div>
           <div className="flex justify-start lg:gap-[4px] xl:gap-x-2 2xl:gap-x-3 gap-x-3 before:w-1 before:bg-primary">
             <div>
-              <span className="block uppercase font-semibold text-gray -mb-1 lg:text-[2px] xl:text-[4px] 2xl:text-[6px] text-[6px]">
-                Time
-              </span>
-              <span className="block uppercase text-white lg:font-base xl:font-semibold text-base lg:text-xs 2xl:text-base">
-                {time}
-              </span>
+              <span className="block uppercase font-semibold text-gray -mb-1 text-xs">Time</span>
+              <span className="block uppercase text-white font-semibold text-sm">{time}</span>
             </div>
           </div>
         </header>
         {type === CardType.MATCH_HISTORY ? (
-          <div className="w-full h-fit pt-8 flex flex-col gap-y-4">
+          <div className="w-full h-fit pt-8 px-4 flex flex-col gap-y-4">
             <div className="center-y justify-between">
               <div className="center-y lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
                 <img
                   className="lg:w-6 lg:h-6 2xl:w-12 w-12 2xl:h-12 h-12 rounded-full"
                   src={host.avatar}
-                  alt=""
+                  alt="Host Avatar"
                 />
-                <p className="text-white font-medium lg:text-sm 2xl:text-xl text-xl">
+                <p className="text-white font-medium lg:text-sm 2xl:text-lg text-lg">
                   {host.username}
                 </p>
               </div>
@@ -77,15 +69,15 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
               <div className="center-y lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
                 <img
                   className="lg:w-6 lg:h-6 2xl:w-12 w-12 2xl:h-12 h-12 rounded-full"
-                  src={host.avatar}
-                  alt=""
+                  src={opponent.avatar}
+                  alt="Opppenent avatar"
                 />
                 <p className="text-white font-medium lg:text-sm 2xl:text-xl text-xl">
-                  {host.username}
+                  {opponent.username}
                 </p>
               </div>
               <h1 className="font-serif text-white lg:font-medium xl:font-bold lg:text-base 2xl:text-4xl  text-4xl">
-                {host.score}
+                {opponent.score}
               </h1>
             </div>
           </div>

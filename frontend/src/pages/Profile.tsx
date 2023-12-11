@@ -29,7 +29,7 @@ function Profile() {
   return (
     <div className="w-full h-full grid grid-rows-1 grid-cols-4 gap-[1vw]">
       <PlayerProfile className="col-span-1" />
-      <div className="col-span-3 grid grid-rows-section gap-y-10">
+      <div className="col-span-3 grid grid-rows-section gap-y-20">
         <nav className="flex">
           <NavLinkButton to="overview" cut={35}>
             Overview

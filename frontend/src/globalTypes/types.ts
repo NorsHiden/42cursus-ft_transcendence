@@ -1,3 +1,5 @@
+import { GAMEMODE_NAME } from './gameModes';
+
 export type UserProfile = {
   id: number;
   about: string;
@@ -23,21 +25,14 @@ export type User = {
   friendStatus: string;
 };
 
-export type match = {
+export type MatchType = {
   match_id: number;
-  game_mode: Game;
+  game_mode: GAMEMODE_NAME;
   home_player: player;
   away_player: player;
   created_at: Date;
   ended_at: Date;
 };
-
-export enum Game {
-  CURSED = 'CURSED',
-  GOLDRUSH = 'GOLD_RUSH',
-  VANISH = 'VANISH',
-  REGULAR = 'REGULAR',
-}
 
 export enum CardType {
   RECENT_MATCHES = 'recent_matches',
