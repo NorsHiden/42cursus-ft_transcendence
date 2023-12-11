@@ -118,7 +118,7 @@ export class ChannelsController {
     return this.channelsService.leave(channelId, user);
   }
 
-  @Post(':channelId/invite')
+  @Post(':channelId/invite/:userId')
   @UseInterceptors(ClassSerializerInterceptor)
   invite(
     @Param('channelId', ParseIntPipe) channelId: number,
