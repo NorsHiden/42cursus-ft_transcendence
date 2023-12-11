@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IconProps from '../IconProps';
+import IconProps from '@assets/IconProps';
 
 const VolumeMuteSolid: React.FC<IconProps> = ({ size, className }) => {
   return (

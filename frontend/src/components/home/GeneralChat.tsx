@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Card from '@components/Card';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
+import Card from '@components/Card';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';
@@ -94,9 +94,9 @@ const GeneralChat: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4">
-          {messages.map((message) => (
-            <Message type={message.name == user ? 'SENT' : 'RECEIVED'} {...message} />
+        <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4 hide-scrollbar">
+          {messages.map((message, index) => (
+            <Message key={index} type={message.name == user ? 'SENT' : 'RECEIVED'} {...message} />
           ))}
         </div>
 

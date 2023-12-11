@@ -10,17 +10,17 @@ export default {
 ],
   theme: {
     screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
       '2xl': '1536px',
     },
     screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
       '2xl': '1536px',
     },
     extend: {
@@ -39,7 +39,7 @@ export default {
       },
       colors: {
         accent: '#FE5821',
-        background:'#1B191D',
+        background: '#1B191D',
         'input-color': '#1E1F23',
         'input-border-color':'#3E4048',
         gray :'#71717A',
@@ -78,20 +78,19 @@ export default {
         purple: '#6B26FF',
         pink: '#FF2695',
         red: '#FF2633',
-        DarkMaroon:'#2B1F24',
-        BrightRed:'#F32C44',
-        redShade:'#E95E6F'
-
+        DarkMaroon: '#2B1F24',
+        BrightRed: '#F32C44',
+        redShade: '#E95E6F',
       },
       spacing: {
-        '14': '3.5rem', 
+        14: '3.5rem',
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
-        'rowdies': ['Rowdies', 'sans-serif'],
+        rowdies: ['Rowdies', 'sans-serif'],
         mono: ['ui-monospace', 'monospace'],
-        'inter': ['Inter', 'sans-serif'],
-        'inter': ['Inter', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
       },
       aspectRatio: {
         '7/10': '70%',
@@ -110,7 +109,7 @@ export default {
     },
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],
-      'inter': ['Inter', 'sans-serif'],
+      inter: ['Inter', 'sans-serif'],
       serif: ['Rowdies', 'serif'],
       mono: ['ui-monospace', 'monospace'],
     },

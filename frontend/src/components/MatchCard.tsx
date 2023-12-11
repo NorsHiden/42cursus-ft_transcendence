@@ -1,42 +1,29 @@
 import React from 'react';
-
 import Card from '@components/Card';
-
-import {CursedIcon,GoldRushIcon,VanishIcon,RegularIcon} from '@assets/gameIcons/'
-// import user from '@assets/images/user.png'
-import userAvatar from '@assets/images/user.jpeg';
-import {Game,player,CardType} from '@globalTypes/index'
-// import { match } from 'assert';
-
-
-
+import { CursedIcon, GoldRushIcon, VanishIcon, RegularIcon } from '@assets/gameIcons/';
+import { Game, player, CardType } from '@globalTypes/index';
 
 interface MatchHistoryProps {
-    type: CardType;
-    gamemode: Game;
-    host: player;
-    opponent: player;
-    time: string;
+  type: CardType;
+  gamemode: Game;
+  host: player;
+  opponent: player;
+  time: string;
+  isLive?: boolean;
 }
 
-// interface Match {
-//   home_player: player;
-//   away_player: player;
-//   home_score: number;
-//   away_score: number;
-//   match_type: string;
-//   match_date: string;
-//   match_time: string;
-//   match_duration: string;
-// }
-
-
-  
-const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,time}) => {
+const MatchCard: React.FC<MatchHistoryProps> = ({
+  type,
+  gamemode,
+  host,
+  opponent,
+  time,
+  isLive,
+}) => {
   return (
     <Card
-      className={`relative text-[#1E1F23] w-full  ${
-        type === CardType.MATCH_HISTORY ? 'aspect-[193/143]' : 'aspect-[193/106]'
+      className={`relative text-[#1E1F23] w-full ${
+        type === CardType.MATCH_HISTORY ? 'aspect-[193/143]' : 'h-full aspect-[193/106]'
       }`}
       cut={12}
       borderRadius={20}
@@ -58,7 +45,8 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
                   ? 'bg-[#C2784F]'
                   : ''
               }
-            `}>
+            `}
+            >
               {gamemode === Game.CURSED ? (
                 <CursedIcon className=" lg:w-2 lg:h-2  2xl:h-4 h-4 2xl:w-4 w-4 " />
               ) : gamemode === Game.GOLDRUSH ? (
@@ -138,18 +126,29 @@ const MatchCard: React.FC<MatchHistoryProps> = ({type,gamemode,host,opponent,tim
             </div>
           </div>
         ) : (
-          <div className="center gap-x-6 py-8">
-            <img
-              className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
-              src={host.avatar}
-              alt=""
-            />
-            <h1 className="font-serif text-white text-xl lg:text-2xl 2xl:text-4xl">9 : 4</h1>
-            <img
-              className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
-              src={opponent.avatar}
-              alt=""
-            />
+          <div className="flex flex-col items-center justify-center">
+            <div className="center gap-x-6 py-8">
+              <img
+                className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
+                src={host.avatar}
+              />
+              <h1 className="font-serif text-white text-xl lg:text-2xl 2xl:text-4xl">
+                {host.score} : {opponent.score}
+              </h1>
+              <img
+                className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
+                src={opponent.avatar}
+              />
+            </div>
+            <Card
+              className="center w-12 h-6"
+              cut={35}
+              fill={isLive ? '#D5FF5C' : '#5E6069'}
+              borderWidth={1}
+              borderColor={isLive ? '#E0FF85' : '#767984'}
+            >
+              <p className="text-sm font-serif">{isLive ? 'Live' : 'Done'}</p>
+            </Card>
           </div>
         )}
       </div>

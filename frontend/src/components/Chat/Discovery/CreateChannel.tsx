@@ -86,7 +86,7 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) =>
               {loading ? (
                 <EllipseOutline className="w-8 h-8 text-white animate-spin" />
               ) : (
-                <p className="text-2xl">Create</p>
+                <p className="text-2xl font-serif">Create</p>
               )}
             </button>
           </Card>

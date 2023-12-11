@@ -1,154 +1,164 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import MatchCard from '@components/MatchCard';
+import { CardType, Game, player } from '@globalTypes/types';
 import Card from '@components/Card';
-import userAvatar from '@assets/images/user.jpeg';
-import { GAME_MODES } from '@globalTypes/gameModes';
+import EmptyMatchCard from '@assets/images/matchcardempty.png';
+import ChevronRightOutline from '@assets/novaIcons/outline/ChevronRightOutline';
+import { socket } from '../../socket';
 
-enum GameMode {
-  REGULAR = 'regular',
-  CURSED = 'cursed',
-  VANISH = 'vanish',
-  GOLD_RUSH = 'goldRush',
-}
-
-type Game = {
+type GameType = {
   isLive: boolean;
-  mode: GameMode;
-  duration: string;
-  player1: { name: string; avatar: string };
-  player2: { name: string; avatar: string };
-  score: { player1: number; player2: number };
+  game_id: string;
+  gamemode: Game;
+  time: string;
+  host: player;
+  opponent: player;
+  score: { host: number; opponent: number };
 };
 
-const GameCard: React.FC<Game> = ({ mode, duration, player1, player2, score }) => {
-  const modeIcon = GAME_MODES.find((presetMode) => presetMode.name === mode) || GAME_MODES[0];
+type RadioInputProps = Omit<
+  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+  'type'
+> & {
+  label: string;
+};
 
+const RadioInput: React.FC<RadioInputProps> = ({ id, name, value, label, ...props }) => {
+  return (
+    <div className="w-fit flex items-center">
+      <input
+        id={id}
+        type="radio"
+        name={name}
+        value={value}
+        {...props}
+        className="w-5 h-5 appearance-none border-4 border-gray rounded-full checked:bg-primary checked:border-primary focus:outline-none cursor-pointer transition-all"
+      />
+      <label htmlFor={id} className="text-lg font-medium text-gray cursor-pointer pl-2">
+        {label}
+      </label>
+    </div>
+  );
+};
+
+type SelectInputProps = {
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
+const SelectInput: React.FC<SelectInputProps> = ({ onChange }) => {
   return (
     <Card
       fill="#1E1F23"
-      borderWidth={1}
+      borderWidth={2}
       borderColor="#2C2D33"
-      className="w-full p-8 text-white flex flex-col items-center justify-between"
+      cut={30}
+      className="relative min-w-[200px] flex items-center justify-between cursor-pointer"
     >
-      <header className="w-full flex items-center justify-between">
-        <div className="flex items-center gap-x-2">
-          <div className={`w-8 h-8 center rounded-full bg-${mode}-color`}>
-            {<modeIcon.icon size={18} className={`text-${mode}-dark`} />}
-          </div>
-          <div>
-            <span className="block text-[8px] font-semibold uppercase text-gray -mb-1">Mode</span>
-            <span className="block font-semibold uppercase text-white">{mode}</span>
-          </div>
-        </div>
-        <div className="flex justify-start gap-x-2 before:w-1 before:bg-primary">
-          <div>
-            <span className="block text-[8px] font-semibold uppercase text-gray -mb-1">Time</span>
-            <span className="block font-semibold uppercase text-white">{duration}</span>
-          </div>
-        </div>
-      </header>
-      <div className="center gap-x-6 py-4">
-        <img className="w-14 h-14 rounded-full" src={player1.avatar} alt="" />
-        <h1 className="font-serif text-4xl">
-          {score.player1} : {score.player2}
-        </h1>
-        <img className="w-14 h-14 rounded-full" src={player2.avatar} alt="" />
-      </div>
-      <Card
-        cut={30}
-        borderWidth={1}
-        borderColor="#E0FF85"
-        className="z-10 mx-auto w-fit text-green"
+      <select
+        name="filter"
+        onChange={onChange}
+        className="peer w-full h-full flex px-5 py-3 appearance-none outline-none bg-transparent text-white border-gray cursor-pointer"
       >
-        <span className="py-1 px-4 font-serif text-sm text-black uppercase">Live</span>
-      </Card>
+        <option className="bg-lightBlack" value="ALL">
+          All
+        </option>
+        <option className="bg-lightBlack" value="REGULAR">
+          Regular
+        </option>
+        <option className="bg-lightBlack" value="VANISH">
+          Vanish
+        </option>
+        <option className="bg-lightBlack" value="CURSED">
+          Cursed
+        </option>
+        <option className="bg-lightBlack" value="GOLD_RUSH">
+          Gold Rush
+        </option>
+      </select>
+      <ChevronRightOutline
+        size={18}
+        className="text-white absolute right-5 pointer-events-none transition-transform rotate-90 peer-open:rotate-0"
+      />
     </Card>
   );
 };
 
 const PreviousGames: React.FC = () => {
-  const games: Game[] = [
-    {
-      isLive: true,
-      mode: GameMode.REGULAR,
-      duration: '02:13',
-      player1: { name: 'Leanne', avatar: userAvatar },
-      player2: { name: 'Ervin', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.CURSED,
-      duration: '03:30',
-      player1: { name: 'Clementine', avatar: userAvatar },
-      player2: { name: 'ramiro', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.GOLD_RUSH,
-      duration: '09:59',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.CURSED,
-      duration: '07:33',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.REGULAR,
-      duration: '08:00',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-    {
-      isLive: true,
-      mode: GameMode.VANISH,
-      duration: '10:12',
-      player1: { name: 'John', avatar: userAvatar },
-      player2: { name: 'Jane', avatar: userAvatar },
-      score: { player1: 5, player2: 8 },
-    },
-  ];
+  const [games, setGames] = useState<GameType[]>([]);
+  const [gameStatus, setGameStatus] = useState<string>('ALL');
+  const [gameMode, setGameMode] = useState<string>('ALL');
+
+  const handleGameStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGameStatus(event.target.value);
+  };
+
+  const handleGameMode = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setGameMode(event.target.value);
+  };
+
+  useEffect(() => {
+    socket.on('live', (liveGames: GameType[]) => setGames(liveGames));
+
+    return () => {
+      socket.off('live');
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.emit('live', {
+      game_mode: gameMode.toUpperCase(),
+      live: gameStatus.toUpperCase(),
+    });
+  }, [gameStatus, gameMode]);
 
   return (
     <section className="col-span-4 2xl:col-span-3 grid grid-rows-section gap-y-4">
       <header className="flex items-center justify-between">
         <h1 className="font-serif text-2xl text-white">Recent Matches</h1>
         <div className="flex items-center gap-x-6 text-white">
-          <label htmlFor="allRadio">
-            <input type="radio" name="filter" value="all" id="allRadio" /> All
-          </label>
-          <label htmlFor="liveRadio">
-            <input type="radio" name="filter" value="live" id="liveRadio" /> Live
-          </label>
-          <label htmlFor="doneRadio">
-            <input type="radio" name="filter" value="done" id="doneRadio" /> Done
-          </label>
-          <select
-            className="w-32 px-3 text-base/10 border rounded bg-black border-gray"
-            defaultValue="_"
-          >
-            <option value="_" disabled hidden>
-              Sort By
-            </option>
-            <option value="qwe">qwe</option>
-            <option value="yerye">yerye</option>
-          </select>
+          <div className="flex justify-end gap-x-6">
+            <RadioInput
+              id="allOption"
+              name="matchesFilter"
+              value="ALL"
+              label="All"
+              checked={gameStatus === 'ALL'}
+              onChange={handleGameStatus}
+            />
+            <RadioInput
+              id="liveOption"
+              name="matchesFilter"
+              value="LIVE"
+              label="Live"
+              checked={gameStatus === 'LIVE'}
+              onChange={handleGameStatus}
+            />
+            <RadioInput
+              id="doneOption"
+              name="matchesFilter"
+              value="DONE"
+              label="Done"
+              checked={gameStatus === 'DONE'}
+              onChange={handleGameStatus}
+            />
+          </div>
+          <SelectInput onChange={handleGameMode} />
         </div>
       </header>
-
-      <main className="grid grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-x-4 gap-y-4 mb-4">
-        {games.map((game) => (
-          <GameCard {...game} />
+      <main className="relative grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-x-4 gap-y-4 mb-4 overflow-auto scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-gray">
+        {games.map((game: GameType, index: number) => (
+          <MatchCard key={index} type={CardType.RECENT_MATCHES} {...game} />
         ))}
+        {games.length < 6 &&
+          Array.from({ length: 6 - games.length }).map((_, index) => (
+            <img key={index} src={EmptyMatchCard} className="w-full aspect-[193/106] h-full" />
+          ))}
+        {games.length == 0 && (
+          <div className="absolute flex w-full h-full items-center justify-center">
+            <p className="text-gray font-serif text-[60px]">NO MATCH FOUND !</p>
+          </div>
+        )}
       </main>
     </section>
   );

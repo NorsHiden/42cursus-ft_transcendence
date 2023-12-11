@@ -12,8 +12,10 @@ export type User = {
   email: string;
   wins: number;
   loses: number;
-  presence: string;
-  points: number;
+  points: {
+    value: number;
+  }[];
+  presence: 'online' | 'ingame' | 'offline';
   verified: boolean;
   profile: UserProfile;
 };
