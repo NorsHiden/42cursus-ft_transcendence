@@ -36,7 +36,7 @@ const Achievement: React.FC<AchievementProps> = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setTooltipPosition({ x: 0, y: 0 })}
       className={`group w-fit h-fit relative center ${
-        size == 'sm' ? 'p-3' : size == 'md' ? 'p-4' : 'p-6'
+        size == 'sm' ? 'p-2' : size == 'md' ? 'p-4' : 'p-6'
       } rounded-lg cursor-pointer`}
       style={{
         backgroundColor: isClaimed ? achievement.color : getColorValue('lightBlack'),
@@ -44,12 +44,12 @@ const Achievement: React.FC<AchievementProps> = ({
     >
       {!isClaimed && (
         <LockSolid
-          size={size == 'sm' ? 24 : size == 'md' ? 32 : 64}
+          size={size == 'sm' ? 20 : size == 'md' ? 28 : 64}
           className="absolute text-white"
         />
       )}
       <achievement.icon
-        size={size == 'sm' ? 32 : size == 'md' ? 40 : 72}
+        size={size == 'sm' ? 28 : size == 'md' ? 40 : 72}
         className={isClaimed ? 'text-black' : 'text-gray'}
       />
       <div

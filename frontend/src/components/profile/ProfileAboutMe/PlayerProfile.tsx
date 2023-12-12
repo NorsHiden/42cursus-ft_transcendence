@@ -78,7 +78,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
           <img className="h-24 w-24 rounded-full" src={user.profile.avatar} alt="avatar" />
         </div>
         <div>
-          <h1 className="text-white text-2xl font-semibold">{user.display_name}</h1>
+          <h1 className="text-white text-2xl font-bold">{user.display_name}</h1>
           <p className="text-gray text-sm font-semibold">@{user.username}</p>
         </div>
       </section>
@@ -150,20 +150,22 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
         </section>
       )}
 
-      <section className="flex flex-col gap-y-2">
-        <h1 className="text-white font-medium">About me</h1>
-        <p className="text-white/40 text-base whitespace-wrap">{user.profile.about}</p>
+      <section className="flex flex-col gap-y-1">
+        <h1 className="text-white font-bold">About me</h1>
+        <p className="text-white/40 text-sm whitespace-wrap">{user.profile.about}</p>
       </section>
 
       <section className="flex flex-col gap-y-4">
-        <div className="flex gap-x-4">
+        <div className="center-x gap-x-4">
           <CalendarSolid className="text-primary w-4 h-4 lg:w-6 lg:h-6 2xl:w-7 2xl:h-7" />
-          <p className="text-white">{new Date(user.profile.birthdate).toLocaleDateString()}</p>
+          <p className="text-white text-sm font-semibold">
+            {new Date(user.profile.birthdate).toLocaleDateString()}
+          </p>
         </div>
 
-        <div className="flex gap-x-4">
+        <div className="center-x gap-x-4">
           <LocationSolid className="text-primary w-4 h-4 lg:w-6 lg:h-6 2xl:w-7 2xl:h-7" />
-          <p className="text-white">{user.profile.location}</p>
+          <p className="text-white text-sm font-semibold">{user.profile.location}</p>
         </div>
       </section>
     </aside>

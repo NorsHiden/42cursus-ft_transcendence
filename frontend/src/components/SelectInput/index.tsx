@@ -39,7 +39,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ name, onChange }) => {
         </option>
       </select>
       <ChevronRightOutline
-        size={18}
+        size={14}
         className="text-white absolute right-4 pointer-events-none transition-transform rotate-90 peer-open:rotate-0"
       />
     </Card>

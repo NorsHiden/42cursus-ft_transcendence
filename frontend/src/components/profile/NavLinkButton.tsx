@@ -15,12 +15,12 @@ const NavLinkButton: React.FC<NavLinkCardProps> = ({ to, cut, children }) => (
       <Card
         cut={cut || 25}
         borderRadius={25}
-        className={`center h-10 px-6 cursor-pointer ${
+        className={`center h-8 px-6 cursor-pointer font-medium ${
           isActive ? 'text-primary' : 'text-transparent'
         }`}
         {...(isActive ? { borderColor: '#FF8C66', borderWidth: 0 } : {})}
       >
-        <p className="text-[18px] text-white opacity-75">{children}</p>
+        <p className="text-[14px] text-white opacity-75">{children}</p>
       </Card>
     )}
   </NavLink>

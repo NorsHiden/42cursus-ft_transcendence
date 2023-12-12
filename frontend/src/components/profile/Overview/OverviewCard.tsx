@@ -17,7 +17,7 @@ const OverviewCard: React.FC<WonCardProps> = ({ children, label, number }) => {
       borderColor="#545763"
       className="text-transparent"
     >
-      <div className="flex flex-col gap-y-2 py-6 px-8">
+      <div className="flex flex-col gap-y-1 py-6 px-8">
         {children}
         <h1 className="font-serif text-3xl text-white">{number?.toString().padStart(2, '0')}</h1>
         <p className="font-medium text-sm text-white/70 whitespace-nowrap">{label}</p>

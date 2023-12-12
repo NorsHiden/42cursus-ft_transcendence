@@ -21,9 +21,11 @@ import { getColorValue } from '@utils/getColorValue';
 const Overview: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
   const [matches, setMatches] = useState<MatchType[]>([]);
-  const displayedMatches = Array.from({ length: 3 }, (_v, i) =>
-    i < matches.length ? matches[i] : null,
-  );
+  // const displayedMatches = Array.from({ length: 3 }, (_v, i) =>
+  //   i < matches.length ? matches[i] : null,
+  // );
+  const displayedMatches = [null, null, null];
+  console.log(displayedMatches);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -71,29 +73,31 @@ const Overview: React.FC = () => {
       </div>
       <div className="grid grid-rows-section gap-y-5">
         <header>
-          <h1 className="text-white font-semibold text-2xl/loose">Highlighted Matches</h1>
-          <p className="text-white/80">Best matches played</p>
+          <h1 className="text-white font-bold text-xl/relaxed">Highlighted Matches</h1>
+          <p className="text-white/80 font-medium text-sm">Best matches played</p>
         </header>
         <div className="grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-x-6">
-          {displayedMatches.map((match, index) =>
-            match ? (
-              <MatchCard
-                key={match.match_id}
-                type={CardType.MATCH_HISTORY}
-                gamemode={match.game_mode as GAMEMODE_NAME}
-                host={match.home_player}
-                opponent={match.away_player}
-                time={getTimeDiff(match.created_at, match.ended_at)}
-              />
-            ) : (
+          {displayedMatches.map(
+            (match, index) => (
+              // match ? (
+              //   <MatchCard
+              //     key={match.match_id}
+              //     type={CardType.MATCH_HISTORY}
+              //     gamemode={match.game_mode as GAMEMODE_NAME}
+              //     host={match.home_player}
+              //     opponent={match.away_player}
+              //     time={getTimeDiff(match.created_at, match.ended_at)}
+              //   />
+              // ) : (
               <Card
                 key={index}
-                className="text-black"
-                borderStyle="dashed"
+                className="w-full aspect-video text-black"
                 borderWidth={2}
+                borderStyle="dashed"
                 borderColor={getColorValue('darkGray')}
               ></Card>
             ),
+            // ),
           )}
           {isLoading &&
             hasMore &&

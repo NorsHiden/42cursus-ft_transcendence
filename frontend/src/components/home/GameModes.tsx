@@ -54,7 +54,7 @@ const GameModes: React.FC = () => {
         {Object.values(GAME_MODES).map((mode, index) => (
           <Card
             className={twclsx(
-              `center py-6 px-9 transition-all text-${mode.name}-dark cursor-pointer opacity-80 transition-all`,
+              `center py-5 px-8 transition-all text-${mode.name}-dark cursor-pointer opacity-80 transition-all`,
               isSearching && 'cursor-not-allowed',
               selectedMode == index && `brightness-150 opacity-100`,
               selectedMode != index && !isSearching && `hover:scale-105 hover:opacity-100`,
@@ -65,7 +65,7 @@ const GameModes: React.FC = () => {
             key={mode.name}
             onClick={() => !isSearching && setSelectedMode(index)}
           >
-            <mode.icon size={50} className={`text-${mode.name}-color`} />
+            <mode.icon size={40} className={`text-${mode.name}-color`} />
           </Card>
         ))}
       </div>
@@ -79,14 +79,16 @@ const GameModes: React.FC = () => {
           )}
           onClick={handleButtonClick}
         >
-          <button className="flex items-center gap-x-2 text-white text-xl font-serif py-4 px-9 z-10">
-            {!isSearching && <PlayRectangleSolid size={24} className="text-white/40" />}
-            {isSearching && <CloseRectangleSolid size={24} className="text-white/40" />}
+          <button className="flex items-center gap-x-2 text-white font-serif py-4 px-6 z-10">
+            {!isSearching && <PlayRectangleSolid size={18} className="text-white/40" />}
+            {isSearching && <CloseRectangleSolid size={18} className="text-white/40" />}
             {isSearching ? 'CANCEL' : 'PLAY'}
           </button>
         </Card>
         {isSearching && (
-          <div className="text-white font-semibold loading-dots">Looking for an opponent</div>
+          <div className="text-white text-sm font-semibold loading-dots">
+            Looking for an opponent
+          </div>
         )}
       </div>
     </section>

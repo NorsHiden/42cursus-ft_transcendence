@@ -87,8 +87,8 @@ const GeneralChat: React.FC = () => {
         className="mb-4 grid grid-cols-1 grid-rows-chat"
       >
         <div className="text-white bg-lightBlack py-4 px-10">
-          <h1 className="font-medium text-lg">#General</h1>
-          <p className="flex items-center gap-x-1 text-sm">
+          <h1 className="font-semibold text-base">#General</h1>
+          <p className="center-x gap-x-1 text-[10px]">
             <CircleSolid size={10} className="text-green" />
             22 player online
           </p>

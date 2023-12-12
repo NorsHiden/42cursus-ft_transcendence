@@ -30,18 +30,18 @@ const PointsGraphSection: React.FC = () => {
     <section className="hidden justify-self-center col-span-2 xl:flex flex-col items-start gap-y-5">
       <div className="flex items-center gap-x-10 pl-4">
         <div className="flex flex-col flex-shrink-0 items-baseline">
-          <h1 className="font-serif text-white text-5xl/loose">
+          <h1 className="font-serif text-white text-4xl/tight">
             {points.points.length ? points.points[0].value : '0'} pts
           </h1>
           {points.points.length > 1 &&
             (points.points[0].value == points.best_points[1].value ||
               points.points[0].value == points.best_points[0].value) && (
               <div className="flex items-center gap-x-1 py-1 px-3 my-3 rounded bg-purple">
-                <AlertCircleSolid size={18} className="text-white" />
-                <span className="text-sm text-white">New personal record</span>
+                <AlertCircleSolid size={14} className="text-white" />
+                <span className="text-xs text-white">New personal record</span>
               </div>
             )}
-          <p className="text-gray text-base font-medium">
+          <p className="text-gray text-sm">
             Your previous best{' '}
             <span className="font-semibold">
               {points.points.length > 1
