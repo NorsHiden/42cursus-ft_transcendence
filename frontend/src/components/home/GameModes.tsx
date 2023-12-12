@@ -6,7 +6,7 @@ import { getColorValue } from '@utils/getColorValue';
 import twclsx from '@utils/twclsx';
 import { GAME_MODES } from '@globalTypes/gameModes';
 import Card from '@components/Card';
-import { socket } from '../../socket';
+import { gameSocket } from '../../socket';
 import PlayRectangleSolid from '@assets/novaIcons/solid/PlayRectangleSolid';
 import CloseRectangleSolid from '@assets/novaIcons/solid/CloseRectangleSolid';
 
@@ -27,10 +27,10 @@ const GameModes: React.FC = () => {
 
   const handleButtonClick = () => {
     if (isSearching) {
-      socket.emit('lobby', { action: 'CANCEL' });
+      gameSocket.emit('lobby', { action: 'CANCEL' });
       setIsSearching(false);
     } else {
-      socket.emit('lobby', {
+      gameSocket.emit('lobby', {
         action: 'SEARCH',
         game_mode: Object.keys(GAME_MODES)[selectedMode],
       });
@@ -39,16 +39,16 @@ const GameModes: React.FC = () => {
   };
 
   useEffect(() => {
-    socket.on('lobby', checkLobby);
-    socket.on('error', () => {
+    gameSocket.on('lobby', checkLobby);
+    gameSocket.on('error', () => {
       toast.dismiss();
       toast.error('You need at least 300pts to play Gold Rush');
       setIsSearching(false);
     });
 
     return () => {
-      socket.off('lobby', checkLobby);
-      socket.off('error');
+      gameSocket.off('lobby', checkLobby);
+      gameSocket.off('error');
     };
   }, []);
 

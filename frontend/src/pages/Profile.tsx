@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData } from 'react-router-dom';
+import { Outlet, defer, useLoaderData } from 'react-router-dom';
 import axios from 'axios';
 
 import { PlayerProfile } from '../components/profile';
@@ -13,11 +13,11 @@ export async function profileLoader(user?: string) {
 
     const username = currentUser.data.username;
 
-    return {
+    return defer({
       ...userData.data,
       isforeign: username !== userData.data.username,
       friendStatus: friendStatus.data.state,
-    };
+    });
   } catch (error) {
     throw new Error('Failed to load user');
   }

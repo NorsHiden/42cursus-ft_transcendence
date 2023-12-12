@@ -52,6 +52,7 @@ export const useCreateChannel = (hidePopUp: () => void) => {
   };
 
   const createChannel = async () => {
+    if (loading) return;
     const formData = new FormData();
     if (channel.avatar?.file) formData.append('avatar', channel.avatar?.file as Blob);
     if (channel.banner?.file) formData.append('banner', channel.banner?.file as Blob);
