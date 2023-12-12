@@ -47,8 +47,8 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
         </header>
         {type === CardType.MATCH_HISTORY ? (
           <div className="w-full h-fit pt-8 px-4 flex flex-col gap-y-4">
-            <div className="center-y justify-between">
-              <div className="center-y lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
+            <div className="center-x justify-between">
+              <div className="center-x lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
                 <img
                   className="lg:w-6 lg:h-6 2xl:w-12 w-12 2xl:h-12 h-12 rounded-full"
                   src={host.avatar}
@@ -65,8 +65,8 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
 
             <hr className="border-darkGray" />
 
-            <div className="center-y justify-between">
-              <div className="center-y lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
+            <div className="center-x justify-between">
+              <div className="center-x lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
                 <img
                   className="lg:w-6 lg:h-6 2xl:w-12 w-12 2xl:h-12 h-12 rounded-full"
                   src={opponent.avatar}
@@ -88,7 +88,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
                 className="w-10 h-10 lg:w-12 lg:h-12 2xl:w-14 2xl:h-14 rounded-full"
                 src={host.avatar}
               />
-              <h1 className="font-serif text-white text-xl lg:text-2xl 2xl:text-4xl">
+              <h1 className="font-serif text-white max-w-[100px] text-center text-xl lg:text-2xl 2xl:text-4xl">
                 {host.score} : {opponent.score}
               </h1>
               <img

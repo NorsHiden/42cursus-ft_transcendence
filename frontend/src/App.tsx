@@ -8,7 +8,7 @@ import Discovery from '@pages/Discovery';
 import Leaderboard from '@pages/Leaderboard';
 import Game from '@pages/Game';
 import Profile, { profileLoader } from '@pages/Profile';
-import { Overview, MatchHistory, Achievements, Settings, ManageFriends } from '@components/profile';
+import { Overview, MatchHistory, Achievements, ManageFriends, Settings } from '@components/profile';
 import Login from '@pages/Login';
 import PostLogin, { PostLoginLoader } from '@pages/PostLogin';
 import TwoFactorAuth, { TwoFactorAuthLoader } from '@pages/OTP2fa';

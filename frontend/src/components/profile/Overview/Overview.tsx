@@ -74,7 +74,7 @@ const Overview: React.FC = () => {
           <h1 className="text-white font-semibold text-2xl/loose">Highlighted Matches</h1>
           <p className="text-white/80">Best matches played</p>
         </header>
-        <div className="grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-x-4">
+        <div className="grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-x-6">
           {displayedMatches.map((match, index) =>
             match ? (
               <MatchCard

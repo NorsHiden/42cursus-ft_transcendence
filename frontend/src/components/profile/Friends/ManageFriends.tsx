@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useRouteLoaderData } from 'react-router-dom';
@@ -50,12 +50,12 @@ import RadioInput from '@components/RadioInput/index.tsx';
 //   }[];
 // }
 
-interface args {
+type args = {
   friendType: string;
   setFriends: (props: []) => void;
   setBlocked: (props: []) => void;
   setPending: (props: []) => void;
-}
+};
 
 const getFriendList = (data: args) => {
   const { friendType, setFriends, setBlocked, setPending } = data;
@@ -90,7 +90,7 @@ const getFriendList = (data: args) => {
   }
 };
 
-const ManageFriends = () => {
+const ManageFriends: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
 
   if (user.isforeign) throw new Error('This is not your profile');
@@ -99,7 +99,6 @@ const ManageFriends = () => {
   const [blocked, setBlocked] = useState<User[]>([]);
   const [pending, setPending] = useState<User[]>([]);
 
-  // you need to isolate lists comcerns to remove card smooth
   function handletype(e: ChangeEvent<HTMLInputElement>) {
     console.log(e.target.value);
     setType(e.target.value);
@@ -107,14 +106,12 @@ const ManageFriends = () => {
 
   useEffect(() => {
     const data: args = { friendType, setFriends, setBlocked, setPending };
-
-    console.log('FriendType:', friendType);
     getFriendList(data);
   }, [friendType]);
 
   return (
-    <section className="">
-      <div className="flex justify-end gap-x-6">
+    <section className="grid grid-rows-section gap-y-6">
+      <div className="flex justify-end gap-x-4">
         <RadioInput
           id="pendingOption"
           name="friendsStatus"
@@ -141,7 +138,43 @@ const ManageFriends = () => {
         />
       </div>
 
-      <motion.ul className="grid grid-cols-3 gap-8 mt-16">
+      <div className="h-full grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-6 pb-6 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
+        {Array.from({ length: 6 }, (_v, index) => (
+          <UserCard
+            key={index}
+            banner={user.profile.banner}
+            avatar={user.profile.avatar}
+            name={user.display_name}
+            username={user.username}
+          >
+            <div className="center-x justify-start gap-x-4">
+              <Button
+                className="center gap-x-2 py-2 px-5"
+                color="BrightRed"
+                onClick={() => {}}
+                cut={25}
+                borderRadius={10}
+                borderWidth={1}
+                borderColor="#E95E6F"
+              >
+                <Unblock size={20} className="text-white" />
+                <p className="text-white">Unfriend</p>
+              </Button>
+              <Button
+                className="center gap-x-2 py-2 px-5"
+                color="DarkMaroon"
+                onClick={() => {}}
+                cut={25}
+              >
+                <Block size={20} className="text-red" />
+                <p className="text-red">Block</p>
+              </Button>
+            </div>
+          </UserCard>
+        ))}
+      </div>
+
+      {/* <motion.ul className="grid grid-cols-3 gap-8 mt-16">
         {friendType == 'Accepted'
           ? friends.map((users) => (
               <motion.li initial={{ x: -10 }} animate={{ x: 0 }} exit={{ x: 500 }} key={users.id}>
@@ -249,7 +282,7 @@ const ManageFriends = () => {
               </motion.li>
             ))
           : []}
-      </motion.ul>
+      </motion.ul> */}
     </section>
   );
 };

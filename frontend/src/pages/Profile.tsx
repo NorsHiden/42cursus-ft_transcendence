@@ -3,13 +3,11 @@ import { Outlet, useLoaderData } from 'react-router-dom';
 import axios from 'axios';
 
 import { User } from '@globalTypes/types';
-import { PlayerProfile } from '@components/profile';
-import { NavLinkButton } from '@components/profile';
+import { NavLinkButton, PlayerProfile } from '@components/profile';
 
 export const profileLoader = async (user?: string): Promise<User> => {
   try {
     const userData = await axios.get(`/api/users/${user}`);
-    // const currentUser = useRouteLoaderData('layout') as User;
     const currentUser = await axios.get(`/api/users/@me`);
     const friendStatus = await axios.get(`/api/friendlist/${userData.data.id}`);
 

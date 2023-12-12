@@ -75,7 +75,7 @@ const MatchHistory: React.FC = () => {
           onChange={handleTypeChange}
         />
       </div>
-      <div className="h-full grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-4 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
+      <div className="h-full grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-6 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
         {matches.map((match) => {
           return (
             <MatchCard

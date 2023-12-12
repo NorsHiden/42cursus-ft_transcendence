@@ -23,11 +23,11 @@
     @apply flex justify-center items-center;
   }
 
-  .center-y {
+  .center-x {
     @apply flex items-center;
   }
 
-  .center-x {
+  .center-y {
     @apply flex justify-center;
   }
 
