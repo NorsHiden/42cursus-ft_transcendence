@@ -1,28 +1,26 @@
+import React from 'react';
 import { NavLink } from 'react-router-dom';
+
 import Card from '@components/Card';
 
 interface NavLinkCardProps {
   to: string;
-  children: React.ReactNode;
   cut?: number;
-  replace?: boolean;
+  children: React.ReactNode;
 }
 
-const NavLinkButton: React.FC<NavLinkCardProps> = ({ to, children, cut }) => (
+const NavLinkButton: React.FC<NavLinkCardProps> = ({ to, cut, children }) => (
   <NavLink to={to}>
     {({ isActive }) => (
       <Card
-        className={`${
-          isActive ? ' h-[30px] text-[#FE5821] rounded-lg' : 'text-transparent  h-[30px]'
-        } flex center`}
-        cut={cut}
-        {...(isActive ? { borderRadius: 10, borderColor: '#FF8C66', borderWidth: 2 } : {})}
+        cut={cut || 25}
+        borderRadius={25}
+        className={`center h-10 px-6 cursor-pointer ${
+          isActive ? 'text-primary' : 'text-transparent'
+        }`}
+        {...(isActive ? { borderColor: '#FF8C66', borderWidth: 0 } : {})}
       >
-        <button className="">
-          <p className="font-sans font-medium text-white opacity-75" style={{ padding: '1.5em' }}>
-            {children}
-          </p>
-        </button>
+        <p className="text-[18px] text-white opacity-75">{children}</p>
       </Card>
     )}
   </NavLink>

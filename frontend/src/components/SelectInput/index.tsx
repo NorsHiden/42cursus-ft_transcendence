@@ -15,12 +15,12 @@ const SelectInput: React.FC<SelectInputProps> = ({ name, onChange }) => {
       borderWidth={2}
       borderColor="#2C2D33"
       cut={30}
-      className="relative min-w-[200px] flex items-center justify-between cursor-pointer"
+      className="relative min-w-[150px] flex items-center justify-between cursor-pointer"
     >
       <select
         name={name}
         onChange={onChange}
-        className="peer w-full h-full flex px-5 py-3 appearance-none outline-none bg-transparent text-white border-gray cursor-pointer"
+        className="peer w-full h-full flex px-4 py-2 appearance-none outline-none bg-transparent text-white border-gray cursor-pointer"
       >
         <option className="bg-lightBlack" value="ALL">
           All
@@ -40,7 +40,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ name, onChange }) => {
       </select>
       <ChevronRightOutline
         size={18}
-        className="text-white absolute right-5 pointer-events-none transition-transform rotate-90 peer-open:rotate-0"
+        className="text-white absolute right-4 pointer-events-none transition-transform rotate-90 peer-open:rotate-0"
       />
     </Card>
   );

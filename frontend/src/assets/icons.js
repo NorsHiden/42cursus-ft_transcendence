@@ -7,8 +7,8 @@ import { transform } from '@svgr/core';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ICONS_DIR = path.resolve(__dirname, 'achievementsIcons');
-const ICONS_OUTPUT_DIR = path.resolve(__dirname, 'achievementsIcons');
+const ICONS_DIR = path.resolve(__dirname, 'profileIcons');
+const ICONS_OUTPUT_DIR = path.resolve(__dirname, 'profileIcons');
 
 const toPascalCase = (str) => {
   return str
@@ -53,10 +53,7 @@ const generateIcon = ({ svg, componentName }) => {
   const component = transformToJSX(svg, componentName);
   const fileTemplate = `import React from 'react';
 
-type IconProps = React.SVGProps<SVGSVGElement> & {
-  size?: number;
-  className?: string;
-};
+import IconProps from '@assets/IconProps';
 
 const ${componentName}: React.FC<IconProps> = ({ size, className }) => {
   return (

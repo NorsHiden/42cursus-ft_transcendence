@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import Card from '@components/Card';
+import twclsx from '@utils/twclsx';
 import { NotificationType } from '@globalTypes/notification';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
 import useIntersectionObserver from '@hooks/useIntersectionObserver';
 import useSSE from '@hooks/useSSE';
-import twclsx from '@utils/twclsx';
 
 interface NotificationMessageProps {
   notificationMessage: NotificationType;
@@ -115,6 +115,11 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
 
 type NotificationProps = {
   open: boolean;
+  isLoading?: boolean;
+  hasMore?: boolean;
+  notifications?: NotificationType[];
+  setNotifications?: React.Dispatch<React.SetStateAction<NotificationType[]>>;
+  lastElementRef?: (node: HTMLDivElement) => void;
 };
 
 const Notification: React.FC<NotificationProps> = ({ open }) => {
@@ -126,7 +131,7 @@ const Notification: React.FC<NotificationProps> = ({ open }) => {
   const getNotifications = async (page: number) => {
     setIsLoading(true);
     const res = await axios.get(`/api/notification?page=${page}`);
-    setNotifications((notifications) => [...notifications, ...res.data]);
+    setNotifications((prevNotifications) => [...prevNotifications, ...res.data]);
     if (res.data.length < 10) setHasMore(false);
     setIsLoading(false);
   };
@@ -141,7 +146,7 @@ const Notification: React.FC<NotificationProps> = ({ open }) => {
   useSSE('/api/notification/sse-notifications', {
     onMessage: (event) => {
       const newNotification = JSON.parse(event.data);
-      setNotifications((notifications) => [newNotification, ...notifications]);
+      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
     },
   });
 

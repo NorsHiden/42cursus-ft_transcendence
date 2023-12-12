@@ -1,146 +1,109 @@
-import { AchievementIcon, LoseIcon, WonIcon, PointsIcon, LeaderIcon } from '@assets/profileIcons';
-import MatchCard from '@components/MatchCard';
-import { CardType, User, MatchType } from '@globalTypes/types';
-import OverviewCard from './OverviewCard.tsx';
+import React, { useEffect, useState } from 'react';
 import { useRouteLoaderData } from 'react-router';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-// import emptyCard from '@assets/images/matchcardempty.png';
-import { GAMEMODE_NAME } from '@globalTypes/gameModes.ts';
 
-const Overview = () => {
+import {
+  AchievementsIcon,
+  LossesIcon,
+  WinsIcon,
+  PointsIcon,
+  LeaderboardIcon,
+} from '@assets/profileIcons';
+import OverviewCard from '@components/profile/Overview/OverviewCard';
+import MatchCard from '@components/MatchCard';
+import { GAMEMODE_NAME } from '@globalTypes/gameModes';
+import { CardType, User, MatchType } from '@globalTypes/types';
+import getTimeDiff from '@utils/getTimeDiff';
+import { extractMatchType } from '../MatchHistory/utils';
+import Card from '@components/Card';
+import { getColorValue } from '@utils/getColorValue';
+
+const Overview: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
-  const [highlightedMatches, setHighlightedMatches] = useState<MatchType[]>([]);
+  const [matches, setMatches] = useState<MatchType[]>([]);
+  const displayedMatches = Array.from({ length: 3 }, (_v, i) =>
+    i < matches.length ? matches[i] : null,
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`/api/match_history/${user.id}/highlights`)
-      .then((res) => {
-        const newMatches: MatchType[] = res.data.data.map((match: any) => ({
-          id: match.id,
-          game_mode: match.game_mode as GAMEMODE_NAME,
-          home_player: {
-            id: match.home_player.id,
-            username: match.home_player.username,
-            score: match.home_score,
-            avatar: match.home_player.profile.avatar,
-          },
-          away_player: {
-            id: match.away_player.id,
-            username: match.away_player.username,
-            score: match.away_score,
-            avatar: match.away_player.profile.avatar,
-          },
-          created_at: new Date(match.created_at),
-          ended_at: new Date(match.ended_at),
-        }));
-        setHighlightedMatches(newMatches);
-      })
-      .catch((error) => console.error('Error:', error));
+    const abortController = new AbortController();
+
+    const getMatches = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`/api/match_history/${user.id}/highlights`, {
+          signal: abortController.signal,
+        });
+        const newMatches: MatchType[] = response.data.data.map((match: any) =>
+          extractMatchType(match),
+        );
+        setMatches(newMatches);
+        setHasMore(response.data.meta.currentPage < response.data.meta.TotalPages);
+        setIsLoading(false);
+      } catch (error) {}
+    };
+
+    getMatches();
+
+    return () => abortController.abort();
   }, []);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex flex-col gap-y-20">
       <div className="grid grid-cols-2 lg:grid-cols-5 grid-flow-cols gap-4">
-        <OverviewCard footer="Matches Won" number={user.wins}>
-          <WonIcon className="w-[18px] h-[20px] lg:w-[21px] lg:h-[24px] 2xl:w-[25px] 2xl:h-[28px] text-white" />
+        <OverviewCard label={`Match${user.wins > 1 ? 'es' : ''} Won`} number={user.wins}>
+          <WinsIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
-        <OverviewCard footer="Leader board position" number={5}>
-          <LeaderIcon className="w-[30px] h-[20px] lg:w-[34px] lg:h-[24px] 2xl:w-[38px] 2xl:h-[28px] text-white" />
+        <OverviewCard label="Leaderboard position" number={5}>
+          <LeaderboardIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
-        <OverviewCard footer="Matches Losses" number={user.loses}>
-          <LoseIcon className="w-[24px] h-[16px] lg:w-[28px] lg:h-[20px] 2xl:w-[32px] 2xl:h-[24px] text-white" />
+        <OverviewCard label={`Match${user.loses > 1 ? 'es' : ''} Lost`} number={user.loses}>
+          <LossesIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
-        <OverviewCard footer="Unlocked Achievments" number={5}>
-          <AchievementIcon className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px] 2xl:w-[28px] 2xl:h-[28px] text-white" />
+        <OverviewCard label="Unlocked Achievments" number={5}>
+          <AchievementsIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
-        <OverviewCard footer="Total Pts" number={user.points.length ? user.points[0].value : 0}>
-          <PointsIcon className="w-[19px] h-[19px] lg:w-[23px] lg:h-[23px] 2xl:w-[27px] 2xl:h-[27px] text-white" />
+        <OverviewCard label="Total Points" number={user.points.length ? user.points[0].value : 0}>
+          <PointsIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
       </div>
-      <div className="grid grid-rows-section gap-y-5 pt-20">
+      <div className="grid grid-rows-section gap-y-5">
         <header>
-          <h1 className="text-white font-bold text-2xl">Highlighted Matches</h1>
-          <p className="text-white font-medium">Best matches played</p>
+          <h1 className="text-white font-semibold text-2xl/loose">Highlighted Matches</h1>
+          <p className="text-white/80">Best matches played</p>
         </header>
-        <div className="grid grid-rows-1 grid-cols-1 lg:grid-cols-3 gap-x-4">
-          <MatchCard
-            type={CardType.MATCH_HISTORY}
-            gamemode={GAMEMODE_NAME.REGULAR}
-            host={{
-              id: '1',
-              username: 'RAYVENRTYU',
-              avatar: user.profile.avatar,
-              score: 5,
-            }}
-            opponent={{
-              id: '1',
-              username: 'ANAS',
-              avatar: user.profile.avatar,
-              score: 5,
-            }}
-            time="04:23"
-          />
-          <MatchCard
-            type={CardType.MATCH_HISTORY}
-            gamemode={GAMEMODE_NAME.VANISH}
-            host={{
-              id: '1',
-              username: 'RAYVENRTYU',
-              avatar: user.profile.avatar,
-              score: 5,
-            }}
-            opponent={{
-              id: '1',
-              username: 'ANAS',
-              avatar: user.profile.avatar,
-              score: 5,
-            }}
-            time="04:23"
-          />
-          <MatchCard
-            type={CardType.MATCH_HISTORY}
-            gamemode={GAMEMODE_NAME.VANISH}
-            host={{
-              id: '1',
-              username: 'RAYVENRTYU',
-              avatar: user.profile.avatar,
-              score: 5,
-            }}
-            opponent={{
-              id: '1',
-              username: 'ANAS',
-              avatar: user.profile.avatar,
-              score: 5,
-            }}
-            time="04:23"
-          />
-
-          {/* {highlightedMatches.slice(0, 3).map((match, index) => (
-            <MatchCard
-              gamemode={match.game_mode as Game}
-              time="04:23"
-              type={CardType.MATCH_HISTORY}
-              host={match.home_player}
-              opponent={match.away_player}
-            />
-          ))}
-          {highlightedMatches.length === 0 && (
-            <>
-              <div className="flex justify-center items-center aspect-[193/143]">
-                <img src={emptyCard} alt="" />
-              </div>
-              <div className="flex justify-center items-center aspect-[193/143]">
-                <img src={emptyCard} alt="" />
-              </div>
-              <div className="flex justify-center items-center aspect-[193/143]">
-                <img src={emptyCard} alt="" />
-              </div>
-            </>
-          )} */}
+        <div className="grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-x-4">
+          {displayedMatches.map((match, index) =>
+            match ? (
+              <MatchCard
+                key={match.match_id}
+                type={CardType.MATCH_HISTORY}
+                gamemode={match.game_mode as GAMEMODE_NAME}
+                host={match.home_player}
+                opponent={match.away_player}
+                time={getTimeDiff(match.created_at, match.ended_at)}
+              />
+            ) : (
+              <Card
+                key={index}
+                className="text-black"
+                borderStyle="dashed"
+                borderWidth={2}
+                borderColor={getColorValue('darkGray')}
+              ></Card>
+            ),
+          )}
+          {isLoading &&
+            hasMore &&
+            Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="w-full aspect-[16/10] animate-pulse bg-lightBlack" />
+            ))}
         </div>
       </div>
     </div>
   );
 };
+
 export default Overview;

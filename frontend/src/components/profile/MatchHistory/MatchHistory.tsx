@@ -6,7 +6,6 @@ import { CardType, User, MatchType } from '@globalTypes/types';
 import MatchCard from '@components/MatchCard.tsx';
 import { extractMatchType } from './utils.ts';
 import RadioInput from '@components/RadioInput';
-import useIntersectionObserver from '@hooks/useIntersectionObserver.ts';
 import getTimeDiff from '@utils/getTimeDiff.ts';
 
 const MatchHistory: React.FC = () => {
@@ -16,37 +15,36 @@ const MatchHistory: React.FC = () => {
   const [matchType, setMatchType] = useState('all');
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
-
-  const getMatchHistory = async () => {
-    setIsLoading(true);
-    const response = await axios.get(
-      `/api/match_history/${user.id}/${matchType === 'all' ? '' : matchType}?page=${page}`,
-    );
-    const newMatches = response.data.data.map((match: any) => extractMatchType(match));
-    setMatches((matches) => [...matches, ...newMatches]);
-    if (response.data.length < 10) setHasMore(false);
-    setIsLoading(false);
-  };
-
-  // const lastMatchRef = useIntersectionObserver(() => {
-  //   if (hasMore) {
-  //     console.log('last match');
-  //     getMatchHistory();
-  //     setPage((prevPage) => prevPage + 1);
-  //   }
-  // });
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
+    const abortController = new AbortController();
+
+    const getMatchHistory = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(
+          `/api/match_history/${user.id}/${matchType === 'all' ? '' : matchType}?page=${page}`,
+          { signal: abortController.signal },
+        );
+        const newMatches = response.data.data.map((match: any) => extractMatchType(match));
+        setMatches((matches) => [...matches, ...newMatches]);
+        setHasMore(response.data.meta.currentPage < response.data.meta.TotalPages);
+        setPage((page) => page + 1);
+        setIsLoading(false);
+      } catch (error) {}
+    };
+
     getMatchHistory();
-  }, []);
+
+    return () => abortController.abort();
+  }, [matchType]);
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // setMatches([]);
-    // setPage(0);
-    // setHasMore(false);
+    setMatches([]);
+    setPage(0);
+    setHasMore(true);
     setMatchType(event.target.value);
-    // getMatchHistory();
   };
 
   return (
@@ -90,11 +88,10 @@ const MatchHistory: React.FC = () => {
             />
           );
         })}
-        {/* {!isLoading && hasMore && <div ref={lastMatchRef}></div>} */}
         {isLoading &&
           hasMore &&
-          Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="aspect-[193/143] animate-pulse bg-lightBlack" />
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="w-full aspect-[16/10] animate-pulse bg-lightBlack" />
           ))}
       </div>
     </section>

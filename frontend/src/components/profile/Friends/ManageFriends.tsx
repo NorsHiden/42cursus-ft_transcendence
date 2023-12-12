@@ -144,7 +144,7 @@ const ManageFriends = () => {
       <motion.ul className="grid grid-cols-3 gap-8 mt-16">
         {friendType == 'Accepted'
           ? friends.map((users) => (
-              <motion.li initial={{ x: -500 }} animate={{ x: 0 }} exit={{ x: 500 }} key={users.id}>
+              <motion.li initial={{ x: -10 }} animate={{ x: 0 }} exit={{ x: 500 }} key={users.id}>
                 <UserCard
                   user={users.profile.avatar}
                   name={users.display_name}
@@ -155,7 +155,7 @@ const ManageFriends = () => {
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
                       color="BrightRed"
-                      onClick={(event) => {
+                      onClick={() => {
                         unfriend(friends, users.username, users.id, setFriends);
                       }}
                       cut={55}
@@ -169,7 +169,7 @@ const ManageFriends = () => {
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px] gap-1"
                       color="DarkMaroon"
-                      onClick={(event) => {
+                      onClick={() => {
                         block(friends, users.username, users.id, setFriends);
                       }}
                       cut={25}
@@ -194,7 +194,7 @@ const ManageFriends = () => {
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
                     <Button
                       className="center pl-[12px] pr-[20px] py-[8px] gap-1"
-                      onClick={(event) => {
+                      onClick={() => {
                         unblock(blocked, users.username, users.id, setBlocked);
                       }}
                       color="gray"
@@ -223,7 +223,7 @@ const ManageFriends = () => {
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
-                      onClick={(event) => {
+                      onClick={() => {
                         accept(pending, users.username, users.id, setPending);
                       }}
                       color="primary"
@@ -236,7 +236,7 @@ const ManageFriends = () => {
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
                       color="DarkMaroon"
-                      onClick={(event) => {
+                      onClick={() => {
                         unfriend(pending, users.username, users.id, setPending);
                       }}
                       cut={25}

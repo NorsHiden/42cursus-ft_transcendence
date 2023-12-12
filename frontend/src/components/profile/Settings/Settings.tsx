@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React from 'react';
 // import React, { useState, useRef, useEffect } from 'react';
 
 //the card will take from 9 to 12.
@@ -19,7 +19,6 @@ type UserCardProps = {
   setNewuser: React.Dispatch<React.SetStateAction<settingsData>>;
   setactiveChanges: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
 
 export type settingsData = {
   username: string;
@@ -124,7 +123,7 @@ const UserCard: React.FC<UserCardProps> = ({ Newuser, setNewuser, setactiveChang
   );
 };
 
-const Settings: FC = () => {
+const Settings: React.FC = () => {
   const {
     Newuser,
     setNewuser,
@@ -134,10 +133,9 @@ const Settings: FC = () => {
     setactiveChanges,
     resetForm,
   } = useSettingsData();
-  
+
   return (
     <>
-
       <TwoFaModal />
       <h1 className="font-sans font-bold text-white mb-[28px] mt-[64px]">Personal Info</h1>
       <form

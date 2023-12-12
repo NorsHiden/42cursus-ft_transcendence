@@ -1,5 +1,5 @@
-export {default as AchievementIcon} from './AchievementIcon';
-export {default as LeaderIcon} from './LeaderIcon';
-export {default as LoseIcon} from './LoseIcon';
-export {default as WonIcon} from './WonIcon';
-export {default as PointsIcon}  from './PointsIcon';
+export { default as AchievementsIcon } from './AchievementsIcon';
+export { default as LeaderboardIcon } from './LeaderboardIcon';
+export { default as LossesIcon } from './LossesIcon';
+export { default as WinsIcon } from './WinsIcon';
+export { default as PointsIcon } from './PointsIcon';
