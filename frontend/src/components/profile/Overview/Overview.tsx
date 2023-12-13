@@ -10,22 +10,20 @@ import {
   LeaderboardIcon,
 } from '@assets/profileIcons';
 import OverviewCard from '@components/profile/Overview/OverviewCard';
+import Card from '@components/Card';
 import MatchCard from '@components/MatchCard';
 import { GAMEMODE_NAME } from '@globalTypes/gameModes';
 import { CardType, User, MatchType } from '@globalTypes/types';
-import getTimeDiff from '@utils/getTimeDiff';
 import { extractMatchType } from '../MatchHistory/utils';
-import Card from '@components/Card';
-import { getColorValue } from '@utils/getColorValue';
+import getTimeDiff from '@utils/getTimeDiff';
+import getColorValue from '@utils/getColorValue';
 
 const Overview: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
   const [matches, setMatches] = useState<MatchType[]>([]);
-  // const displayedMatches = Array.from({ length: 3 }, (_v, i) =>
-  //   i < matches.length ? matches[i] : null,
-  // );
-  const displayedMatches = [null, null, null];
-  console.log(displayedMatches);
+  const displayedMatches = Array.from({ length: 3 }, (_v, i) =>
+    i < matches.length ? matches[i] : null,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -77,28 +75,27 @@ const Overview: React.FC = () => {
           <p className="text-white/80 font-medium text-sm">Best matches played</p>
         </header>
         <div className="grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-x-6">
-          {displayedMatches.map(
-            (match, index) => (
-              // match ? (
-              //   <MatchCard
-              //     key={match.match_id}
-              //     type={CardType.MATCH_HISTORY}
-              //     gamemode={match.game_mode as GAMEMODE_NAME}
-              //     host={match.home_player}
-              //     opponent={match.away_player}
-              //     time={getTimeDiff(match.created_at, match.ended_at)}
-              //   />
-              // ) : (
-              <Card
-                key={index}
-                className="w-full aspect-video text-black"
-                borderWidth={2}
-                borderStyle="dashed"
-                borderColor={getColorValue('darkGray')}
-              ></Card>
-            ),
-            // ),
-          )}
+          {!isLoading &&
+            displayedMatches.map((match, index) =>
+              match ? (
+                <MatchCard
+                  key={match.match_id}
+                  type={CardType.MATCH_HISTORY}
+                  gamemode={match.game_mode as GAMEMODE_NAME}
+                  host={match.home_player}
+                  opponent={match.away_player}
+                  time={getTimeDiff(match.created_at, match.ended_at)}
+                />
+              ) : (
+                <Card
+                  key={index}
+                  borderWidth={2}
+                  borderStyle="dashed"
+                  borderColor={getColorValue('darkGray')}
+                  className="w-full aspect-[16/10] text-black"
+                ></Card>
+              ),
+            )}
           {isLoading &&
             hasMore &&
             Array.from({ length: 3 }).map((_, i) => (
