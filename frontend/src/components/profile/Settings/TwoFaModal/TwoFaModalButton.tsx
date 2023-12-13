@@ -40,7 +40,7 @@ const TwoFaModalButton: React.FC<TwoFaModalButtonProps> = ({
           ) : (
             <Lock className="mr-2 text-[32px] text-white" />
           )}
-          <p className="font-sans font-bold text-sm text-white">
+          <p className="font-bold text-sm text-white">
             {' '}
             {twofaEnabled ? 'Disable 2FA' : 'Enable 2FA'}
           </p>

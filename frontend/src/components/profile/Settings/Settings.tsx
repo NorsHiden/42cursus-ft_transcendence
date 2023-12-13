@@ -112,10 +112,10 @@ const UserCard: React.FC<UserCardProps> = ({ Newuser, setNewuser, setactiveChang
         </label>
       </div>
       <div id="card-body">
-        <h1 className="font-sans font-bold text-lg lg:text-4xl text-white ml-2 lg:ml-4 mt-4 lg:mt-8">
+        <h1 className="font-bold text-lg lg:text-4xl text-white ml-2 lg:ml-4 mt-4 lg:mt-8">
           {Newuser.username}
         </h1>
-        <p className="font-sans font-bold text-sm text-[#5E6069] ml-2 lg:ml-4 opacity-50 -mt-2 lg:-mt-4">
+        <p className="font-bold text-sm text-[#5E6069] ml-2 lg:ml-4 opacity-50 -mt-2 lg:-mt-4">
           @{Newuser.display_name}
         </p>
       </div>
@@ -137,7 +137,7 @@ const Settings: React.FC = () => {
   return (
     <>
       <TwoFaModal />
-      <h1 className="font-sans font-bold text-white mb-[28px] mt-[64px]">Personal Info</h1>
+      <h1 className="font-bold text-white mb-[28px] mt-[64px]">Personal Info</h1>
       <form
         className="grid grid-rows-6 lg:grid-rows-4 grid-cols-2 lg:grid-cols-3 grid-flow-col gap-4 h-[26rem] lg:h-[20rem] "
         onSubmit={handleUpload}

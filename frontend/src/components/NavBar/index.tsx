@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { SearchBar } from './SearchBar';
+
 import { UserType } from '@globalTypes/user';
 import Logo from '/logo.svg';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import BellSolid from '@assets/novaIcons/solid/BellSolid';
 import Notification from './Notification';
+import SearchBar from './SearchBar';
 import twclsx from '@utils/twclsx';
 import useOutsideClick from '@hooks/useOutsideClick';
 

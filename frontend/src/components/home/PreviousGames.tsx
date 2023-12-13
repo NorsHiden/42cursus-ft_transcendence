@@ -5,7 +5,7 @@ import SelectInput from '@components/SelectInput';
 import Card from '@components/Card';
 import MatchCard from '@components/MatchCard';
 import { socket } from '../../socket';
-import { getColorValue } from '@utils/getColorValue';
+import getColorValue from '@utils/getColorValue';
 import { CardType } from '@globalTypes/types';
 import { LiveGameType } from '@globalTypes/game';
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line } from 'recharts';
-
-import AlertCircleSolid from '@assets/novaIcons/solid/AlertCircleSolid';
 import axios from 'axios';
+
 import { PointsType } from '@globalTypes/points';
 import { ACHIEVEMENT_NAME, AchievementType } from '@globalTypes/achievements';
+import AlertCircleSolid from '@assets/novaIcons/solid/AlertCircleSolid';
 import Achievement from '@components/profile/Achievements/Achievement';
 
 const PointsGraphSection: React.FC = () => {
@@ -30,7 +30,7 @@ const PointsGraphSection: React.FC = () => {
     <section className="hidden justify-self-center col-span-2 xl:flex flex-col items-start gap-y-5">
       <div className="flex items-center gap-x-10 pl-4">
         <div className="flex flex-col flex-shrink-0 items-baseline">
-          <h1 className="font-serif text-white text-4xl/tight">
+          <h1 className="font-serif text-white text-5xl/snug">
             {points.points.length ? points.points[0].value : '0'} pts
           </h1>
           {points.points.length > 1 &&

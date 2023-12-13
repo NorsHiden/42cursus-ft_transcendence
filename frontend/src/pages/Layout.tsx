@@ -6,7 +6,14 @@ import SideBar from '@components/Sidebar';
 import FriendsBar from '@components/FriendsBar';
 import BottomNavBar from '@components/NavBar/BottomNavBar';
 
-export const LayoutLoader = () => {
+export const LayoutLoader = async () => {
+  // try {
+  //   const currentUser = await axios.get('/api/users/@me');
+  //   return currentUser.data;
+  // } catch (error) {
+  //   console.log('Failed to load user');
+  // }
+
   return {
     username: 'test',
     display_name: 'test',

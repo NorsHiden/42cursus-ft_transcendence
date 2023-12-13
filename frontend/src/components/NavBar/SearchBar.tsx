@@ -7,7 +7,7 @@ import { UserType } from '@globalTypes/user';
 import { SearchUser } from './SearchUser';
 import { SearchSkeleton } from './SearchSkeleton';
 
-export const SearchBar = () => {
+const SearchBar = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>('');
   const [debouncedPrompt] = useDebounce<string>(prompt, 500);
@@ -80,3 +80,5 @@ export const SearchBar = () => {
     </div>
   );
 };
+
+export default SearchBar;

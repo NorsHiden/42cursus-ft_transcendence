@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 import useDimensions from '@hooks/useDimensions';
-import { getColorValue } from '@utils/getColorValue';
-import { ACHIEVEMENT_NAME, ACHIEVEMENT_STYLES } from '@globalTypes/achievements';
+import getColorValue from '@utils/getColorValue';
 import LockSolid from '@assets/novaIcons/solid/LockSolid';
+import { ACHIEVEMENT_NAME, ACHIEVEMENT_STYLES } from '@globalTypes/achievements';
 
 type AchievementProps = {
   isClaimed: boolean;

@@ -6,7 +6,7 @@ import Card from '@components/Card';
 import { GAME_MODES } from '@globalTypes/gameModes';
 import { GameLobby } from '@globalTypes/game';
 import twclsx from '@utils/twclsx';
-import { getColorValue } from '@utils/getColorValue';
+import getColorValue from '@utils/getColorValue';
 import { socket } from '../../socket';
 import PlayRectangleSolid from '@assets/novaIcons/solid/PlayRectangleSolid';
 import CloseRectangleSolid from '@assets/novaIcons/solid/CloseRectangleSolid';
@@ -79,16 +79,14 @@ const GameModes: React.FC = () => {
           )}
           onClick={handleButtonClick}
         >
-          <button className="flex items-center gap-x-2 text-white font-serif py-4 px-6 z-10">
+          <button className="flex items-center gap-x-2 text-white font-serif py-4 px-7 z-10">
             {!isSearching && <PlayRectangleSolid size={18} className="text-white/40" />}
             {isSearching && <CloseRectangleSolid size={18} className="text-white/40" />}
             {isSearching ? 'CANCEL' : 'PLAY'}
           </button>
         </Card>
         {isSearching && (
-          <div className="text-white text-sm font-semibold loading-dots">
-            Looking for an opponent
-          </div>
+          <div className="text-white font-semibold loading-dots">Looking for an opponent</div>
         )}
       </div>
     </section>

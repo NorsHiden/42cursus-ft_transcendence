@@ -51,7 +51,7 @@ const TwoFaModalDialog: React.FC<TwoFaModalDialogProps> = ({
             borderRadius={10}
           >
             <button className="flex center" onClick={verify}>
-              <p className="font-bold font-rowdies text-2xl text-white">VERIFY</p>
+              <p className="font-bold font-serif text-2xl text-white">VERIFY</p>
             </button>
           </Card>
         </div>
