@@ -1,15 +1,14 @@
 import React,{useState,useEffect} from 'react';
+import axios from 'axios';
+import { toast } from 'sonner';
+
 import { mychannel } from '@globalTypes/channel';
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import InviteUser from '@assets/novaIcons/outline/InviteUser';
 import User2Solid from '@assets/novaIcons/solid/User2Solid';
 import twclsx from '@utils/twclsx';
 import ContextMenu from '@components/ContextMenu';
-import ContexMenuIcon from '@assets/novaIcons/solid/ContexMenuIcon';
-import axios from 'axios';
 import { fetchMembers } from './utils';
-import { toast } from 'sonner';
-import { useRef } from 'react';
 import {User} from '@globalTypes/user';
 import { getUsers } from './utils.tsx';
 import { useSelectedChannel } from '@context/Channel.tsx';

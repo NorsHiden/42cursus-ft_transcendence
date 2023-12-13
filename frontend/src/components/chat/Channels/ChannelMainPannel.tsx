@@ -62,26 +62,33 @@ const ChannelMainPannel: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    const abortController = new AbortController();
+
+    
     const channel = channels.find((channel) => channel.id === Number(param.id));
     if (channel) {
       setLoading(true);
-        getMessages(channel.id).then((fetchedMessages) => {
-          setMessages((prev: MessageType[] | undefined) => {
-            console.log("prev");
-            console.log(prev);
-            console.log("fetchedMessages");
-            console.log(fetchedMessages);
-            setLoading(false);
-            if (prev == undefined)
-              return fetchedMessages;
-            else
-              return [...prev,...fetchedMessages];
-          });
+        getMessages(channel.id,abortController).then((fetchedMessages) => {
+          if (fetchedMessages.length != 0)
+          {
+            setMessages((prev: MessageType[] | undefined) => {
+              console.log("prev");
+              console.log(prev);
+              console.log("fetchedMessages");
+              console.log(fetchedMessages);
+              setLoading(false);
+              if (prev == undefined)
+                return fetchedMessages;
+              else
+                return [...prev,...fetchedMessages];
+            });
+          }
         });
       setSelectedChannel(channel);
     }
 
     return () => {
+      abortController.abort();
       setMessages(()=>{
         return [];
       });
@@ -184,7 +191,6 @@ const ChannelMainPannel: React.FC = () => {
                     messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
                   />
                 ))}
-                 
                 </>
               )
 
