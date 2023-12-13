@@ -26,6 +26,9 @@ const BottomNavBar = () => {
       to: '/leaderboard',
     },
   ];
+
+
+
   return (
     <div className="flex flex-row items-center justify-between h-full px-4 sm:px-8 md:px-16">
       {links.map(({ title, icon: Icon, to }) => (
