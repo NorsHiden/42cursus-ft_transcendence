@@ -1,44 +1,63 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+
+import { User } from '@globalTypes/user';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import Card from '@components/Card';
+import { Message as MessageType } from '@globalTypes/types';
+import Loader1Outline from '@assets/novaIcons/outline/Loader1Outline';
 import { chatSocket } from '../../socket';
 import { toast } from 'sonner';
-import axios from 'axios';
-import { MessageType } from '@globalTypes/channel';
-import { User } from '@globalTypes/user';
-import Loader1Outline from '@assets/novaIcons/outline/Loader1Outline';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';
   message: MessageType;
+  messageReceivedSuccessfully: boolean;
 };
 
-const Message: React.FC<MessageProps> = ({ type, message }) => {
+export const MessageSkeleton: React.FC = () => {
   return (
-    <div className={`max-w-4/5 ${type == 'RECEIVED' ? 'self-start' : 'self-end'}`}>
+    <div className="max-w-[50%] pt-4 self-start">
+      <div className="flex items-center justify-between mb-3 gap-4">
+        <div className="flex items-center gap-x-2">
+          <div className="w-8 h-8 rounded-full bg-gray animate-pulse"></div>
+          <div className="text-sm rounded-full font-medium w-20 h-4 bg-gray animate-pulse"></div>
+        </div>
+        <div className="text-sm rounded-full w-16 h-4 bg-gray animate-pulse"></div>
+      </div>
+      <div className="text-sm py-4 px-4 bg-gray animate-pulse rounded-tr-2xl rounded-b-2xl"></div>
+    </div>
+  );
+};
+
+export const Message: React.FC<MessageProps> = ({ type, message, messageReceivedSuccessfully=true}) => {
+
+
+  return (
+    <div  className={`max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${messageReceivedSuccessfully?" opacity-100":" opacity-25"}`}>
       <div
         className={`flex items-center justify-between text-white mb-3 gap-4 ${
           type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
-        }`}
+        } gap-4`}
       >
         <div
           className={`flex items-center ${
             type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
-          } gap-x-2`}
+          } gap-x-2 `}
         >
           <img className="w-8 h-8 rounded-full" src={message.author.avatar} alt="" />
           <p className="text-sm font-medium">{message.author.display_name}</p>
         </div>
-        <span className="text-sm text-gray">{new Date(message.createdAt).get}</span>
+        <span className="ext-sm text-gray font-poppins font-regular">13.37</span>
       </div>
       <div
         className={`text-white ${
-          type == 'RECEIVED' ? 'bg-lightBlack' : 'bg-primary'
+          type == 'RECEIVED' ? 'bg-[#2B2F33]' : 'bg-primary'
         } text-sm py-2 px-4 ${
           type == 'RECEIVED' ? 'rounded-tr-2xl' : 'rounded-tl-2xl'
-        } rounded-b-2xl`}
+        } rounded-b-2xl overflow-hidden`}
       >
-        {message.content}
+        <p className='font-poppins font-regular   break-words'>{message.content}</p>
       </div>
     </div>
   );
@@ -127,6 +146,7 @@ const GeneralChat: React.FC = () => {
               key={index}
               type={message.author.display_name == me.display_name ? 'SENT' : 'RECEIVED'}
               message={message}
+              
             />
           ))}
           <div ref={scrollRef} />

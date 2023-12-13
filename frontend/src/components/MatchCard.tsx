@@ -32,9 +32,8 @@ const MatchCard: React.FC<MatchHistoryProps> = ({
     >
       <div id="content" className=" lg:p-4 xl:p-5 2xl:p-6 p-6">
         <header className="w-full flex items-center justify-between">
-          <div className="flex items-center justify-center lg:gap-x-2 xl:gap-x-3 2xl:gap-x-3 gap-x-3  lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
-            <div
-              className={`flex lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 center rounded-full 
+          <div className="flex items-center justify-center lg:gap-x-2  2xl:gap-x-3 gap-x-3  lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
+            <div className={`flex lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 center rounded-full 
               ${
                 gamemode === Game.CURSED
                   ? 'bg-[#3DFFFB]'

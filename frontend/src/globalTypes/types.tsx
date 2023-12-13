@@ -49,5 +49,39 @@ export type player = {
   username: string;
   score: number;
   avatar: string;
+}
+
+export type Message =   {
+  id: string;
+  content: string;
+  author: {
+    id: number;
+    display_name: string;
+    avatar: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  messageReceivedSuccessfully: boolean;
+}
+
+
+
+
+export type Member = {
+  role: string;
+  state: string;
+  userId: number;
+  displayName: string;
+  presence: string;
+  avatar: string;
 };
-// export default User
+
+export type DM = {
+  id: number;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+  members: Member[];
+};
+
+
