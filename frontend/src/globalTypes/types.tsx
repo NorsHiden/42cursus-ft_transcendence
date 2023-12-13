@@ -61,6 +61,7 @@ export type Message =   {
   };
   createdAt: string;
   updatedAt: string;
+  messageReceivedSuccessfully: boolean;
 }
 
 export type Member = {

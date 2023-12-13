@@ -12,12 +12,8 @@ import { toast } from 'sonner';
 import { useRef } from 'react';
 import {User} from '@globalTypes/user';
 import { getUsers } from './utils.tsx';
-
-interface ChannelMainPannelProps {
-  selectedChannel: mychannel;
-  expanded: boolean;
-  setExpanded: (arg: boolean) => void;
-}
+import { useSelectedChannel } from '@context/Channel.tsx';
+import { Member } from '@globalTypes/types';
 
 interface UserElementProps {
   presence: string;
@@ -80,13 +76,22 @@ interface MemberElementProps {
   displayName: string;
   avatar: string;
   state: string;
-  userId: string;
+  userId: number;
   channelID: number;
 }
 
 const MemberElement: React.FC<MemberElementProps> = ({role,presence,displayName,avatar,state,userId,channelID}) => {
 
+  const {selectedChannel} = useSelectedChannel();
 
+  // let MemberItems = [
+  //   {
+  //     labe: 'Mute',
+  //     onclick:()=>{console.log("mute")},
+  //     className:"text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray"
+  //   },
+
+  // ];
 
   let menuItems = [{label: 'Mute', onClick: () => {
     toast.promise(
@@ -165,30 +170,33 @@ const MemberElement: React.FC<MemberElementProps> = ({role,presence,displayName,
           </div> )   
           }
           
-         
-          <div id="label" className=" bg-primary rounded-full flex justify-center  px-1">
-            <p className="text-white font-poppins text-xs lg:text-[4px] 2xl:text-xs font-bold">{role}</p>
-          </div>
+          {role != 'member' &&
+            <div id="label" className={` ${role=="admin"?"bg-purple":"bg-primary"} rounded-full flex justify-center  px-1`}>
+              <p className="text-white font-poppins text-xs lg:text-[4px] 2xl:text-xs font-bold">{role}</p>
+            </div>
+          }
         </div>
       </div>
       {/* <div className='center '> */}
      
       {/* </div> */}
-      <ContextMenu menuItems={menuItems} /> 
+      {
+        selectedChannel.role != 'member' &&
+        <ContextMenu menuItems={menuItems} /> 
+      }
     
     </div>
     
   );
 };
 
-export type Member = {
-  role: string;
-  presence: string;
-  displayName: string;
-  avatar: string;
-  state: string;
-  userId: string;
+
+interface ChannelMainPannelProps {
+  selectedChannel: mychannel;
+  expanded: boolean;
+  setExpanded: (arg: boolean) => void;
 }
+
 const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
   selectedChannel,
   expanded,
@@ -202,7 +210,8 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
 
   function handlieinvite() {
     // console.log('invite user')
-    inviteUser ? setInviteUser(false) : setInviteUser(true);
+    if(selectedChannel.role == 'owner' || selectedChannel.role == 'admin')
+      inviteUser ? setInviteUser(false) : setInviteUser(true);
   }
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {

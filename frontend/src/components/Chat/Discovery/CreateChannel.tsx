@@ -27,7 +27,6 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp}) => 
 
   }, [context]);
 
-  console.log(currentChannel);
 
   return (
     <div

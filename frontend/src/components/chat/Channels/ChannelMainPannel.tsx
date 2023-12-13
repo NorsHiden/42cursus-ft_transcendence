@@ -11,43 +11,33 @@ import ChannelSidePannel from './ChannelSidePannel';
 import { Message as MessageType} from '@globalTypes/types';
 import { sendMessage } from './utils';
 import { getMessages } from './utils';
-
-// const data = [];
-
-// for (let i = 1; i <= 90; i++) {
-//   data.push({
-//     name: `Channel ${i}`,
-//     type: 'public',
-//   });
-// }
-
-// async function createChannel(channel) {
-//   const response = await axios.post('/api/channels', channel);
-//   return response.data;
-// }
-
-
-// /chat
-// chat/channels/3
+import EditSolid from '@assets/novaIcons/solid/EditSolid';
+import useIntersectionObserver from '@hooks/useIntersectionObserver';
 
 const ChannelMainPannel: React.FC = () => {
-  const {channels, selectedChannel, setSelectedChannel,socket } = useSelectedChannel();
+  const {channels, selectedChannel, setSelectedChannel,socket,setShowUpdateChannelModal} = useSelectedChannel();
   const [messages, setMessages] = useState<MessageType[]>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [hasmore, setHasmore] = useState<boolean>(false);
+  // const [page , setPage] = useState<number>(1);
 
   const param = useParams();
   const navigate = useNavigate();
   const user = useRouteLoaderData('layout') as User;
   const [message, setMessage] = useState<string>('');
-  
   const containerRef = useRef(null);
+  
+  // const elementRef = useIntersectionObserver(()=>{
+  //   console.log("intersected");
+  //   setPage((prev)=>prev+1);
+  // });
 
 
   const sendMessageHandler = () => {
 
 
     const newMessage:MessageType = {
-      id: '1',
+      id: '-1',
       content: message,
       author: {
         id: user.id,
@@ -56,6 +46,7 @@ const ChannelMainPannel: React.FC = () => {
       },
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        messageReceivedSuccessfully: false,
       }
     
     setMessages((prev: MessageType[] | undefined) => {
@@ -65,7 +56,7 @@ const ChannelMainPannel: React.FC = () => {
         return [newMessage,...prev!];
     });
 
-    sendMessage(selectedChannel.id, message);
+    sendMessage(selectedChannel.id, message,setMessages,newMessage);
   };
 
   const [expanded, setExpanded] = useState(false);
@@ -84,16 +75,18 @@ const ChannelMainPannel: React.FC = () => {
             if (prev == undefined)
               return fetchedMessages;
             else
-              return [...fetchedMessages];
+              return [...prev,...fetchedMessages];
           });
-      
         });
       setSelectedChannel(channel);
     }
+
     return () => {
-      setMessages([]);
+      setMessages(()=>{
+        return [];
+      });
     };
-  }, [channels, param.id]);
+  }, [channels,param.id]);
 
   useEffect(() => {
     if (socket == null) return;
@@ -155,8 +148,13 @@ const ChannelMainPannel: React.FC = () => {
               <img src={selectedChannel.avatar} alt="avatar" className="rounded-xl h-12 w-12" />
               <h1 className="text-white font-poppoins">{selectedChannel.name}</h1>
             </div>
-            <div id="header_icons" className="flex items-center">
-              
+            <div id="header_icons" className="flex items-center gap-4">
+              {
+                selectedChannel.role == 'owner' &&
+                <button onClick={()=>{setShowUpdateChannelModal(true)}}>
+                  <EditSolid className={` w-[23px] text-lighgray`} />
+                </button>
+              }
               <button className=" text-white" onClick={() => setExpanded(!expanded)}>
                 <Members className={` w-[23px] ${expanded ? 'text-white' : 'text-lighgray'}`} />
               </button>
@@ -168,22 +166,35 @@ const ChannelMainPannel: React.FC = () => {
             className="flex  flex-col-reverse overflow-auto p-4 space-y-5 h-[65vh] scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray"
           >
             
+              
+               
+              
+           
             {messages &&
               Object.keys(messages).length > 0 &&
-              messages?.map((messagev) => (
-                <Message
-                  type={messagev.author.id == user.id ? 'SENT' : 'RECEIVED'}
-                  name={messagev.author.display_name}
-                  avatar={messagev.author.avatar}
-                  content={messagev.content}
-                  time="12:00"
-                />
-              ))}
+              (
+                <>
+                  {messages?.map((messagev) => (
+                  <Message
+                    type={messagev.author.id == user.id ? 'SENT' : 'RECEIVED'}
+                    name={messagev.author.display_name}
+                    avatar={messagev.author.avatar}
+                    content={messagev.content}
+                    time="12:00"
+                    messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
+                  />
+                ))}
+                 
+                </>
+              )
+
+              }
             {loading && (
              <div className="flex justify-center items-center py-2">
              <div className="absolute animate-spin rounded-full h-6 w-6 bg-primary"></div>
            </div>
             )}
+             
           </div>
           <div className="absolute bottom-[15px] w-full flex justify-center items-center">
             <input

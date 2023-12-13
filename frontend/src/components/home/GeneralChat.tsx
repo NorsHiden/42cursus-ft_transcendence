@@ -3,6 +3,7 @@ import React from 'react';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
 import Card from '@components/Card';
+import { useEffect } from 'react';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';
@@ -10,6 +11,7 @@ type MessageProps = {
   avatar: string;
   time: string;
   content: string;
+  messageReceivedSuccessfully: boolean;
 };
 
 export const MessageSkeleton: React.FC = () => {
@@ -27,9 +29,18 @@ export const MessageSkeleton: React.FC = () => {
   );
 };
 
-export const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content }) => {
+export const Message: React.FC<MessageProps> = ({ type, name, avatar, time, content,messageReceivedSuccessfully=true}) => {
+  const messageref = React.useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   if (messageReceivedSuccessfully) {
+  //     if (messageRef.current) {
+  //       messageRef.current.style.opacity = 100;
+  //     }
+  //   }
+  // }, [messageReceivedSuccessfully]);
+
   return (
-    <div className={`max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'}`}>
+    <div ref={messageref} className={`max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${messageReceivedSuccessfully?" opacity-100":" opacity-25"}`}>
       <div
         className={`flex items-center justify-between text-white mb-3 ${
           type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
