@@ -38,15 +38,20 @@ const configService = new ConfigService();
     }),
 
     // Configures serving static files, including avatars.
-    ServeStaticModule.forRoot({
-      rootPath: `${__dirname}/../../imgs`,
-      renderPath: '/imgs',
-      serveRoot: '/imgs',
-      serveStaticOptions: {
-        index: false,
-        redirect: false,
+    ServeStaticModule.forRoot(
+      {
+        rootPath: `${__dirname}/../../imgs`,
+        renderPath: '/imgs',
+        serveRoot: '/imgs',
+        serveStaticOptions: {
+          index: false,
+          redirect: false,
+        },
       },
-    }),
+      {
+        rootPath: `${__dirname}/../client`,
+      },
+    ),
 
     // Imports the `AuthModule` for handling authentication and user authorization.
     AuthModule,
