@@ -83,6 +83,7 @@ const ChannelMainPannel: React.FC = () => {
                 return [...prev,...fetchedMessages];
             });
           }
+          setLoading(false);
         });
       setSelectedChannel(channel);
     }
@@ -183,11 +184,8 @@ const ChannelMainPannel: React.FC = () => {
                 <>
                   {messages?.map((messagev) => (
                   <Message
+                    message={messagev}
                     type={messagev.author.id == user.id ? 'SENT' : 'RECEIVED'}
-                    name={messagev.author.display_name}
-                    avatar={messagev.author.avatar}
-                    content={messagev.content}
-                    time="12:00"
                     messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
                   />
                 ))}

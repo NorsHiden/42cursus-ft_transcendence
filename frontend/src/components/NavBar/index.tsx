@@ -15,7 +15,7 @@ const NotificationBox: React.FC = () => {
   const ref = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
 
   return (
-    <div ref={ref} className="relative center">
+    <div ref={ref} className="relative group center">
       <button
         onClick={() => setIsOpen((isOpen) => !isOpen)}
         className={twclsx('text-gray hover:text-white transition-all', isOpen && 'text-white')}

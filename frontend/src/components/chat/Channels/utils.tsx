@@ -65,8 +65,6 @@ export const sendMessage =  (channelId, message,setMessages:React.Dispatch<React
 export const getMessages = async (channelId:number,abortController:AbortController) => {
   try {
     const response = await axios.get(`/api/channels/${channelId}/messages`,{signal:abortController.signal});
-    console.log(`Data : `);
-    console.log(response.data.meta);
     // if (response.data.meta.currentPage < response.data.meta.totalPages)
     //   setHasMore(true);
     // else

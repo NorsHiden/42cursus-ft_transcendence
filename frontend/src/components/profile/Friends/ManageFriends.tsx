@@ -2,8 +2,6 @@ import { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useRouteLoaderData } from 'react-router-dom';
-
-
 import UserCard from './Friends-cards/Friends.tsx';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline.tsx';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline.tsx';
@@ -12,43 +10,6 @@ import Block from '@assets/novaIcons/outline/block.tsx';
 import { unfriend, block, accept, unblock } from './utils.ts';
 import { User } from '@globalTypes/types';
 import Button from '../../Button.tsx';
-
-// get api/friendlist/
-// {
-//   "id":14,
-//   "friendlist": {
-
-//   },
-//   "pending":{
-
-//   },
-//   "blocked":{
-
-//   }
-// }
-
-// post /api/friendlist/[userId]/unblock
-// post /api/friendlist/[userId]/block
-// post /api/friendlist/[userId]/accept
-// delete /api/friendlist/[userId]
-// post /api/friendlist/[userId]/send
-
-//sse data
-// data: {
-//   friend_request: {
-//     id: string;
-//     username: string;
-//     display_name: string;
-//     email: string;
-//     profile: Profile as {
-//       id: string;
-//       about: string;
-//       avatar: string;
-//       banner: string;
-//     };
-//     verified: boolean;
-//   }[];
-// }
 
 interface args {
   friendType: string;
@@ -182,7 +143,7 @@ const ManageFriends = () => {
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
                       color="BrightRed"
-                      onClick={(event) => {
+                      onClick={() => {
                         unfriend(friends, users.username, users.id, setFriends);
                       }}
                       cut={55}
@@ -196,7 +157,7 @@ const ManageFriends = () => {
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px] gap-1"
                       color="DarkMaroon"
-                      onClick={(event) => {
+                      onClick={() => {
                         block(friends, users.username, users.id, setFriends);
                       }}
                       cut={25}
@@ -221,7 +182,7 @@ const ManageFriends = () => {
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
                     <Button
                       className="center pl-[12px] pr-[20px] py-[8px] gap-1"
-                      onClick={(event) => {
+                      onClick={() => {
                         unblock(blocked, users.username, users.id, setBlocked);
                       }}
                       color="gray"
@@ -250,7 +211,7 @@ const ManageFriends = () => {
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
-                      onClick={(event) => {
+                      onClick={() => {
                         accept(pending, users.username, users.id, setPending);
                       }}
                       color="primary"
@@ -263,7 +224,7 @@ const ManageFriends = () => {
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
                       color="DarkMaroon"
-                      onClick={(event) => {
+                      onClick={() => {
                         unfriend(pending, users.username, users.id, setPending);
                       }}
                       cut={25}

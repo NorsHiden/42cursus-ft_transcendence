@@ -17,3 +17,15 @@ export type Channel = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type MessageType = {
+  id: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    id: number;
+    display_name: string;
+    avatar: string;
+  };
+};
