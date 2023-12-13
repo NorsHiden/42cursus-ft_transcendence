@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC } from 'react';
 // import React, { useState, useRef, useEffect } from 'react';
 
 //the card will take from 9 to 12.

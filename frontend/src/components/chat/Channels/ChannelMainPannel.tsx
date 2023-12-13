@@ -3,7 +3,7 @@ import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
 
 import { useSelectedChannel } from '@context/Channel';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
-import { Message,MessageSkeleton } from '@components/home/GeneralChat';
+import { Message} from '@components/home/GeneralChat';
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import Members from '@assets/novaIcons/solid/Members';
 import { User } from '@globalTypes/user';
@@ -12,13 +12,12 @@ import { Message as MessageType} from '@globalTypes/types';
 import { sendMessage } from './utils';
 import { getMessages } from './utils';
 import EditSolid from '@assets/novaIcons/solid/EditSolid';
-import useIntersectionObserver from '@hooks/useIntersectionObserver';
 
 const ChannelMainPannel: React.FC = () => {
   const {channels, selectedChannel, setSelectedChannel,socket,setShowUpdateChannelModal} = useSelectedChannel();
   const [messages, setMessages] = useState<MessageType[]>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [hasmore, setHasmore] = useState<boolean>(false);
+  // const [hasmore, setHasmore] = useState<boolean>(false);
   // const [page , setPage] = useState<number>(1);
 
   const param = useParams();
@@ -72,10 +71,6 @@ const ChannelMainPannel: React.FC = () => {
           if (fetchedMessages.length != 0)
           {
             setMessages((prev: MessageType[] | undefined) => {
-              console.log("prev");
-              console.log(prev);
-              console.log("fetchedMessages");
-              console.log(fetchedMessages);
               setLoading(false);
               if (prev == undefined)
                 return fetchedMessages;

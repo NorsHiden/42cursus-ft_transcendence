@@ -1,21 +1,9 @@
-import { NavLink, useMatch} from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import Card from '@components/Card';
-import ChannelsList from './ChannelsList';
-import MessagesList from './MessagesList';
-import { useEffect } from 'react';
 import { useSelectedChannel } from '@context/Channel';
 
 export const NavButtons = () => {
   const {setChannels,setDms} = useSelectedChannel();
-  // let match = useMatch('/chat/channels/:id?');
-  // let isActive = !!match;
-  // console.log(match);
-
-  // useEffect(() => {
-  //   // if (isActive) {
-  //     setChannels([]);
-  //   // }
-  // }, [match]);
 
   return (
     <>

@@ -1,5 +1,4 @@
-import React, { useState,useRef,useEffect} from 'react';
-import ContextMenu from '@components/ContextMenu';
+import React from 'react';
 import twclsx from '@utils/twclsx';
 
 interface ChannelProps {

@@ -18,12 +18,9 @@ const TextErea:FC<TextEreaProps> = (
     {
         className,
         id,
-        style,
         textContent,
         type,
         disabled = false,
-        setContent,
-        setactiveChanges,
         onChange
     }
 )=>{

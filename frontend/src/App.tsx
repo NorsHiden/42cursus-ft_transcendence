@@ -1,8 +1,8 @@
 import React from 'react';
 import { Toaster } from 'sonner';
-import { createBrowserRouter, RouterProvider, Navigate, Await } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
-import Layout, { LayoutLoader } from '@pages/Layout';
+import Layout from '@pages/Layout';
 import Home from '@pages/Home';
 import Discovery from '@pages/Discovery';
 import Leaderboard from '@pages/Leaderboard';

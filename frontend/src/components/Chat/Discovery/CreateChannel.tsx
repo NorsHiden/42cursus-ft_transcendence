@@ -3,7 +3,6 @@ import Card from '@components/Card';
 import { CreateChannelType, useCreateChannel } from './useCreateChannel';
 import { FC, useContext } from 'react';
 import { ChannelAvatarInput, ChannelBannerInput } from './ChannelImageInput';
-import { useSelectedChannel } from '@context/Channel';
 import { useState,useEffect } from 'react';
 import { mychannel } from '@globalTypes/channel';
 import {SelectedChannelContext} from '@context/Channel';

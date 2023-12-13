@@ -146,7 +146,7 @@ const GeneralChat: React.FC = () => {
               key={index}
               type={message.author.display_name == me.display_name ? 'SENT' : 'RECEIVED'}
               message={message}
-              
+              messageReceivedSuccessfully={message.messageReceivedSuccessfully}
             />
           ))}
           <div ref={scrollRef} />

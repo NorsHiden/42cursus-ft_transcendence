@@ -1,44 +1,46 @@
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import { useSelectedChannel } from '@context/Channel';
 import { useEffect } from 'react';
-import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
-import { DM, Member } from '@globalTypes/types';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Member } from '@globalTypes/types';
 import { useState, useRef } from 'react';
 import twclsx from '@utils/twclsx';
 import { Message } from '@components/home/GeneralChat';
 import { Message as MessageType } from '@globalTypes/types';
-import { sendMessage,getMessages } from '../Channels/utils.tsx';
+import { sendMessage, getMessages } from '../Channels/utils.tsx';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
 
 const MessagesMainPannel = () => {
-  const { Dms, LogedUser, DirectMessages, setDirectMessages, socket} = useSelectedChannel();
+  const { Dms, LogedUser, socket } = useSelectedChannel();
   const navigate = useNavigate();
   const param = useParams();
-  const [host, setHost] = useState<Member>();
+  const [messages, setMessages] = useState<MessageType[]>();
+  const [loading, setLoading] = useState<boolean>(true);
+  // const [host, setHost] = useState<Member>();
+
   const [reciepient, setreciepient] = useState<Member>();
   const [DmId, setDmId] = useState<number>();
   const [message, setMessage] = useState<string>('');
-  const messagesRef = useRef(DirectMessages);
+  const messagesRef = useRef(messages);
 
   const containerRef = useRef(null);
 
   useEffect(() => {
-    messagesRef.current = DirectMessages;
-  }, [DirectMessages]);
+    messagesRef.current = messages;
+  }, [messages]);
 
   useEffect(() => {
-    const channelId: number = param.id as number;
+    const channelId = param.id;
 
-    const selectedDm = Dms.find((dm) => dm.id == channelId);
+    const selectedDm = Dms.find((dm) => dm.id == (channelId as unknown as number));
     console.log(selectedDm);
     if (selectedDm) {
       setDmId(selectedDm.id);
       if (selectedDm.members[0].userId == LogedUser.id) {
-        setHost(selectedDm.members[0]);
+        // setHost(selectedDm.members[0]);
         setreciepient(selectedDm.members[1]);
-      }
-      else {
-        setHost(selectedDm.members[1]);
+      } else {
+        // setHost(selectedDm.members[1]);
         setreciepient(selectedDm.members[0]);
       }
     }
@@ -55,79 +57,81 @@ const MessagesMainPannel = () => {
       },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      messageReceivedSuccessfully: false,
     };
-    console.log("messages ref");
-    console.log(messagesRef.current);
-    console.log("dm id ",DmId);
 
-    console.log("new message");
+    console.log('messages ref');
+    console.log(messagesRef.current);
+    console.log('dm id ', DmId);
+
+    console.log('new message');
     console.log(newMessage);
-    if (messagesRef.current[DmId!] === undefined) {
-      const newMessages = { ...messagesRef.current, [DmId!]: [newMessage] };
-      setDirectMessages(newMessages);
-    }
-    else
-    {
-      const newMessages = { ...messagesRef.current, [DmId!]: [newMessage,...messagesRef.current[DmId!]] };
-      setDirectMessages(newMessages);
-    }
-    // const newMessages = {
-    //   ...messagesRef.current,
-    //   [DmId!]: [newMessage, ...messagesRef.current[DmId!]],
-    // };
-    // setDirectMessages(newMessages);
-    sendMessage(DmId!, message);
+
+    setMessages((prev: MessageType[] | undefined) => {
+      if (prev == undefined) return [newMessage];
+      else return [newMessage, ...prev!];
+    });
+
+    sendMessage(DmId!, message, setMessages, newMessage);
   };
 
   useEffect(() => {
-    if (DmId)
-    {
-      getMessages(DmId).then((fetchedMessages) => {
-              const newMessages = { ...DirectMessages, [DmId!]: [...fetchedMessages] };
-              setDirectMessages(newMessages);
-            });
-    }
-  }, [Dms, param.id]);
+    const abortController = new AbortController();
 
+    if (DmId) {
+      setLoading(true);
+      getMessages(DmId, abortController).then((fetchedMessages) => {
+        if (fetchedMessages.length != 0) {
+          setMessages((prev: MessageType[] | undefined) => {
+            setLoading(false);
+            if (prev == undefined) return fetchedMessages;
+            else return [...prev, ...fetchedMessages];
+          });
+        }
+        // const newMessages = { ...DirectMessages, [DmId!]: [...fetchedMessages] };
+        // setDirectMessages(newMessages);
+      });
+    }
+
+    return () => {
+      abortController.abort();
+      setMessages(() => {
+        return [];
+      });
+    };
+  }, [Dms, param.id]);
 
   useEffect(() => {
     if (socket == null) return;
     if (DmId == null) return;
-    
+
     // Send joinChannel event with channelId as payload
     console.log('Joining channel: ' + DmId);
     socket.emit('joinChannel', { channelId: DmId });
     // Listen for message event
-      socket.on('message', (message) => {
-      if (message.author.id != LogedUser.id)
-      {
-        if (messagesRef.current[DmId!] === undefined) {
-          const newMessages = { ...messagesRef.current, [DmId!]: [message] };
-          setDirectMessages(newMessages);
-        }
-        else
-        {
-          const newMessages = { ...messagesRef.current, [DmId!]: [message,...messagesRef.current[DmId!]] };
-          setDirectMessages(newMessages);
-        }
-      }
-      else
-      {
-        console.log("message sent by user");
+    socket.on('message', (message) => {
+      if (message.author.id != LogedUser.id) {
+        // console.log("message recieved by user");
+        setMessages((prev: MessageType[] | undefined) => {
+          if (prev == undefined) return [message];
+          else return [message, ...prev!];
+        });
+      } else {
+        console.log('message sent by user');
       }
       // Handle received message
     });
-  
+
     return () => {
       // Send leaveChannel event with channelId as payload
       console.log('Leaving channel: ' + DmId);
-      socket.emit('leaveChannel', { channelId: DmId});
+      socket.emit('leaveChannel', { channelId: DmId });
       // Stop listening for message event
       socket.off('message');
     };
   }, [socket, DmId]);
 
-  console.log("REciepient");
+  console.log('REciepient');
   console.log(reciepient);
   return (
     <div
@@ -172,17 +176,22 @@ const MessagesMainPannel = () => {
           ref={containerRef}
           className="flex  flex-col-reverse overflow-auto p-4 space-y-5 h-[65vh] scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray"
         >
-          {DirectMessages &&
-            Object.keys(DirectMessages).length > 0 &&
-            DirectMessages[DmId!]?.map((messagev) => (
-              <Message
-                type={messagev.author.id == LogedUser.id ? 'SENT' : 'RECEIVED'}
-                name={messagev.author.display_name}
-                avatar={messagev.author.avatar}
-                content={messagev.content}
-                time="12:00"
-              />
-            ))}
+          {messages && Object.keys(messages).length > 0 && (
+            <>
+              {messages?.map((messagev) => (
+                <Message
+                  message={messagev}
+                  type={messagev.author.id == LogedUser.id ? 'SENT' : 'RECEIVED'}
+                  messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
+                />
+              ))}
+            </>
+          )}
+          {loading && (
+            <div className="flex justify-center items-center py-2">
+              <div className="absolute animate-spin rounded-full h-6 w-6 bg-primary"></div>
+            </div>
+          )}
         </div>
         <div className="absolute bottom-[15px] w-full flex justify-center items-center">
           <input
@@ -201,17 +210,17 @@ const MessagesMainPannel = () => {
               setMessage(e.target.value);
             }}
           />
-           <div
-              onClick={() => {
-                sendMessageHandler();
-                setMessage('');
-              }}
-            >
-              <SendSolid
-                size={18}
-                className="text-white absolute right-20 top-1/2 -translate-y-1/2 cursor-pointer"
-              />
-            </div>
+          <div
+            onClick={() => {
+              sendMessageHandler();
+              setMessage('');
+            }}
+          >
+            <SendSolid
+              size={18}
+              className="text-white absolute right-20 top-1/2 -translate-y-1/2 cursor-pointer"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -7,7 +7,6 @@ import { DM } from '@globalTypes/types';
 import { User } from '@globalTypes/user';
 import { useRouteLoaderData } from 'react-router-dom';
 
-const data: mychannel[] = [];
 
 // Define the shape of the context data
 interface SelectedChannelContextData {
@@ -37,14 +36,14 @@ interface SelectedChannelProviderProps {
 
 // Create a provider component for this context
 export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = ({ children }) => {
-  const [selectedChannel, setSelectedChannel] = useState<mychannel>({});
+  const [selectedChannel, setSelectedChannel] = useState<mychannel>({} as mychannel);
   const [channels, setChannels] = useState<mychannel[]>([]);
   const [messages, setMessages] = useState<Record<string, Message[]>>({}); // for channels
   const [DirectMessages, setDirectMessages] = useState<Record<string, Message[]>>({}); // for DMs
 
   const [socket, setSocket] = useState<Socket | null>(null);
   const [Dms, setDms] = useState<DM[]>([]);
-  const [LogedUser, setLogedUser] = useState<User>({});
+  const [LogedUser, setLogedUser] = useState<User>({} as User);
   const [ShowUpdateChannelModal, setShowUpdateChannelModal] = useState<boolean>(false);
 
   const user = useRouteLoaderData('layout') as User;

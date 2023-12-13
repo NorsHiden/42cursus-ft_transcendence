@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import ChannelElement from './ChannelElement.tsx';
 import {useSelectedChannel} from '@context/Channel';
 import  {fetchChannels}  from './utils.ts';
-import { Channel } from 'diagnostics_channel';
 
 
 
@@ -46,7 +45,7 @@ const ChannelsList: React.FC = () => {
         ),
       )}
       {loading
-        ? Array.from({ length: 10 }).map((_, i) => (
+        ? Array.from({ length: 10 }).map((_, ) => (
             <li className='flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px]'>
               <div className="flex  items-center gap-4 animate-pulse bg-darkGray">
                 <div  className="rounded-2xl h-[52px] w-[52px] animate-pulse bg-darkGray" />

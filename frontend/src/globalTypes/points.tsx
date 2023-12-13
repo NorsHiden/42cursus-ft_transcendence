@@ -1,4 +1,4 @@
-export type Points {
+export type Points = {
 	points: {
 		value: number;
 		date: Date;

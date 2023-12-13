@@ -150,13 +150,13 @@ const Notification: React.FC = () => {
     >
       <h1 className="text-xl text-white font-bold mb-6">Notifications</h1>
       <div className="flex flex-col gap-4 overflow-hidden group-hover:overflow-y-auto scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-gray">
-        {/* {notifications.map((notification, index) => (
+        {notifications.map((notification, index) => (
           <NotificationMessage
             key={index}
             notificationMessage={notification}
             setNotifications={setNotifications}
           />
-        ))} */}
+        ))}
         {!isLoading && hasMore && <div ref={lastNotificationRef}></div>}
         {(isLoading || hasMore) && (
           <div id="skeleton" className="flex items-center gap-4 animate-pulse">

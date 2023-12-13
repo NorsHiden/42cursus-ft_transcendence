@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { mychannel } from '@globalTypes/channel';
-import {Member} from './ChannelSidePannel';
+import {Member} from '@globalTypes/types';
 import { toast } from 'sonner';
 import { User } from '@globalTypes/user';
 import {Message as MessageType } from '@globalTypes/types';
@@ -33,7 +33,7 @@ export const fetchMembers = (selectedChannel:mychannel,setMembers:(arg:Member[])
   }
   
 
-export const sendMessage =  (channelId, message,setMessages:React.Dispatch<React.SetStateAction<MessageType[]>>,newMessage:MessageType) => {
+export const sendMessage =  (channelId:number, message:string,setMessages:React.Dispatch<React.SetStateAction<MessageType[] | undefined>> ,newMessage:MessageType) => {
     console.log('channelID', message);
     const response =  axios.post(`/api/channels/${channelId}/messages`, {
       content: message,
@@ -44,11 +44,12 @@ export const sendMessage =  (channelId, message,setMessages:React.Dispatch<React
       },
     });
 
-    response.then((response) => {
+    response.then(() => {
       // console.log(response.data);
 
-      setMessages((prev: MessageType[]) => {
-        return prev.map((message) => {
+      setMessages((prev: MessageType[] | undefined) => {
+        
+        return prev?.map((message) => {
           if (message.content === newMessage.content) {
             return {
               ...newMessage,
@@ -72,7 +73,7 @@ export const getMessages = async (channelId:number,abortController:AbortControll
 
     return response.data.data;
   } catch (error) {
-    console.error(`Error fetching messages: ${error}`);
+    // console.error(`Error fetching messages: ${error}`);
   }
 };
 

@@ -13,27 +13,9 @@ export async function ChatMainPannelLoader(id: string | undefined) {
   return channel;
 }
 
-enum MemberPresence {
-  ONLINE = 'online',
-  OFFLINE = 'offline',
-  AWAY = 'ingame',
-}
 
-interface DirectMessagesProps {
-  name: string;
-  avatar: string;
-  presence: MemberPresence;
-}
 
-const DirectMessages: React.FC = () => {
-  return <div className="bg-primary rounded-full h-16"></div>;
-};
 
-enum MemberRole {
-  OWNER = 'owner',
-  ADMIN = 'admin',
-  MEMBER = 'member',
-}
 
 // export default CardComponent;
 // const channelContext = React.createContext(null);

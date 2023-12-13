@@ -1,9 +1,6 @@
 import  React,{useState,useEffect,useCallback,useRef} from 'react';
 import { NavLink } from 'react-router-dom';
-import ChannelElement from './Channel';
 import {useSelectedChannel} from '@context/Channel';
-import  {fetchChannels}  from './utils.ts';
-import { DM, Member } from '@globalTypes/types';
 import { getDms } from './utils';
 import DmElement from './DmElement.tsx';
 
@@ -28,7 +25,7 @@ const MessagesList: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    getDms(pageRef.current,setDms,setHasMore,setLoading,Dms);
+    getDms(pageRef.current,setDms,setHasMore,setLoading);
   }, [pageRef.current]);
   
   return (
@@ -58,7 +55,7 @@ const MessagesList: React.FC = () => {
         ),
       )}
       {loading
-        ? Array.from({ length: 10 }).map((_, i) => (
+        ? Array.from({ length: 10 }).map((_,) => (
             <li className='flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px]'>
               <div className="flex  items-center gap-4 animate-pulse bg-darkGray">
                 <div  className="rounded-2xl h-[52px] w-[52px] animate-pulse bg-darkGray" />
