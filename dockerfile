@@ -13,5 +13,6 @@ COPY frontend ./frontend
 COPY imgs ./imgs
 
 RUN cd frontend && npm run build
+RUN cd backend && npm run build
 
-CMD [ "npm", "start", "--prefix", "backend" ]
+CMD [ "npm", "run", "start:prod", "--prefix", "backend" ]
