@@ -3,4 +3,4 @@
 /.env.dev
 imgs/channels
 imgs/users
-
+.env.db
