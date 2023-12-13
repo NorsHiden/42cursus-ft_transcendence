@@ -1,3 +1,6 @@
-/backend
 
+/backend
 /.env.dev
+imgs/channels
+imgs/users
+
