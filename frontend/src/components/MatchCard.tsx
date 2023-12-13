@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Card from '@components/Card';
 import { player, CardType } from '@globalTypes/types';
 import { GAMEMODE_NAME, GAME_MODES } from '@globalTypes/gameModes';

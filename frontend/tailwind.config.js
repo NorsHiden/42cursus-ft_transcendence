@@ -5,13 +5,9 @@ import scrollbar from 'tailwind-scrollbar';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  safelist: [
-    { pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
-    {
-      pattern:
-        /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade)/,
-    },
-  ],
+  safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
+  { pattern: /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade|lighgray)/ },
+],
   theme: {
     screens: {
       sm: '640px',
@@ -32,13 +28,15 @@ export default {
         layout: '120px minmax(0, 1fr)',
         section: 'auto minmax(0, 1fr)',
         chat: 'auto minmax(0, 1fr) max-content',
+        channels: '25px 25px auto',
       },
       colors: {
         accent: '#FE5821',
         background: '#1B191D',
         'input-color': '#1E1F23',
-        'input-border-color': '#3E4048',
-        gray: '#71717A',
+        'input-border-color':'#3E4048',
+        gray :'#71717A',
+        lighgray:'#9B9CA2',
         regular: {
           color: '#C2784F',
           dark: '#24150D',
@@ -62,6 +60,7 @@ export default {
         black: '#1B191D',
         lightBlack: '#1E1F23',
         darkGray: '#2C2D33',
+        CharcoalGray: '#2B2D32',
         gray: '#5E6069',
         white: '#FFFFFF',
         primary: '#FE5821',

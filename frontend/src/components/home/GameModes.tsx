@@ -25,7 +25,7 @@ const GameModes: React.FC = () => {
       socket.emit('lobby', { action: 'CANCEL' });
       setIsSearching(false);
     } else {
-      socket.emit('lobby', {
+      gameSocket.emit('lobby', {
         action: 'SEARCH',
         game_mode: Object.keys(GAME_MODES)[selectedMode],
       });
@@ -34,8 +34,8 @@ const GameModes: React.FC = () => {
   };
 
   useEffect(() => {
-    socket.on('lobby', checkLobby);
-    socket.on('error', () => {
+    gameSocket.on('lobby', checkLobby);
+    gameSocket.on('error', () => {
       toast.dismiss();
       toast.error('You need at least 300pts to play Gold Rush');
       setIsSearching(false);

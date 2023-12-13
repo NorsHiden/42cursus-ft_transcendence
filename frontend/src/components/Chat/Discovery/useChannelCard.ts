@@ -16,6 +16,7 @@ export type Channel = {
 
 export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) => void) => {
   const [loading, setLoading] = useState(false);
+  const [left, setLeft] = useState(false);
   const [channelMembers, setChannelMembers] = useState([]);
   const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) =
       loading: `Joining ${channel.name}...`,
       success: () => {
         setLoading(false);
-        navigate(`/chat/${channel.id}`);
+        navigate(`/chat/channels/${channel.id}`);
         return 'You have joined the channel successfully!';
       },
       error: (error) => `${error.response.data.message}`,
@@ -40,7 +41,8 @@ export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) =
   const leaveChannel = () => {
     if (loading) return;
     const res = axios.delete(`/api/channels/${channel.id}/leave`).then(() => {
-      getChannelMembers();
+      if (channelMembers.length == 1) setLeft(true);
+      else getChannelMembers();
     });
     setLoading(true);
     toast.dismiss();
@@ -58,10 +60,13 @@ export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) =
   };
 
   const getChannelMembers = () => {
-    axios.get(`/api/channels/${channel.id}/members`).then((res) => {
-      setChannelMembers(res.data.data);
-      setLoading(false);
-    });
+    axios
+      .get(`/api/channels/${channel.id}/members`)
+      .then((res) => {
+        setChannelMembers(res.data.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
     setLoading(true);
   };
 
@@ -71,5 +76,6 @@ export const useChannelCard = (channel: Channel, showPopUp: (channel: Channel) =
     getChannelMembers,
     joinChannel,
     leaveChannel,
+    left,
   };
 };

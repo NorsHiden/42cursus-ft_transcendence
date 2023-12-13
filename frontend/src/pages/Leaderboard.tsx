@@ -46,12 +46,21 @@ const Leaderboard: React.FC = () => {
       }
   >();
 
-  const getRecords = async (page: number) => {
-    setLoading(true);
-    const res = await axios.get(`/api/users/leaderboard?page=${page}`);
-    setRecords((prevRecords) => [...prevRecords, ...res.data]);
-    if (res.data.length < 10) setHasMore(false);
-    setLoading(false);
+  const getRecords = async (page: number,abortController:AbortController) => {
+    try
+    {
+      setLoading(true);
+      const res = await axios.get(`/api/users/leaderboard?page=${page}`,{
+        signal:abortController.signal
+      });
+      setRecords((prevRecords) => [...prevRecords, ...res.data]);
+      if (res.data.length < 10) setHasMore(false);
+      setLoading(false);
+    }
+    catch(err)
+    {
+      return;
+    }
   };
 
   const lastRecordElementRef = useCallback((node: HTMLDivElement) => {
@@ -59,13 +68,18 @@ const Leaderboard: React.FC = () => {
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasMore) {
         setPage((prevPage) => {
-          getRecords(prevPage);
           return prevPage + 1;
         });
       }
     });
     if (node) observer.current.observe(node);
   }, []);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    getRecords(page, abortController);
+    return () => abortController.abort();
+  }, [page]);
 
   return (
     <div className="flex flex-col text-white gap-10">

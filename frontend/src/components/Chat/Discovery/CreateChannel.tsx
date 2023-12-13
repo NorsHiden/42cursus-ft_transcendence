@@ -1,8 +1,11 @@
 import EllipseOutline from '@assets/novaIcons/outline/Ellipse';
 import Card from '@components/Card';
 import { CreateChannelType, useCreateChannel } from './useCreateChannel';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { ChannelAvatarInput, ChannelBannerInput } from './ChannelImageInput';
+import { useState, useEffect } from 'react';
+import { mychannel } from '@globalTypes/channel';
+import { SelectedChannelContext } from '@context/Channel';
 
 interface CreateChannelProps {
   enabled: boolean;
@@ -10,8 +13,18 @@ interface CreateChannelProps {
 }
 
 export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) => {
+  const [update, setUpdate] = useState<boolean>(false);
+  const [currentChannel, setCurrentChannel] = useState<mychannel>();
   const { channel, setChannel, loading, handleAvatarUpload, handleBannerUpload, createChannel } =
-    useCreateChannel(hidePopUp);
+    useCreateChannel(hidePopUp, update, currentChannel);
+  const context = useContext(SelectedChannelContext);
+
+  useEffect(() => {
+    if (context) {
+      setCurrentChannel(context.selectedChannel);
+      setUpdate(true);
+    }
+  }, [context]);
 
   return (
     <div
@@ -26,11 +39,23 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) =>
       />
       <div className="absolute w-full h-full bg-black opacity-75" onClick={hidePopUp} />
       <div className="flex relative flex-col items-center h-[80%] overflow-auto 2xl:h-[45rem] w-[30rem] bg-lightBlack rounded-3xl z-10 2xl:overflow-hidden">
-        <ChannelBannerInput channel={channel} handleBannerUpload={handleBannerUpload} />
+        <ChannelBannerInput
+          channel={channel}
+          handleBannerUpload={handleBannerUpload}
+          update={update}
+          currentChannel={currentChannel}
+        />
         <div className="absolute h-48 w-full bg-gradient-to-b from-transparent to-lightBlack" />
-        <ChannelAvatarInput channel={channel} handleAvatarUpload={handleAvatarUpload} />
+        <ChannelAvatarInput
+          channel={channel}
+          handleAvatarUpload={handleAvatarUpload}
+          update={update}
+          currentChannel={currentChannel}
+        />
         <label className="flex flex-col items-center text-white pt-72 lg:pt-24 gap-7">
-          <p className="text-white">Create your channel and invite your friends</p>
+          <p className="text-white">
+            {update ? 'Update your channel ' : 'Create your channel and invite your friends'}
+          </p>
           <div className="flex flex-col items-center justify-center gap-6">
             <input
               type="text"
@@ -86,7 +111,7 @@ export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) =>
               {loading ? (
                 <EllipseOutline className="w-8 h-8 text-white animate-spin" />
               ) : (
-                <p className="text-2xl font-serif">Create</p>
+                <p className="text-2xl font-serif">{update ? 'Update' : 'Create'}</p>
               )}
             </button>
           </Card>

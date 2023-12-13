@@ -9,25 +9,25 @@ interface UserFormProps {
   isSubmitting: boolean;
 }
 
-const Input: React.FC<{
-  name?: string;
-  value?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  placeholder?: string;
-  className?: string;
-}> = ({ name, value, onChange, placeholder, className }) => {
-  return (
-    <input
-      className={className}
-      type="text"
-      value={value || ''}
-      name={name}
-      placeholder={placeholder}
-      onChange={onChange}
-      autoComplete="off"
-    />
-  );
-};
+// const Input: React.FC<{
+//   name?: string;
+//   value?: string;
+//   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+//   placeholder?: string;
+//   className?: string;
+// }> = ({ name, value, onChange, placeholder, className }) => {
+//   return (
+//     <input
+//       className={className}
+//       type="text"
+//       value={value || ''}
+//       name={name}
+//       placeholder={placeholder}
+//       onChange={onChange}
+//       autoComplete="off"
+//     />
+//   );
+// };
 
 const UserForm: React.FC<UserFormProps> = ({
   NewUser,

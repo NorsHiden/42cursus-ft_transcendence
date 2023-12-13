@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-
 import twclsx from '@utils/twclsx';
 import useDimensions from '@hooks/useDimensions';
 import Polygon, { PolygonProps } from './Polygon';

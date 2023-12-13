@@ -2,7 +2,6 @@ import React, { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useRouteLoaderData } from 'react-router-dom';
-
 import UserCard from './Friends-cards/Friends.tsx';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline.tsx';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline.tsx';

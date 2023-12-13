@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { mychannel } from '@globalTypes/channel';
 
 export type CreateChannelType = {
   avatar?: {
@@ -17,7 +18,11 @@ export type CreateChannelType = {
   password?: string;
 };
 
-export const useCreateChannel = (hidePopUp: () => void) => {
+export const useCreateChannel = (
+  hidePopUp: () => void,
+  update: boolean,
+  currentChannel: mychannel | undefined,
+) => {
   const [channel, setChannel] = useState<CreateChannelType>({} as CreateChannelType);
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +57,7 @@ export const useCreateChannel = (hidePopUp: () => void) => {
   };
 
   const createChannel = async () => {
+    if (loading) return;
     const formData = new FormData();
     if (channel.avatar?.file) formData.append('avatar', channel.avatar?.file as Blob);
     if (channel.banner?.file) formData.append('banner', channel.banner?.file as Blob);
@@ -68,21 +74,39 @@ export const useCreateChannel = (hidePopUp: () => void) => {
       formData.append('password', channel.password as string);
     }
     setLoading(true);
-    const res = axios.post('/api/channels', formData);
-    toast.dismiss();
-    toast.promise(res, {
-      loading: 'Creating channel...',
-      success: (data) => {
-        setLoading(false);
-        hidePopUp();
-        navigate(`/chat/${data.data.id}`);
-        return 'Channel has been created';
-      },
-      error: (error) => {
-        setLoading(false);
-        return error.response.data.message[0];
-      },
-    });
+    if (update) {
+      const res = axios.patch(`/api/channels/${currentChannel?.id}`, formData);
+      toast.dismiss();
+      toast.promise(res, {
+        loading: 'Updating channel...',
+        success: (data) => {
+          setLoading(false);
+          hidePopUp();
+          navigate(`/chat/channels/${data.data.id}`);
+          return 'Channel has been updated';
+        },
+        error: (error) => {
+          setLoading(false);
+          return error.response.data.message[0];
+        },
+      });
+    } else {
+      const res = axios.post('/api/channels', formData);
+      toast.dismiss();
+      toast.promise(res, {
+        loading: 'Creating channel...',
+        success: (data) => {
+          setLoading(false);
+          hidePopUp();
+          navigate(`/chat/channels/${data.data.id}`);
+          return 'Channel has been created';
+        },
+        error: (error) => {
+          setLoading(false);
+          return error.response.data.message[0];
+        },
+      });
+    }
   };
 
   return {
