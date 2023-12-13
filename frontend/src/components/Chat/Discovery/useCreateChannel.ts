@@ -18,7 +18,11 @@ export type CreateChannelType = {
   password?: string;
 };
 
-export const useCreateChannel = (hidePopUp: () => void, update:boolean,currentChannel: mychannel | undefined) => {
+export const useCreateChannel = (
+  hidePopUp: () => void,
+  update: boolean,
+  currentChannel: mychannel | undefined,
+) => {
   const [channel, setChannel] = useState<CreateChannelType>({} as CreateChannelType);
   const [loading, setLoading] = useState(false);
 
@@ -86,8 +90,7 @@ export const useCreateChannel = (hidePopUp: () => void, update:boolean,currentCh
           return error.response.data.message[0];
         },
       });
-    }
-    else {
+    } else {
       const res = axios.post('/api/channels', formData);
       toast.dismiss();
       toast.promise(res, {
