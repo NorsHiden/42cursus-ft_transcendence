@@ -42,6 +42,11 @@ export class UserChannel {
   }
 
   @Expose()
+  get username(): string {
+    return this.user.username;
+  }
+
+  @Expose()
   get presence(): string {
     return this.user.presence;
   }
