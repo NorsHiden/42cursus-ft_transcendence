@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
-import { motion } from 'framer-motion';
 import { useRouteLoaderData } from 'react-router-dom';
 import UserCard from './Friends-cards/Friends.tsx';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline.tsx';
@@ -196,7 +195,7 @@ const ManageFriends: React.FC = () => {
                       borderColor="#E95E6F"
                     >
                       <Unblock className="relative text-white w-[22px] h-[22px]" />
-                      <p className="text-white font-poppins font-medium">Unfriend</p>
+                      <p className="text-white font-medium">Unfriend</p>
                     </Button>
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px] gap-1"
@@ -207,7 +206,7 @@ const ManageFriends: React.FC = () => {
                       cut={25}
                     >
                       <Block className="text-red w-[18px] h-[18px]" />
-                      <p className="text-red font-poppins font-regular">Block</p>
+                      <p className="text-red font-regular">Block</p>
                     </Button>
                   </div>
                 </UserCard>
@@ -236,7 +235,7 @@ const ManageFriends: React.FC = () => {
                       borderColor="#858895"
                     >
                       <Unblock className="relative text-white w-[22px] h-[22px]" />
-                      <p className="text-white font-poppins font-medium">Unblock</p>
+                      <p className="text-white font-medium">Unblock</p>
                     </Button>
                   </div>
                 </UserCard>
@@ -263,7 +262,7 @@ const ManageFriends: React.FC = () => {
                       borderColor="#FF8C66"
                     >
                       <CheckOutline className="text-white" />
-                      <p className="text-white font-poppins font-medium">Accept</p>
+                      <p className="text-white font-medium">Accept</p>
                     </Button>
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
@@ -274,7 +273,7 @@ const ManageFriends: React.FC = () => {
                       cut={25}
                     >
                       <CloseOutline className="text-red" />
-                      <p className="text-red font-poppins font-regular">Decline</p>
+                      <p className="text-red font-regular">Decline</p>
                     </Button>
                   </div>
                 </UserCard>

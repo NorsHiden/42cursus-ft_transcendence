@@ -166,7 +166,7 @@ const MessagesMainPannel = () => {
               <img src={reciepient?.avatar} alt="" className="rounded-full" />
             </div>
             <div id="name" className="flex center gap-2 lg:gap-1 2xl:gap-2">
-              <p className="text-white font-poppins font-medium lg:text-sm 2xl:text-base uppercase">
+              <p className="text-white font-medium lg:text-sm 2xl:text-base uppercase">
                 {reciepient?.displayName}
               </p>
             </div>
@@ -196,7 +196,7 @@ const MessagesMainPannel = () => {
         <div className="absolute bottom-[15px] w-full flex justify-center items-center">
           <input
             type="text"
-            className="text-white font-poppins w-[90%] justify-self-center rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray"
+            className="text-white w-[90%] justify-self-center rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray"
             placeholder="Type your messgage"
             value={message}
             onKeyDown={(e) => {

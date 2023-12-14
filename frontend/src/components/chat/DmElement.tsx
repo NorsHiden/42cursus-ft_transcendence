@@ -24,7 +24,7 @@ const DmElement: React.FC<ChannelProps> = ({ name, avatar, presence }) => {
           <img src={avatar} alt="" className="rounded-full" />
         </div>
         <div id="name" className="flex center gap-2 lg:gap-1 2xl:gap-2">
-          <p className="text-white font-poppins font-medium lg:text-xs 2xl:text-base">{name}</p>
+          <p className="text-white font-medium lg:text-xs 2xl:text-base">{name}</p>
         </div>
       </div>
     </div>

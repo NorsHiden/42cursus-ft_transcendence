@@ -13,19 +13,15 @@ export async function ChatMainPannelLoader(id: string | undefined) {
   return channel;
 }
 
-
-
-
-
-// export default CardComponent;
-// const channelContext = React.createContext(null);
-
 const UpdateChannel: React.FC = () => {
-  const {ShowUpdateChannelModal,setShowUpdateChannelModal} = useSelectedChannel();
+  const { ShowUpdateChannelModal, setShowUpdateChannelModal } = useSelectedChannel();
   return (
-    <CreateChannel enabled={ShowUpdateChannelModal} hidePopUp={() => setShowUpdateChannelModal(false)} />
+    <CreateChannel
+      enabled={ShowUpdateChannelModal}
+      hidePopUp={() => setShowUpdateChannelModal(false)}
+    />
   );
-}
+};
 
 const Chat: React.FC = () => {
   const navigate = useNavigate();
@@ -36,7 +32,6 @@ const Chat: React.FC = () => {
   const isActiveChannels = !!match;
   const isActiveMessages = !!match2;
   const AcitveRoutmobile = isActiveChannels || isActiveMessages;
-  // const {selectedChannel,setSelectedChannel} = useSelectedChannel();
 
   useEffect(() => {
     if (chat) navigate('/chat/channels');
@@ -53,7 +48,7 @@ const Chat: React.FC = () => {
         >
           <div className="flex justify-center items-center">
             <input
-              className="text-white font-poppins w-[90%] justify-self-center rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray"
+              className="text-white w-[90%] justify-self-center rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray"
               placeholder="Search"
             />
           </div>
@@ -70,7 +65,7 @@ const Chat: React.FC = () => {
           ></div>
         )}
       </div>
-      <UpdateChannel/>
+      <UpdateChannel />
     </SelectedChannelProvider>
   );
 };

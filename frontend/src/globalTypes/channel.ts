@@ -19,4 +19,5 @@ export type MessageType = {
     display_name: string;
     avatar: string;
   };
+  messageReceivedSuccessfully: boolean;
 };

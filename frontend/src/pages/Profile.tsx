@@ -27,7 +27,7 @@ const Profile: React.FC = () => {
   const user = useLoaderData() as User;
 
   return (
-    <div className="w-full h-full grid grid-rows-1 grid-cols-4 gap-[1vw]">
+    <div className="w-full h-full grid grid-rows-1 grid-cols-4 gap-x-14">
       <PlayerProfile className="col-span-1" />
       <div className="col-span-3 grid grid-rows-section gap-y-20">
         <nav className="w-full flex">

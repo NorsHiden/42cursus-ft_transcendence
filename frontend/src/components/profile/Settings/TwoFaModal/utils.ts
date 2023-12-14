@@ -1,21 +1,11 @@
 import axios from 'axios';
 import { toast } from 'sonner';
 
-
-
-
-export function hideModalDialog(
-  event: React.MouseEvent,
-  modalRef: any,
-  setIsModalVisible: (visible: boolean) => void,
+export async function generateQrCode(
+  setQrCode: (qrCode: string) => void,
+  generated: boolean,
+  setGenerated: (generated: boolean) => void,
 ) {
-  console.log(modalRef.current);
-  if (modalRef.current && !modalRef.current.contains(event.target)) {
-    setIsModalVisible(false);
-  }
-}
-
-export async function generateQrCode(setQrCode: (qrCode: string) => void, generated: boolean, setGenerated: (generated: boolean) => void) {
   try {
     if (generated) return;
     setGenerated(true);
@@ -27,23 +17,23 @@ export async function generateQrCode(setQrCode: (qrCode: string) => void, genera
   }
 }
 
-export  function verify(
+export function verify(
   OTP: string,
   setTwoFaEnabled: (user: any) => void,
   setIsModalVisible: (visible: boolean) => void,
 ) {
   try {
-    const response =  axios.post('/api/auth/2fa/verify', { auth_code: OTP });
+    const response = axios.post('/api/auth/2fa/verify', { auth_code: OTP });
     toast.promise(response, {
-        loading: 'Verifying...',
-        success: ()=>{
-            setIsModalVisible(false);
-            setTwoFaEnabled(true);
-            return 'Authenticator enabled';
-        },
-        error: (error)=>{
-            return error.response.data.message;
-        },
+      loading: 'Verifying...',
+      success: () => {
+        setIsModalVisible(false);
+        setTwoFaEnabled(true);
+        return 'Authenticator enabled';
+      },
+      error: (error) => {
+        return error.response.data.message;
+      },
     });
   } catch (error) {
     console.error('Failed to verify token:', error);
@@ -53,8 +43,8 @@ export  function verify(
 export async function turnOff2fa(
   TwoFaEnabled: boolean,
   setTwoFaEnabled: (Enabled: boolean) => void,
-  setEnabling: (enabling: boolean) => void, 
-  ) {
+  setEnabling: (enabling: boolean) => void,
+) {
   try {
     if (!TwoFaEnabled) return;
     setEnabling(true);

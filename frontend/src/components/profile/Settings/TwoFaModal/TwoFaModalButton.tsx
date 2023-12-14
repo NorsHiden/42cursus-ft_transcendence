@@ -1,52 +1,38 @@
-// 2FA Modal Button
 import React from 'react';
 import Card from '@components/Card';
-import Lock from '@assets/novaIcons/outline/LockOutline';
-import Unlock from '@assets/novaIcons/outline/UnlockOutline';
+import LockOutline from '@assets/novaIcons/outline/LockOutline';
+import UnlockOutline from '@assets/novaIcons/outline/UnlockOutline';
 
-interface TwoFaModalButtonProps {
+type TwoFaModalButtonProps = {
   twofaEnabled: boolean;
-  enabling: boolean;
+  disabled: boolean;
   handleEnable: () => void;
   handleDisable: () => void;
-}
+};
+
 const TwoFaModalButton: React.FC<TwoFaModalButtonProps> = ({
   twofaEnabled,
-  enabling,
+  disabled,
   handleEnable,
   handleDisable,
 }) => {
+  const Icon = twofaEnabled ? UnlockOutline : LockOutline;
+  const label = `${twofaEnabled ? 'Disable' : 'Enable'} 2FA`;
+
   return (
-    <div className="mt-[20px]">
-      <h1 className="text-white font-bold ">Two Factor Authentication</h1>
-      <Card
-        className={`flex center w-[127px] h-[40px]  text-[#FE5821] ${
-          enabling ? 'filter opacity-75' : ''
-        } mt-[20px] z-10`}
-        cut={30}
-        borderWidth={2}
-        borderColor="#FF8C66"
-        borderRadius={10}
-      >
+    <section className="grid grid-rows-section gap-y-4">
+      <h1 className="text-white font-bold">Two Factor Authentication</h1>
+      <Card className={`w-fit text-transparent`} cut={20} borderRadius={20}>
         <button
-          className="flex center"
-          onClick={() => {
-            twofaEnabled ? handleDisable() : handleEnable();
-          }}
-          disabled={enabling}
+          disabled={disabled}
+          className="w-full center gap-x-1 bg-primary hover:bg-primary/80 py-4 px-8 disabled:cursor-not-allowed disabled:bg-gray transition-all"
+          onClick={twofaEnabled ? handleDisable : handleEnable}
         >
-          {twofaEnabled ? (
-            <Unlock className="mr-2 text-[32px] text-white" />
-          ) : (
-            <Lock className="mr-2 text-[32px] text-white" />
-          )}
-          <p className="font-bold text-sm text-white">
-            {' '}
-            {twofaEnabled ? 'Disable 2FA' : 'Enable 2FA'}
-          </p>
+          <Icon size={28} className="text-white" />
+          <p className="font-medium text-white text-lg">{label}</p>
         </button>
       </Card>
-    </div>
+    </section>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useRouteLoaderData } from 'react-router-dom';
 import axios from 'axios';
+import { useRouteLoaderData } from 'react-router-dom';
 
 import { User } from '@globalTypes/types';
 import PlusOutline from '@assets/novaIcons/outline/PlusOutline.tsx';
@@ -98,7 +98,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
               borderColor="#FF8C66"
             >
               <PlusOutline size={16} className="text-white" />
-              <p className="text-white font-poppins font-medium">Add as friend</p>
+              <p className="text-white font-medium">Add as friend</p>
             </Button>
           )}
 
@@ -115,7 +115,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
               borderColor="#E95E6F"
             >
               <UnblockOutline className="relative text-white w-[22px] h-[22px]" />
-              <p className="text-white font-poppins font-medium">Unfriend</p>
+              <p className="text-white font-medium">Unfriend</p>
             </Button>
           )}
 
@@ -132,7 +132,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
               borderColor="#858895"
             >
               <UnblockOutline className="relative text-white w-[22px] h-[22px]" />
-              <p className="text-white font-poppins font-medium">Unblock</p>
+              <p className="text-white font-medium">Unblock</p>
             </Button>
           )}
 

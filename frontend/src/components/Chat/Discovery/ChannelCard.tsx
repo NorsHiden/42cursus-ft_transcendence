@@ -15,8 +15,10 @@ interface ChannelCardProps {
 }
 
 export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp }) => {
-  const { channelMembers, loading, joinChannel, leaveChannel, getChannelMembers, left } =
-    useChannelCard(channel, showPopUp);
+  const { channelMembers, loading, joinChannel, leaveChannel, getChannelMembers } = useChannelCard(
+    channel,
+    showPopUp,
+  );
   useEffect(() => {
     getChannelMembers();
   }, []);
@@ -64,47 +66,41 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, me, showPopUp
               }`}
               onClick={leaveChannel}
             >
-              <button
-                className={`flex items-center w-full h-full font-medium text-white ${
-                  loading && 'cursor-not-allowed justify-center'
-                }`}
-                onClick={leaveChannel}
-              >
-                {loading ? (
-                  <EllipseOutline className="w-4 h-4 text-white animate-spin" />
-                ) : (
-                  <div className="flex items-center pl-4 gap-[6px]">
-                    <CloseOutline className="w-4 h-4" />
-                    <p className="text-sm">Leave</p>
-                  </div>
-                )}
-              </button>
-            </Card>
-          ) : (
-            <Card
-              fill="#FE5821"
-              borderWidth={2}
-              borderColor="#FF8C66"
-              className={`flex items-center h-10 w-[5.5rem] text-white ${loading && 'opacity-50'}`}
-              cut={32}
+              {loading ? (
+                <EllipseOutline className="w-4 h-4 text-white animate-spin" />
+              ) : (
+                <div className="flex items-center pl-4 gap-[6px]">
+                  <CloseOutline className="w-4 h-4" />
+                  <p className="text-sm">Leave</p>
+                </div>
+              )}
+            </button>
+          </Card>
+        ) : (
+          <Card
+            fill="#FE5821"
+            borderWidth={2}
+            borderColor="#FF8C66"
+            className={`flex items-center h-10 w-[5.5rem] text-white ${loading && 'opacity-50'}`}
+            cut={32}
+          >
+            <button
+              className={`flex items-center w-full h-full font-medium text-white ${
+                loading && 'cursor-not-allowed justify-center'
+              }`}
+              onClick={joinChannel}
             >
-              <button
-                className={`flex items-center w-full h-full font-medium text-white ${
-                  loading && 'cursor-not-allowed justify-center'
-                }`}
-                onClick={joinChannel}
-              >
-                {loading ? (
-                  <EllipseOutline className="w-4 h-4 text-white animate-spin" />
-                ) : (
-                  <div className="flex items-center pl-4 gap-[6px]">
-                    <PlusOutline className=" w-4 h-4" />
-                    <p className="text-sm">Join</p>
-                  </div>
-                )}
-              </button>
-            </Card>
-          ))}
+              {loading ? (
+                <EllipseOutline className="w-4 h-4 text-white animate-spin" />
+              ) : (
+                <div className="flex items-center pl-4 gap-[6px]">
+                  <PlusOutline className=" w-4 h-4" />
+                  <p className="text-sm">Join</p>
+                </div>
+              )}
+            </button>
+          </Card>
+        )}
       </div>
     </Card>
   );

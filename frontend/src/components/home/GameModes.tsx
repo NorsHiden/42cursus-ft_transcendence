@@ -7,7 +7,7 @@ import { GAME_MODES } from '@globalTypes/gameModes';
 import { GameLobby } from '@globalTypes/game';
 import twclsx from '@utils/twclsx';
 import getColorValue from '@utils/getColorValue';
-import { socket } from '../../socket';
+import { gameSocket } from '../../socket';
 import PlayRectangleSolid from '@assets/novaIcons/solid/PlayRectangleSolid';
 import CloseRectangleSolid from '@assets/novaIcons/solid/CloseRectangleSolid';
 
@@ -22,7 +22,7 @@ const GameModes: React.FC = () => {
 
   const handleButtonClick = () => {
     if (isSearching) {
-      socket.emit('lobby', { action: 'CANCEL' });
+      gameSocket.emit('lobby', { action: 'CANCEL' });
       setIsSearching(false);
     } else {
       gameSocket.emit('lobby', {
@@ -42,8 +42,8 @@ const GameModes: React.FC = () => {
     });
 
     return () => {
-      socket.off('lobby', checkLobby);
-      socket.off('error');
+      gameSocket.off('lobby', checkLobby);
+      gameSocket.off('error');
     };
   }, []);
 

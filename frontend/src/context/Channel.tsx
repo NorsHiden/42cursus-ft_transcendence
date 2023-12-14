@@ -1,26 +1,25 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 import { io, Socket } from 'socket.io-client';
 import { useEffect } from 'react';
 import { Message } from '@globalTypes/types';
 import { DM } from '@globalTypes/types';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import { useRouteLoaderData } from 'react-router-dom';
-
 
 // Define the shape of the context data
 interface SelectedChannelContextData {
-  selectedChannel: mychannel;
-  setSelectedChannel:  React.Dispatch<React.SetStateAction<mychannel>>;
-  channels: mychannel[];
-  setChannels: React.Dispatch<React.SetStateAction<mychannel[]>>;
+  selectedChannel: ChannelType;
+  setSelectedChannel: React.Dispatch<React.SetStateAction<ChannelType>>;
+  channels: ChannelType[];
+  setChannels: React.Dispatch<React.SetStateAction<ChannelType[]>>;
   messages: Record<string, Message[]>;
   setMessages: React.Dispatch<React.SetStateAction<Record<string, Message[]>>>;
   socket: Socket | null;
   Dms: DM[];
   setDms: React.Dispatch<React.SetStateAction<DM[]>>;
-  LogedUser:User;
-  setLogedUser: (user: User) => void;
+  LogedUser: UserType;
+  setLogedUser: (user: UserType) => void;
   DirectMessages: Record<string, Message[]>;
   setDirectMessages: React.Dispatch<React.SetStateAction<Record<string, Message[]>>>;
   setShowUpdateChannelModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,18 +35,18 @@ interface SelectedChannelProviderProps {
 
 // Create a provider component for this context
 export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = ({ children }) => {
-  const [selectedChannel, setSelectedChannel] = useState<mychannel>({} as mychannel);
-  const [channels, setChannels] = useState<mychannel[]>([]);
+  const [selectedChannel, setSelectedChannel] = useState<ChannelType>({} as ChannelType);
+  const [channels, setChannels] = useState<ChannelType[]>([]);
   const [messages, setMessages] = useState<Record<string, Message[]>>({}); // for channels
   const [DirectMessages, setDirectMessages] = useState<Record<string, Message[]>>({}); // for DMs
 
   const [socket, setSocket] = useState<Socket | null>(null);
   const [Dms, setDms] = useState<DM[]>([]);
-  const [LogedUser, setLogedUser] = useState<User>({} as User);
+  const [LogedUser, setLogedUser] = useState<UserType>({} as UserType);
   const [ShowUpdateChannelModal, setShowUpdateChannelModal] = useState<boolean>(false);
 
-  const user = useRouteLoaderData('layout') as User;
-  
+  const user = useRouteLoaderData('layout') as UserType;
+
   useEffect(() => {
     setLogedUser(user);
   }, [user]);
@@ -84,7 +83,7 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
         setDirectMessages,
         DirectMessages,
         setShowUpdateChannelModal,
-        ShowUpdateChannelModal
+        ShowUpdateChannelModal,
       }}
     >
       {children}

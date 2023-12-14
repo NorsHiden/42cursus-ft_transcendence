@@ -4,6 +4,11 @@ import axios from 'axios';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
 import Card from '@components/Card';
+import Loader1Outline from '@assets/novaIcons/outline/Loader1Outline';
+import { MessageType } from '@globalTypes/channel';
+import { User } from '@globalTypes/types';
+import { toast } from 'sonner';
+import { chatSocket } from '../../socket';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';
@@ -26,11 +31,17 @@ export const MessageSkeleton: React.FC = () => {
   );
 };
 
-export const Message: React.FC<MessageProps> = ({ type, message, messageReceivedSuccessfully=true}) => {
-
-
+export const Message: React.FC<MessageProps> = ({
+  type,
+  message,
+  messageReceivedSuccessfully = true,
+}) => {
   return (
-    <div  className={`max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${messageReceivedSuccessfully?" opacity-100":" opacity-25"}`}>
+    <div
+      className={`max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${
+        messageReceivedSuccessfully ? ' opacity-100' : ' opacity-25'
+      }`}
+    >
       <div
         className={`flex items-center justify-between text-white mb-3 gap-4 ${
           type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'
@@ -44,7 +55,7 @@ export const Message: React.FC<MessageProps> = ({ type, message, messageReceived
           <img className="w-8 h-8 rounded-full" src={message.author.avatar} alt="" />
           <p className="text-sm font-medium">{message.author.display_name}</p>
         </div>
-        <span className="ext-sm text-gray font-poppins font-regular">13.37</span>
+        <span className="ext-sm text-gray font-regular">13.37</span>
       </div>
       <div
         className={`text-white ${
@@ -53,7 +64,7 @@ export const Message: React.FC<MessageProps> = ({ type, message, messageReceived
           type == 'RECEIVED' ? 'rounded-tr-2xl' : 'rounded-tl-2xl'
         } rounded-b-2xl overflow-hidden`}
       >
-        <p className='font-poppins font-regular   break-words'>{message.content}</p>
+        <p className="font-regular   break-words">{message.content}</p>
       </div>
     </div>
   );

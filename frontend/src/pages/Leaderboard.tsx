@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { UserType } from '@globalTypes/user';
 import axios from 'axios';
 
@@ -46,19 +46,16 @@ const Leaderboard: React.FC = () => {
       }
   >();
 
-  const getRecords = async (page: number,abortController:AbortController) => {
-    try
-    {
+  const getRecords = async (page: number, abortController: AbortController) => {
+    try {
       setLoading(true);
-      const res = await axios.get(`/api/users/leaderboard?page=${page}`,{
-        signal:abortController.signal
+      const res = await axios.get(`/api/users/leaderboard?page=${page}`, {
+        signal: abortController.signal,
       });
       setRecords((prevRecords) => [...prevRecords, ...res.data]);
       if (res.data.length < 10) setHasMore(false);
       setLoading(false);
-    }
-    catch(err)
-    {
+    } catch (err) {
       return;
     }
   };

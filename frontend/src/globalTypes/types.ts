@@ -44,9 +44,9 @@ export type player = {
   username: string;
   score: number;
   avatar: string;
-}
+};
 
-export type Message =   {
+export type Message = {
   id: string;
   content: string;
   author: {
@@ -57,10 +57,7 @@ export type Message =   {
   createdAt: string;
   updatedAt: string;
   messageReceivedSuccessfully: boolean;
-}
-
-
-
+};
 
 export type Member = {
   role: string;

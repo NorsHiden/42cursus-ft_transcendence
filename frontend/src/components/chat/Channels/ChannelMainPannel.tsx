@@ -6,7 +6,7 @@ import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import { Message } from '@components/home/GeneralChat';
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import Members from '@assets/novaIcons/solid/Members';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import ChannelSidePannel from './ChannelSidePannel';
 import { Message as MessageType } from '@globalTypes/types';
 import { sendMessage } from './utils';
@@ -23,7 +23,7 @@ const ChannelMainPannel: React.FC = () => {
 
   const param = useParams();
   const navigate = useNavigate();
-  const user = useRouteLoaderData('layout') as User;
+  const user = useRouteLoaderData('layout') as UserType;
   const [message, setMessage] = useState<string>('');
   const containerRef = useRef(null);
 
@@ -176,7 +176,7 @@ const ChannelMainPannel: React.FC = () => {
           <div className="absolute bottom-[15px] w-full flex justify-center items-center">
             <input
               type="text"
-              className="text-white font-poppins w-[90%] justify-self-center rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray"
+              className="text-white w-[90%] justify-self-center rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray"
               placeholder="Type your messgage"
               value={message}
               onKeyDown={(e) => {

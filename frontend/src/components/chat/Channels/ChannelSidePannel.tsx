@@ -59,9 +59,7 @@ const UserElement: React.FC<UserElementProps> = ({
           <img src={avatar} alt="" className="rounded-full" />
         </div>
         <div id="name" className="flex center gap-2 lg:gap-1 2xl:gap-2">
-          <p className="text-white font-poppins font-medium lg:text-sm 2xl:text-base">
-            {displayName}
-          </p>
+          <p className="text-white font-medium lg:text-sm 2xl:text-base">{displayName}</p>
         </div>
       </div>
       {/* <div className='center '> */}
@@ -185,14 +183,10 @@ const MemberElement: React.FC<MemberElementProps> = ({
           <img src={avatar} alt="" className="rounded-full" />
         </div>
         <div id="name" className="flex center gap-2 lg:gap-1 2xl:gap-2">
-          <p className="text-white font-poppins font-medium lg:text-sm 2xl:text-base">
-            {displayName}
-          </p>
+          <p className="text-white font-medium lg:text-sm 2xl:text-base">{displayName}</p>
           {state != 'active' && (
             <div id="label" className=" bg-[#5E6069] rounded-full flex justify-center  px-1">
-              <p className="text-white font-poppins text-xs lg:text-[4px] 2xl:text-xs font-bold">
-                {state}
-              </p>
+              <p className="text-white text-xs lg:text-[4px] 2xl:text-xs font-bold">{state}</p>
             </div>
           )}
 
@@ -203,9 +197,7 @@ const MemberElement: React.FC<MemberElementProps> = ({
                 role == 'admin' ? 'bg-purple' : 'bg-primary'
               } rounded-full flex justify-center  px-1`}
             >
-              <p className="text-white font-poppins text-xs lg:text-[4px] 2xl:text-xs font-bold">
-                {role}
-              </p>
+              <p className="text-white text-xs lg:text-[4px] 2xl:text-xs font-bold">{role}</p>
             </div>
           )}
         </div>
@@ -290,7 +282,7 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
           className="w-full h-[20vh] object-cover object-center"
         />
         <div className="w-full flex justify-center">
-          <p className="uppercase absolute text-white font-poppins font-bold z-10 pt-12">
+          <p className="uppercase absolute text-white font-bold z-10 pt-12">
             {selectedChannel.name}
           </p>
         </div>
@@ -318,7 +310,7 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
             <input
               value={search}
               id="search"
-              className="text-sm text-[#A3A3A4] font-poppins  w-full rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray "
+              className="text-sm text-[#A3A3A4]  w-full rounded-full pl-4  h-[52px] focus:outline-none bg-CharcoalGray "
               placeholder={inviteUser ? 'Search for users to invite' : 'Search channel members'}
               autoComplete="off"
               onChange={handleSearch}

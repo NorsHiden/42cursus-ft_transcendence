@@ -78,7 +78,7 @@ const OTP2fa: React.FC = () => {
                 OTPLength={6}
                 otpType="number"
                 disabled={false}
-                inputClassName="bg-background border border-2 border-[#3E4048] text-[64px] rounded-lg w-[64px] h-[64px] focus:ring-[3px] focus:ring-accent text-white font-popins"
+                inputClassName="bg-background border border-2 border-[#3E4048] text-[64px] rounded-lg w-[64px] h-[64px] focus:ring-[3px] focus:ring-accent text-white "
                 inputStyles={{ width: '32px,', height: '32px,' }}
               />
               <Card

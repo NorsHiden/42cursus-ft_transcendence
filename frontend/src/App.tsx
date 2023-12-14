@@ -12,49 +12,51 @@ import { Overview, MatchHistory, Achievements, ManageFriends, Settings } from '@
 import Login from '@pages/Login';
 import PostLogin, { PostLoginLoader } from '@pages/PostLogin';
 import TwoFactorAuth, { TwoFactorAuthLoader } from '@pages/OTP2fa';
+import {
+  ChannelMainPannel,
+  ChannelsList,
+  MessagesList,
+  MessagesMainPannel,
+} from '@components/chat';
+import Chat, { ChatMainPannelLoader } from '@pages/Chat';
 
 const router = createBrowserRouter([
   {
     id: 'layout',
-    id: 'layout',
     path: '/',
     element: <Layout />,
-    loader:Layoutloader,
+    loader: LayoutLoader,
     children: [
       {
-        index: true,
         index: true,
         element: <Home />,
       },
       {
-        path:'/chat',
+        path: '/chat',
         element: <Chat />,
         children: [
           {
             path: '/chat/channels/',
-            element:<ChannelsList/>,
+            element: <ChannelsList />,
             children: [
               {
                 path: '/chat/channels/:id',
                 element: <ChannelMainPannel />,
-                loader:({ params }) => ChatMainPannelLoader(params.id),
-              }
-            ]
+                loader: ({ params }) => ChatMainPannelLoader(params.id),
+              },
+            ],
           },
           {
             path: '/chat/messages/',
-            element:<MessagesList/>,
-            // loader:({ params }) => ChatMainPannelLoader(params.id),
+            element: <MessagesList />,
             children: [
               {
                 path: '/chat/messages/:id',
                 element: <MessagesMainPannel />,
-                
-                // loader:({ params }) => ChatMainPannelLoader(params.id),
-              }
-            ]
-          }
-        ]
+              },
+            ],
+          },
+        ],
       },
       {
         path: '/discovery',
@@ -70,14 +72,11 @@ const router = createBrowserRouter([
       },
       {
         id: 'profile',
-        id: 'profile',
         path: '/:user',
         element: <Profile />,
         loader: ({ params }) => profileLoader(params.user),
         children: [
           {
-            index: true,
-            element: <Navigate to="overview" replace />,
             index: true,
             element: <Navigate to="overview" replace />,
           },
@@ -116,13 +115,10 @@ const router = createBrowserRouter([
   {
     path: '/postlogin',
     loader: PostLoginLoader,
-    loader: PostLoginLoader,
     element: <PostLogin />,
   },
   {
     path: '/2fa-verification',
-    loader: TwoFactorAuthLoader,
-    element: <TwoFactorAuth />,
     loader: TwoFactorAuthLoader,
     element: <TwoFactorAuth />,
   },
