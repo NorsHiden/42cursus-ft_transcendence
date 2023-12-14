@@ -387,12 +387,14 @@ export class ChannelsService implements IChannelsService {
           'User is already invited to this channel.',
         );
 
+      const senderUser = await this.usersService.getUser(user.sub);
+      
       this.notificationService.addNotification(invitedUser.id, {
-        action: 'CHANNEL_INVITE',
-        recipient: invitedUser,
-        sender: null,
-        record_id: channelId,
-        status: 'pending',
+          action: 'CHANNEL_INVITE',
+          recipient: invitedUser,
+          sender: senderUser,
+          record_id: channelId,
+          status: 'pending',
       } as Notification);
 
       return invitedUser;
