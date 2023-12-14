@@ -27,10 +27,10 @@ export class DmsService implements IDmsService {
   public async create(recipientId: string, user: JwtUser): Promise<Channel> {
     try {
       if (recipientId === user.sub)
-        throw new NotFoundException('Cannot DM yourself');
+        throw new BadRequestException('Cannot DM yourself');
 
       if (await this.isExist(recipientId, user))
-        throw new NotFoundException('DM already exist');
+        throw new BadRequestException('DM already exist');
 
       const recipient = await this.usersService.getUser(recipientId);
 
