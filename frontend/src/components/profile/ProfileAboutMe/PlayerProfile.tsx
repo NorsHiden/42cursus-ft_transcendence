@@ -152,7 +152,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
 
       <section className="flex flex-col gap-y-1">
         <h1 className="text-white font-bold">About me</h1>
-        <p className="text-white/40 text-sm whitespace-wrap">{user.profile.about}</p>
+        <p className="text-white/40 text-sm whitespace-normal break-words">{user.profile.about}</p>
       </section>
 
       <section className="flex flex-col gap-y-4">

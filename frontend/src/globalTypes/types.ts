@@ -67,3 +67,11 @@ export type Member = {
   presence: string;
   avatar: string;
 };
+
+export type DM = {
+  id: number;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+  members: Member[];
+};

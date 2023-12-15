@@ -5,7 +5,7 @@ import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
 import Card from '@components/Card';
 import Loader1Outline from '@assets/novaIcons/outline/Loader1Outline';
-import { MessageType } from '@globalTypes/channel';
+import { Message as MessageType } from '@globalTypes/types';
 import { User } from '@globalTypes/types';
 import { toast } from 'sonner';
 import { chatSocket } from '../../socket';

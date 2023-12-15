@@ -5,23 +5,11 @@ import NavBar from '@components/NavBar';
 import SideBar from '@components/Sidebar';
 import FriendsBar from '@components/FriendsBar';
 import BottomNavBar from '@components/NavBar/BottomNavBar';
+import axios from 'axios';
 
 export const LayoutLoader = async () => {
-  // try {
-  //   const currentUser = await axios.get('/api/users/@me');
-  //   return currentUser.data;
-  // } catch (error) {
-  //   console.log('Failed to load user');
-  // }
-
-  return {
-    username: 'test',
-    display_name: 'test',
-    avatar: {
-      path: 'test',
-      file: new File([], ''),
-    },
-  };
+  const loggedInUser = await axios.get(`/api/users/@me`);
+  return loggedInUser.data;
 };
 
 const Layout: React.FC = () => {

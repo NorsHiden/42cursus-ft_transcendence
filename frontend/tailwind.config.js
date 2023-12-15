@@ -5,9 +5,13 @@ import scrollbar from 'tailwind-scrollbar';
 
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  safelist: [{ pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
-  { pattern: /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade|lighgray)/ },
-],
+  safelist: [
+    { pattern: /(text|bg)-(regular|cursed|vanish|goldRush)-(color|dark|lightDark)/ },
+    {
+      pattern:
+        /(text|bg)-(black|lightBlack|darkGray|gray|white|primary|shade|green|blue|brown|purple|pink|red|DarkMaroon|BrightRed|redShade|lighgray)/,
+    },
+  ],
   theme: {
     screens: {
       sm: '640px',
@@ -29,14 +33,15 @@ export default {
         section: 'auto minmax(0, 1fr)',
         chat: 'auto minmax(0, 1fr) max-content',
         channels: '25px 25px auto',
+        settings: 'repeat(3, max-content) 1fr',
       },
       colors: {
         accent: '#FE5821',
         background: '#1B191D',
         'input-color': '#1E1F23',
-        'input-border-color':'#3E4048',
-        gray :'#71717A',
-        lighgray:'#9B9CA2',
+        'input-border-color': '#3E4048',
+        gray: '#71717A',
+        lighgray: '#9B9CA2',
         regular: {
           color: '#C2784F',
           dark: '#24150D',

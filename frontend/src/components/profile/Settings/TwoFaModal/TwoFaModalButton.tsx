@@ -22,14 +22,14 @@ const TwoFaModalButton: React.FC<TwoFaModalButtonProps> = ({
   return (
     <section className="grid grid-rows-section gap-y-4">
       <h1 className="text-white font-bold">Two Factor Authentication</h1>
-      <Card className={`w-fit text-transparent`} cut={20} borderRadius={20}>
+      <Card className="w-fit text-transparent" cut={24} borderRadius={20}>
         <button
           disabled={disabled}
-          className="w-full center gap-x-1 bg-primary hover:bg-primary/80 py-4 px-8 disabled:cursor-not-allowed disabled:bg-gray transition-all"
+          className="w-full center gap-x-1 bg-primary hover:bg-primary/80 py-2 px-4 disabled:cursor-not-allowed disabled:bg-gray transition-all"
           onClick={twofaEnabled ? handleDisable : handleEnable}
         >
-          <Icon size={28} className="text-white" />
-          <p className="font-medium text-white text-lg">{label}</p>
+          <Icon size={20} className="text-white" />
+          <p className="font-medium text-white">{label}</p>
         </button>
       </Card>
     </section>

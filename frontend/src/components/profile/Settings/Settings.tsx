@@ -1,27 +1,27 @@
 import React from 'react';
-// import React, { useState, useRef, useEffect } from 'react';
-
-//the card will take from 9 to 12.
-//from 5 to 8
-//from 1 to 4
 
 import InputField from './InputField';
-import TextErea from './TextErea';
+import TextareaField from './TextArea';
 import Card from '@components/Card';
 import EditCircle from '@assets/novaIcons/solid/EditCircleSolid';
-
 import EditRectangle from '@assets/novaIcons/solid/EditRectangleSolid';
 import useSettingsData from './useSettingsData';
 import TwoFaModal from './TwoFaModal/TwoFaModal';
 import getColorValue from '@utils/getColorValue';
 
 type UserCardProps = {
+  className?: string;
   Newuser: settingsData;
   setNewuser: React.Dispatch<React.SetStateAction<settingsData>>;
   setactiveChanges: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const UserCard: React.FC<UserCardProps> = ({ Newuser, setNewuser, setactiveChanges }) => {
+const UserCard: React.FC<UserCardProps> = ({
+  Newuser,
+  setNewuser,
+  setactiveChanges,
+  className,
+}) => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -39,62 +39,57 @@ const UserCard: React.FC<UserCardProps> = ({ Newuser, setNewuser, setactiveChang
 
   return (
     <Card
-      className="col-start-2 row-span-2 lg:col-start-3 lg:row-span-3 text-lightBlack overflow-hidden"
+      className={`text-lightBlack ${className}`}
       cut={10}
       borderColor={getColorValue('darkGray')}
       borderWidth={1}
       borderRadius={30}
     >
-      <div className="w-full h-1/2">
-        <label htmlFor="bannerFile" className="relative w-full h-full">
-          <input
-            id="bannerFile"
-            type="file"
-            name="banner"
-            className="absolute w-full h-full opacity-0 z-10"
-            onChange={(e) => {
-              setactiveChanges(true);
-              handleFileUpload(e);
-            }}
-          />
-          <div
-            id="edit-icon"
-            className="absolute flex center top-0 right-0 bg-[#FE5821] w-[12px] h-[12px] lg:w-[24px] lg:h-[24px] rounded-full mt-[10px] mr-[10px]"
-          >
-            <EditRectangle
-              className=" text-white w-[8px] h-[8px] lg:w-[12px] lg:h-[12px]"
-              size={16}
-            />
-          </div>
-          <img src={Newuser.banner.path} alt="" className="w-full h-full object-cover" />
-        </label>
-      </div>
-      <div id="card-body" className="-mt-10">
+      <div className="relative w-full h-28">
         <label
-          htmlFor="file2"
-          className="flex center relative h-12 w-12 lg:h-24 lg:w-24 rounded-full z-10"
+          htmlFor="bannerFile"
+          className="p-[6px] absolute top-2 right-2 bg-primary border-2 border-white/20 rounded-full cursor-pointer"
         >
           <input
             type="file"
-            id="file2"
-            name="avatar"
-            className="absolute w-full h-full rounded-full opacity-0 z-10"
+            name="banner"
+            id="bannerFile"
+            className="hidden"
             onChange={(e) => {
               setactiveChanges(true);
               handleFileUpload(e);
             }}
           />
-          <div className="absolute -top-1 -right-1 center p-1 bg-primary rounded-full">
-            <EditCircle className=" text-white w-4 h-4 lg:w-6 lg:h-6" />
-          </div>
-          <img
-            alt="user avatar"
-            src={Newuser.avatar.path}
-            className="w-full h-full rounded-full object-cover border-[6px] border-lightBlack"
-          />
+          <EditRectangle size={14} className=" text-white" />
         </label>
-        <h1 className="font-bold text-lg lg:text-4xl text-white">{Newuser.username}</h1>
-        <p className="font-medium text-gray">@{Newuser.display_name}</p>
+        <img src={Newuser.banner.path} alt="user banner" className="w-full h-full object-cover" />
+      </div>
+      <div id="card-body" className="-mt-10 p-5 pt-0">
+        <div className="relative w-20 h-20 mb-2">
+          <label
+            htmlFor="avatarFile"
+            className="p-1 absolute top-0 right-0 bg-primary rounded-full cursor-pointer"
+          >
+            <input
+              type="file"
+              name="avatar"
+              id="avatarFile"
+              className="hidden"
+              onChange={(e) => {
+                setactiveChanges(true);
+                handleFileUpload(e);
+              }}
+            />
+            <EditCircle size={18} className=" text-white" />
+          </label>
+          <img
+            src={Newuser.avatar.path}
+            alt="user avatar"
+            className="w-full h-full object-cover rounded-full border-4 border-lightBlack"
+          />
+        </div>
+        <h1 className="font-bold text-3xl/none text-white min-h-[28px]">{Newuser.display_name}</h1>
+        <p className="font-medium text-sm text-gray">@{Newuser.username}</p>
       </div>
     </Card>
   );
@@ -131,107 +126,101 @@ const Settings: React.FC = () => {
   return (
     <section className="flex flex-col gap-y-12">
       <TwoFaModal />
-      <section className="grid grid-rows-section gap-y-4">
+      <section className="grid grid-rows-section gap-y-4 flex-grow">
         <h1 className="font-bold text-white">Personal Info</h1>
-        <form
-          className="grid grid-rows-6 lg:grid-rows-4 grid-cols-2 lg:grid-cols-3 grid-flow-col gap-4 h-[26rem] lg:h-[20rem] "
-          onSubmit={handleUpload}
-        >
-          <InputField
-            name="username"
-            className="col-start-1 col-end-2 h-10 sm:h-12 md:h-14 "
-            placeholder="username"
-            style={{ paddingLeft: '1rem' }}
-            type="text"
-            value={Newuser.username}
-            onChange={handleInput}
-          />
-          <InputField
-            name="location"
-            className="row-start-5 col-start-1 col-end-2 lg:row-start-3 lg:col-start-1 lg:col-end-2 h-10 sm:h-12 md:h-14"
-            placeholder="location"
-            onChange={handleInput}
-            style={{ paddingLeft: '1rem' }}
-            type="text"
-            value={Newuser.location}
-          />
-          <InputField
-            name="display_name"
-            className="row-start-2 col-start-1 col-end-2 lg:row-start-1 lg:col-start-2 lg:col-end-3 h-10 sm:h-12 md:h-14"
-            placeholder="Display Name"
-            style={{ paddingLeft: '1rem' }}
-            type="text"
-            value={Newuser.display_name}
-            onChange={handleInput}
-          />
-          <InputField
-            name="birthdate"
-            className="row-start-4 col-start-1 col-end-2 lg:row-start-3 lg:col-start-2 lg:col-end-3 h-10 sm:h-12 md:h-14"
-            placeholder="birthdate"
-            style={{ paddingLeft: '1rem' }}
-            type="date"
-            value={Newuser.birthdate as string}
-            onChange={(e) => {
-              setNewuser(() => {
+        <form className="w-full grid grid-cols-3 gap-x-4 pb-10" onSubmit={handleUpload}>
+          <div className="col-span-2 grid grid-cols-2 grid-rows-settings gap-4">
+            <InputField
+              name="username"
+              className="col-span-1"
+              placeholder="username"
+              type="text"
+              value={Newuser.username}
+              onChange={handleInput}
+            />
+            <InputField
+              name="display_name"
+              className="col-span-1"
+              placeholder="Display Name"
+              type="text"
+              value={Newuser.display_name}
+              onChange={handleInput}
+            />
+            <InputField
+              name="email"
+              className="col-span-2"
+              placeholder="Email"
+              value={Newuser.email}
+              type="text"
+              disabled
+            />
+            <InputField
+              name="location"
+              className="col-span-1"
+              placeholder="location"
+              onChange={handleInput}
+              type="text"
+              value={Newuser.location}
+            />
+            <InputField
+              name="birthdate"
+              className="col-span-1"
+              placeholder="birthdate"
+              type="date"
+              value={Newuser.birthdate as string}
+              onChange={(e) => {
                 setactiveChanges(true);
-                return {
+                setNewuser(() => ({
                   ...Newuser,
                   birthdate: new Date(e.target.value).toLocaleDateString('en-CA', {
                     month: '2-digit',
                     day: '2-digit',
                     year: 'numeric',
                   }),
-                };
-              });
-            }}
-          />
+                }));
+              }}
+            />
+            <TextareaField
+              className="col-span-2"
+              placeholder="Biography"
+              value={Newuser.about}
+              onChange={handleInput}
+            />
+          </div>
+          <div className="col-span-1">
+            <UserCard
+              className="mb-4"
+              Newuser={Newuser}
+              setNewuser={setNewuser}
+              setactiveChanges={setactiveChanges}
+            />
 
-          <InputField
-            name="email"
-            className="row-start-3 col-start-1 col-end-2 lg:row-start-2 lg:col-start-1 lg:col-end-3 filter opacity-50 h-10 sm:h-12 md:h-14"
-            placeholder="Email"
-            value={Newuser.email}
-            style={{ paddingLeft: '1rem' }}
-            type="text"
-            disabled
-          />
-
-          <TextErea
-            onChange={handleInput}
-            textContent={Newuser.about}
-            setactiveChanges={setactiveChanges}
-          />
-
-          <UserCard Newuser={Newuser} setNewuser={setNewuser} setactiveChanges={setactiveChanges} />
-
-          <div
-            id="buttons"
-            className="flex justify-end col-start-2 lg:col-start-3 lg:row-start-4 w-full"
-          >
-            <Card
-              className={`text-transparent px-4 py-2 mr-2 w-[98px] h-[34px] ${
-                activeChanges ? '' : 'filter opacity-25'
-              }   flex justify-center items-center font-bold `}
-              cut={9}
-            >
-              <button onClick={resetForm} disabled={!activeChanges} className="text-white">
-                Reset
-              </button>
-            </Card>
-            <Card
-              className={`w-[98px] h-[34px] ${
-                activeChanges ? '' : 'filter opacity-25'
-              }   flex  font-bold text-[#FE5821] z-10`}
-              cut={9}
-            >
-              <button
-                className="text-white flex center font-bold px-4 py-2 mr-2 w-[98px] h-[34px] "
-                disabled={!activeChanges}
-                type="submit"
+            <div id="buttons" className="center-x justify-end">
+              <Card
+                className={`text-transparent px-4 py-2 mr-2 w-[98px] h-[34px] ${
+                  activeChanges ? '' : 'filter opacity-25'
+                }   flex justify-center items-center font-bold `}
+                cut={9}
               >
-                Save
-              </button>
-            </Card>
+                <button onClick={resetForm} disabled={!activeChanges} className="text-white">
+                  Reset
+                </button>
+              </Card>
+              <Card
+                className={`w-[98px] h-[34px] ${
+                  activeChanges ? '' : 'opacity-25'
+                } flex font-bold text-primary z-10`}
+                cut={9}
+              >
+                <button
+                  className="text-white flex center font-bold px-4 py-2 mr-2 w-[98px] h-[34px] "
+                  disabled={!activeChanges}
+                  type="submit"
+                >
+                  Save
+                </button>
+              </Card>
+            </div>
           </div>
         </form>
       </section>

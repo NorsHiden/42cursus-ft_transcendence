@@ -1,10 +1,9 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 
 interface InputFieldProps {
   placeholder: string;
   className?: string;
   id?: string;
-  style?: CSSProperties;
   value?: string;
   type?: string;
   disabled?: boolean;
@@ -13,22 +12,20 @@ interface InputFieldProps {
 }
 
 const InputField: React.FC<InputFieldProps> = ({
-  placeholder,
-  className,
   id,
-  style,
-  value,
-  type,
-  disabled,
-  onChange,
   name,
+  placeholder,
+  type,
+  value,
+  disabled,
+  className,
+  onChange,
 }) => (
   <input
     id={id}
     name={name}
-    className={`input-placeholder rounded-lg sm:rounded-xl md:rounded-2xl bg-[#1E1F23] border border-[#3E4048] text-[#71717A] text-sm sm:text-base focus:outline-none ${className}`}
+    className={`py-3 px-4 rounded-lg bg-lightBlack border-2 border-darkGray text-white text-sm sm:text-base focus:outline-none ${className}`}
     placeholder={placeholder}
-    style={style}
     value={value}
     type={type}
     autoComplete="off"
@@ -38,8 +35,3 @@ const InputField: React.FC<InputFieldProps> = ({
 );
 
 export default InputField;
-
-// Usage in Settings component
-{
-  /* <InputField className="col-start-1 col-end-2" placeholder="username" style={{ paddingLeft: '1rem' }} /> */
-}

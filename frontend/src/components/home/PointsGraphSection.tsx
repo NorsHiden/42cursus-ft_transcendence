@@ -79,6 +79,7 @@ const PointsGraphSection: React.FC = () => {
           .filter((achievement) => !achievement.isClaimed)
           .map((achievement) => (
             <Achievement
+              key={achievement.id}
               size="sm"
               isClaimed={achievement.isClaimed}
               name={achievement.alt_name.toUpperCase() as ACHIEVEMENT_NAME}

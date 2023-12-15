@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import { Outlet, useMatch, useNavigate } from 'react-router-dom';
 import { NavButtons } from '@components/chat';
 import { SelectedChannelProvider } from '@context/Channel';
 import { ChannelMainPannel, MessagesMainPannel } from '@components/chat/';
-import axios from 'axios';
 import { CreateChannel } from '@components/Chat/Discovery/CreateChannel';
 import { useSelectedChannel } from '@context/Channel';
 
