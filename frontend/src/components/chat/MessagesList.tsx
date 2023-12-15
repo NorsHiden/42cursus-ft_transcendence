@@ -31,8 +31,9 @@ const MessagesList: React.FC = () => {
       id="chat-list"
       className=" grid row-start-3 overflow-auto gap-4 scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray"
     >
-      {Dms?.map((dm) => (
+      {Dms?.map((dm,index) => (
         <NavLink
+          key={index}
           to={`/chat/messages/${dm.id}`}
           className={({ isActive }) => {
             return `flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px] hover:bg-CharcoalGray hover:p-4 ${
@@ -56,8 +57,8 @@ const MessagesList: React.FC = () => {
         </NavLink>
       ))}
       {loading
-        ? Array.from({ length: 10 }).map((_) => (
-            <li className="flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px]">
+        ? Array.from({ length: 10 }).map((_,i) => (
+            <li key={i} className="flex items-center justify-between rounded-xl mr-4 ml-4 h-[68px]">
               <div className="flex  items-center gap-4 animate-pulse bg-darkGray">
                 <div className="rounded-2xl h-[52px] w-[52px] animate-pulse bg-darkGray" />
                 <div className="w-[118px]  h-[52px] animate-pulse bg-darkGray"></div>
