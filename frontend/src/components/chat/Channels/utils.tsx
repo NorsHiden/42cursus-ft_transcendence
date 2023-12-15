@@ -9,9 +9,6 @@ export function getUsers(setUsers: React.Dispatch<React.SetStateAction<User[]>>,
   axios
     .get(`/api/users/search?s=${search}`)
     .then((response) => {
-      console.log(`Users : `);
-      console.log(search);
-      console.log(response.data);
       setUsers(response.data);
     })
     .catch((error) => console.error('Error:', error));
@@ -23,12 +20,9 @@ export const fetchMembers = (
   search: string,
 ) => {
   if (selectedChannel && JSON.stringify(selectedChannel) !== '{}') {
-    console.log(`Fetching members for channel ${search}`);
     axios
       .get(`/api/channels/${selectedChannel.id}/members?search=${search}`)
       .then((response) => {
-        console.log(`Members : `);
-        console.log(response.data.data);
         setMembers(response.data.data);
       })
       .catch((error) => console.error('Error:', error));
@@ -41,7 +35,6 @@ export const sendMessage = (
   setMessages: React.Dispatch<React.SetStateAction<MessageType[] | undefined>>,
   newMessage: MessageType,
 ) => {
-  console.log('channelID', message);
   const response = axios.post(`/api/channels/${channelId}/messages`, {
     content: message,
   });
@@ -56,7 +49,7 @@ export const sendMessage = (
 
     setMessages((prev: MessageType[] | undefined) => {
       return prev?.map((message) => {
-        if (message.content === newMessage.content) {
+        if (message.content === newMessage.content && message.id === newMessage.id) {
           return {
             ...newMessage,
             messageReceivedSuccessfully: true,
@@ -69,15 +62,16 @@ export const sendMessage = (
   });
 };
 
-export const getMessages = async (channelId: number, abortController: AbortController) => {
+export const getMessages = async (channelId: number, abortController: AbortController,setHasMore:React.Dispatch<React.SetStateAction<boolean>>,page:Number) => {
   try {
-    const response = await axios.get(`/api/channels/${channelId}/messages`, {
+    const response = await axios.get(`/api/channels/${channelId}/messages?page=${page}`, {
       signal: abortController.signal,
     });
-    // if (response.data.meta.currentPage < response.data.meta.totalPages)
-    //   setHasMore(true);
-    // else
-    //   setHasMore(false);
+    console.log(`/api/channels/${channelId}/messages?page=${page}`);
+    if (response.data.meta.currentPage < response.data.meta.totalPages)
+      setHasMore(true);
+    else
+      setHasMore(false);
 
     return response.data.data;
   } catch (error) {

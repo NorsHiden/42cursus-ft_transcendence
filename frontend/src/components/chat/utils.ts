@@ -28,7 +28,6 @@ export const getDms = async (
     setLoading(false);
   } catch (error) {
     setLoading(false);
-    console.log(error);
   }
 };
 
@@ -41,8 +40,8 @@ export const fetchChannels = async (
   setLoading(true);
   try {
     const res = await axios.get(`/api/channels/me?page=${page}&limit=10`);
-    console.log(res.data);
 
+    // console.log(res.data);
     let newChannels: mychannel[] = res.data.data.map((channel: any) => ({
       id: channel.channel.id,
       name: channel.channel.name,
@@ -57,8 +56,6 @@ export const fetchChannels = async (
     }
 
     setChannels((prevChannels) => {
-      console.log(prevChannels);
-      console.log(newChannels);
       const combinedChannels = [...prevChannels, ...newChannels];
       const uniqueChannels = Array.from(new Set(combinedChannels.map((channel) => channel.id))).map(
         (id) => combinedChannels.find((channel) => channel.id === id),
@@ -69,6 +66,5 @@ export const fetchChannels = async (
     setLoading(false);
   } catch (error) {
     setLoading(false);
-    console.log(error);
   }
 };

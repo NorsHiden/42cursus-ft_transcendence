@@ -64,14 +64,12 @@ export type Message =   {
   messageReceivedSuccessfully: boolean;
 }
 
-
-
-
 export type Member = {
   role: string;
   state: string;
   userId: number;
   displayName: string;
+  username: string;
   presence: string;
   avatar: string;
 };
