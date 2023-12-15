@@ -24,6 +24,7 @@ const Card: React.FC<CardProps> = ({ className, children, onClick, ...PolygonPro
       <Polygon
         clipPathID={clipPathID}
         className="absolute inset-0 -z-10"
+        fill="transparent"
         width={dimensions.width}
         height={dimensions.height}
         {...PolygonProps}

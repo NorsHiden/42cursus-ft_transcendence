@@ -15,7 +15,7 @@ export const profileLoader = async (user?: string): Promise<User> => {
 
     return {
       ...userData.data,
-      isforeign: username !== userData.data.username,
+      isForeign: username !== userData.data.username,
       friendStatus: friendStatus.data.state,
     };
   } catch (error) {
@@ -34,8 +34,8 @@ const Profile: React.FC = () => {
           <NavLinkButton to="overview">Overview</NavLinkButton>
           <NavLinkButton to="MatchHistory">Match History</NavLinkButton>
           <NavLinkButton to="Achievements">Achievements</NavLinkButton>
-          {!user.isforeign && <NavLinkButton to="Friends">Friends</NavLinkButton>}
-          {!user.isforeign && <NavLinkButton to="Settings">Settings</NavLinkButton>}
+          {!user.isForeign && <NavLinkButton to="Friends">Friends</NavLinkButton>}
+          {!user.isForeign && <NavLinkButton to="Settings">Settings</NavLinkButton>}
         </nav>
         <Outlet />
       </div>

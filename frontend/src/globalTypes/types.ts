@@ -6,7 +6,7 @@ export type UserProfile = {
   avatar: string;
   banner: string;
   location: string;
-  birthdate: string;
+  birthdate: Date;
 };
 
 export type User = {
@@ -21,7 +21,7 @@ export type User = {
   }[];
   verified: boolean;
   profile: UserProfile;
-  isforeign: boolean;
+  isForeign: boolean;
   friendStatus: string;
 };
 

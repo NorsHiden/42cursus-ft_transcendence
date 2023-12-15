@@ -1,32 +1,22 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { toast } from 'sonner';
 import { useRouteLoaderData } from 'react-router-dom';
-import { User } from '@globalTypes/types';
+import { toast } from 'sonner';
+import { User, UserProfile } from '@globalTypes/types';
 
-export type settingsData = {
-  username: string;
-  display_name: string;
-  email: string;
-  avatar: {
-    path: string;
-    file: File;
-  };
-  about: string;
-  banner: {
-    path: string;
-    file: File;
-  };
-  location: string;
-  birthdate: string | Date;
+type FileType = {
+  path: string;
+  file: File;
 };
 
-export const useSettingsData = () => {
-  const user = useRouteLoaderData('profile') as User;
+export type SettingsData = Pick<User, 'username' | 'display_name' | 'email'> &
+  Pick<UserProfile, 'about' | 'location' | 'birthdate'> & {
+    avatar: FileType;
+    banner: FileType;
+  };
 
-  if (user.isforeign) throw Error('You are not allowed to edit this profile');
-
-  const data: settingsData = {
+const extractSettingsData = (user: User): SettingsData => {
+  return {
     username: user.username,
     display_name: user.display_name,
     email: user.email,
@@ -40,29 +30,31 @@ export const useSettingsData = () => {
       file: new File([], ''),
     },
     location: user.profile.location,
-    birthdate: new Date(user.profile.birthdate).toLocaleDateString('en-CA', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-    }),
+    birthdate: user.profile.birthdate,
   };
+};
 
-  const [activeChanges, setactiveChanges] = useState<boolean>(false);
-  const [Newuser, setNewuser] = useState<settingsData>(data);
+export const useSettingsData = () => {
+  const user = useRouteLoaderData('profile') as User;
+  const data = extractSettingsData(user);
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [newUser, setNewUser] = useState<SettingsData>(data);
+
+  if (user.isForeign) throw Error('You are not allowed to edit this profile');
 
   function handleUpload(e: any) {
     e.preventDefault();
-    setactiveChanges(false);
+    setHasChanges(false);
 
     const formData = new FormData();
-    formData.append('username', Newuser.username);
-    formData.append('display_name', Newuser.display_name);
-    formData.append('email', Newuser.email);
-    formData.append('about', Newuser.about);
-    formData.append('location', Newuser.location);
-    formData.append('birthdate', Newuser.birthdate.toString());
-    formData.append('avatar', Newuser.avatar.file);
-    formData.append('banner', Newuser.banner.file);
+    formData.append('username', newUser.username);
+    formData.append('display_name', newUser.display_name);
+    formData.append('email', newUser.email);
+    formData.append('about', newUser.about);
+    formData.append('location', newUser.location);
+    formData.append('birthdate', newUser.birthdate.toISOString());
+    formData.append('avatar', newUser.avatar.file);
+    formData.append('banner', newUser.banner.file);
 
     const res = axios.patch('/api/users/@me', formData);
     toast.promise(res, {
@@ -74,25 +66,43 @@ export const useSettingsData = () => {
     });
   }
 
+  const handleFileUpload = (input: HTMLInputElement) => {
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const path = URL.createObjectURL(file);
+
+      setNewUser((user) => ({
+        ...user,
+        [input.name]: {
+          path: path,
+          file: file,
+        },
+      }));
+    }
+  };
+
   function handleInput(e: any) {
     if (e.target.name == 'username' && e.target.value.length > 10) return;
     if (e.target.name == 'display_name' && e.target.value.length > 20) return;
-    setactiveChanges(true);
-    setNewuser({ ...Newuser, [e.target.name]: e.target.value });
+    setHasChanges(true);
+    if (e.target.name == 'birthdate') {
+      console.log(e.target.value);
+      const date = new Date(e.target.value);
+      setNewUser({ ...newUser, [e.target.name]: new Date(date) });
+    } else if (e.target.name == 'avatar' || e.target.name == 'banner') handleFileUpload(e.target);
+    else setNewUser({ ...newUser, [e.target.name]: e.target.value });
   }
 
   function resetForm() {
-    setactiveChanges(false);
-    setNewuser(data);
+    setHasChanges(false);
+    setNewUser(data);
   }
 
   return {
-    Newuser,
+    newUser,
     handleUpload,
     handleInput,
-    activeChanges,
-    setactiveChanges,
-    setNewuser,
+    hasChanges,
     resetForm,
   };
 };
