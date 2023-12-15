@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { Services } from 'src/utils/consts';
 import { IDmsService } from '../interfaces/IDmsService.interface';
 import { JwtUser } from 'src/utils/types';
@@ -27,10 +27,10 @@ export class DmsService implements IDmsService {
   public async create(recipientId: string, user: JwtUser): Promise<Channel> {
     try {
       if (recipientId === user.sub)
-        throw new NotFoundException('Cannot DM yourself');
+        throw new BadRequestException('Cannot DM yourself');
 
       if (await this.isExist(recipientId, user))
-        throw new NotFoundException('DM already exist');
+        throw new BadRequestException('DM already exist');
 
       const recipient = await this.usersService.getUser(recipientId);
 
@@ -112,6 +112,24 @@ export class DmsService implements IDmsService {
     if (dm) return true;
 
     return false;
+  }
+
+  public async findOne(recipientId: string, user: JwtUser): Promise<Channel> {
+    const dm = await this.channelRepository
+      .createQueryBuilder('c')
+      .innerJoin('c.members', 'uc')
+      .where('uc.userId IN (:userId, :recipientId)', {
+        userId: user.sub,
+        recipientId: recipientId,
+      })
+      .andWhere('c.type = :type', { type: 'dm' })
+      .groupBy('c.id')
+      .having('COUNT(DISTINCT uc.userId) = 2')
+      .getOne();
+
+    if (!dm) throw new NotFoundException('DM not found');
+
+    return dm;
   }
 
   private async countDms(userId: string): Promise<number> {

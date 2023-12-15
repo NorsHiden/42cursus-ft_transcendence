@@ -27,6 +27,14 @@ export class DmsController {
     return this.dmsService.findAll(query, user);
   }
 
+  @Get(':recipientId')
+  findOne(
+    @Param('recipientId', ParseIntPipe) recipientId: string,
+    @AuthUser() user: JwtUser,
+  ) {
+    return this.dmsService.findOne(recipientId, user);
+  }
+
   @Post(':recipientId')
   create(
     @Param('recipientId', ParseIntPipe) recipientId: string,
