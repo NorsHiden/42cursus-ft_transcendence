@@ -6,7 +6,7 @@ import { Message } from '@globalTypes/types';
 import { DM } from '@globalTypes/types';
 import { User } from '@globalTypes/user';
 import { useRouteLoaderData } from 'react-router-dom';
-
+import axios from 'axios';
 
 // Define the shape of the context data
 interface SelectedChannelContextData {
@@ -25,6 +25,7 @@ interface SelectedChannelContextData {
   setDirectMessages: React.Dispatch<React.SetStateAction<Record<string, Message[]>>>;
   setShowUpdateChannelModal: React.Dispatch<React.SetStateAction<boolean>>;
   ShowUpdateChannelModal: boolean;
+  blockedUsers: User[];
 }
 
 // Create a context for the selected channel
@@ -45,12 +46,28 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
   const [Dms, setDms] = useState<DM[]>([]);
   const [LogedUser, setLogedUser] = useState<User>({} as User);
   const [ShowUpdateChannelModal, setShowUpdateChannelModal] = useState<boolean>(false);
+  const [blockedUsers, setBlockedUsers] = useState<User[]>([]); // [User]
 
   const user = useRouteLoaderData('layout') as User;
   
   useEffect(() => {
     setLogedUser(user);
   }, [user]);
+
+  useEffect(() => {
+    const fetchBlockedList = async () => {
+      try {
+        const response = await axios.get('/api/friendlist/blocked');
+        const blockedList = response.data;
+        setBlockedUsers(blockedList.friendlist.blocked);
+        // Do something with blockedList
+      } catch (error) {
+        console.error('Failed to fetch blocked list:', error);
+      }
+    };
+  
+    fetchBlockedList();
+  }, []);
 
   useEffect(() => {
     const socket = io('http://localhost:3001/chat', {
@@ -84,7 +101,8 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
         setDirectMessages,
         DirectMessages,
         setShowUpdateChannelModal,
-        ShowUpdateChannelModal
+        ShowUpdateChannelModal,
+        blockedUsers,
       }}
     >
       {children}
