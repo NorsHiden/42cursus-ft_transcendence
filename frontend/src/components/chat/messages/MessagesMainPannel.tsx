@@ -14,7 +14,7 @@ import GameInvite from '@assets/novaIcons/solid/GameInvite.tsx';
 import useIntersectionObserver from '@hooks/useIntersectionObserver';
 
 const MessagesMainPannel = () => {
-  const { Dms, LogedUser, socket,blockedUsers,selectedChannel} = useSelectedChannel();
+  const { Dms, LogedUser, socket,blockedUsers} = useSelectedChannel();
   const navigate = useNavigate();
   const param = useParams();
   const [messages, setMessages] = useState<MessageType[]>();
