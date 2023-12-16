@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 import { DM } from '@globalTypes/types';
 
 export const getDms = async (
@@ -33,7 +33,7 @@ export const getDms = async (
 
 export const fetchChannels = async (
   page: number,
-  setChannels: React.Dispatch<React.SetStateAction<mychannel[]>>,
+  setChannels: React.Dispatch<React.SetStateAction<ChannelType[]>>,
   setHasMore: (value: boolean) => void,
   setLoading: (value: boolean) => void,
 ): Promise<void> => {
@@ -42,7 +42,7 @@ export const fetchChannels = async (
     const res = await axios.get(`/api/channels/me?page=${page}&limit=10`);
 
     // console.log(res.data);
-    let newChannels: mychannel[] = res.data.data.map((channel: any) => ({
+    let newChannels: ChannelType[] = res.data.data.map((channel: any) => ({
       id: channel.channel.id,
       name: channel.channel.name,
       avatar: channel.channel.avatar,
@@ -60,7 +60,7 @@ export const fetchChannels = async (
       const uniqueChannels = Array.from(new Set(combinedChannels.map((channel) => channel.id))).map(
         (id) => combinedChannels.find((channel) => channel.id === id),
       );
-      return uniqueChannels as mychannel[];
+      return uniqueChannels as ChannelType[];
     });
 
     setLoading(false);

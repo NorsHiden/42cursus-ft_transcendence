@@ -14,13 +14,6 @@ import RadioInput from '@components/RadioInput/index.tsx';
 import Card from '@components/Card/index.tsx';
 import getColorValue from '@utils/getColorValue.ts';
 
-type args = {
-  friendType: string;
-  setFriends: (props: []) => void;
-  setBlocked: (props: []) => void;
-  setPending: (props: []) => void;
-};
-
 const ManageFriends: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
 

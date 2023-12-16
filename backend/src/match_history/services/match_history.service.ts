@@ -141,12 +141,12 @@ export class MatchHistoryService {
         win_gap: 'DESC',
         created_at: 'DESC',
       },
-      take: 6,
+      take: 3,
     });
     return {
       data: matches,
       meta: {
-        itemsPerPage: 6,
+        itemsPerPage: 3,
         totalItems: matches.length,
         currentPage: 0,
         TotalPages: 1,

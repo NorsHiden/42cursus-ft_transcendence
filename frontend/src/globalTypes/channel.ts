@@ -5,6 +5,7 @@ export type ChannelType = {
   banner: string;
   type: string;
   protected: boolean;
+  role: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -20,4 +21,3 @@ export type ChannelType = {
 //     avatar: string;
 //   };
 // };
-

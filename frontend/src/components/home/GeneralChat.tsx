@@ -31,20 +31,25 @@ export const MessageSkeleton: React.FC = () => {
   );
 };
 
-export const Message: React.FC<MessageProps> = ({ type, message, messageReceivedSuccessfully=true}) => {
-
+export const Message: React.FC<MessageProps> = ({
+  type,
+  message,
+  messageReceivedSuccessfully = true,
+}) => {
   const [time, setTime] = useState<string>('');
 
-
-  
   useEffect(() => {
     const date = new Date(message.createdAt);
     const formattedDate = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     setTime(formattedDate);
-  },[]);
+  }, []);
 
   return (
-    <div  className={` max-w-[50%]    pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${messageReceivedSuccessfully?" opacity-100":" opacity-25"}`}>
+    <div
+      className={` max-w-[50%]    pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${
+        messageReceivedSuccessfully ? ' opacity-100' : ' opacity-25'
+      }`}
+    >
       <div
         className={`flex items-center justify-between text-white mb-3 gap-4 ${
           type == 'RECEIVED' ? 'flex-row' : 'flex-row-reverse'

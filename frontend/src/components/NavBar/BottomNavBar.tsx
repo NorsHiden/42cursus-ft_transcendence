@@ -10,7 +10,7 @@ import BellSolid from '@assets/novaIcons/solid/BellSolid';
 import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
 import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
 
-const BottomNavBar = () => {
+const BottomNavBar: React.FC = () => {
   const links = [
     {
       title: 'Home',
@@ -29,7 +29,11 @@ const BottomNavBar = () => {
     },
   ];
 
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
+  const handleNotificationsOpen = () => {
+    setIsNotificationsOpen(!isNotificationsOpen);
+  };
 
   return (
     <div className="flex flex-row items-center justify-between h-full px-4 sm:px-8 md:px-16">

@@ -1,18 +1,18 @@
-import { FC } from 'react';
+import React from 'react';
 import { CreateChannelType } from './useCreateChannel';
 import EditRectangleOutline from '@assets/novaIcons/outline/EditRectangleOutline';
 import EditCircleOutline from '@assets/novaIcons/outline/EditCircleOutline';
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 
 interface ChannelImageInputProps {
   channel: CreateChannelType;
   handleAvatarUpload?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleBannerUpload?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  currentChannel?: mychannel;
+  currentChannel?: ChannelType;
   update?: boolean;
 }
 
-export const ChannelAvatarInput: FC<ChannelImageInputProps> = ({
+export const ChannelAvatarInput: React.FC<ChannelImageInputProps> = ({
   channel,
   handleAvatarUpload,
   update,
@@ -46,7 +46,7 @@ export const ChannelAvatarInput: FC<ChannelImageInputProps> = ({
   );
 };
 
-export const ChannelBannerInput: FC<ChannelImageInputProps> = ({
+export const ChannelBannerInput: React.FC<ChannelImageInputProps> = ({
   channel,
   handleBannerUpload,
   currentChannel,

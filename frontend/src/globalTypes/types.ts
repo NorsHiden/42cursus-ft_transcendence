@@ -67,6 +67,7 @@ export type Member = {
   role: string;
   state: string;
   userId: number;
+  username: string;
   displayName: string;
   presence: string;
   avatar: string;

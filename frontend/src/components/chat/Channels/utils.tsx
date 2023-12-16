@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 import { Member } from '@globalTypes/types';
 import { toast } from 'sonner';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import { Message as MessageType } from '@globalTypes/types';
 
-export function getUsers(setUsers: React.Dispatch<React.SetStateAction<User[]>>, search: string) {
+export function getUsers(
+  setUsers: React.Dispatch<React.SetStateAction<UserType[]>>,
+  search: string,
+) {
   axios
     .get(`/api/users/search?s=${search}`)
     .then((response) => {
@@ -15,7 +18,7 @@ export function getUsers(setUsers: React.Dispatch<React.SetStateAction<User[]>>,
 }
 
 export const fetchMembers = (
-  selectedChannel: mychannel,
+  selectedChannel: ChannelType,
   setMembers: (arg: Member[]) => void,
   search: string,
 ) => {
@@ -62,16 +65,19 @@ export const sendMessage = (
   });
 };
 
-export const getMessages = async (channelId: number, abortController: AbortController,setHasMore:React.Dispatch<React.SetStateAction<boolean>>,page:Number) => {
+export const getMessages = async (
+  channelId: number,
+  abortController: AbortController,
+  setHasMore: React.Dispatch<React.SetStateAction<boolean>>,
+  page: Number,
+) => {
   try {
     const response = await axios.get(`/api/channels/${channelId}/messages?page=${page}`, {
       signal: abortController.signal,
     });
     console.log(`/api/channels/${channelId}/messages?page=${page}`);
-    if (response.data.meta.currentPage < response.data.meta.totalPages)
-      setHasMore(true);
-    else
-      setHasMore(false);
+    if (response.data.meta.currentPage < response.data.meta.totalPages) setHasMore(true);
+    else setHasMore(false);
 
     return response.data.data;
   } catch (error) {

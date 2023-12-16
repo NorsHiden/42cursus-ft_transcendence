@@ -25,7 +25,7 @@ interface SelectedChannelContextData {
   setDirectMessages: React.Dispatch<React.SetStateAction<Record<string, Message[]>>>;
   setShowUpdateChannelModal: React.Dispatch<React.SetStateAction<boolean>>;
   ShowUpdateChannelModal: boolean;
-  blockedUsers: User[];
+  blockedUsers: UserType[];
 }
 
 // Create a context for the selected channel
@@ -46,7 +46,7 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
   const [Dms, setDms] = useState<DM[]>([]);
   const [LogedUser, setLogedUser] = useState<UserType>({} as UserType);
   const [ShowUpdateChannelModal, setShowUpdateChannelModal] = useState<boolean>(false);
-  const [blockedUsers, setBlockedUsers] = useState<User[]>([]); // [User]
+  const [blockedUsers, setBlockedUsers] = useState<UserType[]>([]); // [User]
 
   const user = useRouteLoaderData('layout') as UserType;
 
@@ -65,12 +65,12 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
         console.error('Failed to fetch blocked list:', error);
       }
     };
-  
+
     fetchBlockedList();
   }, []);
 
   useEffect(() => {
-    const socket = io('http://localhost:3001/chat', {
+    const socket = io('http://localhost/chat', {
       withCredentials: true,
     });
     setSocket(socket);

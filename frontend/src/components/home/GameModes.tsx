@@ -7,9 +7,20 @@ import { GAME_MODES } from '@globalTypes/gameModes';
 import { GameLobby } from '@globalTypes/game';
 import twclsx from '@utils/twclsx';
 import getColorValue from '@utils/getColorValue';
-import { gameSocket } from '../../socket';
+// import { gameSocket } from '../../socket';
 import PlayRectangleSolid from '@assets/novaIcons/solid/PlayRectangleSolid';
 import CloseRectangleSolid from '@assets/novaIcons/solid/CloseRectangleSolid';
+import { io } from 'socket.io-client';
+
+const gameSocket = io('http://localhost:3001/game', {
+  withCredentials: true,
+});
+
+if (gameSocket.connected) console.log('socket.io is connected.');
+
+gameSocket.on('reconnect', () => {
+  console.log('socket.io is reconnected.');
+});
 
 const GameModes: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +32,7 @@ const GameModes: React.FC = () => {
   };
 
   const handleButtonClick = () => {
+    console.log('Gamemode: ', Object.keys(GAME_MODES)[selectedMode]);
     if (isSearching) {
       gameSocket.emit('lobby', { action: 'CANCEL' });
       setIsSearching(false);
@@ -34,6 +46,12 @@ const GameModes: React.FC = () => {
   };
 
   useEffect(() => {
+    gameSocket.on('connect', function () {
+      console.log('check 2', gameSocket.connected);
+    });
+    gameSocket.on('disconnect', function () {
+      console.log('check 2', gameSocket.connected);
+    });
     gameSocket.on('lobby', checkLobby);
     gameSocket.on('error', () => {
       toast.dismiss();

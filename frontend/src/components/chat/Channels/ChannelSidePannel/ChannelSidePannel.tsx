@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import InviteUser from '@assets/novaIcons/outline/InviteUser';
 import User2Solid from '@assets/novaIcons/solid/User2Solid';
 import { fetchMembers } from '../utils.tsx';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import { getUsers } from '../utils.tsx';
 import { Member } from '@globalTypes/types';
 import UserElement from './UserElement.tsx';
 import MemberElement from './MemberElement.tsx';
 
-
 interface ChannelMainPannelProps {
-  selectedChannel: mychannel;
+  selectedChannel: ChannelType;
   expanded: boolean;
   setExpanded: (arg: boolean) => void;
 }
@@ -27,7 +26,7 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
   const [search, setSearch] = React.useState('');
   const [members, setMembers] = React.useState<Member[]>([]);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserType[]>([]);
 
   function handlieinvite() {
     if (selectedChannel.role == 'owner' || selectedChannel.role == 'admin')
@@ -102,7 +101,6 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
           </div>
 
           <div className="relative w-[90%] justify-self-center">
-      
             <input
               value={search}
               id="search"
@@ -116,16 +114,16 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
       </div>
       <ul className="flex flex-col flex-grow h-27 px-4 lg:px-2 2xl:px-4 overflow-auto mt-8 gap-4 scroll-smooth  scrollbar  scrollbar-track-lightBlack scrollbar-track-w-[4px] scrollbar-thumb-rounded scrollbar-thumb-w-1 scrollbar-thumb-[#5E6069]">
         {!inviteUser &&
-          members.map((member,index) =>(             
-              <MemberElement  key={`${index}${member.userId}-${new Date().getTime()}`} {...member} channelID={selectedChannel.id} />
-            )
-          )
-          
-          
-        }
+          members.map((member, index) => (
+            <MemberElement
+              key={`${index}${member.userId}-${new Date().getTime()}`}
+              {...member}
+              channelID={selectedChannel.id}
+            />
+          ))}
         {inviteUser &&
           users &&
-          users.map((user,index) => (
+          users.map((user, index) => (
             <UserElement
               key={`${index}${user.id}-${new Date().getTime()}`}
               userId={user.id}
@@ -134,7 +132,6 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
               displayName={user.display_name}
               channelID={selectedChannel.id}
             />
-            
           ))}
       </ul>
       <div

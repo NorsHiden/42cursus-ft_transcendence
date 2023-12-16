@@ -12,7 +12,7 @@ export const profileLoader = async (user?: string): Promise<User> => {
     const currentUser = await axios.get(`/api/users/@me`);
     const friendStatus = await axios.get(`/api/friendlist/${userData.data.id}`);
     const leaderboardPosition = await axios.get('/api/users/leaderboard/');
-    const claimedAchievements = await axios.get('/api/achievement/all/');
+    const claimedAchievements = await axios.get('/api/achievement/');
 
     const username = currentUser.data.username;
 

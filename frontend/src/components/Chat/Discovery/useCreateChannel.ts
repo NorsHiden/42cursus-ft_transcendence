@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 
 export type CreateChannelType = {
   avatar?: {
@@ -21,7 +21,7 @@ export type CreateChannelType = {
 export const useCreateChannel = (
   hidePopUp: () => void,
   update: boolean,
-  currentChannel: mychannel | undefined,
+  currentChannel: ChannelType | undefined,
 ) => {
   const [channel, setChannel] = useState<CreateChannelType>({} as CreateChannelType);
   const [loading, setLoading] = useState(false);

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 import ArrowLeftOutline from '@assets/novaIcons/outline/ArrowLeftOutline';
 import InviteUser from '@assets/novaIcons/outline/InviteUser';
 import User2Solid from '@assets/novaIcons/solid/User2Solid';
 import twclsx from '@utils/twclsx';
 import ContextMenu from '@components/ContextMenu';
 import { fetchMembers } from './utils';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import { getUsers } from './utils.tsx';
 import { useSelectedChannel } from '@context/Channel.tsx';
 import { Member } from '@globalTypes/types';
@@ -211,7 +211,7 @@ const MemberElement: React.FC<MemberElementProps> = ({
 };
 
 interface ChannelMainPannelProps {
-  selectedChannel: mychannel;
+  selectedChannel: ChannelType;
   expanded: boolean;
   setExpanded: (arg: boolean) => void;
 }
@@ -225,7 +225,7 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
   const [search, setSearch] = React.useState('');
   const [members, setMembers] = React.useState<Member[]>([]);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserType[]>([]);
 
   function handlieinvite() {
     // console.log('invite user')

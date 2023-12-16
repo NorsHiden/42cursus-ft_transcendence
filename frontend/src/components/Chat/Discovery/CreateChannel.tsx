@@ -4,7 +4,7 @@ import { CreateChannelType, useCreateChannel } from './useCreateChannel';
 import { FC, useContext } from 'react';
 import { ChannelAvatarInput, ChannelBannerInput } from './ChannelImageInput';
 import { useState, useEffect } from 'react';
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 import { SelectedChannelContext } from '@context/Channel';
 
 interface CreateChannelProps {
@@ -14,7 +14,7 @@ interface CreateChannelProps {
 
 export const CreateChannel: FC<CreateChannelProps> = ({ enabled, hidePopUp }) => {
   const [update, setUpdate] = useState<boolean>(false);
-  const [currentChannel, setCurrentChannel] = useState<mychannel>();
+  const [currentChannel, setCurrentChannel] = useState<ChannelType>();
   const { channel, setChannel, loading, handleAvatarUpload, handleBannerUpload, createChannel } =
     useCreateChannel(hidePopUp, update, currentChannel);
   const context = useContext(SelectedChannelContext);

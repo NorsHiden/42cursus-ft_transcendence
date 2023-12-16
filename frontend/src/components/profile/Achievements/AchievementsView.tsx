@@ -8,7 +8,7 @@ const AchievementsView: React.FC = () => {
   const [achievements, setAchievements] = useState<AchievementType[]>([]);
 
   useEffect(() => {
-    axios.get('/api/achievement/all').then((res) => setAchievements(res.data));
+    axios.get('/api/achievement/').then((res) => setAchievements(res.data));
   }, []);
 
   return (

@@ -52,12 +52,13 @@ export class AchievementService {
   }
 
   async getAchievements(target_id: string): Promise<Achievement[]> {
-    return await this.achievementRepository.find({
-      where: {
-        claimers: {
-          id: target_id,
-        },
-      },
+    const claimedAchievements = await this.achievementRepository.find({
+      where: { claimers: { id: target_id } },
+    });
+    return (await this.achievementRepository.find({})).map((achievement) => {
+      if (claimedAchievements.find((a) => a.id === achievement.id))
+        return { ...achievement, isClaimed: true };
+      return { ...achievement, isClaimed: false };
     });
   }
 }

@@ -17,7 +17,7 @@ const PointsGraphSection: React.FC = () => {
   };
 
   const getAchievements = async () => {
-    const res = await axios.get('/api/achievement/all');
+    const res = await axios.get('/api/achievement/');
     setAchievements(res.data);
   };
 

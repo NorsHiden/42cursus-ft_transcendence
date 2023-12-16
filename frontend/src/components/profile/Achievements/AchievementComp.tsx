@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import useDimensions from '@hooks/useDimensions';
-import { getColorValue } from '@utils/getColorValue';
-import { AchievementType, achievements } from '@globalTypes/achievements';
+import getColorValue from '@utils/getColorValue';
+import { ACHIEVEMENT_NAME, ACHIEVEMENT_STYLES } from '@globalTypes/achievements';
 import LockSolid from '@assets/novaIcons/solid/LockSolid';
 
 type AchievementProps = {
   isClaimed: boolean;
-  type: AchievementType;
+  type: ACHIEVEMENT_NAME;
   title: string;
   description: string;
   size?: 'sm' | 'md' | 'lg';
 };
 
 const Achievement: React.FC<AchievementProps> = ({ isClaimed, type, title, description }) => {
-  const achievement = achievements[type];
+  const achievement = ACHIEVEMENT_STYLES[type];
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const { ref, dimensions } = useDimensions<HTMLDivElement>();
 
