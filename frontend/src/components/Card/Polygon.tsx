@@ -4,6 +4,7 @@ export type PolygonProps = {
   width: number;
   height: number;
   fill?: string;
+  borderStyle?: 'solid' | 'dashed';
   borderWidth?: number;
   borderColor?: string;
   borderRadius?: number;
@@ -16,6 +17,7 @@ const Polygon: React.FC<PolygonProps> = ({
   width = 100,
   height = 100,
   fill,
+  borderStyle = 'solid',
   borderWidth = 0,
   borderColor = '#000',
   borderRadius = 20,
@@ -71,6 +73,7 @@ const Polygon: React.FC<PolygonProps> = ({
         strokeWidth={borderWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeDasharray={borderStyle === 'solid' ? 0 : 4}
         d={`M ${cut + borderRadius / 2} ${borderWidth}
         H ${width - borderRadius - borderWidth}
         C ${width - borderRadius / 2 - borderWidth} ${borderWidth} ${width - borderWidth} ${

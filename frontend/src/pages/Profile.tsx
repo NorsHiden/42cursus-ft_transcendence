@@ -1,70 +1,54 @@
-import { Outlet, defer, useLoaderData } from 'react-router-dom';
+import React from 'react';
+import { Outlet, useLoaderData } from 'react-router-dom';
 import axios from 'axios';
 
-import { PlayerProfile } from '../components/profile';
-import { NavLinkButton } from '@components/profile';
 import { User } from '@globalTypes/types';
+import { NavLinkButton, PlayerProfile } from '@components/profile';
+import { AchievementType } from '@globalTypes/achievements';
 
-export async function profileLoader(user?: string) {
+export const profileLoader = async (user?: string): Promise<User> => {
   try {
     const userData = await axios.get(`/api/users/${user}`);
     const currentUser = await axios.get(`/api/users/@me`);
     const friendStatus = await axios.get(`/api/friendlist/${userData.data.id}`);
+    const leaderboardPosition = await axios.get('/api/users/leaderboard/');
+    const claimedAchievements = await axios.get('/api/achievement/all/');
 
     const username = currentUser.data.username;
 
-    return defer({
+    return {
       ...userData.data,
-      isforeign: username !== userData.data.username,
+      isForeign: username !== userData.data.username,
       friendStatus: friendStatus.data.state,
-    });
+      leaderboardPosition:
+        leaderboardPosition.data.findIndex((user: User) => user.id === userData.data.id) + 1,
+      claimedAchievements: claimedAchievements.data.filter(
+        (achievement: AchievementType) => achievement.isClaimed,
+      ).length,
+    };
   } catch (error) {
     throw new Error('Failed to load user');
   }
-}
+};
 
-function Profile() {
+const Profile: React.FC = () => {
   const user = useLoaderData() as User;
 
   return (
-    <div id="profile" className="h-full grid grid-cols-4 gap-[1vw]">
-      <PlayerProfile />
-      <div className="col-span-3">
-        <ul id="tabs" className="flex">
-          <li>
-            <NavLinkButton to="overview" cut={35}>
-              Overview
-            </NavLinkButton>
-          </li>
-          <li>
-            <NavLinkButton to="MatchHistory" cut={35}>
-              Match History
-            </NavLinkButton>
-          </li>
-          <li>
-            <NavLinkButton to="Achievements" cut={35}>
-              Achievements
-            </NavLinkButton>
-          </li>
-          {!user.isforeign && (
-            <li>
-              <NavLinkButton to="Friends" cut={35}>
-                Friends
-              </NavLinkButton>
-            </li>
-          )}
-          {!user.isforeign && (
-            <li>
-              <NavLinkButton to="Settings" cut={35}>
-                Settings
-              </NavLinkButton>
-            </li>
-          )}
-        </ul>
+    <div className="w-full h-full grid grid-rows-1 grid-cols-4 gap-x-14">
+      <PlayerProfile className="col-span-1" />
+      <div className="col-span-3 grid grid-rows-section gap-y-20">
+        <nav className="w-full flex">
+          <NavLinkButton to="overview">Overview</NavLinkButton>
+          <NavLinkButton to="history">Match History</NavLinkButton>
+          <NavLinkButton to="achievements">Achievements</NavLinkButton>
+          {!user.isForeign && <NavLinkButton to="friends">Friends</NavLinkButton>}
+          {!user.isForeign && <NavLinkButton to="settings">Settings</NavLinkButton>}
+        </nav>
         <Outlet />
       </div>
     </div>
   );
-}
+};
 
 export default Profile;

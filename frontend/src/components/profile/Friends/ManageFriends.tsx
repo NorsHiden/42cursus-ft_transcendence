@@ -1,189 +1,144 @@
-import { useState, ChangeEvent, useEffect } from 'react';
-import axios from 'axios';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
+import axios from 'axios';
+
 import UserCard from './Friends-cards/Friends.tsx';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline.tsx';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline.tsx';
-import Unblock from '@assets/novaIcons/outline/Unblock.tsx';
+import Unblock from '@assets/novaIcons/outline/UnblockOutline.tsx';
 import Block from '@assets/novaIcons/outline/block.tsx';
 import { unfriend, block, accept, unblock } from './utils.ts';
 import { User } from '@globalTypes/types';
 import Button from '../../Button.tsx';
+import RadioInput from '@components/RadioInput/index.tsx';
+import Card from '@components/Card/index.tsx';
+import getColorValue from '@utils/getColorValue.ts';
 
-interface args {
+type args = {
   friendType: string;
   setFriends: (props: []) => void;
   setBlocked: (props: []) => void;
   setPending: (props: []) => void;
-}
-
-const getFriendList = (data: args) => {
-  const { friendType, setFriends, setBlocked, setPending } = data;
-
-  if (friendType == 'Accepted') {
-    axios.get('/api/friendlist/friends').then((response) => {
-      if (response.status == 200) {
-        console.log('i got Accepted list');
-        setPending([]);
-        setBlocked([]);
-        setFriends(response.data.friendlist['friends']);
-      }
-    });
-  } else if (friendType == 'Pending') {
-    axios.get('/api/friendlist/pending').then((response) => {
-      if (response.status == 200) {
-        console.log('i got Pending list');
-        setPending(response.data.friendlist['pending']);
-        setBlocked([]);
-        setFriends([]);
-      }
-    });
-  } else {
-    axios.get('/api/friendlist/blocked').then((response) => {
-      if (response.status == 200) {
-        console.log('i got blocked list');
-        setBlocked(response.data.friendlist['blocked']);
-        setFriends([]);
-        setPending([]);
-      }
-    });
-  }
 };
 
-const ManageFriends = () => {
+const ManageFriends: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
 
-  if (user.isforeign) throw new Error('This is not your profile');
+  if (user.isForeign) throw new Error('This is not your profile');
+
   const [friendType, setType] = useState('Accepted');
   const [friends, setFriends] = useState<User[]>([]);
   const [blocked, setBlocked] = useState<User[]>([]);
   const [pending, setPending] = useState<User[]>([]);
+  const displayedFriendsArr =
+    friendType === 'Accepted' ? friends : friendType === 'Blocked' ? blocked : pending;
+  const displayedFriends = Array.from(
+    { length: displayedFriendsArr.length < 3 ? 3 : displayedFriendsArr.length },
+    (_v, i) => (i < displayedFriendsArr.length ? displayedFriendsArr[i] : null),
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
-  // you need to isolate lists comcerns to remove card smooth
-  function handletype(e: ChangeEvent<HTMLInputElement>) {
-    console.log(e.target.value);
+  const getFriendList = async () => {
+    setIsLoading(true);
+    setPending([]);
+    setBlocked([]);
+    setFriends([]);
+    if (friendType == 'Accepted') {
+      const response = await axios.get('/api/friendlist/friends');
+      if (response.status == 200) setFriends(response.data.friendlist['friends']);
+    } else if (friendType == 'Pending') {
+      const response = await axios.get('/api/friendlist/pending');
+      if (response.status == 200) setPending(response.data.friendlist['pending']);
+    } else {
+      const response = await axios.get('/api/friendlist/blocked');
+      if (response.status == 200) setBlocked(response.data.friendlist['blocked']);
+    }
+    setIsLoading(false);
+  };
+
+  const handletype = (e: React.ChangeEvent<HTMLInputElement>) => {
     setType(e.target.value);
-  }
+  };
 
   useEffect(() => {
-    const data: args = { friendType, setFriends, setBlocked, setPending };
-
-    console.log('FriendType:', friendType);
-    getFriendList(data);
+    getFriendList();
   }, [friendType]);
 
   return (
-    <section className="mt-24">
-      <div id="redio-buttons" className="flex justify-end">
-        <div id="Pending" className="flex items-center ml-[30px]">
-          <input
-            id="default-radio-1"
-            type="radio"
-            name="default-radio"
-            value="Pending"
-            checked={friendType === 'Pending'}
-            className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
-            onChange={handletype}
-          />
-          <label
-            htmlFor="default-radio-1"
-            className={`  ml-2 text-['1rem'] font-medium text-[#717178] `}
-          >
-            Pending
-          </label>
-        </div>
-        <div id="Blocked" className="flex items-center ml-[30px]">
-          <input
-            id="default-radio-2"
-            type="radio"
-            value="Blocked"
-            checked={friendType === 'Blocked'}
-            name="default-radio"
-            className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
-            onChange={handletype}
-          />
-          <label
-            htmlFor="default-radio-2"
-            className={`  font-poppins ml-2 text-['1rem'] font-medium text-[#717178] `}
-          >
-            Blocked
-          </label>
-        </div>
-        <div id="Accepted" className="flex items-center ml-[30px]">
-          <input
-            id="default-radio-3"
-            type="radio"
-            value="Accepted"
-            checked={friendType === 'Accepted'}
-            name="default-radio"
-            className="w-6 h-6 appearance-none border-4 border-[#717178] rounded-full checked:bg-[#717178] checked:border-transparent focus:outline-none"
-            onChange={handletype}
-          />
-          <label
-            htmlFor="default-radio-3"
-            className={`ml-2 text-[${'1rem'}px] font-medium text-[#717178] `}
-          >
-            Accepted
-          </label>
-        </div>
-      </div>
+    <section className="grid grid-rows-section gap-y-6">
+      <header className="flex justify-end gap-x-4">
+        <RadioInput
+          id="pendingOption"
+          name="friendsStatus"
+          value="Pending"
+          label="Pending"
+          checked={friendType === 'Pending'}
+          onChange={handletype}
+        />
+        <RadioInput
+          id="blockedOption"
+          name="friendsStatus"
+          value="Blocked"
+          label="Blocked"
+          checked={friendType === 'Blocked'}
+          onChange={handletype}
+        />
+        <RadioInput
+          id="acceptedOption"
+          name="friendsStatus"
+          value="Accepted"
+          label="Accepted"
+          checked={friendType === 'Accepted'}
+          onChange={handletype}
+        />
+      </header>
 
-      <motion.ul className="grid grid-cols-3 gap-8 mt-16">
-        {friendType == 'Accepted'
-          ? friends.map((users) => (
-              <motion.li initial={{ x: -500 }} animate={{ x: 0 }} exit={{ x: 500 }} key={users.id}>
-                <UserCard
-                  user={users.profile.avatar}
-                  name={users.display_name}
-                  username={users.username}
-                  banner={users.profile.banner}
-                >
-                  <div className="flex justify-start items-center gap-4 pt-6 ml-4">
+      <div className="h-full grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-6 pb-6 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
+        {!isLoading &&
+          displayedFriends.map((friend, i) =>
+            friend ? (
+              <UserCard
+                key={i}
+                banner={friend.profile.banner}
+                avatar={friend.profile.avatar}
+                name={friend.display_name}
+                username={friend.username}
+              >
+                {friendType === 'Accepted' && (
+                  <div className="center-x justify-start gap-x-4">
                     <Button
-                      className="flex center pl-[12px] pr-[20px] py-[8px]"
+                      className="center gap-x-2 py-2 px-5"
                       color="BrightRed"
                       onClick={() => {
-                        unfriend(friends, users.username, users.id, setFriends);
+                        unfriend(friends, friend.username, friend.id, setFriends);
                       }}
-                      cut={55}
+                      cut={25}
                       borderRadius={10}
-                      borderWidth={3}
+                      borderWidth={1}
                       borderColor="#E95E6F"
                     >
-                      <Unblock className="relative text-white w-[22px] h-[22px]" />
-                      <p className="text-white font-poppins font-medium">Unfriend</p>
+                      <Unblock size={20} className="text-white" />
+                      <p className="text-white">Unfriend</p>
                     </Button>
                     <Button
-                      className="flex center pl-[12px] pr-[20px] py-[8px] gap-1"
+                      className="center gap-x-2 py-2 px-5"
                       color="DarkMaroon"
                       onClick={() => {
-                        block(friends, users.username, users.id, setFriends);
+                        block(friends, friend.username, friend.id, setFriends);
                       }}
                       cut={25}
                     >
-                      <Block className="text-red w-[18px] h-[18px]" />
-                      <p className="text-red font-poppins font-regular">Block</p>
+                      <Block size={20} className="text-red" />
+                      <p className="text-red">Block</p>
                     </Button>
                   </div>
-                </UserCard>
-              </motion.li>
-            ))
-          : []}
-        {friendType == 'Blocked'
-          ? blocked.map((users) => (
-              <motion.li initial={{ x: -500 }} animate={{ x: 0 }} exit={{ x: 500 }} key={users.id}>
-                <UserCard
-                  user={users.profile.avatar}
-                  name={users.display_name}
-                  username={users.username}
-                  banner={users.profile.banner}
-                >
+                )}
+                {friendType === 'Blocked' && (
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
                     <Button
                       className="center pl-[12px] pr-[20px] py-[8px] gap-1"
                       onClick={() => {
-                        unblock(blocked, users.username, users.id, setBlocked);
+                        unblock(blocked, friend.username, friend.id, setBlocked);
                       }}
                       color="gray"
                       cut={35}
@@ -192,52 +147,55 @@ const ManageFriends = () => {
                       borderColor="#858895"
                     >
                       <Unblock className="relative text-white w-[22px] h-[22px]" />
-                      <p className="text-white font-poppins font-medium">Unblock</p>
+                      <p className="text-white font-medium">Unblock</p>
                     </Button>
                   </div>
-                </UserCard>
-              </motion.li>
-            ))
-          : []}
-        {friendType == 'Pending'
-          ? pending.map((users) => (
-              <motion.li initial={{ x: -500 }} animate={{ x: 0 }} exit={{ x: 500 }} key={users.id}>
-                <UserCard
-                  user={users.profile.avatar}
-                  name={users.display_name}
-                  username={users.username}
-                  banner={users.profile.banner}
-                >
+                )}
+
+                {friendType === 'Pending' && (
                   <div className="flex justify-start items-center gap-4 pt-6 ml-4">
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
                       onClick={() => {
-                        accept(pending, users.username, users.id, setPending);
+                        accept(pending, friend.username, friend.id, setPending);
                       }}
                       color="primary"
                       borderWidth={2}
                       borderColor="#FF8C66"
                     >
                       <CheckOutline className="text-white" />
-                      <p className="text-white font-poppins font-medium">Accept</p>
+                      <p className="text-white font-medium">Accept</p>
                     </Button>
                     <Button
                       className="flex center pl-[12px] pr-[20px] py-[8px]"
                       color="DarkMaroon"
                       onClick={() => {
-                        unfriend(pending, users.username, users.id, setPending);
+                        unfriend(pending, friend.username, friend.id, setPending);
                       }}
                       cut={25}
                     >
                       <CloseOutline className="text-red" />
-                      <p className="text-red font-poppins font-regular">Decline</p>
+                      <p className="text-red font-regular">Decline</p>
                     </Button>
                   </div>
-                </UserCard>
-              </motion.li>
-            ))
-          : []}
-      </motion.ul>
+                )}
+              </UserCard>
+            ) : (
+              <Card
+                key={i}
+                borderWidth={2}
+                borderStyle="dashed"
+                borderColor={getColorValue('darkGray')}
+                className="w-full aspect-[16/14] text-black"
+              ></Card>
+            ),
+          )}
+
+        {isLoading &&
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="w-full aspect-[16/14] animate-pulse bg-lightBlack" />
+          ))}
+      </div>
     </section>
   );
 };

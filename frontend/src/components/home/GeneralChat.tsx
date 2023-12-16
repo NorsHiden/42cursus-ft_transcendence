@@ -1,13 +1,14 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-import { User } from '@globalTypes/user';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
+import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
 import Card from '@components/Card';
-import { Message as MessageType } from '@globalTypes/types';
 import Loader1Outline from '@assets/novaIcons/outline/Loader1Outline';
-import { chatSocket } from '../../socket';
+import { Message as MessageType } from '@globalTypes/types';
+import { User } from '@globalTypes/types';
 import { toast } from 'sonner';
+import { chatSocket } from '../../socket';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';
@@ -66,7 +67,7 @@ export const Message: React.FC<MessageProps> = ({ type, message, messageReceived
           type == 'RECEIVED' ? 'rounded-tr-2xl' : 'rounded-tl-2xl'
         } rounded-b-2xl overflow-hidden`}
       >
-        <p className='font-poppins font-regular   break-words'>{message.content}</p>
+        <p className="font-regular   break-words">{message.content}</p>
       </div>
     </div>
   );
@@ -146,7 +147,11 @@ const GeneralChat: React.FC = () => {
         className="mb-4 grid grid-cols-1 grid-rows-chat"
       >
         <div className="text-white bg-lightBlack py-4 px-10">
-          <h1 className="font-medium text-lg">#General</h1>
+          <h1 className="font-semibold text-base">#General</h1>
+          <p className="center-x gap-x-1 text-[10px]">
+            <CircleSolid size={10} className="text-green" />
+            22 player online
+          </p>
         </div>
 
         <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4 hide-scrollbar">

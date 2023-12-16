@@ -24,9 +24,7 @@ export const NavButtons = () => {
               borderRadius={30}
               {...(isActive ? { borderColor: '#FF8C66', borderWidth: 2 } : {})}
             >
-              <p className="font-poppins font-medium uppercase text-white lg:text-xs 2xl:text-base">
-                CHANNELS
-              </p>
+              <p className="font-medium uppercase text-white lg:text-xs 2xl:text-base">CHANNELS</p>
             </Card>
           )}
         </NavLink>
@@ -46,9 +44,7 @@ export const NavButtons = () => {
               borderRadius={30}
               {...(isActive ? { borderColor: '#FF8C66', borderWidth: 2 } : {})}
             >
-              <p className="font-poppins font-medium uppercase text-white lg:text-xs 2xl:text-base">
-                MESSAGES
-              </p>
+              <p className="font-medium uppercase text-white lg:text-xs 2xl:text-base">MESSAGES</p>
             </Card>
           )}
         </NavLink>

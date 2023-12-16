@@ -1,9 +1,9 @@
-import { User } from './user';
+import { UserType } from './user';
 
 export type NotificationType = {
   id: string;
-  recipient: User;
-  sender: User;
+  recipient: UserType;
+  sender: UserType;
   action: 'FRIEND_REQUEST' | 'GAME_REQUEST' | 'ACHIEVEMENT_UNLOCKED' | 'CHANNEL_INVITE';
   status?: 'pending' | 'accepted' | 'rejected';
   description: string;

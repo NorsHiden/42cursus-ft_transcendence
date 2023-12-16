@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import Card from '@components/Card';
+import twclsx from '@utils/twclsx';
 import { NotificationType } from '@globalTypes/notification';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
@@ -46,8 +47,6 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
       ? notificationMessage.recipient?.profile?.avatar
       : notificationMessage.sender?.profile?.avatar;
 
-  console.log("notificationMessage");
-  console.log(notificationMessage);
   const displayName =
     notificationMessage.action == 'ACHIEVEMENT_UNLOCKED'
       ? notificationMessage.recipient.display_name
@@ -114,7 +113,16 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
   );
 };
 
-const Notification: React.FC = () => {
+type NotificationProps = {
+  open: boolean;
+  isLoading?: boolean;
+  hasMore?: boolean;
+  notifications?: NotificationType[];
+  setNotifications?: React.Dispatch<React.SetStateAction<NotificationType[]>>;
+  lastElementRef?: (node: HTMLDivElement) => void;
+};
+
+const Notification: React.FC<NotificationProps> = ({ open }) => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -123,14 +131,13 @@ const Notification: React.FC = () => {
   const getNotifications = async (page: number) => {
     setIsLoading(true);
     const res = await axios.get(`/api/notification?page=${page}`);
-    setNotifications((notifications) => [...notifications, ...res.data]);
+    setNotifications((prevNotifications) => [...prevNotifications, ...res.data]);
     if (res.data.length < 10) setHasMore(false);
     setIsLoading(false);
   };
 
   const lastNotificationRef = useIntersectionObserver(() => {
     if (hasMore) {
-      console.log('get more');
       getNotifications(page);
       setPage((prevPage) => prevPage + 1);
     }
@@ -139,14 +146,16 @@ const Notification: React.FC = () => {
   useSSE('/api/notification/sse-notifications', {
     onMessage: (event) => {
       const newNotification = JSON.parse(event.data);
-      setNotifications((notifications) => [newNotification, ...notifications]);
+      setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
     },
   });
 
   return (
     <div
-      className="flex flex-col group lg:absolute z-20 lg:w-[450px] lg:h-[350px] pt-5 lg:pb-0 px-6 lg:top-[calc(100%+32px)] bg-lightBlack border-2 border-darkGray rounded-lg transition-all caret
-                fixed top-0 max-lg:left-0 w-full h-[calc(100vh-5rem)] max-lg:opacity-0 group-focus-within:opacity-100 max-lg:overflow-hidden pointer-events-none group-focus-within:pointer-events-auto"
+      className={twclsx(
+        'flex flex-col group invisible absolute z-20 w-[450px] h-0 pt-5 lg:pb-0 px-6 lg:top-[calc(100%+32px)] bg-lightBlack border-2 border-darkGray rounded-lg transition-all caret',
+        open && 'visible h-[350px]',
+      )}
     >
       <h1 className="text-xl text-white font-bold mb-6">Notifications</h1>
       <div className="flex flex-col gap-4 overflow-hidden group-hover:overflow-y-auto scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-gray">

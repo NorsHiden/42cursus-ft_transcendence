@@ -1,18 +1,18 @@
-import { Ball, Player } from '@globalTypes/game';
-import { User } from '@globalTypes/user';
+import { BallType, PlayerType } from '@globalTypes/game';
+import { UserType } from '@globalTypes/user';
 import { FC, useEffect, useRef } from 'react';
 
 type CanvasProps = React.HTMLProps<HTMLCanvasElement> & {
-  homePlayer: Player;
-  awayPlayer: Player;
-  ball: Ball;
-  me: User;
+  homePlayer: PlayerType;
+  awayPlayer: PlayerType;
+  ball: BallType;
+  me: UserType;
 };
 
 export const GameCanvas: FC<CanvasProps> = ({ homePlayer, awayPlayer, ball, me, ...props }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const drawPaddle = (context: CanvasRenderingContext2D, player: Player) => {
+  const drawPaddle = (context: CanvasRenderingContext2D, player: PlayerType) => {
     const { width, height } = context.canvas;
     const paddleWidth = (player.width / 100) * width;
     const paddleHeight = (player.height / 100) * height;
@@ -36,7 +36,7 @@ export const GameCanvas: FC<CanvasProps> = ({ homePlayer, awayPlayer, ball, me, 
     context.fill();
   };
 
-  const drawBall = (context: CanvasRenderingContext2D, ball: Ball) => {
+  const drawBall = (context: CanvasRenderingContext2D, ball: BallType) => {
     const { width, height } = context.canvas;
     const ballRadius = (ball.radius / 100) * height;
     const ballX = (ball.x / 100) * width;

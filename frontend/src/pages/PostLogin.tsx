@@ -11,11 +11,13 @@ export const PostLoginLoader = async () => {
   const username = searchParams.get('username');
   const display_name = searchParams.get('display_name');
   const avatar = searchParams.get('avatar');
+  const userLocation = await axios.get('http://ip-api.com/json/');
 
   if (username && display_name && avatar) {
     return {
       username,
       display_name,
+      location: userLocation.data.country,
       avatar: {
         path: avatar,
         file: new File([], ''),
@@ -34,6 +36,7 @@ export const PostLoginLoader = async () => {
     return {
       username,
       display_name,
+      location: userLocation.data.country,
       avatar: {
         path: avatar,
         file: new File([], ''),
@@ -47,6 +50,7 @@ export const PostLoginLoader = async () => {
 export type userData = {
   username: string;
   display_name: string;
+  location: string;
   avatar: {
     path: string;
     file: File;

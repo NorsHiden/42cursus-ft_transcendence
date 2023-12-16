@@ -2,7 +2,7 @@ import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import Card from '@components/Card';
 import { ChannelCard } from '@components/Chat/Discovery/ChannelCard';
 import { Channel } from '@components/Chat/Discovery/useChannelCard';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import { useDiscovery } from '@components/Chat/Discovery/useDiscovery';
 import { PasswordComp } from '@components/Chat/Discovery/PasswordComp';
 import { useEffect } from 'react';
@@ -10,7 +10,7 @@ import DropDown from '@assets/novaIcons/solid/DropDown';
 
 export type discoveryLoaderType = {
   channels: Channel[];
-  me: User;
+  me: UserType;
 };
 
 const Discovery = () => {

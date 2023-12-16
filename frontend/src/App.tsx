@@ -10,6 +10,7 @@ const Game = React.lazy(() => import('@pages/Game'));
 const Login = React.lazy(() => import('@pages/Login'));
 const PostLogin = React.lazy(() => import('@pages/PostLogin'));
 const Layout = React.lazy(() => import('@pages/Layout'));
+import TwoFactorAuth, { TwoFactorAuthLoader } from '@pages/OTP2fa';
 
 //profile
 const Profile = React.lazy(() => import('@pages/Profile'));
@@ -26,7 +27,6 @@ const MessagesMainPannel = React.lazy(() => import('@components/chat/messages/Me
 const ChannelsList = React.lazy(() => import('@components/chat/ChannelsList'));
 const MessagesList = React.lazy(() => import('@components/chat/MessagesList'));
 
-
 import { ChatMainPannelLoader } from '@pages/Chat';
 import { PostLoginLoader } from '@pages/PostLogin';
 import { profileLoader } from '@pages/Profile';
@@ -36,10 +36,6 @@ async function Layoutloader() {
   console.log('layout loader', LogedinUser.data);
   return LogedinUser.data;
 }
-
-// import {Settings} from '@components/profile';
-
-import TwoFactorAuth, { TwoFactorAuthLoader } from '@pages/OTP2fa';
 
 const router = createBrowserRouter([
   {
@@ -133,7 +129,7 @@ const router = createBrowserRouter([
             element: <Overview />,
           },
           {
-            path: '/:user/matchhistory',
+            path: '/:user/history',
             element: <MatchHistory />,
           },
           {

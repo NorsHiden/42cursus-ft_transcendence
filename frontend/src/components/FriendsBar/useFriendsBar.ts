@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 
 export const useFriendsBar = () => {
-  const [friends, setFriends] = useState<User[]>([]);
+  const [friends, setFriends] = useState<UserType[]>([]);
 
   const getSseRequest = () => {
     const sse = new EventSource('/api/friendlist/sse', { withCredentials: true });
