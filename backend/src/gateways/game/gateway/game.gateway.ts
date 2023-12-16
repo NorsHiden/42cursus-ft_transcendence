@@ -33,13 +33,11 @@ export class GameGateway {
 
   // Event handler for when a client connects to the WebSocket server
   async handleConnection(client: Socket) {
-    console.log('------------ Client connected: ' + client.id);
     await this.gameService.handleConnection(client);
   }
 
   // Event handler for when a client disconnects from the WebSocket server
   async handleDisconnect(client: Socket) {
-    console.log('------------ Client disconnected: ' + client.id);
     await this.gameService.closeConnection(client, this.server);
   }
 
@@ -50,7 +48,6 @@ export class GameGateway {
     @MessageBody('target_id') target_id?: string,
     @MessageBody('game_mode') game_mode?: string,
   ) {
-    console.log('lobby: ', action);
     return await this.gameService.manageLobby(
       client,
       this.server,
