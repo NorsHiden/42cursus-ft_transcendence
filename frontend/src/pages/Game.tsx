@@ -13,9 +13,9 @@ const GamePage: React.FC = () => {
     getMe();
     initGame(gameSocket);
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'w') {
+      if (event.key === 'ArrowUp') {
         gameSocket.emit('ingame', { action: 'UP', game_id: gameId });
-      } else if (event.key === 's') {
+      } else if (event.key === 'ArrowDown') {
         gameSocket.emit('ingame', { action: 'DOWN', game_id: gameId });
       }
     });
