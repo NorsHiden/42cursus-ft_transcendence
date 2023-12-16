@@ -9,9 +9,12 @@ import { Message } from '@components/home/GeneralChat';
 import { Message as MessageType } from '@globalTypes/types';
 import { sendMessage, getMessages } from '../Channels/utils.tsx';
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
+import User1Solid from '@assets/novaIcons/solid/User1Solid.tsx';
+import GameInvite from '@assets/novaIcons/solid/GameInvite.tsx';
+import useIntersectionObserver from '@hooks/useIntersectionObserver';
 
 const MessagesMainPannel = () => {
-  const { Dms, LogedUser, socket } = useSelectedChannel();
+  const { Dms, LogedUser, socket,blockedUsers} = useSelectedChannel();
   const navigate = useNavigate();
   const param = useParams();
   const [messages, setMessages] = useState<MessageType[]>();
@@ -22,8 +25,16 @@ const MessagesMainPannel = () => {
   const [DmId, setDmId] = useState<number>();
   const [message, setMessage] = useState<string>('');
   const messagesRef = useRef(messages);
+  const [hasmore, setHasmore] = useState<boolean>(false);
+  const [page , setPage] = useState<number>(1);
 
   const containerRef = useRef(null);
+
+  const elementRef = useIntersectionObserver(()=>{
+    console.log("intersected");
+    setPage((prev)=>prev+1);
+  });
+
 
   useEffect(() => {
     messagesRef.current = messages;
@@ -33,6 +44,8 @@ const MessagesMainPannel = () => {
     const channelId = param.id;
 
     const selectedDm = Dms.find((dm) => dm.id == (channelId as unknown as number));
+    // console.log(selectedDm);
+    console.log('selected dm');
     console.log(selectedDm);
     if (selectedDm) {
       setDmId(selectedDm.id);
@@ -60,12 +73,9 @@ const MessagesMainPannel = () => {
       messageReceivedSuccessfully: false,
     };
 
-    console.log('messages ref');
-    console.log(messagesRef.current);
-    console.log('dm id ', DmId);
+  
 
-    console.log('new message');
-    console.log(newMessage);
+  
 
     setMessages((prev: MessageType[] | undefined) => {
       if (prev == undefined) return [newMessage];
@@ -76,12 +86,21 @@ const MessagesMainPannel = () => {
   };
 
   useEffect(() => {
+    setPage(1);
+    setMessages(() => {
+      return [];
+    });
+    // console.log('selected channel changed');
+  }, [DmId]);
+
+  useEffect(() => {
     const abortController = new AbortController();
 
     if (DmId) {
       setLoading(true);
-      getMessages(DmId, abortController).then((fetchedMessages) => {
-        if (fetchedMessages.length != 0) {
+      getMessages(DmId, abortController,setHasmore,page).then((fetchedMessages) => {
+        setLoading(false);
+        if (fetchedMessages && fetchedMessages.length != 0) {
           setMessages((prev: MessageType[] | undefined) => {
             setLoading(false);
             if (prev == undefined) return fetchedMessages;
@@ -95,11 +114,13 @@ const MessagesMainPannel = () => {
 
     return () => {
       abortController.abort();
-      setMessages(() => {
-        return [];
-      });
+      setHasmore(false);
+
+      // setMessages(() => {
+      //   return [];
+      // });
     };
-  }, [Dms, param.id]);
+  }, [Dms,DmId,page]);
 
   useEffect(() => {
     if (socket == null) return;
@@ -131,8 +152,7 @@ const MessagesMainPannel = () => {
     };
   }, [socket, DmId]);
 
-  console.log('REciepient');
-  console.log(reciepient);
+
   return (
     <div
       id="chat-main-pannel"
@@ -171,6 +191,17 @@ const MessagesMainPannel = () => {
               </p>
             </div>
           </div>
+          <div className='flex center gap-4'>
+          <button className='text-gray'>
+                <GameInvite  className=" w-[24px] h-[24px]" />
+          </button>
+          <button className='text-gray' onClick={()=>{
+            navigate(`/${reciepient?.username}`);
+          }}>
+                <User1Solid  className=" w-[24px] h-[24px] " />
+          </button>
+          
+            </div>
         </div>
         <div
           ref={containerRef}
@@ -178,15 +209,24 @@ const MessagesMainPannel = () => {
         >
           {messages && Object.keys(messages).length > 0 && (
             <>
-              {messages?.map((messagev) => (
-                <Message
-                  message={messagev}
-                  type={messagev.author.id == LogedUser.id ? 'SENT' : 'RECEIVED'}
-                  messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
-                />
-              ))}
+              {messages?.map((messagev,index) => {
+                if (blockedUsers.some(user => user.id === messagev.author.id)) {
+                  return null; // Skip this message
+                }
+                return(
+                  <Message
+                    key={index}
+                    message={messagev}
+                    type={messagev.author.id == LogedUser.id ? 'SENT' : 'RECEIVED'}
+                    messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
+                  />
+                )
+          })}
             </>
           )}
+          {
+              hasmore && <div ref={elementRef} className='w-full h-10'></div>
+          }
           {loading && (
             <div className="flex justify-center items-center py-2">
               <div className="absolute animate-spin rounded-full h-6 w-6 bg-primary"></div>
@@ -201,6 +241,7 @@ const MessagesMainPannel = () => {
             value={message}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
+                if (message.length == 0) return;
                 sendMessageHandler();
                 setMessage('');
               }
@@ -212,6 +253,7 @@ const MessagesMainPannel = () => {
           />
           <div
             onClick={() => {
+              if (message.length == 0) return;
               sendMessageHandler();
               setMessage('');
             }}

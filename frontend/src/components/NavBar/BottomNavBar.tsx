@@ -10,30 +10,26 @@ import BellSolid from '@assets/novaIcons/solid/BellSolid';
 import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
 import Message1Solid from '@assets/novaIcons/solid/Message1Solid';
 
-const links = [
-  {
-    title: 'Home',
-    icon: Home4Solid,
-    to: '/',
-  },
-  {
-    title: 'Chat',
-    icon: Message1Solid,
-    to: '/chat',
-  },
-  {
-    title: 'Leaderboard',
-    icon: BarChartSolid,
-    to: '/leaderboard',
-  },
-];
+const BottomNavBar = () => {
+  const links = [
+    {
+      title: 'Home',
+      icon: Home4Solid,
+      to: '/',
+    },
+    {
+      title: 'Chat',
+      icon: Message1Solid,
+      to: '/chat',
+    },
+    {
+      title: 'Leaderboard',
+      icon: BarChartSolid,
+      to: '/leaderboard',
+    },
+  ];
 
-const BottomNavBar: React.FC = () => {
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  const handleNotificationsOpen = () => {
-    setIsNotificationsOpen((prev) => !prev);
-  };
 
   return (
     <div className="flex flex-row items-center justify-between h-full px-4 sm:px-8 md:px-16">

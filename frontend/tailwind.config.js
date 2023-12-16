@@ -21,6 +21,20 @@ export default {
       '2xl': '1536px',
     },
     extend: {
+      animation: {
+        fadeIn: 'fadeIn 0.5s ease-in-out',
+        'slide-up': 'slide-up 0.3s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'slide-up': {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+      },
       scrollbar: ['dark'],
       gridTemplateColumns: {
         layout: '8% repeat(4, 1fr) 8%',

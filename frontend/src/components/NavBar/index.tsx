@@ -51,7 +51,7 @@ const NavBar: React.FC = () => {
             </button>
             <SearchBar />
           </div>
-          <NotificationBox />
+          {/* <NotificationBox /> */}
         </div>
         <Link className="group flex items-center gap-x-2" to={currentUser?.username}>
           <img
