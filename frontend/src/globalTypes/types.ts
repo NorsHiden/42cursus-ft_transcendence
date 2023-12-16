@@ -16,10 +16,12 @@ export type User = {
   email: string;
   wins: number;
   loses: number;
+  verified: boolean;
+  is_2fa_enabled: boolean;
+  presence: string;
   points: {
     value: number;
   }[];
-  verified: boolean;
   profile: UserProfile;
   isForeign: boolean;
   friendStatus: string;

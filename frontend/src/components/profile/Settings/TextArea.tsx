@@ -20,7 +20,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   return (
     <div id={id} className={`relative ${className}`}>
       <textarea
-        className="peer w-full h-full pb-3 pt-6 px-4 resize-none transition-all rounded-lg bg-lightBlack border-2 border-darkGray text-white outline-none disabled:text-gray focus:border-gray"
+        className="peer w-full h-full pb-2 pt-6 px-4 resize-none transition-all rounded-lg bg-lightBlack border-2 border-darkGray text-white outline-none disabled:text-gray focus:border-gray"
         placeholder=" "
         value={value}
         onChange={onChange}
@@ -29,7 +29,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       />
       <label
         htmlFor={id}
-        className="absolute pointer-events-none text-gray duration-300 transform origin-left -translate-y-3/4 scale-75 top-6 left-4 z-10 peer-focus:-translate-y-3/4 peer-focus:scale-75 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100"
+        className="absolute pointer-events-none text-gray duration-300 transform origin-left -translate-y-3/4 scale-75 top-6 left-4 z-10 peer-focus:-translate-y-3/4 peer-focus:scale-75 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100"
       >
         {placeholder}
       </label>

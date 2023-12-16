@@ -25,7 +25,7 @@ const InputField: React.FC<InputFieldProps> = ({
     <input
       id={id}
       name={name}
-      className={`peer w-full h-full pb-3 pt-6 px-4 transition-all rounded-lg bg-lightBlack border-2 border-darkGray text-white outline-none disabled:text-gray focus:border-gray`}
+      className={`peer w-full h-full pb-2 pt-6 px-4 transition-all rounded-lg bg-lightBlack border-2 border-darkGray text-white outline-none disabled:text-gray focus:border-gray`}
       placeholder=" "
       value={value}
       type={type}

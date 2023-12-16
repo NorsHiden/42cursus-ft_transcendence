@@ -17,14 +17,13 @@ const Card: React.FC<CardProps> = ({ className, children, onClick, ...PolygonPro
     <div
       ref={ref}
       style={{ clipPath: `url(#${clipPathID})` }}
-      className={twclsx('relative', className)}
+      className={twclsx('relative text-transparent', className)}
       onClick={onClick}
     >
       {children}
       <Polygon
         clipPathID={clipPathID}
         className="absolute inset-0 -z-10"
-        fill="transparent"
         width={dimensions.width}
         height={dimensions.height}
         {...PolygonProps}
