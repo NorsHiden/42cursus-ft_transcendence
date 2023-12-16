@@ -4,12 +4,15 @@ import axios from 'axios';
 
 import { User } from '@globalTypes/types';
 import { NavLinkButton, PlayerProfile } from '@components/profile';
+import { AchievementType } from '@globalTypes/achievements';
 
 export const profileLoader = async (user?: string): Promise<User> => {
   try {
     const userData = await axios.get(`/api/users/${user}`);
     const currentUser = await axios.get(`/api/users/@me`);
     const friendStatus = await axios.get(`/api/friendlist/${userData.data.id}`);
+    const leaderboardPosition = await axios.get('/api/users/leaderboard/');
+    const claimedAchievements = await axios.get('/api/achievement/all/');
 
     const username = currentUser.data.username;
 
@@ -17,6 +20,11 @@ export const profileLoader = async (user?: string): Promise<User> => {
       ...userData.data,
       isForeign: username !== userData.data.username,
       friendStatus: friendStatus.data.state,
+      leaderboardPosition:
+        leaderboardPosition.data.findIndex((user: User) => user.id === userData.data.id) + 1,
+      claimedAchievements: claimedAchievements.data.filter(
+        (achievement: AchievementType) => achievement.isClaimed,
+      ).length,
     };
   } catch (error) {
     throw new Error('Failed to load user');
@@ -32,10 +40,10 @@ const Profile: React.FC = () => {
       <div className="col-span-3 grid grid-rows-section gap-y-20">
         <nav className="w-full flex">
           <NavLinkButton to="overview">Overview</NavLinkButton>
-          <NavLinkButton to="MatchHistory">Match History</NavLinkButton>
-          <NavLinkButton to="Achievements">Achievements</NavLinkButton>
-          {!user.isForeign && <NavLinkButton to="Friends">Friends</NavLinkButton>}
-          {!user.isForeign && <NavLinkButton to="Settings">Settings</NavLinkButton>}
+          <NavLinkButton to="history">Match History</NavLinkButton>
+          <NavLinkButton to="achievements">Achievements</NavLinkButton>
+          {!user.isForeign && <NavLinkButton to="friends">Friends</NavLinkButton>}
+          {!user.isForeign && <NavLinkButton to="settings">Settings</NavLinkButton>}
         </nav>
         <Outlet />
       </div>

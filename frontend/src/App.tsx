@@ -85,7 +85,7 @@ const router = createBrowserRouter([
             element: <Overview />,
           },
           {
-            path: '/:user/matchhistory',
+            path: '/:user/history',
             element: <MatchHistory />,
           },
           {

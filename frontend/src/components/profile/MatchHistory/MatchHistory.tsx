@@ -7,11 +7,17 @@ import MatchCard from '@components/MatchCard.tsx';
 import { extractMatchType } from './utils.ts';
 import RadioInput from '@components/RadioInput';
 import getTimeDiff from '@utils/getTimeDiff.ts';
+import Card from '@components/Card/index.tsx';
+import getColorValue from '@utils/getColorValue.ts';
 
 const MatchHistory: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
 
   const [matches, setMatches] = useState<MatchType[]>([]);
+  const displayedMatches = Array.from(
+    { length: matches.length < 6 ? 6 : matches.length },
+    (_v, i) => (i < matches.length ? matches[i] : null),
+  );
   const [matchType, setMatchType] = useState('all');
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,19 +81,28 @@ const MatchHistory: React.FC = () => {
           onChange={handleTypeChange}
         />
       </div>
-      <div className="h-full grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-6 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
-        {matches.map((match) => {
-          return (
-            <MatchCard
-              key={match.match_id}
-              type={CardType.MATCH_HISTORY}
-              gamemode={match.game_mode}
-              host={match.home_player}
-              opponent={match.away_player}
-              time={getTimeDiff(match.created_at, match.ended_at)}
-            />
-          );
-        })}
+      <div className="relative h-full grid auto-rows-max grid-cols-1 lg:grid-cols-3 gap-6 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-lightBlack scrollbar-thumb-gray">
+        {!isLoading &&
+          displayedMatches.map((match, i) =>
+            match ? (
+              <MatchCard
+                key={match.match_id}
+                type={CardType.MATCH_HISTORY}
+                gamemode={match.game_mode}
+                host={match.home_player}
+                opponent={match.away_player}
+                time={getTimeDiff(match.created_at, match.ended_at)}
+              />
+            ) : (
+              <Card
+                key={i}
+                borderWidth={2}
+                borderStyle="dashed"
+                borderColor={getColorValue('darkGray')}
+                className="w-full aspect-[16/10] text-black"
+              ></Card>
+            ),
+          )}
         {isLoading &&
           hasMore &&
           Array.from({ length: 6 }).map((_, i) => (

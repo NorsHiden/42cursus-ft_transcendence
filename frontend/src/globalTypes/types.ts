@@ -25,6 +25,8 @@ export type User = {
   profile: UserProfile;
   isForeign: boolean;
   friendStatus: string;
+  leaderboardPosition: number;
+  claimedAchievements: number;
 };
 
 export type MatchType = {

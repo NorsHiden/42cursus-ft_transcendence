@@ -10,6 +10,7 @@ import LocationSolid from '@assets/novaIcons/solid/LocationSolid.tsx';
 import UnblockOutline from '@assets/novaIcons/outline/UnblockOutline';
 import Card from '@components/Card';
 import Button from '@components/Button.tsx';
+import ClockCircleOutline from '@assets/novaIcons/outline/ClockCircleOutline';
 
 type PlayerProfileProps = {
   className?: string;
@@ -83,66 +84,61 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
         </div>
       </section>
 
-      {user.isforeign && (
+      {user.isForeign && (
         <section className="flex gap-4">
           {user.friendStatus == 'NONE' && (
             <Button
-              className={`w-full h-full center py-2 px-4 z-10 ${
-                loading ? 'filter opacity-70' : ''
-              }`}
+              className={`center gap-x-1 py-2 px-4 ${loading ? 'opacity-70' : ''}`}
               color="primary"
               onClick={sendFriendRequest}
-              cut={26}
-              borderWidth={0}
-              borderRadius={26}
-              borderColor="#FF8C66"
+              cut={24}
+              borderRadius={24}
             >
-              <PlusOutline size={16} className="text-white" />
-              <p className="text-white font-medium">Add as friend</p>
+              <PlusOutline size={20} className="text-white" />
+              <p className="text-white">Add as friend</p>
+            </Button>
+          )}
+
+          {user.friendStatus == 'PENDING' && (
+            <Button
+              className={`center gap-x-1 py-2 px-4 opacity-70`}
+              color="gray"
+              onClick={sendFriendRequest}
+              cut={24}
+              borderRadius={24}
+            >
+              <ClockCircleOutline size={20} className="text-white" />
+              <p className="text-white">Pending invite</p>
             </Button>
           )}
 
           {user.friendStatus == 'FRIEND' && (
             <Button
-              className={`w-full h-full center pl-[12px] pr-[20px] py-[8px]  ${
-                loading ? 'filter opacity-70' : ''
-              }`}
+              className={`center gap-x-1 py-2 px-4 ${loading ? 'opacity-70' : ''}`}
               color="BrightRed"
               onClick={unfriendRequest}
-              cut={30}
-              borderRadius={10}
-              borderWidth={2}
-              borderColor="#E95E6F"
+              cut={24}
+              borderRadius={24}
             >
-              <UnblockOutline className="relative text-white w-[22px] h-[22px]" />
-              <p className="text-white font-medium">Unfriend</p>
+              <UnblockOutline size={20} className="text-white" />
+              <p className="text-white">Unfriend</p>
             </Button>
           )}
 
           {user.friendStatus == 'BLOCKED' && (
             <Button
-              className={`w-full h-full center pl-[12px] pr-[20px] py-[8px] gap-1  ${
-                loading ? 'filter opacity-70' : ''
-              }`}
+              className={`center gap-x-1 py-2 px-4 ${loading ? 'filter opacity-70' : ''}`}
               onClick={() => unblock(user.id)}
               color="gray"
               cut={35}
               borderRadius={10}
-              borderWidth={3}
-              borderColor="#858895"
             >
-              <UnblockOutline className="relative text-white w-[22px] h-[22px]" />
-              <p className="text-white font-medium">Unblock</p>
+              <UnblockOutline size={20} className="text-white" />
+              <p className="text-white">Unblock</p>
             </Button>
           )}
 
-          <Card
-            cut={20}
-            borderWidth={1}
-            borderRadius={10}
-            borderColor="#4B5261"
-            className="relative center text-darkGray z-10 w-10 aspect-square"
-          >
+          <Card cut={20} borderRadius={20} className="center text-darkGray w-10 aspect-square">
             <button>
               <MessageSendSolid size={20} className="text-white" />
             </button>

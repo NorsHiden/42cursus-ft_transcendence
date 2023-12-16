@@ -56,13 +56,13 @@ const Overview: React.FC = () => {
         <OverviewCard label={`Match${user.wins > 1 ? 'es' : ''} Won`} number={user.wins}>
           <WinsIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
-        <OverviewCard label="Leaderboard position" number={5}>
+        <OverviewCard label="Leaderboard position" number={user.leaderboardPosition}>
           <LeaderboardIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
         <OverviewCard label={`Match${user.loses > 1 ? 'es' : ''} Lost`} number={user.loses}>
           <LossesIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
-        <OverviewCard label="Unlocked Achievments" number={5}>
+        <OverviewCard label="Unlocked Achievments" number={user.claimedAchievements}>
           <AchievementsIcon className="w-[24px] h-[24px] lg:w-[34px] lg:h-[34px] text-white" />
         </OverviewCard>
         <OverviewCard label="Total Points" number={user.points.length ? user.points[0].value : 0}>
