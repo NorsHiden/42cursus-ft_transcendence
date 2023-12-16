@@ -1,11 +1,11 @@
-export type UserProfile = {
+export type ProfileType = {
   id: number;
   about: string;
   avatar: string;
   banner: string;
 };
 
-export type User = {
+export type UserType = {
   id: number;
   username: string;
   display_name: string;
@@ -17,10 +17,10 @@ export type User = {
   }[];
   presence: 'online' | 'ingame' | 'offline';
   verified: boolean;
-  profile: UserProfile;
+  profile: ProfileType;
 };
 
-export type UserChannel = {
+export type ChannelType = {
   role: string;
   state: string;
   userId: number;

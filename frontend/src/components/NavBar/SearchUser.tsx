@@ -1,9 +1,9 @@
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import { FC, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 
 interface SearchUserProps {
-  user: User;
+  user: UserType;
   index: number;
   length: number;
 }

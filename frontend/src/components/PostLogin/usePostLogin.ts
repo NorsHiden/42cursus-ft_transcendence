@@ -19,10 +19,12 @@ export const usePostLogin = (initialData: userData) => {
   const handlesubmit = (event: any) => {
     event.preventDefault();
     setIsSubmitting(true);
+
     const formData = new FormData();
     formData.append('avatar', NewUser.avatar.file);
     formData.append('username', NewUser.username);
     formData.append('display_name', NewUser.display_name);
+    formData.append('location', NewUser.location);
 
     const res = axios.patch('/api/users/@me', formData);
     toast.dismiss();

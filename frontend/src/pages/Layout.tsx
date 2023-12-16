@@ -5,22 +5,16 @@ import NavBar from '@components/NavBar';
 import SideBar from '@components/Sidebar';
 import FriendsBar from '@components/FriendsBar';
 import BottomNavBar from '@components/NavBar/BottomNavBar';
+import axios from 'axios';
 
-export const LayoutLoader = () => {
-  
-  return {
-    username: 'test',
-    display_name: 'test',
-    avatar: {
-      path: 'test',
-      file: new File([], ''),
-    },
-  };
+export const LayoutLoader = async () => {
+  const loggedInUser = await axios.get(`/api/users/@me`);
+  return loggedInUser.data;
 };
 
 const Layout: React.FC = () => {
   return (
-    <div className="w-full h-screen relative bg-black grid grid-cols-2 lg:grid-cols-layout grid-rows-layout gap-x-5 overflow-x-hidden overflow-y-auto scrollbar-none">
+    <div className="w-full h-screen relative bg-black grid grid-cols-2 lg:grid-cols-layout grid-rows-layout gap-x-5">
       <div className="w-full h-full col-start-1 col-end-6 row-span-1 pt-2 p-2">
         <NavBar />
       </div>

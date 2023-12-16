@@ -1,13 +1,4 @@
-
-export type mychannel = {
-    id: number;
-    name: string;
-    avatar: string;
-    role: string;
-    banner: string;
-}
-
-export type Channel = {
+export type ChannelType = {
   id: number;
   name: string;
   avatar: string;

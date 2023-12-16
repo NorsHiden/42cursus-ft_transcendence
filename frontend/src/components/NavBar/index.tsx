@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { SearchBar } from './SearchBar';
-import { User } from '@globalTypes/user';
+
+import { UserType } from '@globalTypes/user';
 import Logo from '/logo.svg';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
 import BellSolid from '@assets/novaIcons/solid/BellSolid';
 import Notification from './Notification';
+import SearchBar from './SearchBar';
 import twclsx from '@utils/twclsx';
 import useOutsideClick from '@hooks/useOutsideClick';
 
@@ -15,20 +16,20 @@ const NotificationBox: React.FC = () => {
   const ref = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
 
   return (
-    <div ref={ref} className="relative group center">
+    <div ref={ref} className="relative center">
       <button
         onClick={() => setIsOpen((isOpen) => !isOpen)}
         className={twclsx('text-gray hover:text-white transition-all', isOpen && 'text-white')}
       >
         <BellSolid size={22} />
       </button>
-      {isOpen && <Notification />}
+      <Notification open={isOpen} />
     </div>
   );
 };
 
 const NavBar: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User>({} as User);
+  const [currentUser, setCurrentUser] = useState<UserType>({} as UserType);
 
   useEffect(() => {
     axios
@@ -50,7 +51,7 @@ const NavBar: React.FC = () => {
             </button>
             <SearchBar />
           </div>
-          {/* <NotificationBox /> */}
+          <NotificationBox />
         </div>
         <Link className="group flex items-center gap-x-2" to={currentUser?.username}>
           <img

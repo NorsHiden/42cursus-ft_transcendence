@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelectedChannel } from '@context/Channel';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { mychannel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 
 interface ChannelProps {
   name: string;
@@ -55,7 +55,9 @@ const ChannelElement: React.FC<ChannelProps> = ({ name, avatar, role, ChanelId }
     {
       label: 'Edit',
       onClick: () => {
-        const channel: mychannel = channels.find((channel) => channel.id === ChanelId) as mychannel;
+        const channel: ChannelType = channels.find(
+          (channel) => channel.id === ChanelId,
+        ) as ChannelType;
         setSelectedChannel(channel);
         setShowUpdateChannelModal(true);
       },
@@ -68,7 +70,7 @@ const ChannelElement: React.FC<ChannelProps> = ({ name, avatar, role, ChanelId }
         setChannels(channels.filter((channel) => channel.id !== ChanelId));
         navigate('/chat/channels');
       },
-      className: 'text-red font-popins font-regular cursor-pointer py-1 px-3 hover:bg-[#2B1F24]',
+      className: 'text-red  font-regular cursor-pointer py-1 px-3 hover:bg-[#2B1F24]',
     },
   ];
 
@@ -76,7 +78,7 @@ const ChannelElement: React.FC<ChannelProps> = ({ name, avatar, role, ChanelId }
     <>
       <div className="flex  items-center gap-4 ">
         <img src={avatar} className="rounded-2xl h-[52px] w-[52px]" />
-        <h1 className="text-white font-poppins font-medium uppercase">{name}</h1>
+        <h1 className="text-white font-medium uppercase">{name}</h1>
       </div>
       <div
         onClick={(e) => {

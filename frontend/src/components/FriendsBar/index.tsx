@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+
 import twclsx from '@utils/twclsx';
 import { useFriendsBar } from './useFriendsBar';
-import { NavLink } from 'react-router-dom';
 
 const FriendsBar: React.FC = () => {
   const { friends, getSseRequest } = useFriendsBar();

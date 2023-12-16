@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { Channel } from './useChannelCard';
 import axios from 'axios';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 
 export const useDiscovery = () => {
   const [channels, setChannel] = useState<Channel[]>([]);
@@ -11,7 +11,7 @@ export const useDiscovery = () => {
   const [hasMore, setHasMore] = useState(true);
   const [needPassword, setNeedPassword] = useState(false);
   const [passwordChannel, setPasswordChannel] = useState<Channel | null>(null);
-  const [me, setMe] = useState<User | null>(null);
+  const [me, setMe] = useState<UserType | null>(null);
 
   const getChannels = async (newPage: number) => {
     try {

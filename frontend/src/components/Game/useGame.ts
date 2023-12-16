@@ -1,6 +1,6 @@
 import { GameData } from '@globalTypes/game';
 import { GAME_MODES } from '@globalTypes/gameModes';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 import axios from 'axios';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -15,7 +15,7 @@ type Spectator = {
 export const useGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const [game, setGame] = useState<GameData>({} as GameData);
-  const [me, setMe] = useState<User>({} as User);
+  const [me, setMe] = useState<UserType>({} as UserType);
   const [spectators, setSpectators] = useState<Spectator[]>([]);
   const [dot, setDot] = useState<string>('.');
   const [mode, setMode] = useState(GAME_MODES.REGULAR);

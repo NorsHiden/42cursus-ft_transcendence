@@ -1,10 +1,12 @@
+import { GAMEMODE_NAME } from './gameModes';
+
 export type UserProfile = {
   id: number;
   about: string;
   avatar: string;
   banner: string;
   location: string;
-  birthdate: string;
+  birthdate: Date;
 };
 
 export type User = {
@@ -14,30 +16,27 @@ export type User = {
   email: string;
   wins: number;
   loses: number;
+  verified: boolean;
+  is_2fa_enabled: boolean;
+  presence: string;
   points: {
     value: number;
   }[];
-  verified: boolean;
   profile: UserProfile;
-  isforeign: boolean;
+  isForeign: boolean;
   friendStatus: string;
+  leaderboardPosition: number;
+  claimedAchievements: number;
 };
 
-export type match = {
+export type MatchType = {
   match_id: number;
-  game_mode: Game;
+  game_mode: GAMEMODE_NAME;
   home_player: player;
   away_player: player;
   created_at: Date;
   ended_at: Date;
 };
-
-export enum Game {
-  CURSED = 'CURSED',
-  GOLDRUSH = 'GOLD_RUSH',
-  VANISH = 'VANISH',
-  REGULAR = 'REGULAR',
-}
 
 export enum CardType {
   RECENT_MATCHES = 'recent_matches',
@@ -49,9 +48,9 @@ export type player = {
   username: string;
   score: number;
   avatar: string;
-}
+};
 
-export type Message =   {
+export type Message = {
   id: string;
   content: string;
   author: {
@@ -62,14 +61,13 @@ export type Message =   {
   createdAt: string;
   updatedAt: string;
   messageReceivedSuccessfully: boolean;
-}
+};
 
 export type Member = {
   role: string;
   state: string;
   userId: number;
   displayName: string;
-  username: string;
   presence: string;
   avatar: string;
 };
@@ -81,5 +79,3 @@ export type DM = {
   updatedAt: string;
   members: Member[];
 };
-
-

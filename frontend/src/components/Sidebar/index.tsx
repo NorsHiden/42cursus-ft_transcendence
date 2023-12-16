@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 
-import { Channel } from '@globalTypes/channel';
+import { ChannelType } from '@globalTypes/channel';
 import { CreateChannel } from '@components/Chat/Discovery/CreateChannel';
 import twclsx from '@utils/twclsx';
 import Home4Solid from '@assets/novaIcons/solid/Home4Solid';
@@ -11,12 +11,12 @@ import BarChartSolid from '@assets/novaIcons/solid/BarChartSolid';
 import SettingSolid from '@assets/novaIcons/solid/SettingSolid';
 import CompassSolid from '@assets/novaIcons/solid/CompassSolid';
 import PlusCircleSolid from '@assets/novaIcons/solid/PlusCircleSolid';
-import { User } from '@globalTypes/user';
+import { UserType } from '@globalTypes/user';
 
 const useSideBar = () => {
-  const [channels, setChannels] = useState<Channel[]>([]);
+  const [channels, setChannels] = useState<ChannelType[]>([]);
   const [showCreateChannel, setShowCreateChannel] = useState(false);
-  const [me, setMe] = useState<User>({} as User);
+  const [me, setMe] = useState<UserType>({} as UserType);
 
   const links = [
     {
@@ -45,8 +45,8 @@ const useSideBar = () => {
     axios.get('/api/channels/me?page=1&limit=5&sortBy=id:ASC').then((res) => {
       setChannels(
         res.data.data
-          .filter((data: { channel: Channel }) => data.channel.id != 1)
-          .map((data: { channel: Channel }) => data.channel),
+          .filter((data: { channel: ChannelType }) => data.channel.id != 1)
+          .map((data: { channel: ChannelType }) => data.channel),
       );
     });
   };

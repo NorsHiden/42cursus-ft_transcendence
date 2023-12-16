@@ -1,10 +1,9 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { User } from '@globalTypes/user';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { UserType } from '@globalTypes/user';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 interface LeaderboardRecordProps {
-  record: User;
+  record: UserType;
   color: string;
   index: number;
 }
@@ -33,7 +32,7 @@ const LeaderboardRecord: React.FC<LeaderboardRecordProps> = ({ record, color, in
 };
 
 const Leaderboard: React.FC = () => {
-  const [records, setRecords] = useState<User[]>([]);
+  const [records, setRecords] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
@@ -47,19 +46,16 @@ const Leaderboard: React.FC = () => {
       }
   >();
 
-  const getRecords = async (page: number,abortController:AbortController) => {
-    try
-    {
+  const getRecords = async (page: number, abortController: AbortController) => {
+    try {
       setLoading(true);
-      const res = await axios.get(`/api/users/leaderboard?page=${page}`,{
-        signal:abortController.signal
+      const res = await axios.get(`/api/users/leaderboard?page=${page}`, {
+        signal: abortController.signal,
       });
       setRecords((prevRecords) => [...prevRecords, ...res.data]);
       if (res.data.length < 10) setHasMore(false);
       setLoading(false);
-    }
-    catch(err)
-    {
+    } catch (err) {
       return;
     }
   };
