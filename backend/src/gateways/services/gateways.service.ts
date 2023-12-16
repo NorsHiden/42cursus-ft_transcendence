@@ -21,8 +21,7 @@ export class GatewaysService implements IGatwaysService {
 
     const token = cookies
       .split(';')
-      .find((cookie: string) => cookie.startsWith('access_token'))
-      .split('=')[1];
+      .find((cookie: string) => cookie.startsWith('access_token'))?.split('=')[1];
 
     if (!token) {
       client.disconnect();

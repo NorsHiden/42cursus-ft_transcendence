@@ -80,7 +80,7 @@ export class AuthService implements IAuthService {
           req.user.username
         }&display_name=${req.user.display_name}&avatar=${user.profile.avatar}`,
       };
-    if (req.user.is_2fa_enabled && !req.user.is_2fa_verified)
+    if (user.is_2fa_enabled)
       return {
         url: `${this.configService.get('CLIENT_URL')}/2fa-verification`,
       };
