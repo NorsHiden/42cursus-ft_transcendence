@@ -9,7 +9,7 @@ import Card from '@components/Card/index.tsx';
 import getTimeDiff from '@utils/getTimeDiff.ts';
 import { extractMatchType } from './utils.ts';
 import getColorValue from '@utils/getColorValue.ts';
-import useIntersectionObserver from '@hooks/useIntersectionObserver.ts';
+// import useIntersectionObserver from '@hooks/useIntersectionObserver.ts';
 
 const MatchHistory: React.FC = () => {
   const user = useRouteLoaderData('profile') as User;
@@ -38,9 +38,9 @@ const MatchHistory: React.FC = () => {
     } catch (error) {}
   };
 
-  const lastMatchRef = useIntersectionObserver(() => {
-    setPage((prevPage) => prevPage + 1);
-  });
+  // const lastMatchRef = useIntersectionObserver(() => {
+  //   setPage((prevPage) => prevPage + 1);
+  // });
 
   useEffect(() => {
     const abortController = new AbortController();

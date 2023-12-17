@@ -88,8 +88,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
         <section className="flex gap-4">
           {user.friendStatus == 'NONE' && (
             <Button
-              className={`center gap-x-1 py-2 px-4 ${loading ? 'opacity-70' : ''}`}
-              color="primary"
+              className={`center gap-x-1 py-2 px-4 bg-primary ${loading ? 'opacity-70' : ''}`}
               onClick={sendFriendRequest}
               cut={24}
               borderRadius={24}
@@ -101,8 +100,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
 
           {user.friendStatus == 'PENDING' && (
             <Button
-              className={`center gap-x-1 py-2 px-4 opacity-70`}
-              color="gray"
+              className={`center gap-x-1 py-2 px-4 bg-gray opacity-70`}
               onClick={sendFriendRequest}
               cut={24}
               borderRadius={24}
@@ -114,8 +112,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
 
           {user.friendStatus == 'FRIEND' && (
             <Button
-              className={`center gap-x-1 py-2 px-4 ${loading ? 'opacity-70' : ''}`}
-              color="BrightRed"
+              className={`center gap-x-1 py-2 px-4 bg-BrightRed ${loading ? 'opacity-70' : ''}`}
               onClick={unfriendRequest}
               cut={24}
               borderRadius={24}
@@ -127,9 +124,8 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
 
           {user.friendStatus == 'BLOCKED' && (
             <Button
-              className={`center gap-x-1 py-2 px-4 ${loading ? 'filter opacity-70' : ''}`}
+              className={`center gap-x-1 py-2 px-4 bg-gray ${loading ? 'filter opacity-70' : ''}`}
               onClick={() => unblock(user.id)}
-              color="gray"
               cut={35}
               borderRadius={10}
             >
