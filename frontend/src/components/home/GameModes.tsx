@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-
 import Card from '@components/Card';
 import { GAME_MODES } from '@globalTypes/gameModes';
 import { GameLobby } from '@globalTypes/game';
@@ -21,7 +20,6 @@ const GameModes: React.FC = () => {
   };
 
   const handleButtonClick = () => {
-    console.log('Gamemode: ', Object.keys(GAME_MODES)[selectedMode]);
     if (isSearching) {
       gameSocket.emit('lobby', { action: 'CANCEL' });
       setIsSearching(false);

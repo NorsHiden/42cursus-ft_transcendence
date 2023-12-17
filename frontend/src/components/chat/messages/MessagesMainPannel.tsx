@@ -12,9 +12,12 @@ import SendSolid from '@assets/novaIcons/solid/SendSolid';
 import User1Solid from '@assets/novaIcons/solid/User1Solid.tsx';
 import GameInvite from '@assets/novaIcons/solid/GameInvite.tsx';
 import useIntersectionObserver from '@hooks/useIntersectionObserver';
+import { gameSocket } from '../../../socket.ts';
+import { GameLobby } from '@globalTypes/game.ts';
+import { toast } from 'sonner';
 
 const MessagesMainPannel = () => {
-  const { Dms, LogedUser, socket,blockedUsers} = useSelectedChannel();
+  const { Dms, LogedUser, socket, blockedUsers } = useSelectedChannel();
   const navigate = useNavigate();
   const param = useParams();
   const [messages, setMessages] = useState<MessageType[]>();
@@ -26,15 +29,14 @@ const MessagesMainPannel = () => {
   const [message, setMessage] = useState<string>('');
   const messagesRef = useRef(messages);
   const [hasmore, setHasmore] = useState<boolean>(false);
-  const [page , setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
 
   const containerRef = useRef(null);
 
-  const elementRef = useIntersectionObserver(()=>{
-    console.log("intersected");
-    setPage((prev)=>prev+1);
+  const elementRef = useIntersectionObserver(() => {
+    console.log('intersected');
+    setPage((prev) => prev + 1);
   });
-
 
   useEffect(() => {
     messagesRef.current = messages;
@@ -73,10 +75,6 @@ const MessagesMainPannel = () => {
       messageReceivedSuccessfully: false,
     };
 
-  
-
-  
-
     setMessages((prev: MessageType[] | undefined) => {
       if (prev == undefined) return [newMessage];
       else return [newMessage, ...prev!];
@@ -98,7 +96,7 @@ const MessagesMainPannel = () => {
 
     if (DmId) {
       setLoading(true);
-      getMessages(DmId, abortController,setHasmore,page).then((fetchedMessages) => {
+      getMessages(DmId, abortController, setHasmore, page).then((fetchedMessages) => {
         setLoading(false);
         if (fetchedMessages && fetchedMessages.length != 0) {
           setMessages((prev: MessageType[] | undefined) => {
@@ -120,7 +118,7 @@ const MessagesMainPannel = () => {
       //   return [];
       // });
     };
-  }, [Dms,DmId,page]);
+  }, [Dms, DmId, page]);
 
   useEffect(() => {
     if (socket == null) return;
@@ -152,6 +150,28 @@ const MessagesMainPannel = () => {
     };
   }, [socket, DmId]);
 
+  const handleButtonClick = () => {
+    console.log('invite button clicked', reciepient?.userId);
+    gameSocket.emit('lobby', {
+      action: 'INVITE',
+      game_mode: 'REGULAR',
+      target_id: reciepient?.userId,
+    });
+    toast.dismiss();
+    toast.success('Game invite sent');
+  };
+
+  const checkLobby = (lobby: GameLobby) => {
+    if (lobby.state === 'MATCH_FOUND') navigate(`/game/${lobby.game_id}`);
+  };
+
+  useEffect(() => {
+    gameSocket.on('lobby', checkLobby);
+
+    return () => {
+      gameSocket.off('lobby', checkLobby);
+    };
+  }, []);
 
   return (
     <div
@@ -191,17 +211,19 @@ const MessagesMainPannel = () => {
               </p>
             </div>
           </div>
-          <div className='flex center gap-4'>
-          <button className='text-gray'>
-                <GameInvite  className=" w-[24px] h-[24px]" />
-          </button>
-          <button className='text-gray' onClick={()=>{
-            navigate(`/${reciepient?.username}`);
-          }}>
-                <User1Solid  className=" w-[24px] h-[24px] " />
-          </button>
-          
-            </div>
+          <div className="flex center gap-4">
+            <button className="text-gray" onClick={handleButtonClick}>
+              <GameInvite className=" w-[24px] h-[24px]" />
+            </button>
+            <button
+              className="text-gray"
+              onClick={() => {
+                navigate(`/${reciepient?.username}`);
+              }}
+            >
+              <User1Solid className=" w-[24px] h-[24px] " />
+            </button>
+          </div>
         </div>
         <div
           ref={containerRef}
@@ -209,24 +231,22 @@ const MessagesMainPannel = () => {
         >
           {messages && Object.keys(messages).length > 0 && (
             <>
-              {messages?.map((messagev,index) => {
-                if (blockedUsers.some(user => user.id === messagev.author.id)) {
+              {messages?.map((messagev, index) => {
+                if (blockedUsers.some((user) => user.id === messagev.author.id)) {
                   return null; // Skip this message
                 }
-                return(
+                return (
                   <Message
                     key={index}
                     message={messagev}
                     type={messagev.author.id == LogedUser.id ? 'SENT' : 'RECEIVED'}
                     messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
                   />
-                )
-          })}
+                );
+              })}
             </>
           )}
-          {
-              hasmore && <div ref={elementRef} className='w-full h-10'></div>
-          }
+          {hasmore && <div ref={elementRef} className="w-full h-10"></div>}
           {loading && (
             <div className="flex justify-center items-center py-2">
               <div className="absolute animate-spin rounded-full h-6 w-6 bg-primary"></div>

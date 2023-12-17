@@ -78,7 +78,7 @@ export class GameService {
     if (action == 'ACCEPT')
       return this.lobby.find((user) => user.id == target_id && user.invitation);
     if (action == 'SEARCH')
-      return this.lobby.find((user) => user.game_mode == game_mode);
+      return this.lobby.find((user) => user.game_mode == game_mode && !user.invitation);
     return null;
   }
 
@@ -103,8 +103,8 @@ export class GameService {
     });
     if (action == 'INVITE')
       await this.notificationService.addNotification(target_id, {
-        recipient: await this.getUser(this.users.get(client.id)),
-        sender: await this.getUser(target_id),
+        recipient: await this.getUser(target_id),
+        sender: await this.getUser(this.users.get(client.id)),
         action: 'GAME_REQUEST',
         description: `Invited you to a ${game_mode} game.`,
         status: 'pending',
@@ -233,7 +233,7 @@ export class GameService {
 
     const game = this.ingame.find(
       (game) =>
-        game.home_player.id == user.id || game.away_player.id == user.id,
+        (game.home_player.id == user.id || game.away_player.id == user.id),
     );
 
     if (game) {
@@ -245,7 +245,7 @@ export class GameService {
       return;
     }
 
-    if (game_mode == GameMode.GOLD_RUSH && user.points[0].value < 300)
+    if (game_mode == GameMode.GOLD_RUSH && (!user.points.length || user.points[0].value < 300))
       throw new WsException('Not Enough Points');
 
     const opponent = this.findOpponent(target_id, action, game_mode);
@@ -298,10 +298,10 @@ export class GameService {
       client.on('disconnect', () => {
         this.ingame[inGameIndex].spectators = this.ingame[
           inGameIndex
-        ].spectators.filter((spec) => spec.id != spectator.id);
+        ]?.spectators.filter((spec) => spec.id != spectator.id);
         server.in(this.ingame[inGameIndex].id).emit('spectators', {
           spectators: this.ingame[inGameIndex].spectators,
-        });
+        }) || [];
       });
     }
 
@@ -322,11 +322,11 @@ export class GameService {
 
     const updatePlayerPosition = (player: { y: number }, action: string) => {
       if (this.ingame[inGameIndex].is_reversed) {
-        if (action === 'UP' && player.y < 80) player.y += 2;
-        else if (action === 'DOWN' && player.y > 0) player.y -= 2;
+        if (action === 'UP' && player.y < 80) player.y += 5;
+        else if (action === 'DOWN' && player.y > 0) player.y -= 5;
       } else {
-        if (action === 'UP' && player.y > 0) player.y -= 2;
-        else if (action === 'DOWN' && player.y < 80) player.y += 2;
+        if (action === 'UP' && player.y > 0) player.y -= 5;
+        else if (action === 'DOWN' && player.y < 80) player.y += 5;
       }
     };
 

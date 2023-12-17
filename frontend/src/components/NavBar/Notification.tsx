@@ -8,6 +8,8 @@ import CheckOutline from '@assets/novaIcons/outline/CheckOutline';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline';
 import useIntersectionObserver from '@hooks/useIntersectionObserver';
 import useSSE from '@hooks/useSSE';
+import { useNavigate } from 'react-router-dom';
+import { gameSocket } from '../../socket';
 
 interface NotificationMessageProps {
   notificationMessage: NotificationType;
@@ -18,6 +20,31 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
   notificationMessage,
   setNotifications,
 }) => {
+  const navigate = useNavigate();
+
+  const notificationType = () => {
+    if (notificationMessage.action == 'GAME_REQUEST') {
+      return acceptGameRequest();
+    } else if (notificationMessage.action == 'FRIEND_REQUEST') {
+      return acceptFriendRequest();
+    } else if (notificationMessage.action == 'CHANNEL_INVITE') {
+      return acceptChannelInvite();
+    }
+  };
+
+  const acceptGameRequest = async () => {
+    gameSocket.emit('lobby', {
+      action: 'ACCEPT',
+      target_id: notificationMessage.sender.id,
+    });
+  };
+
+  const acceptChannelInvite = async () => {
+    axios.post(`/api/channels/${notificationMessage.record_id}/join`).then(() => {
+      navigate(`/chat/channels/${notificationMessage.record_id}`);
+    });
+  };
+
   const acceptFriendRequest = async () => {
     axios.post(`/api/friendlist/${notificationMessage.sender.id}/accept`);
     axios.post(`/api/notification/${notificationMessage.id}/mark-read`);
@@ -76,11 +103,7 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
                       className={`flex items-center w-full h-full gap-1 ${
                         notificationMessage.action == 'GAME_REQUEST' ? 'pl-4' : 'pl-2'
                       }`}
-                      onClick={
-                        notificationMessage.action == 'FRIEND_REQUEST'
-                          ? acceptFriendRequest
-                          : () => {}
-                      }
+                      onClick={notificationType}
                     >
                       <CheckOutline className="h-5 w-5" />
                       <p>{notificationMessage.action == 'GAME_REQUEST' ? 'Play' : 'Accept'}</p>

@@ -1,11 +1,12 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
 import { ChannelType } from '@globalTypes/channel';
-import { io, Socket } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 import { useEffect } from 'react';
 import { Message } from '@globalTypes/types';
 import { DM } from '@globalTypes/types';
 import { UserType } from '@globalTypes/user';
 import { useRouteLoaderData } from 'react-router-dom';
+import { chatSocket as socket } from '../socket';
 import axios from 'axios';
 
 // Define the shape of the context data
@@ -42,7 +43,6 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
   const [messages, setMessages] = useState<Record<string, Message[]>>({}); // for channels
   const [DirectMessages, setDirectMessages] = useState<Record<string, Message[]>>({}); // for DMs
 
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [Dms, setDms] = useState<DM[]>([]);
   const [LogedUser, setLogedUser] = useState<UserType>({} as UserType);
   const [ShowUpdateChannelModal, setShowUpdateChannelModal] = useState<boolean>(false);
@@ -70,11 +70,6 @@ export const SelectedChannelProvider: React.FC<SelectedChannelProviderProps> = (
   }, []);
 
   useEffect(() => {
-    const socket = io('http://localhost/chat', {
-      withCredentials: true,
-    });
-    setSocket(socket);
-
     socket.on('connect', () => {
       console.log('Socket.IO Client Connected');
     });

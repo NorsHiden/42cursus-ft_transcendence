@@ -21,7 +21,7 @@ export const usePasswordComp = (channel: Channel | null, hidePopUp: () => void) 
       success: () => {
         setLoading(false);
         hidePopUp();
-        navitage(`/chat/${channel.id}`);
+        navitage(`/chat/channels/${channel.id}`);
         return 'You have successfully joined the channel';
       },
       error: (error) => {

@@ -4,8 +4,9 @@ services:
   app:
     build: .
     container_name: app
+    restart: always
     ports:
-      - "80:3001"
+      - "3001:3001"
     volumes:
       - .:/app
     depends_on:
@@ -14,12 +15,14 @@ services:
   database:
     image: postgres:latest
     container_name: postgres
+    restart: always
     env_file:
       - .env.db
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
+    restart: always
     env_file:
       - .env.db
     ports:

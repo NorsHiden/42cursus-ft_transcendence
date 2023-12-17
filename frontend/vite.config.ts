@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: '../backend/client',
-	  emptyOutDir: true,
+    emptyOutDir: true,
   },
   resolve: {
     alias: {
@@ -32,16 +32,6 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      '/game': {
-        target: 'http://localhost:3001/',
-        changeOrigin: true,
-        secure: false,
-      },
-      // '/chat': {
-      //   target: 'http://localhost:3001/',
-      //   changeOrigin: true,
-      //   secure: false,
-      // },
     },
   },
 });
