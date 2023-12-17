@@ -85,7 +85,10 @@ const ChannelElement: React.FC<ChannelProps> = ({ name, avatar, role, ChanelId }
           e.preventDefault();
         }}
       >
-        <ContextMenu menuItems={role === 'owner' ? OwnerMenuItems : MemberMenuItems} />
+        {
+          ChanelId != 1 && 
+          <ContextMenu menuItems={role === 'owner' ? OwnerMenuItems : MemberMenuItems} />
+        }
       </div>
     </>
   );

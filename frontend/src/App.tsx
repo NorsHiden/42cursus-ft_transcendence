@@ -26,10 +26,13 @@ const MessagesMainPannel = React.lazy(() => import('@components/chat/messages/Me
 const ChannelsList = React.lazy(() => import('@components/chat/ChannelsList'));
 const MessagesList = React.lazy(() => import('@components/chat/MessagesList'));
 
-import { LayoutLoader } from '@pages/Layout';
+//loaders
 import { ChatMainPannelLoader } from '@pages/Chat';
 import { PostLoginLoader } from '@pages/PostLogin';
 import { profileLoader } from '@pages/Profile';
+import { Layoutloader } from '@pages/Layout';
+
+import ErrorPage from '@pages/Error';
 
 const router = createBrowserRouter([
   {
@@ -40,7 +43,9 @@ const router = createBrowserRouter([
         <Layout />
       </Suspense>
     ),
-    loader: LayoutLoader,
+    loader: Layoutloader,
+    errorElement: <ErrorPage />,
+
     children: [
       {
         index: true,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { useRef } from 'react';
 import { UserType } from '@globalTypes/user';
 import Logo from '/logo.svg';
 import SearchOutline from '@assets/novaIcons/outline/SearchOutline';
@@ -30,6 +30,53 @@ const NotificationBox: React.FC = () => {
 
 const NavBar: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<UserType>({} as UserType);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+  const [visible, setVisible] = useState(false);
+
+  const handleContextMenu = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    // event.preventDefault();
+    setCoords({ x: event.clientX, y: event.clientY });
+    setVisible(true);
+  };
+
+  const handleClick = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setVisible(false);
+    }
+  };
+
+   useEffect(() => {
+    if (menuRef.current) {
+      const rect = menuRef.current.getBoundingClientRect();
+      if (rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
+        const x = coords.x;
+        const y = coords.y - rect.height;
+        setCoords({x, y });
+      }
+    }
+  }, [visible]);
+
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, []);
+
+
+  const MemberMenuItems = [
+    {
+      label: 'Logout',
+      onClick: () => {
+        window.location.href = '/api/auth/logout';
+      },
+      className: 'text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray',
+    },
+  ];
+
 
   useEffect(() => {
     axios
@@ -53,7 +100,10 @@ const NavBar: React.FC = () => {
           </div>
           <NotificationBox />
         </div>
-        <Link className="group flex items-center gap-x-2" to={currentUser?.username}>
+        <Link className="group flex items-center gap-x-2" to={currentUser?.username} onContextMenu={(e)=>{
+          e.preventDefault();
+          handleContextMenu(e);
+        }}>
           <img
             className="w-12 h-12 rounded-full transition-all group-hover:ring-4 ring-darkGray"
             src={currentUser?.profile?.avatar}
@@ -63,6 +113,14 @@ const NavBar: React.FC = () => {
             <p className="font-medium text-gray text-sm">@{currentUser?.username}</p>
           </div>
         </Link>
+        <div ref={menuRef} style={{ top: `${coords.y}px`, left: `${coords.x}px` }} className={`z-10 fixed bg-lightBlack transition-all duration-300 ease-in-out transform rounded-xl overflow-hidden border-2 border-[#2F3136] ${visible ? 'block' : 'hidden'}`}>
+      {MemberMenuItems.map((item, index) => (
+        <h1 key={index} className={item.className} onClick={() => {
+          item.onClick();
+          setVisible(false);
+        }}>{item.label}</h1>
+      ))}
+    </div>
       </div>
     </nav>
   );

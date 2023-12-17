@@ -1,20 +1,24 @@
 import React from 'react';
+import { Outlet,redirect } from 'react-router-dom';
 import axios from 'axios';
-import { Outlet, redirect } from 'react-router-dom';
 
 import NavBar from '@components/NavBar';
 import SideBar from '@components/Sidebar';
 import FriendsBar from '@components/FriendsBar';
 import BottomNavBar from '@components/NavBar/BottomNavBar';
 
-export const LayoutLoader = async () => {
+export async function Layoutloader() {
   try {
-    const res = await axios.get('/api/users/@me');
-    return res.data;
-  } catch (error) {
-    return redirect('/login');
+    const LogedinUser = await axios.get(`/api/users/@me`);
+
+    return LogedinUser.data;
   }
-};
+  catch (e) {
+    console.log(e)
+    return redirect(`/login?redirect=${window.location.pathname}`)
+  }
+  // return LogedinUser.data;
+}
 
 const Layout: React.FC = () => {
   return (

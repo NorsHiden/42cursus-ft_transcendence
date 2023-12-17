@@ -95,8 +95,7 @@ interface MemberElementProps {
           }
           onClick={()=>{navigate(`/${username}`)}}
           >
-            {/* // className="relative  w-12 h-12 lg:w-8 lg:h-8 2xl:w-12 2xl:h-12 empty rounded-full cursor-pointer after:absolute after:top-0 after:right-0  after:bg-gray after:rounded-full after:w-3 after:h-3 after:border-[3px] after:border-lightBlack"> */}
-            <img src={avatar} alt="" className="rounded-full" />
+            <img src={avatar} alt="" className="w-full h-full rounded-full object-cover object-center" />
           </div>
           <div id="name" className="flex center gap-2 lg:gap-1 2xl:gap-2">
             <p className="text-white font-poppins font-medium lg:text-sm 2xl:text-base">
