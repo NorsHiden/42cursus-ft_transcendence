@@ -158,6 +158,7 @@ const router = createBrowserRouter([
   {
     path: '/postlogin',
     loader: PostLoginLoader,
+    errorElement: <ErrorPage />,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <PostLogin />
@@ -167,6 +168,7 @@ const router = createBrowserRouter([
   {
     path: '/2fa-verification',
     loader: TwoFactorAuthLoader,
+    errorElement: <ErrorPage />,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <TwoFactorAuth />

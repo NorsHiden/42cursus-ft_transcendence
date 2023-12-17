@@ -38,29 +38,30 @@ export const sendMessage = (
   setMessages: React.Dispatch<React.SetStateAction<MessageType[] | undefined>>,
   newMessage: MessageType,
 ) => {
-  const response = axios.post(`/api/channels/${channelId}/messages`, {
-    content: message,
-  });
-  toast.promise(response, {
-    error: (error) => {
-      return error.response.data.message;
-    },
-  });
-
-  response.then(() => {
-    setMessages((prev: MessageType[] | undefined) => {
-      return prev?.map((message) => {
-        if (message.content === newMessage.content && message.id === newMessage.id) {
-          return {
-            ...newMessage,
-            messageReceivedSuccessfully: true,
-          };
-        } else {
-          return message;
-        }
-      });
+  try {
+    const response = axios.post(`/api/channels/${channelId}/messages`, {
+      content: message,
     });
-  });
+
+    response
+      .then(() => {
+        setMessages((prev: MessageType[] | undefined) => {
+          return prev?.map((message) => {
+            if (message.content === newMessage.content && message.id === newMessage.id) {
+              return {
+                ...newMessage,
+                messageReceivedSuccessfully: true,
+              };
+            } else {
+              return message;
+            }
+          });
+        });
+      })
+      .catch((error: any) => {
+        toast.error(error.response.data.message);
+      });
+  } catch (error) {}
 };
 
 export const getMessages = async (
