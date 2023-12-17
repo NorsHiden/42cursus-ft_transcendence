@@ -31,7 +31,7 @@ const NotificationBox: React.FC = () => {
 const NavBar: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<UserType>({} as UserType);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+  const [coords, setCoords] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [visible, setVisible] = useState(false);
 
   const handleContextMenu = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -46,17 +46,16 @@ const NavBar: React.FC = () => {
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     if (menuRef.current) {
       const rect = menuRef.current.getBoundingClientRect();
       if (rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
         const x = coords.x;
         const y = coords.y - rect.height;
-        setCoords({x, y });
+        setCoords({ x, y });
       }
     }
   }, [visible]);
-
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClick);
@@ -65,7 +64,6 @@ const NavBar: React.FC = () => {
       document.removeEventListener('mousedown', handleClick);
     };
   }, []);
-
 
   const MemberMenuItems = [
     {
@@ -77,12 +75,8 @@ const NavBar: React.FC = () => {
     },
   ];
 
-
   useEffect(() => {
-    axios
-      .get('/api/users/@me')
-      .then((res) => setCurrentUser(res.data))
-      .catch((err) => console.log("Navbar: couldn't fetch user", err));
+    axios.get('/api/users/@me').then((res) => setCurrentUser(res.data));
   }, []);
 
   return (
@@ -100,10 +94,14 @@ const NavBar: React.FC = () => {
           </div>
           <NotificationBox />
         </div>
-        <Link className="group flex items-center gap-x-2" to={currentUser?.username} onContextMenu={(e)=>{
-          e.preventDefault();
-          handleContextMenu(e);
-        }}>
+        <Link
+          className="group flex items-center gap-x-2"
+          to={currentUser?.username}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            handleContextMenu(e);
+          }}
+        >
           <img
             className="w-12 h-12 rounded-full transition-all group-hover:ring-4 ring-darkGray"
             src={currentUser?.profile?.avatar}
@@ -113,14 +111,26 @@ const NavBar: React.FC = () => {
             <p className="font-medium text-gray text-sm">@{currentUser?.username}</p>
           </div>
         </Link>
-        <div ref={menuRef} style={{ top: `${coords.y}px`, left: `${coords.x}px` }} className={`z-10 fixed bg-lightBlack transition-all duration-300 ease-in-out transform rounded-xl overflow-hidden border-2 border-[#2F3136] ${visible ? 'block' : 'hidden'}`}>
-      {MemberMenuItems.map((item, index) => (
-        <h1 key={index} className={item.className} onClick={() => {
-          item.onClick();
-          setVisible(false);
-        }}>{item.label}</h1>
-      ))}
-    </div>
+        <div
+          ref={menuRef}
+          style={{ top: `${coords.y}px`, left: `${coords.x}px` }}
+          className={`z-10 fixed bg-lightBlack transition-all duration-300 ease-in-out transform rounded-xl overflow-hidden border-2 border-[#2F3136] ${
+            visible ? 'block' : 'hidden'
+          }`}
+        >
+          {MemberMenuItems.map((item, index) => (
+            <h1
+              key={index}
+              className={item.className}
+              onClick={() => {
+                item.onClick();
+                setVisible(false);
+              }}
+            >
+              {item.label}
+            </h1>
+          ))}
+        </div>
       </div>
     </nav>
   );

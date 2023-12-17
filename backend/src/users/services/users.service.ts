@@ -238,6 +238,7 @@ export class UsersService implements IUsersService {
       email: user.email,
       profile: newProfile,
       friendlist: new Friendlist(),
+      points: [new Points(), new Points()],
     });
     return await this.userRepository.save(newUser);
   }

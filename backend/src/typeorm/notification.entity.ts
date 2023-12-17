@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 import { NotificationStatus } from 'src/utils/types';
 
@@ -40,6 +40,6 @@ export class Notification {
   is_read: boolean;
 
   // The timestamp when the notification was created.
-  @Column({ type: 'timestamptz', default: new Date() })
+  @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 }

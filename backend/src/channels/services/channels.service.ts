@@ -394,6 +394,7 @@ export class ChannelsService implements IChannelsService {
           recipient: invitedUser,
           sender: senderUser,
           record_id: channelId,
+          description: `You are invited to join ${channel.name}.`,
           status: 'pending',
       } as Notification);
 

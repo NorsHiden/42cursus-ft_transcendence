@@ -23,13 +23,9 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
   const unblock = async (userId: number) => {
     try {
       setLoading(true);
-      const res = await axios.post(`/api/friendlist/${userId}/unblock`);
+      await axios.post(`/api/friendlist/${userId}/unblock`);
       setLoading(false);
-      if (res.status == 200) {
-        console.log('unblocked');
-      }
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -43,11 +39,8 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
           // setFriend(false);
         }
         setLoading(false);
-        console.log(res);
       });
-      console.log(res);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -61,12 +54,8 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ className }) => {
           // setFriend(true);
         }
         setLoading(false);
-        console.log(res);
       });
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const statusBadge =

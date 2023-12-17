@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet,redirect } from 'react-router-dom';
+import { Outlet, redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import NavBar from '@components/NavBar';
@@ -12,10 +12,8 @@ export async function Layoutloader() {
     const LogedinUser = await axios.get(`/api/users/@me`);
 
     return LogedinUser.data;
-  }
-  catch (e) {
-    console.log(e)
-    return redirect(`/login?redirect=${window.location.pathname}`)
+  } catch (e) {
+    return redirect(`/login?redirect=${window.location.pathname}`);
   }
   // return LogedinUser.data;
 }

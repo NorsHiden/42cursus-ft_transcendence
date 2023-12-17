@@ -25,7 +25,6 @@ export class ChatService implements IChatService {
   }
 
   handleDisconnect(client: any): void {
-    console.log('handleDisconnect');
     this.users.delete(client.id);
   }
 

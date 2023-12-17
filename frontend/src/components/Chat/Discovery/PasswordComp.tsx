@@ -13,7 +13,7 @@ export const PasswordComp: React.FC<PasswordCompProps> = ({ channel, enabled, hi
   const { loading, password, setPassword, joinChannel } = usePasswordComp(channel, hidePopUp);
   return (
     <div
-      className={`flex items-center justify-center absolute top-0 right-0 w-screen h-screen transition-all duration-300 ${
+      className={`flex items-center justify-center fixed top-0 right-0 w-screen h-screen transition-all duration-300 ${
         enabled ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >

@@ -36,7 +36,6 @@ export class GatewaysService implements IGatwaysService {
 
       return payload.sub;
     } catch (error) {
-      console.log(error);
       client.disconnect();
       return;
     }

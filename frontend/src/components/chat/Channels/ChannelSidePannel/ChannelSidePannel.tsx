@@ -45,8 +45,6 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
       setTimeoutId(id);
     } else {
       let id = setTimeout(() => {
-        // console.log("searching");
-        console.log(search);
         fetchMembers(selectedChannel, setMembers, event.target.value);
       }, 600);
       setTimeoutId(id);

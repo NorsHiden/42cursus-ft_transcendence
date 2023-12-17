@@ -41,8 +41,7 @@ export const disable2fa = async (
   try {
     if (!isIsTwoFaEnabled) return;
     setEnabling(true);
-    const response = await axios.post('/api/auth/2fa/turn-off');
-    console.log(response.data);
+    await axios.post('/api/auth/2fa/turn-off');
     setIsTwoFaEnabled(false);
     setEnabling(false);
   } catch (error) {

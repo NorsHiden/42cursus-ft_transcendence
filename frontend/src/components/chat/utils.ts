@@ -11,7 +11,6 @@ export const getDms = async (
   setLoading(true);
   try {
     const res = await axios.get(`/api/channels/me/dms?page=${page}&limit=10`);
-    console.log(res.data);
     if (res.data.meta.currentPage < res.data.meta.totalPages) {
       setHasMore(true);
     } else {
@@ -41,7 +40,6 @@ export const fetchChannels = async (
   try {
     const res = await axios.get(`/api/channels/me?page=${page}&limit=10`);
 
-    // console.log(res.data);
     let newChannels: ChannelType[] = res.data.data.map((channel: any) => ({
       id: channel.channel.id,
       name: channel.channel.name,

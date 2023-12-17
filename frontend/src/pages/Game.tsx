@@ -9,19 +9,21 @@ import { gameSocket } from '../socket';
 const GamePage: React.FC = () => {
   const { game, gameId, me, spectators, dot, mode, initGame, getMe, waitingInterval } = useGame();
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowUp') {
+      gameSocket.emit('ingame', { action: 'UP', game_id: gameId });
+    } else if (event.key === 'ArrowDown') {
+      gameSocket.emit('ingame', { action: 'DOWN', game_id: gameId });
+    }
+  };
+
   useEffect(() => {
     getMe();
     initGame(gameSocket);
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowUp') {
-        gameSocket.emit('ingame', { action: 'UP', game_id: gameId });
-      } else if (event.key === 'ArrowDown') {
-        gameSocket.emit('ingame', { action: 'DOWN', game_id: gameId });
-      }
-    });
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', () => {});
+      document.removeEventListener('keydown', handleKeyDown);
       clearInterval(waitingInterval);
       gameSocket.off('ingame');
     };

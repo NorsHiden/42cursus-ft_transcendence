@@ -451,7 +451,7 @@ export class GameService {
     const winner =
       ingame.game_data.score.home > ingame.game_data.score.away ? home : away;
     const loser =
-      ingame.game_data.score.home < ingame.game_data.score.away ? away : home;
+      ingame.game_data.score.home < ingame.game_data.score.away ? home : away;
     winner.wins++;
     loser.loses++;
     let winner_points = winner.points.length > 0 ? winner.points[0].value : 0;
@@ -465,15 +465,9 @@ export class GameService {
     }
     winner.points.push({
       value: winner_points,
-      user: {
-        id: winner.id,
-      },
     } as Points);
     loser.points.push({
       value: loser_points,
-      user: {
-        id: loser.id,
-      },
     } as Points);
     await this.usersService.setUser(winner);
     await this.usersService.setUser(loser);

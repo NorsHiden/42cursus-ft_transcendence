@@ -34,7 +34,6 @@ const MessagesMainPannel = () => {
   const containerRef = useRef(null);
 
   const elementRef = useIntersectionObserver(() => {
-    console.log('intersected');
     setPage((prev) => prev + 1);
   });
 
@@ -46,9 +45,6 @@ const MessagesMainPannel = () => {
     const channelId = param.id;
 
     const selectedDm = Dms.find((dm) => dm.id == (channelId as unknown as number));
-    // console.log(selectedDm);
-    console.log('selected dm');
-    console.log(selectedDm);
     if (selectedDm) {
       setDmId(selectedDm.id);
       if (selectedDm.members[0].userId == LogedUser.id) {
@@ -88,7 +84,6 @@ const MessagesMainPannel = () => {
     setMessages(() => {
       return [];
     });
-    // console.log('selected channel changed');
   }, [DmId]);
 
   useEffect(() => {
@@ -125,25 +120,21 @@ const MessagesMainPannel = () => {
     if (DmId == null) return;
 
     // Send joinChannel event with channelId as payload
-    console.log('Joining channel: ' + DmId);
     socket.emit('joinChannel', { channelId: DmId });
     // Listen for message event
     socket.on('message', (message) => {
       if (message.author.id != LogedUser.id) {
-        // console.log("message recieved by user");
         setMessages((prev: MessageType[] | undefined) => {
           if (prev == undefined) return [message];
           else return [message, ...prev!];
         });
       } else {
-        console.log('message sent by user');
       }
       // Handle received message
     });
 
     return () => {
       // Send leaveChannel event with channelId as payload
-      console.log('Leaving channel: ' + DmId);
       socket.emit('leaveChannel', { channelId: DmId });
       // Stop listening for message event
       socket.off('message');
@@ -151,7 +142,6 @@ const MessagesMainPannel = () => {
   }, [socket, DmId]);
 
   const handleButtonClick = () => {
-    console.log('invite button clicked', reciepient?.userId);
     gameSocket.emit('lobby', {
       action: 'INVITE',
       game_mode: 'REGULAR',
@@ -267,7 +257,6 @@ const MessagesMainPannel = () => {
               }
             }}
             onChange={(e) => {
-              console.log(message);
               setMessage(e.target.value);
             }}
           />

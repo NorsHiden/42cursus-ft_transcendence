@@ -10,6 +10,7 @@ import useIntersectionObserver from '@hooks/useIntersectionObserver';
 import useSSE from '@hooks/useSSE';
 import { useNavigate } from 'react-router-dom';
 import { gameSocket } from '../../socket';
+import { PasswordComp } from '@components/Chat/Discovery/PasswordComp';
 
 interface NotificationMessageProps {
   notificationMessage: NotificationType;
@@ -20,6 +21,8 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
   notificationMessage,
   setNotifications,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [channel, setChannel] = useState(null);
   const navigate = useNavigate();
 
   const notificationType = () => {
@@ -40,8 +43,15 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
   };
 
   const acceptChannelInvite = async () => {
-    axios.post(`/api/channels/${notificationMessage.record_id}/join`).then(() => {
-      navigate(`/chat/channels/${notificationMessage.record_id}`);
+    axios.get(`/api/channels/${notificationMessage.record_id}`).then((res) => {
+      if (res.data.protected) {
+        setShowPassword(true);
+        setChannel(res.data);
+        return;
+      }
+      axios.post(`/api/channels/${notificationMessage.record_id}/join`).then(() => {
+        navigate(`/chat/channels/${notificationMessage.record_id}`);
+      });
     });
   };
 
@@ -130,6 +140,13 @@ const NotificationMessage: React.FC<NotificationMessageProps> = ({
               )}
           </div>
         </div>
+        {
+          <PasswordComp
+            channel={channel}
+            enabled={showPassword}
+            hidePopUp={() => setShowPassword(false)}
+          />
+        }
       </div>
       <hr className="h-px text-darkGray" />
     </>
@@ -176,7 +193,7 @@ const Notification: React.FC<NotificationProps> = ({ open }) => {
   return (
     <div
       className={twclsx(
-        'flex flex-col group invisible absolute z-20 w-[450px] h-0 pt-5 lg:pb-0 px-6 lg:top-[calc(100%+32px)] bg-lightBlack border-2 border-darkGray rounded-lg transition-all caret',
+        'flex flex-col group invisible max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:w-screen max-lg:h-[calc(100vh-5rem)] absolute z-20 w-[450px] h-0 pt-5 lg:pb-0 px-6 lg:top-[calc(100%+32px)] bg-lightBlack border-2 border-darkGray rounded-lg transition-all caret',
         open && 'visible h-[350px]',
       )}
     >

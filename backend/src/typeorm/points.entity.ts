@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
@@ -6,14 +6,12 @@ export class Points {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
+  @Column({default: 0})
   value: number;
 
   @ManyToOne(() => User, (user) => user.points, { onDelete: 'CASCADE' })
   user: User;
 
-  @Column({
-    default: new Date(),
-  })
+  @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 }

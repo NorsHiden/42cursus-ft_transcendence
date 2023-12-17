@@ -34,7 +34,6 @@ const UserElement: React.FC<UserElementProps> = ({
       loading: 'Inviting...',
       success: 'Invited',
       error: (err) => {
-        console.log(err);
         return err.response.data.message;
       },
     });
@@ -96,15 +95,6 @@ const MemberElement: React.FC<MemberElementProps> = ({
 }) => {
   const { selectedChannel } = useSelectedChannel();
 
-  // let MemberItems = [
-  //   {
-  //     labe: 'Mute',
-  //     onclick:()=>{console.log("mute")},
-  //     className:"text-white cursor-pointer py-1 px-3 hover:bg-CharcoalGray"
-  //   },
-
-  // ];
-
   let menuItems = [
     {
       label: 'Mute',
@@ -113,7 +103,6 @@ const MemberElement: React.FC<MemberElementProps> = ({
           loading: 'Muting...',
           success: 'Muted',
           error: (err) => {
-            console.log(err);
             return err.response.data.message;
           },
         });
@@ -127,7 +116,6 @@ const MemberElement: React.FC<MemberElementProps> = ({
           loading: 'Kicking...',
           success: 'Kicked',
           error: (err) => {
-            console.log(err);
             return err.response.data.message;
           },
         });
@@ -141,7 +129,6 @@ const MemberElement: React.FC<MemberElementProps> = ({
           loading: 'Banning...',
           success: 'Banned',
           error: (err) => {
-            console.log(err);
             return err.response.data.message;
           },
         });
@@ -155,7 +142,6 @@ const MemberElement: React.FC<MemberElementProps> = ({
           loading: 'Promoting...',
           success: 'Promoted',
           error: (err) => {
-            console.log(err);
             return err.response.data.message;
           },
         });
@@ -228,7 +214,6 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
   const [users, setUsers] = useState<UserType[]>([]);
 
   function handlieinvite() {
-    // console.log('invite user')
     if (selectedChannel.role == 'owner' || selectedChannel.role == 'admin')
       inviteUser ? setInviteUser(false) : setInviteUser(true);
   }
@@ -238,18 +223,13 @@ const ChannelSidePannel: React.FC<ChannelMainPannelProps> = ({
       clearTimeout(timeoutId);
     }
     setSearch(event.target.value);
-    console.log('invite user');
-    console.log(inviteUser);
     if (inviteUser) {
       let id = setTimeout(() => {
-        console.log(search);
         getUsers(setUsers, event.target.value);
       }, 600);
       setTimeoutId(id);
     } else {
       let id = setTimeout(() => {
-        // console.log("searching");
-        console.log(search);
         fetchMembers(selectedChannel, setMembers, event.target.value);
       }, 600);
       setTimeoutId(id);

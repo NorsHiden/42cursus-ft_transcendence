@@ -48,8 +48,6 @@ export const sendMessage = (
   });
 
   response.then(() => {
-    // console.log(response.data);
-
     setMessages((prev: MessageType[] | undefined) => {
       return prev?.map((message) => {
         if (message.content === newMessage.content && message.id === newMessage.id) {
@@ -75,12 +73,9 @@ export const getMessages = async (
     const response = await axios.get(`/api/channels/${channelId}/messages?page=${page}`, {
       signal: abortController.signal,
     });
-    console.log(`/api/channels/${channelId}/messages?page=${page}`);
     if (response.data.meta.currentPage < response.data.meta.totalPages) setHasMore(true);
     else setHasMore(false);
 
     return response.data.data;
-  } catch (error) {
-    // console.error(`Error fetching messages: ${error}`);
-  }
+  } catch (error) {}
 };

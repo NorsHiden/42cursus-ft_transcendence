@@ -10,28 +10,31 @@ import { Message as MessageType } from '@globalTypes/types';
 import { getMessages } from './utils';
 import EditSolid from '@assets/novaIcons/solid/EditSolid';
 import MessageInput from './MessageInput';
-import  useIntersectionObserver  from '@hooks/useIntersectionObserver';
+import useIntersectionObserver from '@hooks/useIntersectionObserver';
 
 const ChannelMainPannel: React.FC = () => {
-  const { channels, selectedChannel, setSelectedChannel, socket, setShowUpdateChannelModal ,LogedUser,blockedUsers} =
-    useSelectedChannel();
+  const {
+    channels,
+    selectedChannel,
+    setSelectedChannel,
+    socket,
+    setShowUpdateChannelModal,
+    LogedUser,
+    blockedUsers,
+  } = useSelectedChannel();
   const [messages, setMessages] = useState<MessageType[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasmore, setHasmore] = useState<boolean>(false);
-  const [page , setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
 
   const param = useParams();
   const navigate = useNavigate();
   // const user = useRouteLoaderData('layout') as User;
   const containerRef = useRef(null);
 
-  const elementRef = useIntersectionObserver(()=>{
-    console.log("intersected");
-    setPage((prev)=>prev+1);
+  const elementRef = useIntersectionObserver(() => {
+    setPage((prev) => prev + 1);
   });
-
-  
-
 
   const [expanded, setExpanded] = useState(false);
 
@@ -45,7 +48,7 @@ const ChannelMainPannel: React.FC = () => {
     const channel = channels.find((channel) => channel.id === Number(param.id));
     if (channel) {
       setLoading(true);
-      getMessages(channel.id, abortController,setHasmore,page).then((fetchedMessages) => {
+      getMessages(channel.id, abortController, setHasmore, page).then((fetchedMessages) => {
         if (fetchedMessages && fetchedMessages.length != 0) {
           setMessages((prev: MessageType[] | undefined) => {
             setLoading(false);
@@ -62,7 +65,7 @@ const ChannelMainPannel: React.FC = () => {
       abortController.abort();
       setHasmore(false);
     };
-  }, [channels, param.id,page]);
+  }, [channels, param.id, page]);
 
   useEffect(() => {
     if (socket == null) return;
@@ -75,9 +78,7 @@ const ChannelMainPannel: React.FC = () => {
           if (prev == undefined) return [message];
           else return [message, ...prev!];
         });
-        console.log(message);
       } else {
-        // console.log('message sent by user');
       }
     });
 
@@ -134,25 +135,23 @@ const ChannelMainPannel: React.FC = () => {
             ref={containerRef}
             className="flex  flex-col-reverse overflow-auto p-4 space-y-5 h-[65vh] scroll-smooth scrollbar scrollbar-track-lightBlack scrollbar-thumb-rounded scrollbar-thumb-darkGray"
           >
-            {messages && Object.keys(messages).length > 0 && (
-                messages?.map((messagev,index) => {
-                  if (blockedUsers.some(user => user.id === messagev.author.id)) {
-                    return null; // Skip this message
-                  }
+            {messages &&
+              Object.keys(messages).length > 0 &&
+              messages?.map((messagev, index) => {
+                if (blockedUsers.some((user) => user.id === messagev.author.id)) {
+                  return null; // Skip this message
+                }
 
-                  return (
-                    <Message
+                return (
+                  <Message
                     key={index}
                     message={messagev}
                     type={messagev.author.id == LogedUser.id ? 'SENT' : 'RECEIVED'}
                     messageReceivedSuccessfully={messagev.messageReceivedSuccessfully}
-                    />
-                  )
-          })
-            )}
-            {
-              hasmore && <div ref={elementRef} className='w-full h-10'></div>
-            }
+                  />
+                );
+              })}
+            {hasmore && <div ref={elementRef} className="w-full h-10"></div>}
             {/* <div ref={elementRef} className='bg-white w-full h-10'></div> */}
             {loading && (
               <div className="flex justify-center items-center py-2">
@@ -160,7 +159,7 @@ const ChannelMainPannel: React.FC = () => {
               </div>
             )}
           </div>
-          <MessageInput setMessages={setMessages}/>
+          <MessageInput setMessages={setMessages} />
         </div>
       </div>
       <ChannelSidePannel

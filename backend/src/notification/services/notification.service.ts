@@ -26,7 +26,9 @@ export class NotificationService implements INotificationService {
 
     const notifications = await this.notificationRepository.find({
       where: {
-        recipient: user,
+        recipient: {
+          id: user_id,
+        },
       },
       relations: ['sender', 'recipient', 'sender.profile', 'recipient.profile'],
       order: {
