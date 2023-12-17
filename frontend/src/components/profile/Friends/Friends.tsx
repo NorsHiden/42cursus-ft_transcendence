@@ -19,12 +19,12 @@ const UserCard: React.FC<UserCardProps> = ({ banner, avatar, name, username, chi
       className="text-lightBlack w-full"
     >
       <div className="w-full h-32">
-        <img src={banner} alt="" className="w-full h-full" />
+        <img src={banner} alt="" className="w-full h-full object-cover" />
       </div>
-      <div className="relative z-20 mt-[-12%] p-5 pt-0 flex flex-col gap-y-6">
+      <div className="relative z-20 mt-[-12%] p-5 pt-0 flex flex-col gap-y-4">
         <div>
           <img
-            className="h-28 w-28 rounded-full border-[6px] border-lightBlack"
+            className="h-24 w-24 rounded-full border-[6px] border-lightBlack"
             src={avatar}
             alt="avatar"
           />

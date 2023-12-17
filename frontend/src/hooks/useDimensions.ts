@@ -30,11 +30,11 @@ const useDimensions = <T extends HTMLElement>() => {
     });
 
     resizeObserver.observe(ref.current as HTMLElement);
-    window.addEventListener('resize', handleChange);
+    document.addEventListener('resize', handleChange);
 
     return () => {
       resizeObserver.disconnect();
-      window.removeEventListener('resize', handleChange);
+      document.removeEventListener('resize', handleChange);
     };
   }, []);
 

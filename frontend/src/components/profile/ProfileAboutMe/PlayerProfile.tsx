@@ -9,7 +9,7 @@ import CalendarSolid from '@assets/novaIcons/solid/CalendarSolid.tsx';
 import LocationSolid from '@assets/novaIcons/solid/LocationSolid.tsx';
 import UnblockOutline from '@assets/novaIcons/outline/UnblockOutline';
 import Card from '@components/Card';
-import Button from '@components/Button.tsx';
+import Button from '@components/Button';
 import ClockCircleOutline from '@assets/novaIcons/outline/ClockCircleOutline';
 
 type PlayerProfileProps = {

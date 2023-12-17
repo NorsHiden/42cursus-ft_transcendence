@@ -1,9 +1,9 @@
 import { io } from 'socket.io-client';
 
-export const gameSocket = io('http://c3r6p1.1337.ma:3001/game', {
+export const gameSocket = io(`${import.meta.env.VITE_BACKEND_HOST}/game`, {
   withCredentials: true,
 });
 
-export const chatSocket = io('http://c3r6p1.1337.ma:3001/chat', {
+export const chatSocket = io(`${import.meta.env.VITE_BACKEND_HOST}/chat`, {
   withCredentials: true,
 });

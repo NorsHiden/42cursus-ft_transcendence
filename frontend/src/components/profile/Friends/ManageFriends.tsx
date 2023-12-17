@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useRouteLoaderData } from 'react-router-dom';
 import axios from 'axios';
+import { useRouteLoaderData } from 'react-router-dom';
 
-import UserCard from './Friends-cards/Friends.tsx';
+import UserCard from './Friends.tsx';
 import CheckOutline from '@assets/novaIcons/outline/CheckOutline.tsx';
 import CloseOutline from '@assets/novaIcons/outline/CloseOutline.tsx';
 import Unblock from '@assets/novaIcons/outline/UnblockOutline.tsx';
 import Block from '@assets/novaIcons/outline/block.tsx';
 import { unfriend, block, accept, unblock } from './utils.ts';
 import { User } from '@globalTypes/types';
-import Button from '../../Button.tsx';
-import RadioInput from '@components/RadioInput/index.tsx';
-import Card from '@components/Card/index.tsx';
+import Button from '@components/Button';
+import RadioInput from '@components/RadioInput/';
+import Card from '@components/Card/';
 import getColorValue from '@utils/getColorValue.ts';
 
 const ManageFriends: React.FC = () => {
@@ -98,77 +98,61 @@ const ManageFriends: React.FC = () => {
                 username={friend.username}
               >
                 {friendType === 'Accepted' && (
-                  <div className="center-x justify-start gap-x-4">
+                  <div className="center-x gap-x-4">
                     <Button
-                      className="center gap-x-2 py-2 px-5"
-                      color="BrightRed"
+                      className="center-x gap-x-1 py-2 px-4 bg-primary hover:bg-primary/80 text-white transition-all"
                       onClick={() => {
                         unfriend(friends, friend.username, friend.id, setFriends);
                       }}
-                      cut={25}
-                      borderRadius={10}
-                      borderWidth={1}
-                      borderColor="#E95E6F"
                     >
-                      <Unblock size={20} className="text-white" />
-                      <p className="text-white">Unfriend</p>
+                      <Unblock size={20} />
+                      <p className="text-sm">Unfriend</p>
                     </Button>
                     <Button
-                      className="center gap-x-2 py-2 px-5"
-                      color="DarkMaroon"
+                      className="center-x gap-x-1 py-2 px-4 bg-red/10 hover:bg-red/20 text-red transition-all"
                       onClick={() => {
                         block(friends, friend.username, friend.id, setFriends);
                       }}
-                      cut={25}
                     >
-                      <Block size={20} className="text-red" />
-                      <p className="text-red">Block</p>
+                      <Block size={20} />
+                      <p className="text-sm">Block</p>
                     </Button>
                   </div>
                 )}
+
                 {friendType === 'Blocked' && (
-                  <div className="flex justify-start items-center gap-4 pt-6 ml-4">
+                  <div className="center-x gap-x-4">
                     <Button
-                      className="center pl-[12px] pr-[20px] py-[8px] gap-1"
+                      className="center-x gap-x-1 py-2 px-4 bg-gray hover:bg-gray/80 text-white transition-all"
                       onClick={() => {
                         unblock(blocked, friend.username, friend.id, setBlocked);
                       }}
-                      color="gray"
-                      cut={35}
-                      borderRadius={10}
-                      borderWidth={3}
-                      borderColor="#858895"
                     >
-                      <Unblock className="relative text-white w-[22px] h-[22px]" />
-                      <p className="text-white font-medium">Unblock</p>
+                      <Unblock size={20} />
+                      <p className="text-sm">Unblock</p>
                     </Button>
                   </div>
                 )}
 
                 {friendType === 'Pending' && (
-                  <div className="flex justify-start items-center gap-4 pt-6 ml-4">
+                  <div className="center-x gap-x-4">
                     <Button
-                      className="flex center pl-[12px] pr-[20px] py-[8px]"
+                      className="center-x gap-x-1 py-2 px-4 bg-primary hover:bg-primary/80 text-white transition-all"
                       onClick={() => {
                         accept(pending, friend.username, friend.id, setPending);
                       }}
-                      color="primary"
-                      borderWidth={2}
-                      borderColor="#FF8C66"
                     >
-                      <CheckOutline className="text-white" />
-                      <p className="text-white font-medium">Accept</p>
+                      <CheckOutline size={20} />
+                      <p className="text-sm">Accept</p>
                     </Button>
                     <Button
-                      className="flex center pl-[12px] pr-[20px] py-[8px]"
-                      color="DarkMaroon"
+                      className="center-x gap-x-1 py-2 px-4 bg-red/10 hover:bg-red/20 text-red transition-all"
                       onClick={() => {
                         unfriend(pending, friend.username, friend.id, setPending);
                       }}
-                      cut={25}
                     >
-                      <CloseOutline className="text-red" />
-                      <p className="text-red font-regular">Decline</p>
+                      <CloseOutline size={20} />
+                      <p className="text-sm">Decline</p>
                     </Button>
                   </div>
                 )}

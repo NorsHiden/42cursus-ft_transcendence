@@ -1,14 +1,14 @@
-import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import SendSolid from '@assets/novaIcons/solid/SendSolid';
-import CircleSolid from '@assets/novaIcons/solid/CircleSolid';
 import Card from '@components/Card';
 import Loader1Outline from '@assets/novaIcons/outline/Loader1Outline';
 import { Message as MessageType } from '@globalTypes/types';
 import { User } from '@globalTypes/types';
 import { toast } from 'sonner';
 import { chatSocket } from '../../socket';
+import { useRouteLoaderData } from 'react-router-dom';
 
 type MessageProps = {
   type: 'RECEIVED' | 'SENT';
@@ -46,7 +46,7 @@ export const Message: React.FC<MessageProps> = ({
 
   return (
     <div
-      className={` max-w-[50%]    pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${
+      className={` max-w-[50%] pt-4 ${type == 'RECEIVED' ? 'self-start' : 'self-end'} ${
         messageReceivedSuccessfully ? ' opacity-100' : ' opacity-25'
       }`}
     >
@@ -79,17 +79,15 @@ export const Message: React.FC<MessageProps> = ({
 };
 
 const GeneralChat: React.FC = () => {
+  const me = useRouteLoaderData('layout') as User;
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [input, setInput] = useState<string>('');
-  const [me, setMe] = useState<User>({} as User);
   const [loading, setLoading] = useState<boolean>(false);
 
   const SendMessage = () => {
     if (loading) return;
     axios
-      .post('api/channels/1/messages', {
-        content: input,
-      })
+      .post('api/channels/1/messages', { content: input })
       .then(() => {
         setInput('');
       })
@@ -99,19 +97,14 @@ const GeneralChat: React.FC = () => {
     setLoading(true);
   };
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') SendMessage();
   };
 
   useEffect(() => {
-    axios.get('api/users/@me').then((res) => {
-      setMe(res.data);
-    });
-    axios
-      .get('api/channels/1/messages?page=1&limit=10')
-      .then((res) => setMessages(res.data.data.reverse()));
+    axios.get('api/channels/1/messages?page=1&limit=10').then((res) => setMessages(res.data.data));
     chatSocket.on('message', (message) => {
-      setMessages((prev) => [...prev, message]);
+      setMessages((prev) => [message, ...prev]);
     });
     chatSocket.on('error', (error) => {
       toast.dismiss();
@@ -125,17 +118,6 @@ const GeneralChat: React.FC = () => {
       chatSocket.off('error');
     };
   }, []);
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (messages.length) {
-      scrollRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-      });
-    }
-  }, [messages.length]);
 
   return (
     <section className="col-span-1 hidden 2xl:grid grid-rows-section gap-y-3">
@@ -151,15 +133,11 @@ const GeneralChat: React.FC = () => {
         borderWidth={1}
         className="mb-4 grid grid-cols-1 grid-rows-chat"
       >
-        <div className="text-white bg-lightBlack py-4 px-10">
-          <h1 className="font-semibold text-base">#General</h1>
-          <p className="center-x gap-x-1 text-[10px]">
-            <CircleSolid size={10} className="text-green" />
-            22 player online
-          </p>
+        <div className="text-white bg-lightBlack py-6 px-10 center">
+          <h1 className="font-semibold text-lg">#General_chat</h1>
         </div>
 
-        <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col gap-y-5 p-4 hide-scrollbar">
+        <div className="max-h-full overflow-x-hidden overflow-y-auto flex flex-col-reverse gap-y-5 p-4 hide-scrollbar">
           {messages.map((message, index) => (
             <Message
               key={index}
@@ -168,7 +146,6 @@ const GeneralChat: React.FC = () => {
               messageReceivedSuccessfully={message.messageReceivedSuccessfully}
             />
           ))}
-          <div ref={scrollRef} />
         </div>
 
         <div className="p-5">

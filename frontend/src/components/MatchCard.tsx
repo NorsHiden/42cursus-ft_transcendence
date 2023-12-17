@@ -45,7 +45,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
           </div>
         </header>
         {type === CardType.MATCH_HISTORY ? (
-          <div className="w-full h-fit pt-8 px-4 flex flex-col gap-y-4">
+          <div className="w-full h-fit px-4 flex flex-col gap-y-4">
             <div className="center-x justify-between">
               <div className="center-x lg:gap-2 xl:gap-3 2xl:gap-4 gap-4">
                 <img
@@ -69,7 +69,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
                 <img
                   className="lg:w-6 lg:h-6 2xl:w-12 w-12 2xl:h-12 h-12 rounded-full"
                   src={opponent.avatar}
-                  alt="Opppenent avatar"
+                  alt="Opponent avatar"
                 />
                 <p className="text-white font-medium lg:text-sm 2xl:text-xl text-xl">
                   {opponent.username}
@@ -102,7 +102,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ type, gamemode, host, opponent, t
               borderColor={isLive ? '#E0FF85' : '#767984'}
               fill={isLive ? '#D5FF5C' : '#5E6069'}
             >
-              <p className="text-sm/none font-serif">{isLive ? 'Live' : 'Done'}</p>
+              <p className="text-sm/none text-black font-serif">{isLive ? 'Live' : 'Done'}</p>
             </Card>
           </>
         )}

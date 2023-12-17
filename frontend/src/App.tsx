@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import axios from 'axios';
 
 const Home = React.lazy(() => import('@pages/Home'));
 const Discovery = React.lazy(() => import('@pages/Discovery'));
@@ -27,15 +26,10 @@ const MessagesMainPannel = React.lazy(() => import('@components/chat/messages/Me
 const ChannelsList = React.lazy(() => import('@components/chat/ChannelsList'));
 const MessagesList = React.lazy(() => import('@components/chat/MessagesList'));
 
+import { LayoutLoader } from '@pages/Layout';
 import { ChatMainPannelLoader } from '@pages/Chat';
 import { PostLoginLoader } from '@pages/PostLogin';
 import { profileLoader } from '@pages/Profile';
-
-async function Layoutloader() {
-  const LogedinUser = await axios.get(`/api/users/@me`);
-  console.log('layout loader', LogedinUser.data);
-  return LogedinUser.data;
-}
 
 const router = createBrowserRouter([
   {
@@ -46,7 +40,7 @@ const router = createBrowserRouter([
         <Layout />
       </Suspense>
     ),
-    loader: Layoutloader,
+    loader: LayoutLoader,
     children: [
       {
         index: true,

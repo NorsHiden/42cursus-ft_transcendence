@@ -32,6 +32,7 @@ export const usePostLogin = (initialData: userData) => {
       loading: 'Updating user...',
       success: () => {
         setIsSubmitting(false);
+        axios.post('/api/channels/1/join');
         navigate('/');
         return 'User has been updated';
       },

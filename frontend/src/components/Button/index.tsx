@@ -7,19 +7,17 @@ type ButtonProps = Omit<PolygonProps, 'width' | 'height' | 'className'> & {
   className: string;
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
   children?: React.ReactNode;
-  color?: string;
 };
 
 const Button: React.FC<ButtonProps> = ({
   className,
   onClick,
   children,
-  cut = 30,
-  color = 'primary',
+  cut = 24,
   ...PolygonProps
 }) => {
   return (
-    <Card className={`text-${color}`} cut={cut} {...PolygonProps}>
+    <Card className="text-transparent" cut={cut} borderRadius={30} {...PolygonProps}>
       <button className={className} onClick={onClick}>
         {children}
       </button>
